@@ -4,24 +4,24 @@ import "./globals.css";
 export const metadata: Metadata = {
   metadataBase: new URL("https://maritesallen.com"),
   title: {
-    default: "Marites Allen | Global Feng Shui Master",
+    default: "Marites Allen | The Feng Shui Queen",
     template: "%s | Marites Allen"
   },
   description:
-    "Authentic Feng Shui consultations, BaZi readings, destiny analysis, books, events, and Destara AI guidance by internationally recognized Feng Shui Master Marites Allen.",
+    "Private Feng Shui consultations, BaZi destiny readings, Destara AI, annual forecasts, and Frigga charms with internationally recognized Master Marites Allen.",
   openGraph: {
-    title: "Marites Allen | Global Feng Shui Master",
+    title: "Marites Allen | The Feng Shui Queen",
     description:
-      "Transform your life, home, and business through authentic Feng Shui and modern AI-powered guidance.",
+      "Transform your luck, home and destiny with authentic Feng Shui guidance.",
     url: "https://maritesallen.com",
     siteName: "Marites Allen",
     type: "website"
   },
   twitter: {
     card: "summary_large_image",
-    title: "Marites Allen | Global Feng Shui Master",
+    title: "Marites Allen | The Feng Shui Queen",
     description:
-      "Luxury Feng Shui guidance for individuals, families, and businesses worldwide."
+      "Private consultations, Destara AI, and annual forecasts from the Feng Shui Queen."
   },
   alternates: {
     canonical: "/"
@@ -32,12 +32,13 @@ const organizationSchema = {
   "@context": "https://schema.org",
   "@type": "Person",
   name: "Marites Allen",
+  alternateName: "The Feng Shui Queen",
   jobTitle: "Feng Shui Master, Author, Speaker",
   url: "https://maritesallen.com",
   sameAs: [
-    "https://www.instagram.com/",
-    "https://www.facebook.com/",
-    "https://www.youtube.com/"
+    "https://www.facebook.com/MaritesAllen168/",
+    "https://www.instagram.com/maritesallen/",
+    "https://www.youtube.com/channel/UCDrwKncdOeMKG3dt6vk2QLg"
   ],
   knowsAbout: [
     "Feng Shui",

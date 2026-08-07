@@ -1,8 +1,8 @@
-# Marites Allen Premium Website
+# Marites Allen Website
 
-A luxury editorial website concept for Marites Allen, built with Next.js, TypeScript, TailwindCSS, Framer Motion, shadcn-style UI primitives, and Lucide icons.
+Premium Next.js site for Marites Allen (The Feng Shui Queen), ported from the design-canvas HTML build into React App Router pages.
 
-## Run Locally
+## Run locally
 
 ```bash
 npm install
@@ -15,28 +15,25 @@ Open `http://localhost:3000`.
 
 ```bash
 npm run build
-npm run start
+npm start
 ```
 
-## Key Routes
+## Routes
 
-- `/` - Premium public website experience
-- `/admin` - Admin dashboard prototype
+| Route | Page |
+|-------|------|
+| `/` | Home |
+| `/about` | About |
+| `/destara` | Destara AI |
+| `/frigga` | Frigga Charmed Life |
+| `/forecast` | Annual Forecast (`?year=2026`) |
+| `/projects` | Brands & collaborations |
+| `/events` | Speaking & events |
+| `/media` | Press & media kit |
+| `/book` | Book consultation wizard |
+| `/booking-experience` | Mobile booking preview |
+| `/admin` | Admin prototype (`fengshui2026`) |
 
-## Deployment
+## Notes
 
-Recommended hosting: Vercel.
-
-1. Push this project to a GitHub repository.
-2. Import the repository in Vercel.
-3. Use the default Next.js build settings.
-
-## Integration Notes
-
-The booking wizard and admin dashboard are currently frontend prototypes. The next production step is connecting:
-
-- availability/calendar storage
-- Stripe and PayPal checkout
-- booking confirmation email
-- admin notification email
-- content management for books, events, testimonials, blog, and gallery
+Booking, destiny-chart lead capture, press-kit signup, and admin are **frontend prototypes**. They need a booking database, Stripe/PayPal, and an email service before going live.

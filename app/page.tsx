@@ -2,657 +2,961 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { useMemo, useState } from "react";
+import { SiteFooter } from "@/components/site-footer";
+import { SiteHeader } from "@/components/site-header";
 import {
-  ArrowRight,
-  Award,
-  BookOpen,
-  Building2,
-  CalendarDays,
-  ChevronRight,
-  Compass,
-  Gem,
-  Globe2,
-  Heart,
-  Home,
-  Mail,
-  Map,
-  Menu,
-  Moon,
-  Play,
-  Quote,
-  Search,
-  ShieldCheck,
-  Sparkles,
-  Star,
-  Timer,
-  Upload,
-  Users
-} from "lucide-react";
-import { motion, useScroll, useTransform } from "framer-motion";
-import { Button } from "@/components/ui/button";
+  CHART_PERKS,
+  DESTARA_BENEFITS,
+  emailOk,
+  FAQ_DATA,
+  FRIGGA_BROWSE,
+  FRIGGA_REGIONS,
+  GUARANTEES,
+  HOME_SERVICES,
+  SPEAKING_CLIENTS,
+  TESTIMONIALS,
+  zodiacFromYear,
+  zodiacNote
+} from "@/lib/site-data";
 
-const fadeUp = {
-  hidden: { opacity: 0, y: 34 },
-  visible: { opacity: 1, y: 0 }
-};
+export default function HomePage() {
+  const [chartOpen, setChartOpen] = useState(false);
+  const [leadName, setLeadName] = useState("");
+  const [leadDob, setLeadDob] = useState("");
+  const [leadTime, setLeadTime] = useState("");
+  const [leadEmail, setLeadEmail] = useState("");
+  const [leadSent, setLeadSent] = useState(false);
+  const [openFaq, setOpenFaq] = useState(0);
 
-const services = [
-  {
-    title: "Personal Consultation",
-    copy: "Private guidance for career, wealth, relationships, health, and life transitions.",
-    icon: Sparkles
-  },
-  {
-    title: "Business Feng Shui",
-    copy: "Strategic spatial and timing recommendations for leaders, teams, and enterprises.",
-    icon: Building2
-  },
-  {
-    title: "Home Audit",
-    copy: "Create a refined sanctuary with energy flow, harmony, and prosperity at its center.",
-    icon: Home
-  },
-  {
-    title: "BaZi Reading",
-    copy: "Decode your elemental profile and uncover patterns behind opportunity and timing.",
-    icon: Compass
-  },
-  {
-    title: "Destiny Analysis",
-    copy: "A deeper lens into purpose, potential, compatibility, and long-term direction.",
-    icon: Moon
-  },
-  {
-    title: "Date Selection",
-    copy: "Choose auspicious dates for launches, moves, contracts, weddings, and milestones.",
-    icon: CalendarDays
-  },
-  {
-    title: "Annual Forecast",
-    copy: "Navigate the year ahead with elegant, practical insight for every life area.",
-    icon: Globe2
-  }
-];
+  const leadYear = leadDob ? parseInt(leadDob.slice(0, 4), 10) : null;
+  const leadSign = leadYear ? zodiacFromYear(leadYear) : "";
+  const leadReady = !!(leadDob && emailOk(leadEmail));
 
-const destaraFeatures = [
-  "Daily Feng Shui Forecast",
-  "AI Feng Shui Assistant",
-  "Lucky Directions",
-  "Personalized Calendar",
-  "Compass Tool",
-  "Home Analysis",
-  "Chinese Zodiac Profile",
-  "Destiny Insights"
-];
-
-const stats = [
-  ["30+", "Years of Expertise"],
-  ["100+", "Countries Reached"],
-  ["10K+", "Clients Guided"],
-  ["Global", "Media Recognition"]
-];
-
-const books = [
-  {
-    title: "Annual Feng Shui Forecast",
-    badge: "New Release",
-    copy: "An elegant guide to navigating the year with clarity, timing, and intention."
-  },
-  {
-    title: "The Destiny Code",
-    badge: "Bestseller",
-    copy: "A practical introduction to BaZi, personal elements, and life direction."
-  },
-  {
-    title: "Feng Shui for Modern Living",
-    badge: "Signature",
-    copy: "Timeless Eastern wisdom adapted for refined contemporary homes."
-  }
-];
-
-const articles = [
-  "The Year of the Fire Horse: Forecast 2026",
-  "The Science Behind Feng Shui",
-  "Designing a Home for Prosperity",
-  "Auspicious Dates for Life Milestones"
-];
-
-function Header() {
-  return (
-    <header className="fixed inset-x-0 top-0 z-50 border-b border-black/5 bg-[#FAF8F2]/86 backdrop-blur-2xl">
-      <div className="luxury-container flex h-20 items-center justify-between gap-6">
-        <Link href="/" className="focus-ring flex items-center gap-3 rounded-full">
-          <Image
-            src="/images/marites-logo-horizontal.png"
-            alt="Marites Allen"
-            width={310}
-            height={64}
-            className="h-9 w-auto object-contain invert"
-            priority
-          />
-        </Link>
-        <nav className="hidden items-center gap-8 text-sm font-semibold text-[#171717]/75 lg:flex">
-          {["Services", "Destara", "Books", "Stories", "Events", "Journal"].map((item) => (
-            <a key={item} href={`#${item.toLowerCase()}`} className="focus-ring rounded-full hover:text-[#0F5132]">
-              {item}
-            </a>
-          ))}
-        </nav>
-        <div className="flex items-center gap-3">
-          <Button asChild variant="ghost" size="sm" className="hidden sm:inline-flex">
-            <a href="#booking">Book Consultation</a>
-          </Button>
-          <button className="focus-ring rounded-full border border-black/10 p-3 lg:hidden" aria-label="Open menu">
-            <Menu className="h-5 w-5" />
-          </button>
-        </div>
-      </div>
-    </header>
+  const faqs = useMemo(
+    () =>
+      FAQ_DATA.map((f, i) => ({
+        ...f,
+        open: openFaq === i,
+        icon: openFaq === i ? "−" : "+"
+      })),
+    [openFaq]
   );
-}
-
-function Hero() {
-  const { scrollY } = useScroll();
-  const imageScale = useTransform(scrollY, [0, 700], [1.05, 1.18]);
-  const textY = useTransform(scrollY, [0, 700], [0, 80]);
 
   return (
-    <section className="noise relative min-h-screen overflow-hidden bg-[#06261A] pt-20 text-white">
-      <motion.div style={{ scale: imageScale }} className="absolute inset-y-20 right-0 w-full opacity-55 md:w-[58%]">
-        <Image
-          src="/images/marites-emerald-full.png"
-          alt="Marites Allen portrait"
-          fill
-          className="object-cover object-top"
-          priority
-        />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#06261A] via-[#06261A]/70 to-transparent" />
-      </motion.div>
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_22%,rgba(198,163,72,0.22),transparent_28%),linear-gradient(120deg,#06261A_0%,#0F5132_58%,#07150f_100%)]" />
-      <motion.div style={{ y: textY }} className="luxury-container relative flex min-h-[calc(100vh-80px)] items-center">
-        <div className="max-w-4xl py-20">
-          <motion.p
-            variants={fadeUp}
-            initial="hidden"
-            animate="visible"
-            transition={{ duration: 0.8 }}
-            className="mb-8 inline-flex items-center gap-3 rounded-full border border-white/15 bg-white/8 px-4 py-2 text-sm uppercase tracking-[0.28em] text-[#C6A348]"
-          >
-            <Gem className="h-4 w-4" /> Global Feng Shui Master
-          </motion.p>
-          <motion.h1
-            variants={fadeUp}
-            initial="hidden"
-            animate="visible"
-            transition={{ delay: 0.12, duration: 0.9 }}
-            className="font-display max-w-4xl text-balance text-6xl font-semibold leading-[0.88] tracking-[-0.055em] md:text-8xl lg:text-9xl"
-          >
-            Transform Your Life Through Authentic Feng Shui
-          </motion.h1>
-          <motion.p
-            variants={fadeUp}
-            initial="hidden"
-            animate="visible"
-            transition={{ delay: 0.24, duration: 0.9 }}
-            className="mt-8 max-w-2xl text-lg leading-8 text-white/78 md:text-xl"
-          >
-            Helping individuals, families, and businesses create harmony, prosperity, and lasting success through over three decades of expertise.
-          </motion.p>
-          <motion.div
-            variants={fadeUp}
-            initial="hidden"
-            animate="visible"
-            transition={{ delay: 0.36, duration: 0.9 }}
-            className="mt-10 flex flex-col gap-4 sm:flex-row"
-          >
-            <Button asChild variant="gold" size="lg">
-              <a href="#booking">Book Consultation</a>
-            </Button>
-            <Button asChild variant="ivory" size="lg">
-              <a href="#services">Explore Services</a>
-            </Button>
-          </motion.div>
-        </div>
-      </motion.div>
-      <motion.div
-        animate={{ y: [0, 12, 0] }}
-        transition={{ duration: 2.4, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute bottom-8 left-1/2 hidden -translate-x-1/2 flex-col items-center gap-3 text-xs uppercase tracking-[0.35em] text-white/55 md:flex"
-      >
-        Scroll
-        <span className="h-12 w-px bg-gradient-to-b from-white/70 to-transparent" />
-      </motion.div>
-    </section>
-  );
-}
+    <div className="page-shell page-enter">
+      <SiteHeader />
 
-function SectionIntro({ eyebrow, title, copy }: { eyebrow: string; title: string; copy: string }) {
-  return (
-    <motion.div
-      variants={fadeUp}
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, margin: "-120px" }}
-      transition={{ duration: 0.8 }}
-      className="mx-auto mb-14 max-w-3xl text-center"
-    >
-      <p className="mb-4 text-sm font-semibold uppercase tracking-[0.28em] text-[#C6A348]">{eyebrow}</p>
-      <h2 className="font-display text-balance text-5xl font-semibold leading-none tracking-[-0.04em] text-[#171717] md:text-7xl">
-        {title}
-      </h2>
-      <p className="mx-auto mt-6 max-w-2xl text-lg leading-8 text-[#171717]/62">{copy}</p>
-    </motion.div>
-  );
-}
-
-function Services() {
-  return (
-    <section id="services" className="bg-[#FAF8F2] py-24 md:py-32">
-      <div className="luxury-container">
-        <SectionIntro
-          eyebrow="Consultation Atelier"
-          title="Guidance for every chapter of life"
-          copy="A refined suite of Feng Shui, BaZi, destiny, and timing services designed for modern lives, homes, and companies."
-        />
-        <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-4">
-          {services.map((service, index) => {
-            const Icon = service.icon;
-            return (
-              <motion.article
-                key={service.title}
-                variants={fadeUp}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true, margin: "-80px" }}
-                transition={{ delay: index * 0.045, duration: 0.7 }}
-                whileHover={{ y: -10 }}
-                className="group min-h-[290px] rounded-[2rem] border border-[#0F5132]/10 bg-white/72 p-7 shadow-[0_20px_70px_rgba(15,81,50,0.07)] backdrop-blur"
-              >
-                <div className="mb-12 flex h-14 w-14 items-center justify-center rounded-2xl bg-[#C6A348]/12 text-[#C6A348] transition group-hover:scale-110 group-hover:bg-[#0F5132] group-hover:text-white">
-                  <Icon className="h-6 w-6" />
-                </div>
-                <h3 className="font-display text-3xl font-semibold leading-none text-[#171717]">{service.title}</h3>
-                <p className="mt-5 text-sm leading-7 text-[#171717]/60">{service.copy}</p>
-                <span className="mt-7 inline-flex items-center gap-2 text-sm font-semibold text-[#0F5132]">
-                  Learn more <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" />
-                </span>
-              </motion.article>
-            );
-          })}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function About() {
-  return (
-    <section className="overflow-hidden bg-white py-24 md:py-32">
-      <div className="luxury-container grid items-center gap-12 lg:grid-cols-[0.92fr_1.08fr]">
-        <motion.div
-          initial={{ opacity: 0, clipPath: "inset(12% 12% 12% 12% round 36px)" }}
-          whileInView={{ opacity: 1, clipPath: "inset(0% 0% 0% 0% round 36px)" }}
-          viewport={{ once: true }}
-          transition={{ duration: 1 }}
-          className="relative aspect-[4/5] overflow-hidden rounded-[2.25rem]"
+      {chartOpen && (
+        <div
+          onClick={() => setChartOpen(false)}
+          style={{
+            position: "fixed",
+            inset: 0,
+            zIndex: 200,
+            background: "rgba(10,26,20,0.7)",
+            backdropFilter: "blur(3px)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            padding: 20
+          }}
         >
-          <Image src="/images/marites-red-portrait.png" alt="Marites Allen" fill className="object-cover" />
-          <div className="absolute inset-x-8 bottom-8 rounded-3xl bg-white/90 p-5 shadow-2xl backdrop-blur">
-            <p className="text-xs uppercase tracking-[0.24em] text-[#C6A348]">Authority</p>
-            <p className="font-display mt-1 text-3xl font-semibold">International speaker, author, and trusted advisor.</p>
-          </div>
-        </motion.div>
-        <motion.div variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true }} transition={{ duration: 0.8 }}>
-          <p className="mb-5 text-sm font-semibold uppercase tracking-[0.28em] text-[#C6A348]">About Marites Allen</p>
-          <h2 className="font-display text-balance text-5xl font-semibold leading-[0.95] tracking-[-0.04em] md:text-7xl">
-            Timeless Eastern wisdom, translated for a modern global life.
-          </h2>
-          <p className="mt-7 text-lg leading-8 text-[#171717]/64">
-            Marites Allen is internationally recognized for making authentic Feng Shui practical, elegant, and deeply personal. Her work spans private consultations, corporate strategy, books, media, speaking engagements, and digital tools for everyday guidance.
-          </p>
-          <div className="mt-10 grid gap-5 sm:grid-cols-2">
-            {stats.map(([value, label]) => (
-              <div key={label} className="rounded-3xl border border-[#0F5132]/10 bg-[#FAF8F2] p-6">
-                <div className="font-display text-5xl font-semibold text-[#0F5132]">{value}</div>
-                <p className="mt-2 text-sm font-medium text-[#171717]/58">{label}</p>
-              </div>
-            ))}
-          </div>
-        </motion.div>
-      </div>
-    </section>
-  );
-}
-
-function Books() {
-  return (
-    <section id="books" className="bg-[#FAF8F2] py-24 md:py-32">
-      <div className="luxury-container">
-        <SectionIntro
-          eyebrow="Library"
-          title="Books for a more intentional life"
-          copy="A luxury bookstore-inspired presentation for annual forecasts, destiny guides, and signature Feng Shui titles."
-        />
-        <div className="grid gap-6 md:grid-cols-3">
-          {books.map((book, index) => (
-            <motion.article
-              key={book.title}
-              initial={{ opacity: 0, y: 30, rotate: -1 }}
-              whileInView={{ opacity: 1, y: 0, rotate: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.08, duration: 0.75 }}
-              whileHover={{ y: -8 }}
-              className="rounded-[2rem] bg-white p-6 shadow-[0_20px_80px_rgba(15,81,50,0.08)]"
+          <div
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              position: "relative",
+              maxWidth: 900,
+              width: "100%",
+              maxHeight: "90vh",
+              overflowY: "auto",
+              overflowX: "hidden",
+              background: "#fffdf8",
+              borderRadius: 20,
+              boxShadow: "0 40px 90px -20px rgba(0,0,0,0.5)",
+              display: "flex",
+              flexWrap: "wrap"
+            }}
+          >
+            <button
+              type="button"
+              onClick={() => setChartOpen(false)}
+              style={{
+                position: "absolute",
+                top: 12,
+                right: 12,
+                width: 34,
+                height: 34,
+                borderRadius: "50%",
+                background: "rgba(0,0,0,0.35)",
+                color: "#fff",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                cursor: "pointer",
+                zIndex: 2,
+                border: 0
+              }}
+              aria-label="Close"
             >
-              <div className="relative mb-8 flex aspect-[4/5] items-center justify-center rounded-[1.5rem] bg-gradient-to-br from-[#0F5132] to-[#061b13] p-8 text-center text-white">
-                <span className="absolute left-5 top-5 rounded-full bg-[#C6A348] px-3 py-1 text-xs font-bold text-[#171717]">{book.badge}</span>
-                <div>
-                  <BookOpen className="mx-auto mb-5 h-12 w-12 text-[#C6A348]" />
-                  <p className="font-display text-4xl font-semibold leading-none">{book.title}</p>
-                </div>
+              ×
+            </button>
+            <div
+              style={{
+                flex: "1 1 320px",
+                minWidth: 280,
+                background: "linear-gradient(155deg,#1a4d3e,#0f3126)",
+                padding: "clamp(28px,4vw,48px)",
+                color: "#fff"
+              }}
+            >
+              <div style={{ fontSize: 12, fontWeight: 700, letterSpacing: 3, textTransform: "uppercase", color: "#e6c680" }}>
+                Free · No obligation
               </div>
-              <h3 className="font-display text-3xl font-semibold">{book.title}</h3>
-              <p className="mt-3 min-h-20 text-sm leading-7 text-[#171717]/62">{book.copy}</p>
-              <div className="mt-6 flex gap-3">
-                <Button size="sm">Buy Now</Button>
-                <Button size="sm" variant="ghost">Preview</Button>
-              </div>
-            </motion.article>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function Destara() {
-  return (
-    <section id="destara" className="noise relative overflow-hidden bg-[#06140f] py-24 text-white md:py-36">
-      <div className="absolute -left-32 top-16 h-96 w-96 rounded-full bg-[#0F5132] blur-[120px]" />
-      <div className="absolute bottom-0 right-0 h-[520px] w-[520px] rounded-full bg-[#C6A348]/18 blur-[140px]" />
-      <motion.div
-        animate={{ rotate: 360 }}
-        transition={{ duration: 70, repeat: Infinity, ease: "linear" }}
-        className="absolute right-[8%] top-20 hidden h-56 w-56 rounded-full border border-[#C6A348]/20 md:block"
-      >
-        <div className="absolute inset-10 rounded-full border border-white/10" />
-        <Compass className="absolute left-1/2 top-1/2 h-16 w-16 -translate-x-1/2 -translate-y-1/2 text-[#C6A348]/40" />
-      </motion.div>
-      <div className="luxury-container relative grid items-center gap-12 lg:grid-cols-[1.02fr_0.98fr]">
-        <motion.div variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true }} transition={{ duration: 0.8 }}>
-          <p className="mb-5 text-sm font-semibold uppercase tracking-[0.28em] text-[#C6A348]">Destara App</p>
-          <h2 className="font-display text-balance text-5xl font-semibold leading-[0.92] tracking-[-0.04em] md:text-7xl">
-            Your Personal Feng Shui Master, Powered by AI
-          </h2>
-          <p className="mt-7 max-w-2xl text-lg leading-8 text-white/70">
-            Discover personalized daily Feng Shui guidance, auspicious dates, elemental insights, lucky directions, and AI-powered recommendations wherever you are.
-          </p>
-          <div className="mt-8 grid gap-3 sm:grid-cols-2">
-            {destaraFeatures.map((feature) => (
-              <div key={feature} className="glass rounded-2xl px-4 py-4 text-sm font-medium">
-                <Sparkles className="mr-3 inline h-4 w-4 text-[#C6A348]" />
-                {feature}
-              </div>
-            ))}
-          </div>
-          <div className="mt-10 flex flex-col gap-4 sm:flex-row">
-            <Button variant="gold" size="lg">Download Destara</Button>
-            <Button variant="ivory" size="lg">Learn More</Button>
-          </div>
-          <div className="mt-7 flex flex-wrap gap-3">
-            {["App Store", "Google Play"].map((store) => (
-              <div key={store} className="rounded-2xl border border-white/20 bg-white/10 px-5 py-3 text-sm font-semibold backdrop-blur">
-                Download on {store}
-              </div>
-            ))}
-          </div>
-        </motion.div>
-        <motion.div
-          initial={{ opacity: 0, y: 40, rotate: 3 }}
-          whileInView={{ opacity: 1, y: 0, rotate: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 1 }}
-          className="relative mx-auto w-full max-w-[430px]"
-        >
-          <motion.div
-            animate={{ y: [-12, 12, -12] }}
-            transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-            className="relative mx-auto aspect-[0.52/1] rounded-[3rem] border-[12px] border-[#111] bg-[#0F5132] p-5 shadow-[0_40px_140px_rgba(0,0,0,0.55)]"
-          >
-            <div className="absolute left-1/2 top-3 h-6 w-28 -translate-x-1/2 rounded-b-2xl bg-[#111]" />
-            <div className="h-full overflow-hidden rounded-[2.15rem] bg-[#FAF8F2] p-5 text-[#171717]">
-              <div className="mb-6 flex items-center justify-between">
-                <Image src="/images/destara-logo.png" alt="Destara" width={86} height={58} className="h-12 w-auto object-contain" />
-                <Compass className="h-6 w-6 text-[#0F5132]" />
-              </div>
-              <p className="text-xs uppercase tracking-[0.24em] text-[#C6A348]">Today</p>
-              <h3 className="font-display mt-2 text-4xl font-semibold leading-none">Auspicious Flow</h3>
-              <div className="mt-6 rounded-3xl bg-[#0F5132] p-5 text-white">
-                <p className="text-sm text-white/70">Lucky direction</p>
-                <p className="font-display mt-2 text-5xl">South East</p>
-              </div>
-              <div className="mt-5 grid grid-cols-2 gap-3">
-                {["Wealth", "Harmony", "Timing", "Home"].map((item) => (
-                  <div key={item} className="rounded-2xl border border-[#0F5132]/10 bg-white p-4">
-                    <Star className="mb-3 h-4 w-4 fill-[#C6A348] text-[#C6A348]" />
-                    <p className="text-sm font-semibold">{item}</p>
-                  </div>
+              <h2 className="font-display" style={{ fontWeight: 700, fontSize: "clamp(24px,3.2vw,34px)", lineHeight: 1.15, margin: "12px 0" }}>
+                Get your free Destiny Chart
+              </h2>
+              <p style={{ fontSize: 15, lineHeight: 1.6, color: "#c7ddd2", margin: "0 0 20px", maxWidth: 400 }}>
+                Enter your birth details and we&apos;ll send you a personalized snapshot of your Chinese zodiac and this
+                year&apos;s energies. It&apos;s a good first step before a full consultation.
+              </p>
+              <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "grid", gap: 10 }}>
+                {CHART_PERKS.map((p) => (
+                  <li key={p} style={{ display: "flex", gap: 10, alignItems: "flex-start", fontSize: 14, color: "#e7efe9" }}>
+                    <span style={{ color: "#e6c680", fontWeight: 700 }}>✓</span>
+                    {p}
+                  </li>
                 ))}
-              </div>
-              <div className="mt-5 rounded-3xl border border-[#0F5132]/10 bg-white p-4">
-                <p className="text-sm font-semibold text-[#0F5132]">Ask Destara AI</p>
-                <p className="mt-2 text-xs leading-5 text-[#171717]/55">What is the best date for signing a contract?</p>
+              </ul>
+            </div>
+            <div
+              style={{
+                flex: "1 1 320px",
+                minWidth: 280,
+                background: "#f9f5ec",
+                padding: "clamp(24px,3.5vw,40px)",
+                display: "flex",
+                alignItems: "center"
+              }}
+            >
+              <div style={{ width: "100%" }}>
+                {!leadSent ? (
+                  <div>
+                    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(140px,1fr))", gap: 14 }}>
+                      <div style={{ gridColumn: "1 / -1" }}>
+                        <label style={{ display: "block", fontSize: 13, fontWeight: 700, color: "#3d5348", marginBottom: 6 }}>
+                          Full name
+                        </label>
+                        <input
+                          type="text"
+                          value={leadName}
+                          onChange={(e) => setLeadName(e.target.value)}
+                          placeholder="Your name"
+                          style={inputStyle}
+                        />
+                      </div>
+                      <div>
+                        <label style={{ display: "block", fontSize: 13, fontWeight: 700, color: "#3d5348", marginBottom: 6 }}>
+                          Date of birth
+                        </label>
+                        <input type="date" value={leadDob} onChange={(e) => setLeadDob(e.target.value)} style={inputStyle} />
+                      </div>
+                      <div>
+                        <label style={{ display: "block", fontSize: 13, fontWeight: 700, color: "#3d5348", marginBottom: 6 }}>
+                          Time of birth
+                        </label>
+                        <input type="time" value={leadTime} onChange={(e) => setLeadTime(e.target.value)} style={inputStyle} />
+                      </div>
+                      <div style={{ gridColumn: "1 / -1" }}>
+                        <label style={{ display: "block", fontSize: 13, fontWeight: 700, color: "#3d5348", marginBottom: 6 }}>
+                          Email
+                        </label>
+                        <input
+                          type="email"
+                          value={leadEmail}
+                          onChange={(e) => setLeadEmail(e.target.value)}
+                          placeholder="you@email.com"
+                          style={inputStyle}
+                        />
+                      </div>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => leadReady && setLeadSent(true)}
+                      style={{
+                        marginTop: 16,
+                        width: "100%",
+                        textAlign: "center",
+                        background: "linear-gradient(160deg,#e6c680,#c69a3e)",
+                        color: "#143d31",
+                        borderRadius: 12,
+                        padding: 15,
+                        fontSize: 16,
+                        fontWeight: 700,
+                        cursor: leadReady ? "pointer" : "default",
+                        opacity: leadReady ? 1 : 0.5,
+                        border: 0
+                      }}
+                    >
+                      Send me my Destiny Chart
+                    </button>
+                    <div style={{ fontSize: 12, color: "#6b6862", textAlign: "center", marginTop: 10 }}>
+                      We respect your privacy. No spam, and you can unsubscribe anytime.
+                    </div>
+                  </div>
+                ) : (
+                  <div style={{ textAlign: "center" }}>
+                    <div
+                      style={{
+                        width: 56,
+                        height: 56,
+                        borderRadius: "50%",
+                        background: "#1a4d3e",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        margin: "0 auto 14px",
+                        color: "#e6c680",
+                        fontSize: 28
+                      }}
+                    >
+                      ✓
+                    </div>
+                    <h3 className="font-display" style={{ fontWeight: 700, fontSize: 24, color: "#143d31", margin: "0 0 6px" }}>
+                      You&apos;re a {leadSign}!
+                    </h3>
+                    <p style={{ fontSize: 15, color: "#5f6b60", margin: "0 0 16px", lineHeight: 1.55 }}>
+                      Your full Destiny Chart is on its way to <strong style={{ color: "#143d31" }}>{leadEmail}</strong>.{" "}
+                      {zodiacNote(leadSign)}
+                    </p>
+                    <Link
+                      href="/book"
+                      style={{
+                        display: "inline-block",
+                        background: "linear-gradient(160deg,#1a4d3e,#143d31)",
+                        color: "#fff",
+                        fontSize: 15,
+                        fontWeight: 700,
+                        padding: "13px 26px",
+                        borderRadius: 11
+                      }}
+                    >
+                      Book a full consultation →
+                    </Link>
+                  </div>
+                )}
               </div>
             </div>
-          </motion.div>
-          <Image
-            src="/images/destara-qr.png"
-            alt="Destara QR code"
-            width={150}
-            height={150}
-            className="absolute -bottom-8 -left-4 hidden rounded-3xl bg-white p-3 shadow-2xl md:block"
-          />
-        </motion.div>
-      </div>
-    </section>
-  );
-}
+          </div>
+        </div>
+      )}
 
-function Testimonials() {
-  return (
-    <section id="stories" className="bg-white py-24 md:py-32">
-      <div className="luxury-container">
-        <SectionIntro
-          eyebrow="Client Success Stories"
-          title="Results told with restraint and credibility"
-          copy="A luxury editorial approach to testimonials, from business transformation to family harmony and inspired homes."
+      <div id="top" />
+
+      {/* HERO */}
+      <section style={{ background: "linear-gradient(165deg,#1a4d3e 0%,#0f3126 100%)", position: "relative", overflow: "hidden" }}>
+        <div
+          style={{
+            position: "absolute",
+            top: -60,
+            right: "8%",
+            width: 340,
+            height: 340,
+            borderRadius: "50%",
+            background: "radial-gradient(circle,rgba(198,154,62,0.28),transparent 70%)"
+          }}
         />
-        <div className="grid gap-6 lg:grid-cols-[1fr_1.35fr]">
-          <motion.div variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true }} className="rounded-[2rem] bg-[#0F5132] p-8 text-white">
-            <Quote className="mb-12 h-10 w-10 text-[#C6A348]" />
-            <p className="font-display text-4xl font-semibold leading-tight">
-              “After one consultation, we finally understood how our home could support the life we wanted to build.”
+        <div
+          style={{
+            maxWidth: 1180,
+            margin: "0 auto",
+            padding: "clamp(44px,6vw,80px) clamp(18px,4vw,40px)",
+            display: "flex",
+            flexWrap: "wrap",
+            gap: "clamp(24px,3.5vw,44px)",
+            alignItems: "center",
+            position: "relative",
+            zIndex: 2
+          }}
+        >
+          <div style={{ flex: "1 1 380px", minWidth: 300 }}>
+            <div
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 8,
+                background: "rgba(230,198,128,0.14)",
+                border: "1px solid rgba(230,198,128,0.35)",
+                borderRadius: 99,
+                padding: "6px 14px"
+              }}
+            >
+              <span style={{ color: "#e6c680", fontSize: 13 }}>★★★★★</span>
+              <span style={{ color: "#f2ede1", fontSize: 12, fontWeight: 600 }}>4.9 · 1,200+ verified reviews</span>
+            </div>
+            <h1
+              className="font-display"
+              style={{
+                fontWeight: 700,
+                fontSize: "clamp(34px,5vw,58px)",
+                lineHeight: 1.08,
+                color: "#fff",
+                margin: "20px 0 16px"
+              }}
+            >
+              Transform your luck, home &amp; destiny
+            </h1>
+            <p style={{ fontSize: "clamp(16px,1.6vw,19px)", lineHeight: 1.6, color: "#c7ddd2", margin: "0 0 12px", maxWidth: 520 }}>
+              Private consultations with <strong style={{ color: "#e6c680" }}>the Philippines&apos; Feng Shui Queen</strong>, the
+              first Filipina Master in Feng Shui, who has advised business leaders and families from Manila to London.
             </p>
-            <p className="mt-8 text-white/60">Private family consultation, Singapore</p>
-          </motion.div>
-          <div className="grid gap-6 md:grid-cols-2">
-            {["Business revenue grew after a strategic office redesign.", "A family renovation became calmer, lighter, and more intentional.", "A founder chose an auspicious launch date with confidence.", "A personal BaZi reading clarified career timing."].map((story, index) => (
-              <motion.article
-                key={story}
-                variants={fadeUp}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.07 }}
-                className="rounded-[2rem] border border-[#0F5132]/10 bg-[#FAF8F2] p-7"
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 14, marginTop: 28 }}>
+              <Link
+                href="/book"
+                style={{
+                  background: "linear-gradient(160deg,#e6c680,#c69a3e)",
+                  color: "#143d31",
+                  fontSize: 16,
+                  fontWeight: 700,
+                  padding: "16px 30px",
+                  borderRadius: 12,
+                  boxShadow: "0 14px 28px -10px rgba(198,154,62,0.6)"
+                }}
               >
-                <div className="mb-8 flex gap-1 text-[#C6A348]">
-                  {Array.from({ length: 5 }).map((_, starIndex) => (
-                    <Star key={starIndex} className="h-4 w-4 fill-current" />
-                  ))}
+                Book Your Consultation →
+              </Link>
+              <button
+                type="button"
+                onClick={() => setChartOpen(true)}
+                style={{
+                  border: "1.5px solid rgba(255,255,255,0.35)",
+                  color: "#fff",
+                  fontSize: 15,
+                  fontWeight: 700,
+                  padding: "15px 24px",
+                  borderRadius: 12,
+                  background: "transparent",
+                  cursor: "pointer"
+                }}
+              >
+                Free Destiny Chart
+              </button>
+            </div>
+            <div
+              style={{
+                display: "flex",
+                gap: "clamp(20px,4vw,44px)",
+                marginTop: 40,
+                paddingTop: 26,
+                borderTop: "1px solid rgba(255,255,255,0.14)"
+              }}
+            >
+              {[
+                ["30+", "Years"],
+                ["100+", "Countries"],
+                ["10K+", "Companies"],
+                ["1M+", "Clients"]
+              ].map(([n, l]) => (
+                <div key={l}>
+                  <div className="font-display" style={{ fontWeight: 700, fontSize: "clamp(24px,3vw,32px)", color: "#e6c680" }}>
+                    {n}
+                  </div>
+                  <div style={{ fontSize: 12, letterSpacing: 0.5, color: "#9fbcb0", textTransform: "uppercase" }}>{l}</div>
                 </div>
-                <p className="text-lg leading-8 text-[#171717]/72">{story}</p>
-                <div className="mt-8 flex items-center gap-3">
-                  <div className="flex h-11 w-11 items-center justify-center rounded-full bg-[#0F5132] text-sm font-bold text-white">
-                    {index + 1}
+              ))}
+            </div>
+          </div>
+          <div style={{ flex: "0 1 420px", minWidth: 280, position: "relative" }}>
+            <div
+              style={{
+                position: "relative",
+                borderRadius: 24,
+                overflow: "hidden",
+                border: "2px solid rgba(230,198,128,0.4)",
+                boxShadow: "0 40px 70px -20px rgba(0,0,0,0.6)",
+                aspectRatio: "4/5"
+              }}
+            >
+              <Image
+                src="/images/zip/marites-1.webp"
+                alt="Marites Allen, Feng Shui Master"
+                fill
+                priority
+                style={{ objectFit: "cover", objectPosition: "50% 16%" }}
+              />
+            </div>
+            <div
+              style={{
+                position: "absolute",
+                bottom: -18,
+                left: -18,
+                background: "#fffdf8",
+                borderRadius: 14,
+                padding: "14px 18px",
+                boxShadow: "0 20px 40px -14px rgba(0,0,0,0.4)",
+                maxWidth: 230
+              }}
+            >
+              <div style={{ fontSize: 12, color: "#6b6862" }}>As featured in</div>
+              <div className="font-display" style={{ fontWeight: 700, fontSize: 16, color: "#143d31" }}>
+                Forbes · Tatler · ANC
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <Link href="/media" style={{ display: "block", background: "#efe8d8", borderBottom: "1px solid rgba(20,61,49,0.08)" }}>
+        <div
+          style={{
+            maxWidth: 1180,
+            margin: "0 auto",
+            padding: "18px clamp(18px,4vw,40px)",
+            display: "flex",
+            flexWrap: "wrap",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: "clamp(16px,4vw,44px)"
+          }}
+        >
+          <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: 2, textTransform: "uppercase", color: "#4a4740" }}>
+            As featured in
+          </span>
+          {["Forbes", "Tatler", "Manila Bulletin", "Manila Times", "ANC"].map((name) => (
+            <span key={name} className="font-display" style={{ fontSize: name === "Tatler" ? 19 : 17, color: "#63583a", fontStyle: name === "Tatler" ? "italic" : "normal" }}>
+              {name}
+            </span>
+          ))}
+          <span style={{ fontSize: 12, fontWeight: 700, color: "#143d31" }}>See all press →</span>
+        </div>
+      </Link>
+
+      <section id="about" style={{ background: "#efe8d8" }}>
+        <div
+          style={{
+            maxWidth: 1180,
+            margin: "0 auto",
+            padding: "clamp(48px,7vw,72px) clamp(18px,4vw,40px)",
+            display: "flex",
+            flexWrap: "wrap",
+            gap: "clamp(28px,5vw,50px)",
+            alignItems: "center"
+          }}
+        >
+          <div style={{ flex: "0 1 260px", minWidth: 220 }}>
+            <div
+              style={{
+                borderRadius: 20,
+                overflow: "hidden",
+                boxShadow: "0 24px 50px -24px rgba(20,60,45,0.5)",
+                aspectRatio: "4/5",
+                maxWidth: 280,
+                position: "relative"
+              }}
+            >
+              <Image src="/images/zip/marites-2.webp" alt="Marites Allen" fill style={{ objectFit: "cover", objectPosition: "50% 15%" }} />
+            </div>
+          </div>
+          <div style={{ flex: "1 1 340px", minWidth: 280 }}>
+            <div style={{ fontSize: 12, fontWeight: 700, letterSpacing: 3, textTransform: "uppercase", color: "#4a4740" }}>
+              Meet Marites Allen
+            </div>
+            <h2 className="font-display" style={{ fontWeight: 700, fontSize: "clamp(22px,2.8vw,30px)", color: "#143d31", margin: "10px 0 12px" }}>
+              The name the world trusts for Feng Shui
+            </h2>
+            <p style={{ fontSize: 15.5, lineHeight: 1.7, color: "#4d5850", margin: "0 0 18px" }}>
+              Dubbed <em>the Real Feng Shui Queen</em>, Marites Allen is the first Filipina Master in Feng Shui, guiding
+              business leaders, celebrities and families for over three decades from Manila to London.
+            </p>
+            <Link
+              href="/about"
+              style={{
+                display: "inline-block",
+                background: "linear-gradient(160deg,#1a4d3e,#143d31)",
+                color: "#fff",
+                fontSize: 14,
+                fontWeight: 700,
+                padding: "12px 24px",
+                borderRadius: 10
+              }}
+            >
+              Read her full story →
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      <section style={{ background: "#fffdf8", borderTop: "1px solid rgba(20,61,49,0.08)", borderBottom: "1px solid rgba(20,61,49,0.08)" }}>
+        <div style={{ maxWidth: 1180, margin: "0 auto", padding: "28px clamp(18px,4vw,40px)", textAlign: "center" }}>
+          <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: 2, textTransform: "uppercase", color: "#4a4740", marginBottom: 12 }}>
+            Corporate clients &amp; speaking engagements
+          </div>
+          <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "clamp(14px,3vw,28px)" }}>
+            {SPEAKING_CLIENTS.map((c) => (
+              <span key={c} className="font-display" style={{ fontSize: 16, color: "#5f6b60" }}>
+                {c}
+              </span>
+            ))}
+          </div>
+          <Link href="/projects" style={{ display: "inline-block", marginTop: 14, fontSize: 13, fontWeight: 700, color: "#143d31" }}>
+            See all projects &amp; collaborations →
+          </Link>
+        </div>
+      </section>
+
+      <section id="destara" style={{ background: "linear-gradient(160deg,#0f3126,#06140f)", color: "#fff", position: "relative", overflow: "hidden" }}>
+        <div
+          style={{
+            maxWidth: 1180,
+            margin: "0 auto",
+            padding: "clamp(34px,4.5vw,56px) clamp(18px,4vw,40px)",
+            display: "flex",
+            flexWrap: "wrap",
+            gap: "clamp(24px,3.5vw,44px)",
+            alignItems: "center",
+            position: "relative",
+            zIndex: 2
+          }}
+        >
+          <div style={{ flex: "1 1 360px", minWidth: 300 }}>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 8, alignItems: "center", marginBottom: 12 }}>
+              <span style={{ fontSize: 10.5, fontWeight: 700, letterSpacing: 1.5, textTransform: "uppercase", color: "#0f3126", background: "#e6c680", borderRadius: 99, padding: "4px 12px" }}>
+                New
+              </span>
+              <span style={{ fontSize: 10.5, fontWeight: 700, letterSpacing: 1.5, textTransform: "uppercase", color: "#e6c680", border: "1px solid rgba(230,198,128,0.5)", borderRadius: 99, padding: "3px 11px" }}>
+                Beta testing now
+              </span>
+            </div>
+            <h2 className="font-display" style={{ fontWeight: 700, fontSize: "clamp(26px,3.6vw,40px)", lineHeight: 1.12, margin: "0 0 14px" }}>
+              The future of Feng Shui, in your pocket
+            </h2>
+            <p style={{ fontSize: 16, lineHeight: 1.65, color: "#bcd3c8", margin: "0 0 22px", maxWidth: 520 }}>
+              Destara is an AI Destiny Guide trained on 30 years of Marites Allen&apos;s Feng Shui expertise. It&apos;s free to
+              use, with no email and no sign-up. Just open it and ask.
+            </p>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(220px,1fr))", gap: 12, marginBottom: 26, maxWidth: 560 }}>
+              {DESTARA_BENEFITS.map((b) => (
+                <div key={b.title} style={{ display: "flex", gap: 11, alignItems: "flex-start" }}>
+                  <span style={{ color: "#e6c680", fontWeight: 700, flexShrink: 0 }}>✦</span>
+                  <span>
+                    <span style={{ display: "block", fontSize: 14, fontWeight: 700, color: "#fff" }}>{b.title}</span>
+                    <span style={{ display: "block", fontSize: 13, lineHeight: 1.5, color: "#a9c6ba", marginTop: 2 }}>{b.desc}</span>
+                  </span>
+                </div>
+              ))}
+            </div>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 11, alignItems: "center" }}>
+              <a
+                href="https://destara.app"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ background: "linear-gradient(160deg,#e6c680,#c69a3e)", color: "#143d31", fontSize: 15, fontWeight: 700, padding: "15px 30px", borderRadius: 99 }}
+              >
+                Try Destara free →
+              </a>
+              <Link href="/destara" style={{ border: "1.5px solid rgba(255,255,255,0.35)", color: "#fff", fontSize: 15, fontWeight: 700, padding: "15px 24px", borderRadius: 99 }}>
+                Learn more
+              </Link>
+            </div>
+          </div>
+          <div style={{ flex: "0 1 300px", minWidth: 250, display: "flex", justifyContent: "center" }}>
+            <div style={{ perspective: 1500, width: "100%", maxWidth: 290 }}>
+              <div
+                className="om3d"
+                style={{
+                  position: "relative",
+                  width: "100%",
+                  transform: "rotateY(-14deg) rotateX(6deg)",
+                  borderRadius: 52,
+                  background: "linear-gradient(145deg,#3b4046 0%,#14171a 22%,#0a0c0e 50%,#20242a 78%,#4a5057 100%)",
+                  padding: 11,
+                  boxShadow: "0 50px 90px -28px rgba(0,0,0,0.8)"
+                }}
+              >
+                <div style={{ position: "relative", borderRadius: 42, overflow: "hidden", background: "#04120d", aspectRatio: "626/1078" }}>
+                  <Image src="/images/zip/destara-app.png" alt="The Destara app" fill style={{ objectFit: "cover", objectPosition: "top center" }} />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="services" style={{ maxWidth: 1180, margin: "0 auto", padding: "clamp(34px,4.5vw,56px) clamp(18px,4vw,40px)" }}>
+        <div style={{ textAlign: "center", maxWidth: 640, margin: "0 auto 26px" }}>
+          <div style={{ fontSize: 12, fontWeight: 700, letterSpacing: 3, textTransform: "uppercase", color: "#4a4740" }}>
+            Consultations
+          </div>
+          <h2 className="font-display" style={{ fontWeight: 700, fontSize: "clamp(24px,3vw,32px)", color: "#143d31", margin: "10px 0 12px" }}>
+            Guidance for every turning point
+          </h2>
+          <p style={{ fontSize: 16, lineHeight: 1.6, color: "#5f6b60", margin: 0 }}>
+            Every session is one-on-one with Marites, online or in person. Each one includes a personalized analysis, a
+            written action plan, and a follow-up window.
+          </p>
+        </div>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(280px,1fr))", gap: 22 }}>
+          {HOME_SERVICES.map((s) => (
+            <div
+              key={s.id}
+              style={{
+                background: "#fffdf8",
+                border: "1px solid rgba(20,61,49,0.1)",
+                borderRadius: 20,
+                padding: 28,
+                display: "flex",
+                flexDirection: "column",
+                boxShadow: "0 12px 30px -18px rgba(20,60,45,0.35)"
+              }}
+            >
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                <div
+                  className="font-display"
+                  style={{
+                    width: 52,
+                    height: 52,
+                    borderRadius: "50%",
+                    border: "1.5px solid #c69a3e",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    fontWeight: 700,
+                    fontSize: 20,
+                    color: "#1a4d3e"
+                  }}
+                >
+                  {s.num}
+                </div>
+                {s.popular && (
+                  <span style={{ fontSize: 10, fontWeight: 700, letterSpacing: 0.5, textTransform: "uppercase", color: "#1a4d3e", background: "#e6c680", borderRadius: 99, padding: "3px 10px" }}>
+                    Most booked
+                  </span>
+                )}
+              </div>
+              <h3 className="font-display" style={{ fontWeight: 600, fontSize: 21, color: "#143d31", margin: "18px 0 8px" }}>
+                {s.title}
+              </h3>
+              <p style={{ fontSize: 14, lineHeight: 1.6, color: "#6b7268", margin: "0 0 16px" }}>{s.tagline}</p>
+              <div style={{ fontSize: 12, fontWeight: 700, letterSpacing: 0.5, textTransform: "uppercase", color: "#4a4740", marginBottom: 8 }}>
+                You&apos;ll receive
+              </div>
+              <ul style={{ listStyle: "none", padding: 0, margin: "0 0 18px", display: "grid", gap: 7, flex: 1 }}>
+                {s.includes.map((inc) => (
+                  <li key={inc} style={{ display: "flex", gap: 8, alignItems: "flex-start", fontSize: 13.5, color: "#3d4a41" }}>
+                    <span style={{ color: "#1a4d3e", fontWeight: 700 }}>✓</span>
+                    {inc}
+                  </li>
+                ))}
+              </ul>
+              <div style={{ fontSize: 13, color: "#6b6862", marginBottom: 16 }}>{s.duration}</div>
+              <Link
+                href={`/book?service=${s.id}`}
+                style={{
+                  display: "block",
+                  textAlign: "center",
+                  background: "linear-gradient(160deg,#1a4d3e,#143d31)",
+                  color: "#fff",
+                  fontSize: 15,
+                  fontWeight: 700,
+                  padding: 13,
+                  borderRadius: 11
+                }}
+              >
+                Book this consultation
+              </Link>
+            </div>
+          ))}
+        </div>
+        <Link
+          href="/book?bespoke=1"
+          style={{
+            marginTop: 22,
+            background: "linear-gradient(120deg,#1a4d3e,#0f3126)",
+            border: "1px solid rgba(230,198,128,0.3)",
+            borderRadius: 16,
+            padding: "20px 26px",
+            display: "flex",
+            flexWrap: "wrap",
+            gap: 16,
+            alignItems: "center",
+            justifyContent: "space-between"
+          }}
+        >
+          <div>
+            <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: 1.5, textTransform: "uppercase", color: "#e6c680" }}>
+              For estates, family offices &amp; business leaders
+            </div>
+            <div className="font-display" style={{ fontWeight: 600, fontSize: 19, color: "#fff", marginTop: 4 }}>
+              Bespoke Advisory, scoped around what you need
+            </div>
+          </div>
+          <span style={{ background: "#e6c680", color: "#143d31", fontWeight: 700, padding: "12px 24px", borderRadius: 10, flexShrink: 0 }}>
+            Enquire privately →
+          </span>
+        </Link>
+      </section>
+
+      <section id="book" style={{ maxWidth: 1180, margin: "0 auto", padding: "clamp(34px,4.5vw,56px) clamp(18px,4vw,40px)" }}>
+        <div
+          style={{
+            background: "linear-gradient(155deg,#1a4d3e,#0f3126)",
+            borderRadius: 24,
+            padding: "clamp(28px,3.6vw,42px)",
+            textAlign: "center",
+            boxShadow: "0 30px 70px -30px rgba(20,60,45,0.5)"
+          }}
+        >
+          <div style={{ fontSize: 12, fontWeight: 700, letterSpacing: 3, textTransform: "uppercase", color: "#e6c680" }}>
+            Book now
+          </div>
+          <h2 className="font-display" style={{ fontWeight: 700, fontSize: "clamp(24px,3vw,32px)", color: "#fff", margin: "10px 0 12px" }}>
+            Reserve your consultation
+          </h2>
+          <p style={{ fontSize: 16, color: "#c7ddd2", margin: "0 auto 28px", maxWidth: 520 }}>
+            Five quick steps. Transparent pricing, instant confirmation, free reschedule up to 48 hours before.
+          </p>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 10, justifyContent: "center", marginBottom: 30 }}>
+            {GUARANTEES.map((g) => (
+              <span
+                key={g}
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: 7,
+                  background: "rgba(255,255,255,0.08)",
+                  border: "1px solid rgba(255,255,255,0.18)",
+                  borderRadius: 99,
+                  padding: "8px 15px",
+                  fontSize: 13,
+                  fontWeight: 600,
+                  color: "#e7efe9"
+                }}
+              >
+                <span style={{ color: "#e6c680" }}>✦</span>
+                {g}
+              </span>
+            ))}
+          </div>
+          <Link
+            href="/book"
+            style={{
+              display: "inline-block",
+              background: "linear-gradient(160deg,#e6c680,#c69a3e)",
+              color: "#143d31",
+              fontSize: 16,
+              fontWeight: 700,
+              padding: "16px 34px",
+              borderRadius: 12
+            }}
+          >
+            Start booking →
+          </Link>
+        </div>
+      </section>
+
+      <section id="reviews" style={{ background: "#efe8d8" }}>
+        <div style={{ maxWidth: 1180, margin: "0 auto", padding: "clamp(34px,4.5vw,54px) clamp(18px,4vw,40px)" }}>
+          <div style={{ textAlign: "center", maxWidth: 560, margin: "0 auto 26px" }}>
+            <div style={{ color: "#5c4408", fontSize: 16, letterSpacing: 2 }}>★★★★★</div>
+            <h2 className="font-display" style={{ fontWeight: 700, fontSize: "clamp(24px,3vw,32px)", color: "#143d31", margin: "10px 0 0" }}>
+              Testimonials
+            </h2>
+          </div>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(280px,1fr))", gap: 20 }}>
+            {TESTIMONIALS.map((q) => (
+              <div
+                key={q.name}
+                style={{
+                  background: "#fffdf8",
+                  border: "1px solid rgba(20,61,49,0.1)",
+                  borderRadius: 18,
+                  padding: 26,
+                  boxShadow: "0 12px 30px -20px rgba(20,60,45,0.3)"
+                }}
+              >
+                <div style={{ color: "#5c4408", fontSize: 14, letterSpacing: 1, marginBottom: 12 }}>★★★★★</div>
+                <p className="font-display" style={{ fontStyle: "italic", fontSize: 17, lineHeight: 1.55, color: "#2f3d35", margin: "0 0 18px" }}>
+                  {q.text}
+                </p>
+                <div style={{ display: "flex", alignItems: "center", gap: 11 }}>
+                  <div
+                    className="font-display"
+                    style={{
+                      width: 38,
+                      height: 38,
+                      borderRadius: "50%",
+                      background: "#1a4d3e",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      fontWeight: 700,
+                      color: "#e6c680"
+                    }}
+                  >
+                    {q.initial}
                   </div>
                   <div>
-                    <p className="font-semibold">Verified Client</p>
-                    <p className="text-sm text-[#171717]/48">Global consultation</p>
+                    <div style={{ fontSize: 14, fontWeight: 700, color: "#143d31" }}>{q.name}</div>
+                    <div style={{ fontSize: 12, color: "#6b6862" }}>{q.role}</div>
                   </div>
                 </div>
-              </motion.article>
+              </div>
             ))}
           </div>
         </div>
-      </div>
-    </section>
-  );
-}
+      </section>
 
-function EventsBlogTrust() {
-  return (
-    <section id="events" className="bg-[#FAF8F2] py-24 md:py-32">
-      <div className="luxury-container grid gap-6 lg:grid-cols-3">
-        <motion.div variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true }} className="rounded-[2rem] bg-white p-8 shadow-[0_20px_80px_rgba(15,81,50,0.07)]">
-          <Timer className="mb-8 h-10 w-10 text-[#C6A348]" />
-          <p className="text-sm uppercase tracking-[0.24em] text-[#C6A348]">Upcoming Seminar</p>
-          <h3 className="font-display mt-4 text-4xl font-semibold leading-none">2026 Prosperity Forecast</h3>
-          <p className="mt-5 text-[#171717]/62">A private online event for auspicious timing, wealth sectors, and annual energies.</p>
-          <div className="mt-8 rounded-2xl bg-[#0F5132] p-5 text-white">18 days : 06 hours : 22 minutes</div>
-          <Button className="mt-6 w-full" variant="gold">Reserve Seat</Button>
-        </motion.div>
-        <motion.div variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true }} className="rounded-[2rem] bg-[#0F5132] p-8 text-white lg:col-span-2">
-          <div className="mb-8 flex items-center justify-between gap-4">
-            <div>
-              <p className="text-sm uppercase tracking-[0.24em] text-[#C6A348]">Journal</p>
-              <h3 className="font-display mt-3 text-5xl font-semibold leading-none">Featured from the archives</h3>
+      <section style={{ background: "#fbfaf8", borderTop: "1px solid rgba(0,0,0,0.07)", borderBottom: "1px solid rgba(0,0,0,0.07)" }}>
+        <div
+          style={{
+            maxWidth: 1180,
+            margin: "0 auto",
+            padding: "clamp(34px,4.5vw,54px) clamp(18px,4vw,40px)",
+            display: "flex",
+            flexWrap: "wrap",
+            gap: "clamp(24px,3.5vw,44px)",
+            alignItems: "center"
+          }}
+        >
+          <div style={{ flex: "1 1 360px", minWidth: 300 }}>
+            <Image src="/images/zip/frigga-logo.png" alt="Frigga, Charmed Life" width={132} height={48} style={{ width: "100%", maxWidth: 132, height: "auto", marginBottom: 14 }} />
+            <h2 className="font-display" style={{ fontWeight: 400, fontSize: "clamp(21px,2.6vw,30px)", lineHeight: 1.25, margin: "0 0 10px", color: "#1c1c1c" }}>
+              Shop your lucky items for the year
+            </h2>
+            <p style={{ fontSize: 14.5, lineHeight: 1.7, color: "#6b6862", margin: "0 0 16px", maxWidth: 440 }}>
+              Marites Allen&apos;s own line of charms, amulets, planners and almanacs, so the guidance from your consultation
+              travels with you every day.
+            </p>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 7, marginBottom: 18 }}>
+              {FRIGGA_BROWSE.map((b) => (
+                <a
+                  key={b.label}
+                  href={b.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ display: "inline-block", border: "1px solid rgba(0,0,0,0.14)", padding: "7px 14px", fontSize: 12.5, fontWeight: 600, color: "#1c1c1c", background: "#fff" }}
+                >
+                  {b.label}
+                </a>
+              ))}
             </div>
-            <Search className="hidden h-8 w-8 text-white/50 sm:block" />
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 11, alignItems: "center" }}>
+              <a
+                href="https://www.frigga.com.ph"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ display: "inline-block", background: "#1c1c1c", color: "#fff", fontSize: 11.5, fontWeight: 600, letterSpacing: 2.5, textTransform: "uppercase", padding: "14px 32px" }}
+              >
+                Shop Frigga
+              </a>
+              {FRIGGA_REGIONS.map((r) => (
+                <a key={r.domain} href={r.url} target="_blank" rel="noopener noreferrer" style={{ fontSize: 12.5, fontWeight: 600, color: "#4a4740" }}>
+                  {r.domain}
+                </a>
+              ))}
+            </div>
           </div>
-          <div className="grid gap-4 md:grid-cols-2">
-            {articles.map((article, index) => (
-              <div key={article} className="group rounded-3xl border border-white/12 bg-white/8 p-5">
-                <p className="mb-5 text-xs text-[#C6A348]">Featured · {2026 - index}</p>
-                <h4 className="font-display text-3xl font-semibold leading-none">{article}</h4>
-                <p className="mt-5 text-sm text-white/58">6 min read</p>
-                <ChevronRight className="mt-5 h-5 w-5 text-[#C6A348] transition group-hover:translate-x-1" />
+          <div style={{ flex: "0 1 380px", minWidth: 260, perspective: 1400 }}>
+            <a
+              className="om3d"
+              href="https://www.frigga.com.ph"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                display: "block",
+                transform: "rotateX(8deg) rotateY(-10deg)",
+                borderRadius: 9,
+                overflow: "hidden",
+                boxShadow: "0 34px 60px -28px rgba(0,0,0,0.4)"
+              }}
+            >
+              <div style={{ display: "flex", alignItems: "center", gap: 7, background: "#3d3835", padding: "7px 11px" }}>
+                <span style={{ width: 8, height: 8, borderRadius: "50%", background: "#ff5f57" }} />
+                <span style={{ width: 8, height: 8, borderRadius: "50%", background: "#febc2e" }} />
+                <span style={{ width: 8, height: 8, borderRadius: "50%", background: "#28c840" }} />
+                <span style={{ flex: 1, background: "rgba(255,255,255,0.12)", borderRadius: 99, padding: "4px 11px", fontSize: 10.5, color: "#d9d2cd", marginLeft: 5 }}>
+                  frigga.com.ph
+                </span>
               </div>
-            ))}
-          </div>
-        </motion.div>
-      </div>
-      <div className="luxury-container mt-20">
-        <div className="rounded-[2rem] border border-[#0F5132]/10 bg-white p-8">
-          <p className="mb-8 text-center text-sm uppercase tracking-[0.28em] text-[#C6A348]">As Seen In · Trusted By</p>
-          <div className="grid grid-cols-2 gap-5 text-center text-sm font-bold uppercase tracking-[0.18em] text-[#171717]/45 md:grid-cols-6">
-            {["TV", "News", "Tatler", "Vogue", "Awards", "Keynotes"].map((logo) => (
-              <div key={logo} className="rounded-2xl bg-[#FAF8F2] px-5 py-6">{logo}</div>
-            ))}
+              <Image src="/images/zip/frigga-site.png" alt="The Frigga Charmed Life online store" width={760} height={480} style={{ display: "block", width: "100%", height: "auto" }} />
+            </a>
           </div>
         </div>
-      </div>
-    </section>
-  );
-}
+      </section>
 
-function BookingWizard() {
-  const steps = ["Choose Service", "Choose Date", "Choose Time", "Your Details", "Payment"];
-  return (
-    <section id="booking" className="bg-white py-24 md:py-32">
-      <div className="luxury-container grid gap-10 lg:grid-cols-[0.82fr_1.18fr]">
-        <motion.div variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true }}>
-          <p className="mb-5 text-sm font-semibold uppercase tracking-[0.28em] text-[#C6A348]">Booking Experience</p>
-          <h2 className="font-display text-5xl font-semibold leading-none tracking-[-0.04em] md:text-7xl">
-            Reserve a consultation like a private retreat.
+      <section id="faq" style={{ maxWidth: 820, margin: "0 auto", padding: "clamp(34px,4.5vw,56px) clamp(18px,4vw,40px)" }}>
+        <div style={{ textAlign: "center", marginBottom: 40 }}>
+          <div style={{ fontSize: 12, fontWeight: 700, letterSpacing: 3, textTransform: "uppercase", color: "#4a4740" }}>
+            Questions
+          </div>
+          <h2 className="font-display" style={{ fontWeight: 700, fontSize: "clamp(24px,3vw,32px)", color: "#143d31", margin: "10px 0 0" }}>
+            Everything you might be wondering
           </h2>
-          <p className="mt-7 text-lg leading-8 text-[#171717]/62">
-            The production-ready flow is ready to connect to Stripe, PayPal, email confirmations, availability, and admin notifications.
+        </div>
+        {faqs.map((f, i) => (
+          <button
+            type="button"
+            key={f.q}
+            onClick={() => setOpenFaq(openFaq === i ? -1 : i)}
+            style={{
+              width: "100%",
+              textAlign: "left",
+              background: "#fffdf8",
+              border: "1px solid rgba(20,61,49,0.1)",
+              borderRadius: 14,
+              padding: "20px 22px",
+              marginBottom: 12,
+              cursor: "pointer"
+            }}
+          >
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 16 }}>
+              <span className="font-display" style={{ fontWeight: 600, fontSize: 17, color: "#143d31" }}>
+                {f.q}
+              </span>
+              <span style={{ flexShrink: 0, fontSize: 22, color: "#143d31", lineHeight: 1 }}>{f.icon}</span>
+            </div>
+            {f.open && <p style={{ fontSize: 15, lineHeight: 1.65, color: "#5f6b60", margin: "14px 0 0" }}>{f.a}</p>}
+          </button>
+        ))}
+      </section>
+
+      <section style={{ background: "linear-gradient(160deg,#1a4d3e,#0f3126)" }}>
+        <div style={{ maxWidth: 1180, margin: "0 auto", padding: "clamp(32px,4vw,50px) clamp(18px,4vw,40px)", textAlign: "center" }}>
+          <h2 className="font-display" style={{ fontWeight: 700, fontSize: "clamp(28px,4vw,44px)", color: "#fff", margin: "0 0 12px" }}>
+            Ready to align with your best year yet?
+          </h2>
+          <p style={{ fontSize: 17, color: "#c7ddd2", margin: "0 auto 28px", maxWidth: 560 }}>
+            Join over a million people who have turned to Marites Allen for clarity, prosperity and peace of mind.
           </p>
-        </motion.div>
-        <motion.div variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true }} className="rounded-[2rem] border border-[#0F5132]/10 bg-[#FAF8F2] p-5 md:p-8">
-          <div className="mb-8 flex gap-2 overflow-x-auto">
-            {steps.map((step, index) => (
-              <div key={step} className={`min-w-max rounded-full px-4 py-2 text-xs font-semibold ${index === 0 ? "bg-[#0F5132] text-white" : "bg-white text-[#171717]/55"}`}>
-                {index + 1}. {step}
-              </div>
-            ))}
-          </div>
-          <div className="grid gap-4 md:grid-cols-2">
-            {["Personal Consultation", "Business Feng Shui", "Home Audit", "BaZi Reading"].map((service) => (
-              <button key={service} className="focus-ring rounded-3xl border border-[#0F5132]/12 bg-white p-5 text-left transition hover:-translate-y-1 hover:border-[#C6A348]">
-                <ShieldCheck className="mb-6 h-6 w-6 text-[#C6A348]" />
-                <span className="font-display text-2xl font-semibold">{service}</span>
-                <p className="mt-2 text-sm text-[#171717]/52">From $250 · Video, phone, or in-person</p>
-              </button>
-            ))}
-          </div>
-          <div className="mt-6 grid gap-4 md:grid-cols-2">
-            {["Name", "Country", "Birth Date", "Birth Time", "Phone", "Email"].map((field) => (
-              <label key={field} className="text-xs font-semibold uppercase tracking-[0.18em] text-[#171717]/45">
-                {field}
-                <input className="focus-ring mt-2 h-12 w-full rounded-2xl border border-[#0F5132]/10 bg-white px-4 normal-case tracking-normal" placeholder={field} />
-              </label>
-            ))}
-          </div>
-          <div className="mt-4 rounded-3xl border border-dashed border-[#0F5132]/25 bg-white p-5 text-sm text-[#171717]/58">
-            <Upload className="mr-2 inline h-4 w-4 text-[#C6A348]" />
-            Optional uploads: floor plans, house photos, business layout, and notes.
-          </div>
-          <div className="mt-7 flex flex-col gap-3 sm:flex-row">
-            <Button variant="gold" size="lg" className="flex-1">Continue to Payment</Button>
-            <Button variant="ghost" size="lg" className="flex-1">PayPal / Stripe Ready</Button>
-          </div>
-        </motion.div>
-      </div>
-    </section>
+          <Link
+            href="/book"
+            style={{
+              display: "inline-block",
+              background: "linear-gradient(160deg,#e6c680,#c69a3e)",
+              color: "#143d31",
+              fontSize: 17,
+              fontWeight: 700,
+              padding: "17px 38px",
+              borderRadius: 12
+            }}
+          >
+            Book Your Consultation →
+          </Link>
+        </div>
+      </section>
+
+      <SiteFooter />
+    </div>
   );
 }
 
-function NewsletterFooter() {
-  return (
-    <footer className="bg-[#06140f] text-white">
-      <div className="luxury-container border-b border-white/10 py-20">
-        <div className="mx-auto max-w-3xl text-center">
-          <Mail className="mx-auto mb-7 h-9 w-9 text-[#C6A348]" />
-          <h2 className="font-display text-5xl font-semibold leading-none md:text-7xl">Receive refined guidance monthly.</h2>
-          <p className="mx-auto mt-5 max-w-xl text-white/62">A minimal newsletter for auspicious dates, annual insights, events, books, and Destara updates.</p>
-          <div className="mx-auto mt-8 flex max-w-xl flex-col gap-3 rounded-full bg-white p-2 sm:flex-row">
-            <input className="min-h-12 flex-1 rounded-full px-5 text-[#171717] outline-none" placeholder="Email address" />
-            <Button variant="gold">Subscribe</Button>
-          </div>
-        </div>
-      </div>
-      <div className="luxury-container flex flex-col gap-8 py-10 md:flex-row md:items-center md:justify-between">
-        <Image src="/images/marites-logo-horizontal.png" alt="Marites Allen" width={260} height={52} className="h-8 w-auto object-contain invert-0 brightness-0 invert" />
-        <div className="flex flex-wrap gap-5 text-sm text-white/55">
-          {["Services", "Books", "Destara", "Events", "Journal", "Contact", "Admin"].map((item) => (
-            <Link key={item} href={item === "Admin" ? "/admin" : `/#${item.toLowerCase()}`} className="hover:text-white">
-              {item}
-            </Link>
-          ))}
-        </div>
-        <p className="text-sm text-white/42">© 2026 Marites Allen. All rights reserved.</p>
-      </div>
-    </footer>
-  );
-}
-
-export default function Page() {
-  return (
-    <>
-      <Header />
-      <main>
-        <Hero />
-        <Services />
-        <About />
-        <Books />
-        <Destara />
-        <Testimonials />
-        <EventsBlogTrust />
-        <BookingWizard />
-      </main>
-      <NewsletterFooter />
-    </>
-  );
-}
+const inputStyle: React.CSSProperties = {
+  width: "100%",
+  background: "#fffdf8",
+  border: "1.5px solid #cdd8d0",
+  borderRadius: 11,
+  padding: "12px 14px",
+  fontFamily: "Lato, system-ui, sans-serif",
+  fontSize: 16,
+  color: "#2a2a28"
+};
