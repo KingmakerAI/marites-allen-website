@@ -1,0 +1,40 @@
+# dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# next.js
+.next/
+out/
+build/
+dist/
+
+# env / secrets
+.env
+.env.*
+!.env.example
+
+# debug / logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# typescript
+*.tsbuildinfo
+
+# ide / os
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+
+# misc local clutter (not part of the Next.js website)
+*.zip
+*.sql
+*.pptx
+*.docx
+*.skill
+Tomora.zip
