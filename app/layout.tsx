@@ -1,52 +1,82 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
+import { JsonLd } from "@/components/json-ld";
+import {
+  DEFAULT_OG_IMAGE,
+  personJsonLd,
+  professionalServiceJsonLd,
+  SITE_KEYWORDS,
+  SITE_NAME,
+  SITE_TAGLINE,
+  SITE_URL,
+  websiteJsonLd
+} from "@/lib/seo";
 import "./globals.css";
 
+export const viewport: Viewport = {
+  themeColor: "#143d31",
+  width: "device-width",
+  initialScale: 1,
+  colorScheme: "light"
+};
+
 export const metadata: Metadata = {
-  metadataBase: new URL("https://maritesallen.com"),
+  metadataBase: new URL(SITE_URL),
   title: {
-    default: "Marites Allen | The Feng Shui Queen",
-    template: "%s | Marites Allen"
+    default: `${SITE_NAME} | ${SITE_TAGLINE}`,
+    template: `%s | ${SITE_NAME}`
   },
   description:
-    "Private Feng Shui consultations, BaZi destiny readings, Destara AI, annual forecasts, and Frigga charms with internationally recognized Master Marites Allen.",
+    "Book private Feng Shui consultations with Marites Allen — BaZi destiny readings, home & business audits, Destara AI, 2026 Fire Horse forecasts, and Frigga Charmed Life charms.",
+  applicationName: SITE_NAME,
+  authors: [{ name: SITE_NAME, url: SITE_URL }],
+  creator: SITE_NAME,
+  publisher: SITE_NAME,
+  category: "Lifestyle",
+  keywords: SITE_KEYWORDS,
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false
+  },
   openGraph: {
-    title: "Marites Allen | The Feng Shui Queen",
+    title: `${SITE_NAME} | ${SITE_TAGLINE}`,
     description:
-      "Transform your luck, home and destiny with authentic Feng Shui guidance.",
-    url: "https://maritesallen.com",
-    siteName: "Marites Allen",
-    type: "website"
+      "Transform your luck, home and destiny with authentic Feng Shui guidance from the Philippines' Feng Shui Queen.",
+    url: SITE_URL,
+    siteName: SITE_NAME,
+    locale: "en_PH",
+    type: "website",
+    images: [
+      {
+        url: DEFAULT_OG_IMAGE,
+        width: 1200,
+        height: 630,
+        alt: `${SITE_NAME} — ${SITE_TAGLINE}`
+      }
+    ]
   },
   twitter: {
     card: "summary_large_image",
-    title: "Marites Allen | The Feng Shui Queen",
+    title: `${SITE_NAME} | ${SITE_TAGLINE}`,
     description:
-      "Private consultations, Destara AI, and annual forecasts from the Feng Shui Queen."
+      "Private consultations, Destara AI, and annual forecasts from the Feng Shui Queen.",
+    images: [DEFAULT_OG_IMAGE]
   },
-  alternates: {
-    canonical: "/"
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1
+    }
+  },
+  icons: {
+    icon: [{ url: "/icon" }],
+    apple: [{ url: "/apple-icon" }]
   }
-};
-
-const organizationSchema = {
-  "@context": "https://schema.org",
-  "@type": "Person",
-  name: "Marites Allen",
-  alternateName: "The Feng Shui Queen",
-  jobTitle: "Feng Shui Master, Author, Speaker",
-  url: "https://maritesallen.com",
-  sameAs: [
-    "https://www.facebook.com/MaritesAllen168/",
-    "https://www.instagram.com/maritesallen/",
-    "https://www.youtube.com/channel/UCDrwKncdOeMKG3dt6vk2QLg"
-  ],
-  knowsAbout: [
-    "Feng Shui",
-    "BaZi",
-    "Destiny Analysis",
-    "Auspicious Date Selection",
-    "Business Feng Shui"
-  ]
 };
 
 export default function RootLayout({
@@ -57,10 +87,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
-        />
+        <JsonLd data={personJsonLd()} />
+        <JsonLd data={websiteJsonLd()} />
+        <JsonLd data={professionalServiceJsonLd()} />
         {children}
       </body>
     </html>

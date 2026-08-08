@@ -171,6 +171,82 @@ export const FRIGGA_REGIONS = [
   { region: "Europe & UK", domain: "frigga.co.uk", url: "https://www.frigga.co.uk" }
 ];
 
+/** Official Marites Allen profiles (sourced from facebook.com/MaritesAllen168 + maritesallen.com). */
+export const SOCIAL_LINKS = [
+  {
+    id: "facebook",
+    label: "Facebook",
+    handle: "Marites Allen, the real Feng Shui Queen",
+    href: "https://www.facebook.com/MaritesAllen168/"
+  },
+  {
+    id: "instagram",
+    label: "Instagram",
+    handle: "@MaritesAllen",
+    href: "https://www.instagram.com/MaritesAllen/"
+  },
+  {
+    id: "youtube",
+    label: "YouTube",
+    handle: "@MaritesAllen",
+    href: "https://www.youtube.com/@MaritesAllen"
+  },
+  {
+    id: "tiktok",
+    label: "TikTok",
+    handle: "@FengShuiQueen",
+    href: "https://www.tiktok.com/@FengShuiQueen"
+  },
+  {
+    id: "linkedin",
+    label: "LinkedIn",
+    handle: "Marites Allen",
+    href: "https://www.linkedin.com/in/MaritesAllen"
+  },
+  {
+    id: "x",
+    label: "X",
+    handle: "@MaritesAllen",
+    href: "https://x.com/MaritesAllen"
+  },
+  {
+    id: "pinterest",
+    label: "Pinterest",
+    handle: "MaritesAllen",
+    href: "https://www.pinterest.com/MaritesAllen/"
+  }
+] as const;
+
+/** Frigga Charmed Life brand channels (from brand flyers + active Instagram). */
+export const FRIGGA_SOCIAL_LINKS = [
+  {
+    id: "instagram",
+    label: "Instagram",
+    handle: "@frigga_charmedlife",
+    href: "https://www.instagram.com/frigga_charmedlife/"
+  },
+  {
+    id: "tiktok",
+    label: "TikTok",
+    handle: "@frigga_charmedlife",
+    href: "https://www.tiktok.com/@frigga_charmedlife"
+  },
+  {
+    id: "linkedin",
+    label: "LinkedIn",
+    handle: "Frigga UK",
+    href: "https://www.linkedin.com/company/frigga-uk"
+  }
+] as const;
+
+export const OFFICIAL_WEBSITES = [
+  { label: "Marites Allen", href: "https://maritesallen.com" },
+  { label: "Destara AI", href: "https://destara.app" },
+  { label: "Frigga PH", href: "https://www.frigga.com.ph" },
+  { label: "Frigga UK", href: "https://www.frigga.co.uk" },
+  { label: "Frigga USA", href: "https://www.frigga-usa.com" }
+] as const;
+
 export const FRIGGA_BROWSE = [
   { label: "Love", url: "https://www.frigga.com.ph" },
   { label: "Health", url: "https://www.frigga.com.ph" },

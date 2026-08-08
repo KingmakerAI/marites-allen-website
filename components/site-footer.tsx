@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { FRIGGA_SOCIAL_LINKS, SOCIAL_LINKS } from "@/lib/site-data";
 
 type Props = {
   variant?: "full" | "minimal";
@@ -24,7 +25,20 @@ export function SiteFooter({ variant = "full" }: Props) {
             MARITES ALLEN
           </div>
         </div>
-        <div style={{ fontSize: 12, color: "#6b6862" }}>© 2026 Marites Allen. All rights reserved.</div>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 14, alignItems: "center" }}>
+          {SOCIAL_LINKS.slice(0, 4).map((s) => (
+            <a
+              key={s.id}
+              href={s.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ fontSize: 12, color: "#5f6b60", fontWeight: 600 }}
+            >
+              {s.label}
+            </a>
+          ))}
+          <div style={{ fontSize: 12, color: "#6b6862" }}>© 2026 Marites Allen. All rights reserved.</div>
+        </div>
       </footer>
     );
   }
@@ -57,6 +71,10 @@ export function SiteFooter({ variant = "full" }: Props) {
           >
             FENG SHUI QUEEN
           </div>
+          <p style={{ fontSize: 13.5, lineHeight: 1.6, color: "#9fbcb0", margin: "14px 0 0", maxWidth: 280 }}>
+            Official channels for live sessions, forecasts, and brand updates from Marites Allen and Frigga Charmed
+            Life.
+          </p>
         </div>
         <div style={{ flex: "0 1 auto" }}>
           <div
@@ -112,14 +130,19 @@ export function SiteFooter({ variant = "full" }: Props) {
             <a href="mailto:sales@frigga.co.uk" style={{ color: "#c7ddd2" }}>
               sales@frigga.co.uk
             </a>
-            <span>+63 920 950 9390</span>
+            <a href="mailto:connect@frigga.co.uk" style={{ color: "#c7ddd2" }}>
+              connect@frigga.co.uk
+            </a>
+            <a href="https://wa.me/639209509390" target="_blank" rel="noopener noreferrer" style={{ color: "#c7ddd2" }}>
+              WhatsApp · +63 920 950 9390
+            </a>
             <span>+63 939 351 6424</span>
             <a href="https://destara.app" target="_blank" rel="noopener noreferrer" style={{ color: "#c7ddd2" }}>
               destara.app
             </a>
           </div>
         </div>
-        <div style={{ flex: "0 1 auto" }}>
+        <div style={{ flex: "1 1 220px", minWidth: 200 }}>
           <div
             style={{
               fontSize: 12,
@@ -130,32 +153,58 @@ export function SiteFooter({ variant = "full" }: Props) {
               marginBottom: 12
             }}
           >
-            Follow
+            Follow Marites
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: 9, fontSize: 14 }}>
+            {SOCIAL_LINKS.map((s) => (
+              <a
+                key={s.id}
+                href={s.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ color: "#c7ddd2" }}
+                title={s.handle}
+              >
+                {s.label}
+                <span style={{ color: "#7fa093", fontSize: 12, marginLeft: 6 }}>{s.handle.startsWith("@") ? s.handle : ""}</span>
+              </a>
+            ))}
+          </div>
+          <div
+            style={{
+              fontSize: 12,
+              fontWeight: 700,
+              letterSpacing: 1.5,
+              textTransform: "uppercase",
+              color: "#e6c680",
+              margin: "22px 0 12px"
+            }}
+          >
+            Frigga Charmed Life
+          </div>
+          <div style={{ display: "flex", flexDirection: "column", gap: 9, fontSize: 14 }}>
+            {FRIGGA_SOCIAL_LINKS.map((s) => (
+              <a
+                key={s.id}
+                href={s.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ color: "#c7ddd2" }}
+                title={s.handle}
+              >
+                {s.label}
+                <span style={{ color: "#7fa093", fontSize: 12, marginLeft: 6 }}>
+                  {s.handle.startsWith("@") ? s.handle : ""}
+                </span>
+              </a>
+            ))}
             <a
-              href="https://www.facebook.com/MaritesAllen168/"
+              href="https://www.frigga.com.ph"
               target="_blank"
               rel="noopener noreferrer"
               style={{ color: "#c7ddd2" }}
             >
-              Facebook
-            </a>
-            <a
-              href="https://www.instagram.com/maritesallen/"
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{ color: "#c7ddd2" }}
-            >
-              Instagram
-            </a>
-            <a
-              href="https://www.youtube.com/channel/UCDrwKncdOeMKG3dt6vk2QLg"
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{ color: "#c7ddd2" }}
-            >
-              YouTube
+              Shop · frigga.com.ph
             </a>
           </div>
         </div>

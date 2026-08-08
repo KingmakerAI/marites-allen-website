@@ -1,14 +1,25 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { Metadata } from "next";
+import { JsonLd } from "@/components/json-ld";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
+import { FRIGGA_SOCIAL_LINKS } from "@/lib/site-data";
+import { breadcrumbJsonLd, pageMetadata, SITE_URL } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Frigga Charmed Life",
   description:
-    "Marites Allen's Feng Shui charms, amulets, planners and almanacs — Frigga Charmed Life."
-};
+    "Shop Marites Allen's Frigga Charmed Life — Feng Shui charms, amulets, planners, almanacs and lucky fashion across the Philippines, UK, and USA stores.",
+  path: "/frigga",
+  keywords: [
+    "Frigga Charmed Life",
+    "Feng Shui charms",
+    "Feng Shui amulets",
+    "Feng Shui planner 2026",
+    "frigga.com.ph"
+  ]
+});
 
 const SHOPS = [
   { flag: "🇵🇭", label: "frigga.com.ph", url: "https://www.frigga.com.ph" },
@@ -34,9 +45,30 @@ const GUIDE_PERKS = [
   "Recommended cures and enhancers"
 ];
 
+const brandJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Brand",
+  name: "Frigga Charmed Life",
+  url: `${SITE_URL}/frigga`,
+  logo: `${SITE_URL}/images/zip/frigga-logo.png`,
+  sameAs: FRIGGA_SOCIAL_LINKS.map((s) => s.href),
+  founder: {
+    "@type": "Person",
+    name: "Marites Allen",
+    url: SITE_URL
+  }
+};
+
 export default function FriggaPage() {
   return (
     <div className="page-shell page-enter">
+      <JsonLd data={brandJsonLd} />
+      <JsonLd
+        data={breadcrumbJsonLd([
+          { name: "Home", path: "/" },
+          { name: "Frigga Charmed Life", path: "/frigga" }
+        ])}
+      />
       <SiteHeader />
 
       <section
@@ -358,6 +390,26 @@ export default function FriggaPage() {
               <span style={{ background: "#f4eee3", borderRadius: 99, padding: "9px 18px", fontSize: 14, fontWeight: 700, color: "#7d1b52" }}>
                 Lazada · Frigga Charmed Life
               </span>
+            </div>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 10, marginTop: 14 }}>
+              {FRIGGA_SOCIAL_LINKS.map((s) => (
+                <a
+                  key={s.id}
+                  href={s.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    background: "#7d1b52",
+                    color: "#fff",
+                    borderRadius: 99,
+                    padding: "9px 16px",
+                    fontSize: 13,
+                    fontWeight: 700
+                  }}
+                >
+                  {s.label} {s.handle.startsWith("@") ? s.handle : ""}
+                </a>
+              ))}
             </div>
           </div>
           <Link

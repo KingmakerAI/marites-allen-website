@@ -1,18 +1,29 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { Metadata } from "next";
+import { JsonLd } from "@/components/json-ld";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
+import { breadcrumbJsonLd, pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "About",
+export const metadata: Metadata = pageMetadata({
+  title: "About Marites Allen",
   description:
-    "Marites Allen, the Feng Shui Queen — first Filipina Master in Feng Shui, author, and consultant to clients in 100+ countries."
-};
+    "Meet Marites Allen, the Feng Shui Queen — first Filipina Master in Feng Shui, author, speaker, and consultant to families and leaders in 100+ countries.",
+  path: "/about",
+  keywords: ["about Marites Allen", "Feng Shui Queen biography", "Filipina Feng Shui master"],
+  type: "profile"
+});
 
 export default function AboutPage() {
   return (
     <div className="page-shell page-enter">
+      <JsonLd
+        data={breadcrumbJsonLd([
+          { name: "Home", path: "/" },
+          { name: "About", path: "/about" }
+        ])}
+      />
       <SiteHeader />
 
       <div style={{ maxWidth: 1080, margin: "0 auto", padding: "clamp(28px,4vw,48px) clamp(18px,4vw,40px) 0" }}>

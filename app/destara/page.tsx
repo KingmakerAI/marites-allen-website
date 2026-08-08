@@ -1,7 +1,18 @@
 import Image from "next/image";
 import type { CSSProperties } from "react";
+import type { Metadata } from "next";
+import { JsonLd } from "@/components/json-ld";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
+import { breadcrumbJsonLd, pageMetadata, SITE_URL } from "@/lib/seo";
+
+export const metadata: Metadata = pageMetadata({
+  title: "Destara AI — Destiny Guide",
+  description:
+    "Destara is Marites Allen's AI Destiny Guide — daily Feng Shui guidance, personal forecasts, and practical tips trained on 30 years of expertise. Free to try at destara.app.",
+  path: "/destara",
+  keywords: ["Destara AI", "Feng Shui AI", "destiny app", "daily Feng Shui guide"]
+});
 
 const sectionTitle: CSSProperties = {
   fontWeight: 600,
@@ -26,9 +37,37 @@ const metaRows = [
   { label: "Languages", value: "50+" }
 ];
 
+const softwareJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  name: "Destara",
+  applicationCategory: "LifestyleApplication",
+  operatingSystem: "Web, iOS, Android",
+  url: "https://destara.app",
+  description:
+    "AI Destiny Guide trained on 30 years of Marites Allen Feng Shui expertise — daily guidance, personal forecasts, and practical tips.",
+  offers: {
+    "@type": "Offer",
+    price: "0",
+    priceCurrency: "USD"
+  },
+  author: {
+    "@type": "Person",
+    name: "Marites Allen",
+    url: SITE_URL
+  }
+};
+
 export default function DestaraPage() {
   return (
     <div className="page-shell page-enter">
+      <JsonLd data={softwareJsonLd} />
+      <JsonLd
+        data={breadcrumbJsonLd([
+          { name: "Home", path: "/" },
+          { name: "Destara AI", path: "/destara" }
+        ])}
+      />
       <SiteHeader />
 
       <div

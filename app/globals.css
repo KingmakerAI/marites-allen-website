@@ -293,6 +293,12 @@ select:focus {
   }
 }
 
+@media (max-width: 900px) {
+  .eventFeatureCard {
+    grid-template-columns: 1fr !important;
+  }
+}
+
 @media (max-width: 480px) {
   .brandName {
     font-size: 17px !important;
