@@ -228,7 +228,7 @@ export default function AboutPage() {
                 borderRadius: 10
               }}
             >
-              Book a consultation →
+              Book Consultation · Coming Soon →
             </Link>
           </div>
         </div>

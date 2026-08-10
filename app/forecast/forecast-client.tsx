@@ -354,7 +354,7 @@ export function ForecastClient() {
                   borderRadius: 99
                 }}
               >
-                Book a consultation
+                Coming Soon
               </Link>
             </div>
           </div>
@@ -877,7 +877,7 @@ export function ForecastClient() {
                   borderRadius: 99
                 }}
               >
-                Get your personal reading →
+                Coming Soon →
               </Link>
             </div>
           </div>
@@ -915,7 +915,7 @@ export function ForecastClient() {
               borderRadius: 12
             }}
           >
-            Book Your Consultation →
+            Book Consultation · Coming Soon →
           </Link>
         </div>
       </section>

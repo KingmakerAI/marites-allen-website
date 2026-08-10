@@ -1,15 +1,15 @@
 import type { Metadata } from "next";
+import { redirect } from "next/navigation";
 import { pageMetadata } from "@/lib/seo";
-import BookingExperienceClient from "./booking-experience-client";
 
 export const metadata: Metadata = pageMetadata({
-  title: "Booking Experience",
+  title: "Booking Experience — Coming Soon",
   description:
-    "See how booking a Marites Allen consultation works — transparent steps, scheduling, and a refined client experience from inquiry to confirmation.",
+    "Online booking for Marites Allen consultations is coming soon. Visit the Book page for enquire options.",
   path: "/booking-experience",
-  keywords: ["consultation booking flow", "Feng Shui appointment experience"]
+  noIndex: true
 });
 
 export default function BookingExperiencePage() {
-  return <BookingExperienceClient />;
+  redirect("/book");
 }

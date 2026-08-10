@@ -424,7 +424,7 @@ export default function FriggaPage() {
               whiteSpace: "nowrap"
             }}
           >
-            Not sure what you need? Book a consultation →
+            Book Consultation · Coming Soon →
           </Link>
         </div>
       </section>

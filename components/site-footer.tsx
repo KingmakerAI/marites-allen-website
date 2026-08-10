@@ -108,8 +108,8 @@ export function SiteFooter({ variant = "full" }: Props) {
             <Link href="/media" style={{ color: "#c7ddd2", fontSize: 14 }}>
               Media
             </Link>
-            <Link href="/book" style={{ color: "#e6c680", fontSize: 14, fontWeight: 700 }}>
-              Book now
+            <Link href="/book" style={{ color: "#e6c680", fontSize: 14, fontWeight: 700 }} title="Book Consultation — Coming Soon">
+              Book · Coming Soon
             </Link>
           </div>
         </div>

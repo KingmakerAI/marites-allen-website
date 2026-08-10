@@ -131,7 +131,7 @@ export function SiteHeader({ compact = false, bookAsLabel = false }: Props) {
               whiteSpace: "nowrap"
             }}
           >
-            Book Consultation
+            Coming Soon
           </span>
         ) : (
           <Link
@@ -147,8 +147,9 @@ export function SiteHeader({ compact = false, bookAsLabel = false }: Props) {
               boxShadow: "0 8px 18px -8px rgba(20,60,45,0.6)",
               whiteSpace: "nowrap"
             }}
+            title="Book Consultation — Coming Soon"
           >
-            Book Consultation
+            Coming Soon
           </Link>
         )}
 
@@ -180,8 +181,8 @@ export function SiteHeader({ compact = false, bookAsLabel = false }: Props) {
         <Link href="/projects">Projects</Link>
         <Link href="/events">Events</Link>
         <Link href="/media">Media</Link>
-        <Link href="/book" className="cta">
-          Book Consultation
+        <Link href="/book" className="cta" title="Book Consultation — Coming Soon">
+          Coming Soon
         </Link>
       </div>
     </header>

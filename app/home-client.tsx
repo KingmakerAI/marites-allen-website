@@ -241,7 +241,7 @@ export default function HomePage() {
                         borderRadius: 11
                       }}
                     >
-                      Book a full consultation →
+                      Consultation · Coming Soon →
                     </Link>
                   </div>
                 )}
@@ -323,7 +323,7 @@ export default function HomePage() {
                   boxShadow: "0 14px 28px -10px rgba(198,154,62,0.6)"
                 }}
               >
-                Book Your Consultation →
+                Book Consultation · Coming Soon →
               </Link>
               <button
                 type="button"
@@ -707,13 +707,13 @@ export default function HomePage() {
           }}
         >
           <div style={{ fontSize: 12, fontWeight: 700, letterSpacing: 3, textTransform: "uppercase", color: "#e6c680" }}>
-            Book now
+            Coming soon
           </div>
           <h2 className="font-display" style={{ fontWeight: 700, fontSize: "clamp(24px,3vw,32px)", color: "#fff", margin: "10px 0 12px" }}>
-            Reserve your consultation
+            Online booking is on the way
           </h2>
           <p style={{ fontSize: 16, color: "#c7ddd2", margin: "0 auto 28px", maxWidth: 520 }}>
-            Five quick steps. Transparent pricing, instant confirmation, free reschedule up to 48 hours before.
+            Private consultations with Marites Allen will open for booking here shortly. Enquire anytime while we finish the experience.
           </p>
           <div style={{ display: "flex", flexWrap: "wrap", gap: 10, justifyContent: "center", marginBottom: 30 }}>
             {GUARANTEES.map((g) => (
@@ -749,7 +749,7 @@ export default function HomePage() {
               borderRadius: 12
             }}
           >
-            Start booking →
+            View Coming Soon →
           </Link>
         </div>
       </section>
@@ -940,7 +940,7 @@ export default function HomePage() {
               borderRadius: 12
             }}
           >
-            Book Your Consultation →
+            Book Consultation · Coming Soon →
           </Link>
         </div>
       </section>
