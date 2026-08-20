@@ -2,22 +2,26 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 import { JsonLd } from "@/components/json-ld";
 import { breadcrumbJsonLd, pageMetadata } from "@/lib/seo";
+import { getCachedPageCopy } from "@/lib/cms/content";
 import { ForecastClient } from "./forecast-client";
 
-export const metadata: Metadata = pageMetadata({
-  title: "2026 Fire Horse Annual Forecast",
-  description:
-    "Explore Marites Allen's annual Feng Shui forecasts — Year of the Fire Horse 2026 guidance for all 12 animal signs, lucky directions, and yearly themes.",
-  path: "/forecast",
-  keywords: [
-    "2026 Fire Horse forecast",
-    "annual Feng Shui forecast",
-    "Chinese zodiac 2026",
-    "Marites Allen horoscope"
-  ]
-});
+export async function generateMetadata(): Promise<Metadata> {
+  const copy = await getCachedPageCopy();
+  return pageMetadata({
+    title: copy.forecast.seoTitle,
+    description: copy.forecast.seoDescription,
+    path: "/forecast",
+    keywords: [
+      "2026 Fire Horse forecast",
+      "annual Feng Shui forecast",
+      "Chinese zodiac 2026",
+      "Marites Allen horoscope"
+    ]
+  });
+}
 
-export default function ForecastPage() {
+export default async function ForecastPage() {
+  const copy = await getCachedPageCopy();
   return (
     <>
       <JsonLd
@@ -33,7 +37,7 @@ export default function ForecastPage() {
           </div>
         }
       >
-        <ForecastClient />
+        <ForecastClient copy={copy.forecast} />
       </Suspense>
     </>
   );

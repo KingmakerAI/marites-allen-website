@@ -1,23 +1,37 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { JsonLd } from "@/components/json-ld";
+import { SignupForm } from "@/components/signup-form";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
+import { cms } from "@/lib/cms/cms-attr";
+import { getCachedPageCopy, getCachedPricing, getCachedServices, getCachedSettings } from "@/lib/cms/content";
+import { formatServicePrice } from "@/lib/cms/map-services";
 import { breadcrumbJsonLd, pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = pageMetadata({
-  title: "Book a Consultation — Coming Soon",
-  description:
-    "Online booking for Marites Allen Feng Shui consultations is coming soon. Contact the team by WhatsApp or email to enquire in the meantime.",
-  path: "/book",
-  keywords: [
-    "book Feng Shui consultation",
-    "Marites Allen booking",
-    "consultation coming soon"
-  ]
-});
+export async function generateMetadata(): Promise<Metadata> {
+  const copy = await getCachedPageCopy();
+  return pageMetadata({
+    title: copy.book.seoTitle,
+    description: copy.book.seoDescription,
+    path: "/book",
+    keywords: ["book Feng Shui consultation", "Marites Allen booking", "consultation coming soon"]
+  });
+}
 
-export default function BookPage() {
+export default async function BookPage() {
+  const [settings, services, pricing, pageCopy] = await Promise.all([
+    getCachedSettings(),
+    getCachedServices(),
+    getCachedPricing(),
+    getCachedPageCopy()
+  ]);
+  const book = pageCopy.book;
+  const whatsapp = settings.contact.whatsapp || "639209509390";
+  const email = settings.contact.email || "sales@frigga.co.uk";
+  const featured = services.filter((s) => s.featured).slice(0, 3);
+  const listed = featured.length ? featured : services.slice(0, 3);
+
   return (
     <div className="page-shell page-enter">
       <JsonLd
@@ -56,8 +70,9 @@ export default function BookPage() {
               padding: "6px 14px",
               marginBottom: 18
             }}
+            {...cms("book.kicker")}
           >
-            Coming soon
+            {book.kicker}
           </div>
           <h1
             className="font-display"
@@ -67,8 +82,9 @@ export default function BookPage() {
               lineHeight: 1.12,
               margin: "0 0 16px"
             }}
+            {...cms("book.title")}
           >
-            Book Consultation
+            {book.title}
           </h1>
           <p
             style={{
@@ -78,8 +94,9 @@ export default function BookPage() {
               margin: "0 auto 28px",
               maxWidth: 560
             }}
+            {...cms("book.intro")}
           >
-            Online booking is being prepared. Private consultations with Marites Allen will open here shortly.
+            {book.intro}
           </p>
 
           <div
@@ -102,15 +119,46 @@ export default function BookPage() {
                 color: "#e6c680",
                 marginBottom: 10
               }}
+              {...cms("book.formTitle")}
             >
-              Need help now?
+              {book.formTitle}
             </div>
-            <p style={{ fontSize: 14.5, lineHeight: 1.6, color: "#c7ddd2", margin: "0 0 16px" }}>
-              Enquire by WhatsApp or email and the team will assist you while booking goes live.
+            <p style={{ fontSize: 14.5, lineHeight: 1.6, color: "#c7ddd2", margin: "0 0 16px" }} {...cms("book.formBody")}>
+              {book.formBody}
+            </p>
+            <SignupForm
+              kind="booking-waitlist"
+              source="book"
+              showName
+              showPhone
+              showNotes
+              notesLabel="What are you looking for?"
+              extraFields={[
+                {
+                  name: "service",
+                  label: "Consultation",
+                  required: true,
+                  placeholder: "Choose a consultation",
+                  options: [
+                    ...services.map((s) => ({ value: s.name, label: s.name })),
+                    { value: "Not sure yet", label: "Not sure yet" }
+                  ]
+                }
+              ]}
+              submitLabel={book.submitLabel}
+              successTitle={book.successTitle}
+              successBody={book.successBody}
+              variant="dark"
+            />
+            <p
+              style={{ fontSize: 13, lineHeight: 1.6, color: "#c7ddd2", margin: "18px 0 12px" }}
+              {...cms("book.preferTalkHeading")}
+            >
+              {book.preferTalkHeading}
             </p>
             <div style={{ display: "flex", flexWrap: "wrap", gap: 10 }}>
               <a
-                href="https://wa.me/639209509390"
+                href={`https://wa.me/${whatsapp}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 style={{
@@ -122,11 +170,12 @@ export default function BookPage() {
                   padding: "12px 18px",
                   borderRadius: 10
                 }}
+                {...cms("book.whatsappLabel")}
               >
-                WhatsApp enquire →
+                {book.whatsappLabel}
               </a>
               <a
-                href="mailto:sales@frigga.co.uk?subject=Consultation%20enquiry"
+                href={`mailto:${email}?subject=Consultation%20enquiry`}
                 style={{
                   display: "inline-block",
                   background: "rgba(255,255,255,0.06)",
@@ -138,20 +187,29 @@ export default function BookPage() {
                   borderRadius: 10
                 }}
               >
-                Email sales@frigga.co.uk
+                Email {email}
               </a>
             </div>
           </div>
 
+          {listed.length > 0 && (
+            <div style={{ textAlign: "left", maxWidth: 520, margin: "0 auto 28px" }}>
+              {listed.map((s) => {
+                const price = pricing.find((p) => p.serviceId === s.id);
+                const priceLabel = formatServicePrice(price);
+                return (
+                  <div key={s.id} style={{ color: "#c7ddd2", marginBottom: 10, fontSize: 14 }}>
+                    <strong style={{ color: "#fff" }}>{s.name}</strong>
+                    {priceLabel ? <span style={{ color: "#e6c680" }}> · {priceLabel}</span> : null}
+                    <div>{s.description}</div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+
           <div style={{ display: "flex", flexWrap: "wrap", gap: 12, justifyContent: "center" }}>
-            <Link
-              href="/destara"
-              style={{
-                color: "#e6c680",
-                fontWeight: 700,
-                fontSize: 14
-              }}
-            >
+            <Link href="/destara" style={{ color: "#e6c680", fontWeight: 700, fontSize: 14 }}>
               Try Destara AI →
             </Link>
             <span style={{ color: "#5f7a6e" }}>·</span>

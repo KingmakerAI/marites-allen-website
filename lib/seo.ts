@@ -6,6 +6,9 @@ export const SITE_NAME = "Marites Allen";
 export const SITE_TAGLINE = "The Feng Shui Queen";
 export const DEFAULT_OG_IMAGE = "/opengraph-image";
 export const PERSON_IMAGE = "/images/zip/marites-1.webp";
+export const BRAND_ICON = "/images/brand/icon-512.png";
+export const BRAND_LOGO = "/images/brand/marites-allen-logo.png";
+export const BRAND_MARK = "/images/brand/marites-allen-mark.png";
 
 export const SITE_KEYWORDS = [
   "Marites Allen",
@@ -145,6 +148,7 @@ export function websiteJsonLd() {
     url: SITE_URL,
     description:
       "Official website of Marites Allen — book Feng Shui consultations, explore Destara AI, annual forecasts, events, and Frigga Charmed Life.",
+    image: `${SITE_URL}${BRAND_ICON}`,
     publisher: { "@id": `${SITE_URL}/#person` },
     inLanguage: "en"
   };
@@ -157,6 +161,7 @@ export function professionalServiceJsonLd() {
     "@id": `${SITE_URL}/#service`,
     name: "Marites Allen Feng Shui Consultations",
     image: `${SITE_URL}${PERSON_IMAGE}`,
+    logo: `${SITE_URL}${BRAND_LOGO}`,
     url: `${SITE_URL}/book`,
     description:
       "One-on-one Feng Shui and BaZi destiny consultations with Marites Allen, online worldwide and in person in Metro Manila.",
@@ -181,12 +186,12 @@ export function professionalServiceJsonLd() {
   };
 }
 
-export function faqJsonLd() {
+export function faqJsonLd(items = FAQ_DATA) {
   return {
     "@context": "https://schema.org",
     "@type": "FAQPage",
     "@id": `${SITE_URL}/#faq`,
-    mainEntity: FAQ_DATA.map((item) => ({
+    mainEntity: items.map((item) => ({
       "@type": "Question",
       name: item.q,
       acceptedAnswer: {

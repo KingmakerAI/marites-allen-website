@@ -1,14 +1,5 @@
-import type { Metadata } from "next";
-import { pageMetadata } from "@/lib/seo";
-import AdminClient from "./admin-client";
+import { redirect } from "next/navigation";
 
-export const metadata: Metadata = pageMetadata({
-  title: "Admin",
-  description: "Private admin area for Marites Allen website operations.",
-  path: "/admin",
-  noIndex: true
-});
-
-export default function AdminPage() {
-  return <AdminClient />;
+export default function AdminIndex() {
+  redirect("/admin/dashboard");
 }

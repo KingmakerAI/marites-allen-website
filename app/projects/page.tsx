@@ -1,22 +1,26 @@
 import type { Metadata } from "next";
 import { JsonLd } from "@/components/json-ld";
+import { getCachedPageCopy } from "@/lib/cms/content";
 import { breadcrumbJsonLd, pageMetadata } from "@/lib/seo";
 import ProjectsClient from "./projects-client";
 
-export const metadata: Metadata = pageMetadata({
-  title: "Projects & Collaborations",
-  description:
-    "Corporate speaking, brand collaborations, and signature projects with Marites Allen — Accenture, Citibank, HSBC, Nestlé, Bench, Marco Polo, and more.",
-  path: "/projects",
-  keywords: [
-    "Marites Allen speaking",
-    "corporate Feng Shui",
-    "Feng Shui collaborations",
-    "brand partnerships"
-  ]
-});
+export async function generateMetadata(): Promise<Metadata> {
+  const copy = await getCachedPageCopy();
+  return pageMetadata({
+    title: copy.projects.seoTitle,
+    description: copy.projects.seoDescription,
+    path: "/projects",
+    keywords: [
+      "Marites Allen speaking",
+      "corporate Feng Shui",
+      "Feng Shui collaborations",
+      "brand partnerships"
+    ]
+  });
+}
 
-export default function ProjectsPage() {
+export default async function ProjectsPage() {
+  const copy = await getCachedPageCopy();
   return (
     <>
       <JsonLd
@@ -25,7 +29,7 @@ export default function ProjectsPage() {
           { name: "Projects", path: "/projects" }
         ])}
       />
-      <ProjectsClient />
+      <ProjectsClient copy={copy.projects} />
     </>
   );
 }

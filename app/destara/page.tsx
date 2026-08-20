@@ -4,15 +4,9 @@ import type { Metadata } from "next";
 import { JsonLd } from "@/components/json-ld";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
+import { cms } from "@/lib/cms/cms-attr";
+import { getCachedPageCopy } from "@/lib/cms/content";
 import { breadcrumbJsonLd, pageMetadata, SITE_URL } from "@/lib/seo";
-
-export const metadata: Metadata = pageMetadata({
-  title: "Destara AI — Destiny Guide",
-  description:
-    "Destara is Marites Allen's AI Destiny Guide — daily Feng Shui guidance, personal forecasts, and practical tips trained on 30 years of expertise. Free to try at destara.app.",
-  path: "/destara",
-  keywords: ["Destara AI", "Feng Shui AI", "destiny app", "daily Feng Shui guide"]
-});
 
 const sectionTitle: CSSProperties = {
   fontWeight: 600,
@@ -30,35 +24,38 @@ const bodyText: CSSProperties = {
   margin: 0
 };
 
-const metaRows = [
-  { label: "Developer", value: "Marites Allen" },
-  { label: "Platforms", value: "Web, iOS, Android" },
-  { label: "Launch", value: "2026" },
-  { label: "Languages", value: "50+" }
-];
+export async function generateMetadata(): Promise<Metadata> {
+  const copy = await getCachedPageCopy();
+  return pageMetadata({
+    title: copy.destara.seoTitle,
+    description: copy.destara.seoDescription,
+    path: "/destara",
+    keywords: ["Destara AI", "Feng Shui AI", "destiny app", "daily Feng Shui guide"]
+  });
+}
 
-const softwareJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "SoftwareApplication",
-  name: "Destara",
-  applicationCategory: "LifestyleApplication",
-  operatingSystem: "Web, iOS, Android",
-  url: "https://destara.app",
-  description:
-    "AI Destiny Guide trained on 30 years of Marites Allen Feng Shui expertise — daily guidance, personal forecasts, and practical tips.",
-  offers: {
-    "@type": "Offer",
-    price: "0",
-    priceCurrency: "USD"
-  },
-  author: {
-    "@type": "Person",
-    name: "Marites Allen",
-    url: SITE_URL
-  }
-};
+export default async function DestaraPage() {
+  const destara = (await getCachedPageCopy()).destara;
+  const softwareJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    name: destara.title,
+    applicationCategory: "LifestyleApplication",
+    operatingSystem: destara.facts.find((f) => f.label === "Platforms")?.value || "Web, iOS, Android",
+    url: destara.appUrl,
+    description: destara.seoDescription,
+    offers: {
+      "@type": "Offer",
+      price: "0",
+      priceCurrency: "USD"
+    },
+    author: {
+      "@type": "Person",
+      name: "Marites Allen",
+      url: SITE_URL
+    }
+  };
 
-export default function DestaraPage() {
   return (
     <div className="page-shell page-enter">
       <JsonLd data={softwareJsonLd} />
@@ -77,7 +74,9 @@ export default function DestaraPage() {
           padding: "clamp(28px,4vw,48px) clamp(18px,4vw,40px) 0"
         }}
       >
-        <div style={{ fontSize: 12, color: "#8a8a80", letterSpacing: 0.2 }}>Destara (application)</div>
+        <div style={{ fontSize: 12, color: "#8a8a80", letterSpacing: 0.2 }} {...cms("destara.kicker")}>
+          {destara.kicker}
+        </div>
         <h1
           className="font-display"
           style={{
@@ -88,8 +87,9 @@ export default function DestaraPage() {
             borderBottom: "2px solid rgba(20,61,49,0.12)",
             paddingBottom: 14
           }}
+          {...cms("destara.title")}
         >
-          Destara
+          {destara.title}
         </h1>
       </div>
 
@@ -105,26 +105,22 @@ export default function DestaraPage() {
         }}
       >
         <article style={{ flex: "2 1 480px", minWidth: 280, maxWidth: 680 }}>
-          <p style={{ ...bodyText, marginBottom: 32 }}>
-            <strong>Destara</strong> is an AI-powered Destiny Guide created with Feng Shui master Marites Allen. Launched
-            in 2026 for the Year of the Fire Horse, it draws on more than thirty years of her practice to offer personal
-            guidance rooted in Chinese astrology and Feng Shui.
+          <p style={{ ...bodyText, marginBottom: 32 }} {...cms("destara.intro")}>
+            {destara.intro}
           </p>
 
           <section style={{ marginBottom: 32 }}>
-            <h2 className="font-display" style={sectionTitle}>
-              Overview
+            <h2 className="font-display" style={sectionTitle} {...cms("destara.overviewHeading")}>
+              {destara.overviewHeading}
             </h2>
-            <p style={bodyText}>
-              Destara makes Marites Allen&apos;s guidance available between formal consultations. It is not a generic
-              chatbot. The app is built around Feng Shui and Chinese astrology, so the advice stays grounded in an
-              established practice instead of open-ended speculation.
+            <p style={bodyText} {...cms("destara.overview")}>
+              {destara.overview}
             </p>
           </section>
 
           <section style={{ marginBottom: 28 }}>
-            <h2 className="font-display" style={sectionTitle}>
-              Features
+            <h2 className="font-display" style={sectionTitle} {...cms("destara.featuresHeading")}>
+              {destara.featuresHeading}
             </h2>
             <ul
               style={{
@@ -137,10 +133,11 @@ export default function DestaraPage() {
                 gap: 10
               }}
             >
-              <li>Personalized BaZi and zodiac-based readings</li>
-              <li>Real-time auspicious date suggestions</li>
-              <li>Tailored Feng Shui cures and recommendations</li>
-              <li>Available day and night in more than 50 languages</li>
+              {destara.features.map((item, i) => (
+                <li key={item} {...cms(`destara.features.${i}`)}>
+                  {item}
+                </li>
+              ))}
             </ul>
           </section>
 
@@ -164,7 +161,7 @@ export default function DestaraPage() {
                 >
                   <Image
                     src="/images/zip/destara-app.png"
-                    alt="Destara app home screen with today's forecast"
+                    alt={destara.caption}
                     width={626}
                     height={1078}
                     sizes="260px"
@@ -180,31 +177,27 @@ export default function DestaraPage() {
                 lineHeight: 1.5,
                 color: "#6b7268"
               }}
+              {...cms("destara.caption")}
             >
-              Destara home screen with your daily forecast
+              {destara.caption}
             </figcaption>
           </figure>
 
           <section style={{ marginBottom: 32 }}>
-            <h2 className="font-display" style={sectionTitle}>
-              Availability
+            <h2 className="font-display" style={sectionTitle} {...cms("destara.availabilityHeading")}>
+              {destara.availabilityHeading}
             </h2>
-            <p style={bodyText}>
-              Use Destara on the web at{" "}
-              <a href="https://destara.app" target="_blank" rel="noopener noreferrer">
-                destara.app
-              </a>
-              . It is also available on iOS and Android.
+            <p style={bodyText} {...cms("destara.availability")}>
+              {destara.availability}
             </p>
           </section>
 
           <section>
-            <h2 className="font-display" style={sectionTitle}>
-              How it complements consultations
+            <h2 className="font-display" style={sectionTitle} {...cms("destara.complementHeading")}>
+              {destara.complementHeading}
             </h2>
-            <p style={bodyText}>
-              Destara supports Marites Allen&apos;s practice; it does not replace it. Use the app for everyday guidance,
-              then book a one-on-one session for deeper work such as home audits or major business decisions.
+            <p style={bodyText} {...cms("destara.complement")}>
+              {destara.complement}
             </p>
           </section>
         </article>
@@ -230,14 +223,15 @@ export default function DestaraPage() {
                 fontSize: 16,
                 color: "#143d31"
               }}
+              {...cms("destara.title")}
             >
-              Destara
+              {destara.title}
             </div>
 
             <div style={{ padding: "20px 18px 22px" }}>
               <Image
                 src="/images/zip/destara-logo.png"
-                alt="Destara"
+                alt={destara.title}
                 width={1600}
                 height={515}
                 unoptimized
@@ -251,7 +245,7 @@ export default function DestaraPage() {
               />
 
               <dl style={{ margin: "0 0 20px", display: "grid", gap: 12 }}>
-                {metaRows.map((row) => (
+                {destara.facts.map((row, i) => (
                   <div key={row.label}>
                     <dt
                       style={{
@@ -261,6 +255,7 @@ export default function DestaraPage() {
                         letterSpacing: 0.6,
                         marginBottom: 3
                       }}
+                      {...cms(`destara.facts.${i}.label`)}
                     >
                       {row.label}
                     </dt>
@@ -272,6 +267,7 @@ export default function DestaraPage() {
                         color: "#2a2a28",
                         fontWeight: 600
                       }}
+                      {...cms(`destara.facts.${i}.value`)}
                     >
                       {row.value}
                     </dd>
@@ -280,7 +276,7 @@ export default function DestaraPage() {
               </dl>
 
               <a
-                href="https://destara.app"
+                href={destara.appUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 style={{
@@ -293,8 +289,9 @@ export default function DestaraPage() {
                   fontSize: 14,
                   fontWeight: 700
                 }}
+                {...cms("destara.ctaLabel")}
               >
-                Open Destara.app →
+                {destara.ctaLabel}
               </a>
             </div>
           </div>

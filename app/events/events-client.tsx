@@ -3,53 +3,34 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import { submitSignupAction } from "@/app/signup/actions";
 import { EventCountdown } from "@/components/event-countdown";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
+import { cms } from "@/lib/cms/cms-attr";
+import type { CopyTalk, CopyVideo } from "@/lib/cms/copy-lines";
 import { emailOk } from "@/lib/site-data";
 
-const FEATURED_EVENTS = [
-  {
-    id: "meet-greet-cleansing",
-    title: "Exclusive In Person Meet & Greet — Catch Up & Cleansing Ritual",
-    eyebrow: "In person · Pre-booked",
-    summary:
-      "Be ready for Ghost Month. Protection today brings peace, luck and clarity tomorrow. Strictly for confirmed attendees only.",
-    whenLabel: "Saturday, 8 August 2026 · 2:00–5:00 PM",
-    whereLabel: "Acceler8 Rockwell, 5th Floor, Phinma Plaza, Rockwell Center, Makati",
-    startsAt: "2026-08-08T14:00:00+08:00",
-    endsAt: "2026-08-08T17:00:00+08:00",
-    image: "/images/events/meet-greet-cleansing-ritual.png",
-    imageWidth: 1536,
-    imageHeight: 1024,
-    ctaHref: "https://wa.me/639209509390",
-    ctaLabel: "Enquire on WhatsApp",
-    liveHref: undefined as string | undefined,
-    liveLabel: undefined as string | undefined,
-    tagline: "Protect your space · Attract positive energy · Create harmony"
-  },
-  {
-    id: "ghost-month-live",
-    title: "Ghost Month 2026: Tips, Insights & Reminders",
-    eyebrow: "Facebook Live",
-    summary:
-      "Join Marites Allen for common sense, tradition, and Feng Shui guidance for a safe, harmonious and prosperous season.",
-    whenLabel: "Saturday, 1 August 2026 · 3:00 PM (PH Time)",
-    whereLabel: "Facebook Live",
-    startsAt: "2026-08-01T15:00:00+08:00",
-    endsAt: "2026-08-01T17:00:00+08:00",
-    image: "/images/events/ghost-month-2026-live.png",
-    imageWidth: 1600,
-    imageHeight: 800,
-    ctaHref: "https://www.facebook.com/MaritesAllen168/",
-    ctaLabel: "Watch on Facebook",
-    liveHref: "https://www.facebook.com/MaritesAllen168/",
-    liveLabel: "Watch live on Facebook",
-    tagline: "Be informed. Be prepared. Be protected."
-  }
-];
+export type FeaturedEvent = {
+  id: string;
+  title: string;
+  eyebrow: string;
+  summary: string;
+  whenLabel: string;
+  whereLabel: string;
+  startsAt: string;
+  endsAt: string;
+  image: string;
+  imageWidth: number;
+  imageHeight: number;
+  ctaHref: string;
+  ctaLabel: string;
+  liveHref?: string;
+  liveLabel?: string;
+  tagline: string;
+};
 
-const ENGAGEMENTS = [
+const FALLBACK_TALKS: CopyTalk[] = [
   { org: "Manila House Private Club", topic: "Annual CNY Countdown & Welcoming Ritual" },
   { org: "Marco Polo Hotels", topic: "Media conference & annual forecast" },
   { org: "Citibank", topic: "Client event on prosperity and timing" },
@@ -60,23 +41,45 @@ const ENGAGEMENTS = [
   { org: "McDonald's Philippines", topic: "Corporate talk on Feng Shui themes" }
 ];
 
-const VIDEOS = [
+const FALLBACK_VIDEOS: CopyVideo[] = [
   { source: "Boy Abunda · The Interviewer", title: "Marites Allen, Philippine Feng Shui Queen", yt: "mswSQ7Utz1s" },
   { source: "Media Conference · Marco Polo", title: "Why 2018 is a Prosperous Year", yt: "4RPYGf1oY_4" },
   { source: "NewsWatch Interviews", title: "Feng Shui Expert on the Year of the Wooden Snake", yt: "r27QpjNfhfk" },
   { source: "ABS-CBN · The Bottomline", title: "Predictions for Each Chinese Zodiac Sign", yt: "xfLMTQCr3og" }
 ];
 
-export default function EventsPage() {
+export default function EventsPage({
+  featuredEvents,
+  kicker,
+  title,
+  intro,
+  speakingHeading,
+  speaking,
+  videosHeading,
+  videos
+}: {
+  featuredEvents: FeaturedEvent[];
+  kicker?: string;
+  title?: string;
+  intro?: string;
+  speakingHeading?: string;
+  speaking?: CopyTalk[];
+  videosHeading?: string;
+  videos?: CopyVideo[];
+}) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [org, setOrg] = useState("");
   const [eventDate, setEventDate] = useState("");
   const [notes, setNotes] = useState("");
   const [sent, setSent] = useState(false);
+  const [pending, setPending] = useState(false);
+  const [error, setError] = useState("");
   const [videoModalOpen, setVideoModalOpen] = useState(false);
   const [activeVideoId, setActiveVideoId] = useState<string | null>(null);
 
+  const talks = speaking?.length ? speaking : FALLBACK_TALKS;
+  const clips = videos?.length ? videos : FALLBACK_VIDEOS;
   const ready = !!(name && emailOk(email));
 
   return (
@@ -167,8 +170,9 @@ export default function EventsPage() {
                 textTransform: "uppercase",
                 color: "#e6c680"
               }}
+              {...cms("eventsPage.kicker")}
             >
-              Upcoming & featured
+              {kicker || "Upcoming & featured"}
             </div>
             <h1
               className="font-display"
@@ -178,16 +182,17 @@ export default function EventsPage() {
                 margin: "10px 0 10px",
                 lineHeight: 1.15
               }}
+              {...cms("eventsPage.title")}
             >
-              Events with Marites Allen
+              {title || "Events with Marites Allen"}
             </h1>
-            <p style={{ fontSize: 16, lineHeight: 1.65, color: "#c7ddd2", margin: 0 }}>
-              Live sessions and private gatherings for Ghost Month preparation, cleansing, and guidance.
+            <p style={{ fontSize: 16, lineHeight: 1.65, color: "#c7ddd2", margin: 0 }} {...cms("eventsPage.intro")}>
+              {intro || "Live sessions and private gatherings for Ghost Month preparation, cleansing, and guidance."}
             </p>
           </div>
 
           <div style={{ display: "grid", gap: 22 }}>
-            {FEATURED_EVENTS.map((event) => {
+            {featuredEvents.map((event) => {
               const isExternal = event.ctaHref.startsWith("http");
               return (
                 <article
@@ -210,7 +215,7 @@ export default function EventsPage() {
                       height={event.imageHeight}
                       sizes="(max-width: 900px) 100vw, 55vw"
                       style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
-                      priority={event.id === FEATURED_EVENTS[0].id}
+                      priority={event.id === featuredEvents[0]?.id}
                     />
                   </div>
                   <div
@@ -316,6 +321,7 @@ export default function EventsPage() {
         </div>
       </section>
 
+      {featuredEvents.length === 0 ? (
       <section style={{ maxWidth: 1180, margin: "0 auto", padding: "clamp(28px,3.6vw,42px) clamp(18px,4vw,40px)" }}>
         <div
           style={{
@@ -369,17 +375,19 @@ export default function EventsPage() {
           </div>
         </div>
       </section>
+      ) : null}
 
       <section style={{ background: "#efe8d8" }}>
         <div style={{ maxWidth: 1180, margin: "0 auto", padding: "clamp(28px,3.6vw,42px) clamp(18px,4vw,40px)" }}>
           <h2
             className="font-display"
             style={{ fontWeight: 700, fontSize: "clamp(24px,3.4vw,32px)", color: "#143d31", margin: "0 0 24px" }}
+            {...cms("eventsPage.speakingHeading")}
           >
-            Speaking engagements &amp; corporate talks
+            {speakingHeading || "Speaking engagements & corporate talks"}
           </h2>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(260px,1fr))", gap: 16 }}>
-            {ENGAGEMENTS.map((e) => (
+            {talks.map((e) => (
               <div
                 key={e.org}
                 style={{
@@ -389,7 +397,10 @@ export default function EventsPage() {
                   padding: 18
                 }}
               >
-                <div className="font-display" style={{ fontWeight: 600, fontSize: 16, color: "#143d31", marginBottom: 4 }}>
+                <div
+                  className="font-display"
+                  style={{ fontWeight: 600, fontSize: 16, color: "#143d31", marginBottom: 4 }}
+                >
                   {e.org}
                 </div>
                 <div style={{ fontSize: 13, color: "#6b7268" }}>{e.topic}</div>
@@ -404,11 +415,12 @@ export default function EventsPage() {
           <h2
             className="font-display"
             style={{ fontWeight: 700, fontSize: "clamp(24px,3.4vw,32px)", margin: "0 0 24px" }}
+            {...cms("eventsPage.videosHeading")}
           >
-            Videos &amp; presentations
+            {videosHeading || "Videos & presentations"}
           </h2>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(260px,1fr))", gap: 18 }}>
-            {VIDEOS.map((v) => (
+            {clips.map((v) => (
               <button
                 key={v.yt}
                 type="button"
@@ -463,7 +475,10 @@ export default function EventsPage() {
                 </div>
                 <div style={{ padding: "14px 16px" }}>
                   <div style={{ fontSize: 12, color: "#9fbcb0", marginBottom: 4 }}>{v.source}</div>
-                  <div className="font-display" style={{ fontWeight: 600, fontSize: 15, color: "#fff" }}>
+                  <div
+                    className="font-display"
+                    style={{ fontWeight: 600, fontSize: 15, color: "#fff" }}
+                  >
                     {v.title}
                   </div>
                 </div>
@@ -607,10 +622,28 @@ export default function EventsPage() {
                   }}
                 />
               </div>
+              {error && <div style={{ color: "#8b2e2e", fontSize: 13, marginBottom: 10 }}>{error}</div>}
               <button
                 type="button"
-                onClick={() => {
-                  if (ready) setSent(true);
+                onClick={async () => {
+                  if (!ready || pending) return;
+                  setError("");
+                  setPending(true);
+                  const result = await submitSignupAction({
+                    kind: "speaking",
+                    source: "events",
+                    email,
+                    name,
+                    organization: org,
+                    notes,
+                    fields: { eventDate }
+                  });
+                  setPending(false);
+                  if (!result.ok) {
+                    setError(result.error);
+                    return;
+                  }
+                  setSent(true);
                 }}
                 style={{
                   width: "100%",
@@ -621,13 +654,13 @@ export default function EventsPage() {
                   padding: 14,
                   fontSize: 15,
                   fontWeight: 700,
-                  cursor: ready ? "pointer" : "default",
-                  opacity: ready ? 1 : 0.5,
-                  pointerEvents: ready ? "auto" : "none",
+                  cursor: ready && !pending ? "pointer" : "default",
+                  opacity: ready && !pending ? 1 : 0.5,
+                  pointerEvents: ready && !pending ? "auto" : "none",
                   border: 0
                 }}
               >
-                Send speaking enquiry
+                {pending ? "Sending…" : "Send speaking enquiry"}
               </button>
             </div>
           ) : (

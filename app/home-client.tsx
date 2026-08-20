@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useMemo, useState } from "react";
+import { submitSignupAction } from "@/app/signup/actions";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import {
@@ -19,28 +20,116 @@ import {
   zodiacFromYear,
   zodiacNote
 } from "@/lib/site-data";
+import type { HomeExtrasCopy } from "@/lib/cms/page-copy-types";
+import { cms } from "@/lib/cms/cms-attr";
 
-export default function HomePage() {
+type HomeFaq = { q: string; a: string };
+type HomeQuote = { name: string; role: string; text: string; initial: string };
+type HomeHero = {
+  heading: string;
+  subheading: string;
+  highlight?: string;
+  ctaLabel: string;
+  ctaHref: string;
+  chartCtaLabel: string;
+  rating: string;
+  imageUrl: string;
+  imageAlt: string;
+};
+type HomeStat = { value: string; label: string };
+type HomeClosing = { heading: string; body: string; ctaLabel: string; ctaHref: string };
+
+export default function HomePage({
+  faqs: faqInput,
+  services,
+  testimonials,
+  hero,
+  stats,
+  closing,
+  extras,
+  showServices = true
+}: {
+  faqs?: HomeFaq[];
+  services?: typeof HOME_SERVICES;
+  testimonials?: HomeQuote[];
+  hero?: HomeHero;
+  stats?: HomeStat[];
+  closing?: HomeClosing;
+  extras?: HomeExtrasCopy;
+  showServices?: boolean;
+}) {
   const [chartOpen, setChartOpen] = useState(false);
   const [leadName, setLeadName] = useState("");
   const [leadDob, setLeadDob] = useState("");
   const [leadTime, setLeadTime] = useState("");
   const [leadEmail, setLeadEmail] = useState("");
   const [leadSent, setLeadSent] = useState(false);
+  const [leadPending, setLeadPending] = useState(false);
+  const [leadError, setLeadError] = useState("");
   const [openFaq, setOpenFaq] = useState(0);
 
   const leadYear = leadDob ? parseInt(leadDob.slice(0, 4), 10) : null;
   const leadSign = leadYear ? zodiacFromYear(leadYear) : "";
   const leadReady = !!(leadDob && emailOk(leadEmail));
+  const faqSource = faqInput?.length ? faqInput : FAQ_DATA;
+  const serviceSource = services?.length ? services : HOME_SERVICES;
+  const quoteSource = testimonials?.length ? testimonials : TESTIMONIALS;
+  const aboutKicker = extras?.aboutKicker || "Meet Marites Allen";
+  const aboutHeading = extras?.aboutHeading || "The name the world trusts for Feng Shui";
+  const aboutBody =
+    extras?.aboutBody ||
+    "Dubbed the Real Feng Shui Queen, Marites Allen is the first Filipina Master in Feng Shui, guiding business leaders, celebrities and families for over three decades from Manila to London.";
+  const aboutCta = extras?.aboutCta || "Read her full story →";
+  const speakingLabel = extras?.speakingLabel || "Corporate clients & speaking engagements";
+  const speakingClients = extras?.speakingClients?.length ? extras.speakingClients : SPEAKING_CLIENTS;
+  const destaraBenefits = extras?.destaraBenefits?.length ? extras.destaraBenefits : DESTARA_BENEFITS;
+  const friggaBrowse = extras?.friggaBrowse?.length ? extras.friggaBrowse : FRIGGA_BROWSE;
+  const friggaRegions = extras?.friggaRegions?.length ? extras.friggaRegions : FRIGGA_REGIONS;
+  const aboutImageUrl = extras?.aboutImageUrl || "/images/zip/marites-2.webp";
+  const pressLabel = extras?.pressLabel || "As featured in";
+  const pressBadge = extras?.pressBadge || "Forbes · Tatler · ANC";
+  const pressNames = extras?.pressNames?.length
+    ? extras.pressNames
+    : ["Forbes", "Tatler", "Manila Bulletin", "Manila Times", "ANC"];
+  const destaraBadge1 = extras?.destaraBadge1 || "New";
+  const destaraBadge2 = extras?.destaraBadge2 || "Beta testing now";
+  const destaraHeading = extras?.destaraHeading || "The future of Feng Shui, in your pocket";
+  const destaraBody =
+    extras?.destaraBody ||
+    "Destara is an AI Destiny Guide trained on 30 years of Marites Allen's Feng Shui expertise. It's free to use, with no email and no sign-up. Just open it and ask.";
+  const destaraCta = extras?.destaraCta || "Try Destara free →";
+  const destaraMore = extras?.destaraMore || "Learn more";
+  const destaraUrl = extras?.destaraUrl || "https://destara.app";
+  const servicesKicker = extras?.servicesKicker || "Consultations";
+  const servicesHeading = extras?.servicesHeading || "Guidance for every turning point";
+  const servicesBody =
+    extras?.servicesBody ||
+    "Every session is one-on-one with Marites, online or in person. Each one includes a personalized analysis, a written action plan, and a follow-up window.";
+  const bespokeKicker = extras?.bespokeKicker || "For estates, family offices & business leaders";
+  const bespokeHeading = extras?.bespokeHeading || "Bespoke Advisory, scoped around what you need";
+  const bespokeCta = extras?.bespokeCta || "Enquire privately →";
+  const comingKicker = extras?.comingKicker || "Coming soon";
+  const comingHeading = extras?.comingHeading || "Online booking is on the way";
+  const comingBody =
+    extras?.comingBody ||
+    "Private consultations with Marites Allen will open for booking here shortly. Enquire anytime while we finish the experience.";
+  const comingCta = extras?.comingCta || "View Coming Soon →";
+  const guarantees = extras?.guarantees?.length ? extras.guarantees : GUARANTEES;
+  const friggaHeading = extras?.friggaHeading || "Shop your lucky items for the year";
+  const friggaBody =
+    extras?.friggaBody ||
+    "Marites Allen's own line of charms, amulets, planners and almanacs, so the guidance from your consultation travels with you every day.";
+  const friggaCta = extras?.friggaCta || "Shop Frigga";
+  const friggaShopUrl = friggaRegions[0]?.url || "https://www.frigga.com.ph";
 
   const faqs = useMemo(
     () =>
-      FAQ_DATA.map((f, i) => ({
+      faqSource.map((f, i) => ({
         ...f,
         open: openFaq === i,
         icon: openFaq === i ? "−" : "+"
       })),
-    [openFaq]
+    [openFaq, faqSource]
   );
 
   return (
@@ -180,9 +269,29 @@ export default function HomePage() {
                         />
                       </div>
                     </div>
+                    {leadError && (
+                      <div style={{ color: "#8b2e2e", fontSize: 13, marginBottom: 8 }}>{leadError}</div>
+                    )}
                     <button
                       type="button"
-                      onClick={() => leadReady && setLeadSent(true)}
+                      onClick={async () => {
+                        if (!leadReady || leadPending) return;
+                        setLeadError("");
+                        setLeadPending(true);
+                        const result = await submitSignupAction({
+                          kind: "destiny-chart",
+                          source: "home",
+                          email: leadEmail,
+                          name: leadName,
+                          fields: { dob: leadDob, time: leadTime, sign: leadSign }
+                        });
+                        setLeadPending(false);
+                        if (!result.ok) {
+                          setLeadError(result.error);
+                          return;
+                        }
+                        setLeadSent(true);
+                      }}
                       style={{
                         marginTop: 16,
                         width: "100%",
@@ -193,12 +302,12 @@ export default function HomePage() {
                         padding: 15,
                         fontSize: 16,
                         fontWeight: 700,
-                        cursor: leadReady ? "pointer" : "default",
-                        opacity: leadReady ? 1 : 0.5,
+                        cursor: leadReady && !leadPending ? "pointer" : "default",
+                        opacity: leadReady && !leadPending ? 1 : 0.5,
                         border: 0
                       }}
                     >
-                      Send me my Destiny Chart
+                      {leadPending ? "Sending…" : "Send me my Destiny Chart"}
                     </button>
                     <div style={{ fontSize: 12, color: "#6b6862", textAlign: "center", marginTop: 10 }}>
                       We respect your privacy. No spam, and you can unsubscribe anytime.
@@ -292,7 +401,9 @@ export default function HomePage() {
               }}
             >
               <span style={{ color: "#e6c680", fontSize: 13 }}>★★★★★</span>
-              <span style={{ color: "#f2ede1", fontSize: 12, fontWeight: 600 }}>4.9 · 1,200+ verified reviews</span>
+              <span style={{ color: "#f2ede1", fontSize: 12, fontWeight: 600 }}>
+                {hero?.rating || "4.9 · 1,200+ verified reviews"}
+              </span>
             </div>
             <h1
               className="font-display"
@@ -304,15 +415,19 @@ export default function HomePage() {
                 margin: "20px 0 16px"
               }}
             >
-              Transform your luck, home &amp; destiny
+              {hero?.heading || "Transform your luck, home & destiny"}
             </h1>
             <p style={{ fontSize: "clamp(16px,1.6vw,19px)", lineHeight: 1.6, color: "#c7ddd2", margin: "0 0 12px", maxWidth: 520 }}>
-              Private consultations with <strong style={{ color: "#e6c680" }}>the Philippines&apos; Feng Shui Queen</strong>, the
-              first Filipina Master in Feng Shui, who has advised business leaders and families from Manila to London.
+              {hero?.subheading || (
+                <>
+                  Private consultations with <strong style={{ color: "#e6c680" }}>the Philippines&apos; Feng Shui Queen</strong>, the
+                  first Filipina Master in Feng Shui, who has advised business leaders and families from Manila to London.
+                </>
+              )}
             </p>
             <div style={{ display: "flex", flexWrap: "wrap", gap: 14, marginTop: 28 }}>
               <Link
-                href="/book"
+                href={hero?.ctaHref || "/book"}
                 style={{
                   background: "linear-gradient(160deg,#e6c680,#c69a3e)",
                   color: "#143d31",
@@ -323,7 +438,7 @@ export default function HomePage() {
                   boxShadow: "0 14px 28px -10px rgba(198,154,62,0.6)"
                 }}
               >
-                Book Consultation · Coming Soon →
+                {hero?.ctaLabel || "Book Consultation · Coming Soon →"}
               </Link>
               <button
                 type="button"
@@ -339,7 +454,7 @@ export default function HomePage() {
                   cursor: "pointer"
                 }}
               >
-                Free Destiny Chart
+                {hero?.chartCtaLabel || "Free Destiny Chart"}
               </button>
             </div>
             <div
@@ -351,17 +466,21 @@ export default function HomePage() {
                 borderTop: "1px solid rgba(255,255,255,0.14)"
               }}
             >
-              {[
-                ["30+", "Years"],
-                ["100+", "Countries"],
-                ["10K+", "Companies"],
-                ["1M+", "Clients"]
-              ].map(([n, l]) => (
-                <div key={l}>
+              {(
+                stats?.length
+                  ? stats
+                  : [
+                      { value: "30+", label: "Years" },
+                      { value: "100+", label: "Countries" },
+                      { value: "10K+", label: "Companies" },
+                      { value: "1M+", label: "Clients" }
+                    ]
+              ).map((item) => (
+                <div key={item.label}>
                   <div className="font-display" style={{ fontWeight: 700, fontSize: "clamp(24px,3vw,32px)", color: "#e6c680" }}>
-                    {n}
+                    {item.value}
                   </div>
-                  <div style={{ fontSize: 12, letterSpacing: 0.5, color: "#9fbcb0", textTransform: "uppercase" }}>{l}</div>
+                  <div style={{ fontSize: 12, letterSpacing: 0.5, color: "#9fbcb0", textTransform: "uppercase" }}>{item.label}</div>
                 </div>
               ))}
             </div>
@@ -378,8 +497,8 @@ export default function HomePage() {
               }}
             >
               <Image
-                src="/images/zip/marites-1.webp"
-                alt="Marites Allen, Feng Shui Master"
+                src={hero?.imageUrl || "/images/zip/marites-1.webp"}
+                alt={hero?.imageAlt || "Marites Allen, Feng Shui Master"}
                 fill
                 priority
                 style={{ objectFit: "cover", objectPosition: "50% 16%" }}
@@ -397,9 +516,11 @@ export default function HomePage() {
                 maxWidth: 230
               }}
             >
-              <div style={{ fontSize: 12, color: "#6b6862" }}>As featured in</div>
-              <div className="font-display" style={{ fontWeight: 700, fontSize: 16, color: "#143d31" }}>
-                Forbes · Tatler · ANC
+              <div style={{ fontSize: 12, color: "#6b6862" }} {...cms("home.pressLabel")}>
+                {pressLabel}
+              </div>
+              <div className="font-display" style={{ fontWeight: 700, fontSize: 16, color: "#143d31" }} {...cms("home.pressBadge")}>
+                {pressBadge}
               </div>
             </div>
           </div>
@@ -419,11 +540,19 @@ export default function HomePage() {
             gap: "clamp(16px,4vw,44px)"
           }}
         >
-          <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: 2, textTransform: "uppercase", color: "#4a4740" }}>
-            As featured in
+          <span
+            style={{ fontSize: 11, fontWeight: 700, letterSpacing: 2, textTransform: "uppercase", color: "#4a4740" }}
+            {...cms("home.pressLabel")}
+          >
+            {pressLabel}
           </span>
-          {["Forbes", "Tatler", "Manila Bulletin", "Manila Times", "ANC"].map((name) => (
-            <span key={name} className="font-display" style={{ fontSize: name === "Tatler" ? 19 : 17, color: "#63583a", fontStyle: name === "Tatler" ? "italic" : "normal" }}>
+          {pressNames.map((name, i) => (
+            <span
+              key={name}
+              className="font-display"
+              style={{ fontSize: name === "Tatler" ? 19 : 17, color: "#63583a", fontStyle: name === "Tatler" ? "italic" : "normal" }}
+              {...cms(`home.pressNames.${i}`)}
+            >
               {name}
             </span>
           ))}
@@ -454,19 +583,25 @@ export default function HomePage() {
                 position: "relative"
               }}
             >
-              <Image src="/images/zip/marites-2.webp" alt="Marites Allen" fill style={{ objectFit: "cover", objectPosition: "50% 15%" }} />
+              <Image src={aboutImageUrl} alt="Marites Allen" fill style={{ objectFit: "cover", objectPosition: "50% 15%" }} />
             </div>
           </div>
           <div style={{ flex: "1 1 340px", minWidth: 280 }}>
-            <div style={{ fontSize: 12, fontWeight: 700, letterSpacing: 3, textTransform: "uppercase", color: "#4a4740" }}>
-              Meet Marites Allen
+            <div
+              style={{ fontSize: 12, fontWeight: 700, letterSpacing: 3, textTransform: "uppercase", color: "#4a4740" }}
+              {...cms("home.aboutKicker")}
+            >
+              {aboutKicker}
             </div>
-            <h2 className="font-display" style={{ fontWeight: 700, fontSize: "clamp(22px,2.8vw,30px)", color: "#143d31", margin: "10px 0 12px" }}>
-              The name the world trusts for Feng Shui
+            <h2
+              className="font-display"
+              style={{ fontWeight: 700, fontSize: "clamp(22px,2.8vw,30px)", color: "#143d31", margin: "10px 0 12px" }}
+              {...cms("home.aboutHeading")}
+            >
+              {aboutHeading}
             </h2>
-            <p style={{ fontSize: 15.5, lineHeight: 1.7, color: "#4d5850", margin: "0 0 18px" }}>
-              Dubbed <em>the Real Feng Shui Queen</em>, Marites Allen is the first Filipina Master in Feng Shui, guiding
-              business leaders, celebrities and families for over three decades from Manila to London.
+            <p style={{ fontSize: 15.5, lineHeight: 1.7, color: "#4d5850", margin: "0 0 18px" }} {...cms("home.aboutBody")}>
+              {aboutBody}
             </p>
             <Link
               href="/about"
@@ -479,8 +614,9 @@ export default function HomePage() {
                 padding: "12px 24px",
                 borderRadius: 10
               }}
+              {...cms("home.aboutCta")}
             >
-              Read her full story →
+              {aboutCta}
             </Link>
           </div>
         </div>
@@ -488,12 +624,15 @@ export default function HomePage() {
 
       <section style={{ background: "#fffdf8", borderTop: "1px solid rgba(20,61,49,0.08)", borderBottom: "1px solid rgba(20,61,49,0.08)" }}>
         <div style={{ maxWidth: 1180, margin: "0 auto", padding: "28px clamp(18px,4vw,40px)", textAlign: "center" }}>
-          <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: 2, textTransform: "uppercase", color: "#4a4740", marginBottom: 12 }}>
-            Corporate clients &amp; speaking engagements
+          <div
+            style={{ fontSize: 11, fontWeight: 700, letterSpacing: 2, textTransform: "uppercase", color: "#4a4740", marginBottom: 12 }}
+            {...cms("home.speakingLabel")}
+          >
+            {speakingLabel}
           </div>
           <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "clamp(14px,3vw,28px)" }}>
-            {SPEAKING_CLIENTS.map((c) => (
-              <span key={c} className="font-display" style={{ fontSize: 16, color: "#5f6b60" }}>
+            {speakingClients.map((c, i) => (
+              <span key={c} className="font-display" style={{ fontSize: 16, color: "#5f6b60" }} {...cms(`home.speakingClients.${i}`)}>
                 {c}
               </span>
             ))}
@@ -520,42 +659,73 @@ export default function HomePage() {
         >
           <div style={{ flex: "1 1 360px", minWidth: 300 }}>
             <div style={{ display: "flex", flexWrap: "wrap", gap: 8, alignItems: "center", marginBottom: 12 }}>
-              <span style={{ fontSize: 10.5, fontWeight: 700, letterSpacing: 1.5, textTransform: "uppercase", color: "#0f3126", background: "#e6c680", borderRadius: 99, padding: "4px 12px" }}>
-                New
-              </span>
-              <span style={{ fontSize: 10.5, fontWeight: 700, letterSpacing: 1.5, textTransform: "uppercase", color: "#e6c680", border: "1px solid rgba(230,198,128,0.5)", borderRadius: 99, padding: "3px 11px" }}>
-                Beta testing now
-              </span>
+              {destaraBadge1 ? (
+                <span
+                  style={{ fontSize: 10.5, fontWeight: 700, letterSpacing: 1.5, textTransform: "uppercase", color: "#0f3126", background: "#e6c680", borderRadius: 99, padding: "4px 12px" }}
+                  {...cms("home.destaraBadge1")}
+                >
+                  {destaraBadge1}
+                </span>
+              ) : null}
+              {destaraBadge2 ? (
+                <span
+                  style={{ fontSize: 10.5, fontWeight: 700, letterSpacing: 1.5, textTransform: "uppercase", color: "#e6c680", border: "1px solid rgba(230,198,128,0.5)", borderRadius: 99, padding: "3px 11px" }}
+                  {...cms("home.destaraBadge2")}
+                >
+                  {destaraBadge2}
+                </span>
+              ) : null}
             </div>
-            <h2 className="font-display" style={{ fontWeight: 700, fontSize: "clamp(26px,3.6vw,40px)", lineHeight: 1.12, margin: "0 0 14px" }}>
-              The future of Feng Shui, in your pocket
+            <h2
+              className="font-display"
+              style={{ fontWeight: 700, fontSize: "clamp(26px,3.6vw,40px)", lineHeight: 1.12, margin: "0 0 14px" }}
+              {...cms("home.destaraHeading")}
+            >
+              {destaraHeading}
             </h2>
-            <p style={{ fontSize: 16, lineHeight: 1.65, color: "#bcd3c8", margin: "0 0 22px", maxWidth: 520 }}>
-              Destara is an AI Destiny Guide trained on 30 years of Marites Allen&apos;s Feng Shui expertise. It&apos;s free to
-              use, with no email and no sign-up. Just open it and ask.
+            <p
+              style={{ fontSize: 16, lineHeight: 1.65, color: "#bcd3c8", margin: "0 0 22px", maxWidth: 520 }}
+              {...cms("home.destaraBody")}
+            >
+              {destaraBody}
             </p>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(220px,1fr))", gap: 12, marginBottom: 26, maxWidth: 560 }}>
-              {DESTARA_BENEFITS.map((b) => (
+              {destaraBenefits.map((b, i) => (
                 <div key={b.title} style={{ display: "flex", gap: 11, alignItems: "flex-start" }}>
                   <span style={{ color: "#e6c680", fontWeight: 700, flexShrink: 0 }}>✦</span>
                   <span>
-                    <span style={{ display: "block", fontSize: 14, fontWeight: 700, color: "#fff" }}>{b.title}</span>
-                    <span style={{ display: "block", fontSize: 13, lineHeight: 1.5, color: "#a9c6ba", marginTop: 2 }}>{b.desc}</span>
+                    <span
+                      style={{ display: "block", fontSize: 14, fontWeight: 700, color: "#fff" }}
+                      {...cms(`home.destaraBenefits.${i}.title`)}
+                    >
+                      {b.title}
+                    </span>
+                    <span
+                      style={{ display: "block", fontSize: 13, lineHeight: 1.5, color: "#a9c6ba", marginTop: 2 }}
+                      {...cms(`home.destaraBenefits.${i}.desc`)}
+                    >
+                      {b.desc}
+                    </span>
                   </span>
                 </div>
               ))}
             </div>
             <div style={{ display: "flex", flexWrap: "wrap", gap: 11, alignItems: "center" }}>
               <a
-                href="https://destara.app"
+                href={destaraUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 style={{ background: "linear-gradient(160deg,#e6c680,#c69a3e)", color: "#143d31", fontSize: 15, fontWeight: 700, padding: "15px 30px", borderRadius: 99 }}
+                {...cms("home.destaraCta")}
               >
-                Try Destara free →
+                {destaraCta}
               </a>
-              <Link href="/destara" style={{ border: "1.5px solid rgba(255,255,255,0.35)", color: "#fff", fontSize: 15, fontWeight: 700, padding: "15px 24px", borderRadius: 99 }}>
-                Learn more
+              <Link
+                href="/destara"
+                style={{ border: "1.5px solid rgba(255,255,255,0.35)", color: "#fff", fontSize: 15, fontWeight: 700, padding: "15px 24px", borderRadius: 99 }}
+                {...cms("home.destaraMore")}
+              >
+                {destaraMore}
               </Link>
             </div>
           </div>
@@ -582,21 +752,28 @@ export default function HomePage() {
         </div>
       </section>
 
+      {showServices ? (
       <section id="services" style={{ maxWidth: 1180, margin: "0 auto", padding: "clamp(34px,4.5vw,56px) clamp(18px,4vw,40px)" }}>
         <div style={{ textAlign: "center", maxWidth: 640, margin: "0 auto 26px" }}>
-          <div style={{ fontSize: 12, fontWeight: 700, letterSpacing: 3, textTransform: "uppercase", color: "#4a4740" }}>
-            Consultations
+          <div
+            style={{ fontSize: 12, fontWeight: 700, letterSpacing: 3, textTransform: "uppercase", color: "#4a4740" }}
+            {...cms("home.servicesKicker")}
+          >
+            {servicesKicker}
           </div>
-          <h2 className="font-display" style={{ fontWeight: 700, fontSize: "clamp(24px,3vw,32px)", color: "#143d31", margin: "10px 0 12px" }}>
-            Guidance for every turning point
+          <h2
+            className="font-display"
+            style={{ fontWeight: 700, fontSize: "clamp(24px,3vw,32px)", color: "#143d31", margin: "10px 0 12px" }}
+            {...cms("home.servicesHeading")}
+          >
+            {servicesHeading}
           </h2>
-          <p style={{ fontSize: 16, lineHeight: 1.6, color: "#5f6b60", margin: 0 }}>
-            Every session is one-on-one with Marites, online or in person. Each one includes a personalized analysis, a
-            written action plan, and a follow-up window.
+          <p style={{ fontSize: 16, lineHeight: 1.6, color: "#5f6b60", margin: 0 }} {...cms("home.servicesBody")}>
+            {servicesBody}
           </p>
         </div>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(280px,1fr))", gap: 22 }}>
-          {HOME_SERVICES.map((s) => (
+          {serviceSource.map((s) => (
             <div
               key={s.id}
               style={{
@@ -637,17 +814,23 @@ export default function HomePage() {
                 {s.title}
               </h3>
               <p style={{ fontSize: 14, lineHeight: 1.6, color: "#6b7268", margin: "0 0 16px" }}>{s.tagline}</p>
-              <div style={{ fontSize: 12, fontWeight: 700, letterSpacing: 0.5, textTransform: "uppercase", color: "#4a4740", marginBottom: 8 }}>
-                You&apos;ll receive
-              </div>
-              <ul style={{ listStyle: "none", padding: 0, margin: "0 0 18px", display: "grid", gap: 7, flex: 1 }}>
-                {s.includes.map((inc) => (
-                  <li key={inc} style={{ display: "flex", gap: 8, alignItems: "flex-start", fontSize: 13.5, color: "#3d4a41" }}>
-                    <span style={{ color: "#1a4d3e", fontWeight: 700 }}>✓</span>
-                    {inc}
-                  </li>
-                ))}
-              </ul>
+              {s.includes.length > 0 ? (
+                <>
+                  <div style={{ fontSize: 12, fontWeight: 700, letterSpacing: 0.5, textTransform: "uppercase", color: "#4a4740", marginBottom: 8 }}>
+                    You&apos;ll receive
+                  </div>
+                  <ul style={{ listStyle: "none", padding: 0, margin: "0 0 18px", display: "grid", gap: 7, flex: 1 }}>
+                    {s.includes.map((inc) => (
+                      <li key={inc} style={{ display: "flex", gap: 8, alignItems: "flex-start", fontSize: 13.5, color: "#3d4a41" }}>
+                        <span style={{ color: "#1a4d3e", fontWeight: 700 }}>✓</span>
+                        {inc}
+                      </li>
+                    ))}
+                  </ul>
+                </>
+              ) : (
+                <div style={{ flex: 1 }} />
+              )}
               <div style={{ fontSize: 13, color: "#6b6862", marginBottom: 16 }}>{s.duration}</div>
               <Link
                 href={`/book?service=${s.id}`}
@@ -683,18 +866,29 @@ export default function HomePage() {
           }}
         >
           <div>
-            <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: 1.5, textTransform: "uppercase", color: "#e6c680" }}>
-              For estates, family offices &amp; business leaders
+            <div
+              style={{ fontSize: 11, fontWeight: 700, letterSpacing: 1.5, textTransform: "uppercase", color: "#e6c680" }}
+              {...cms("home.bespokeKicker")}
+            >
+              {bespokeKicker}
             </div>
-            <div className="font-display" style={{ fontWeight: 600, fontSize: 19, color: "#fff", marginTop: 4 }}>
-              Bespoke Advisory, scoped around what you need
+            <div
+              className="font-display"
+              style={{ fontWeight: 600, fontSize: 19, color: "#fff", marginTop: 4 }}
+              {...cms("home.bespokeHeading")}
+            >
+              {bespokeHeading}
             </div>
           </div>
-          <span style={{ background: "#e6c680", color: "#143d31", fontWeight: 700, padding: "12px 24px", borderRadius: 10, flexShrink: 0 }}>
-            Enquire privately →
+          <span
+            style={{ background: "#e6c680", color: "#143d31", fontWeight: 700, padding: "12px 24px", borderRadius: 10, flexShrink: 0 }}
+            {...cms("home.bespokeCta")}
+          >
+            {bespokeCta}
           </span>
         </Link>
       </section>
+      ) : null}
 
       <section id="book" style={{ maxWidth: 1180, margin: "0 auto", padding: "clamp(34px,4.5vw,56px) clamp(18px,4vw,40px)" }}>
         <div
@@ -706,17 +900,21 @@ export default function HomePage() {
             boxShadow: "0 30px 70px -30px rgba(20,60,45,0.5)"
           }}
         >
-          <div style={{ fontSize: 12, fontWeight: 700, letterSpacing: 3, textTransform: "uppercase", color: "#e6c680" }}>
-            Coming soon
+          <div style={{ fontSize: 12, fontWeight: 700, letterSpacing: 3, textTransform: "uppercase", color: "#e6c680" }} {...cms("home.comingKicker")}>
+            {comingKicker}
           </div>
-          <h2 className="font-display" style={{ fontWeight: 700, fontSize: "clamp(24px,3vw,32px)", color: "#fff", margin: "10px 0 12px" }}>
-            Online booking is on the way
+          <h2
+            className="font-display"
+            style={{ fontWeight: 700, fontSize: "clamp(24px,3vw,32px)", color: "#fff", margin: "10px 0 12px" }}
+            {...cms("home.comingHeading")}
+          >
+            {comingHeading}
           </h2>
-          <p style={{ fontSize: 16, color: "#c7ddd2", margin: "0 auto 28px", maxWidth: 520 }}>
-            Private consultations with Marites Allen will open for booking here shortly. Enquire anytime while we finish the experience.
+          <p style={{ fontSize: 16, color: "#c7ddd2", margin: "0 auto 28px", maxWidth: 520 }} {...cms("home.comingBody")}>
+            {comingBody}
           </p>
           <div style={{ display: "flex", flexWrap: "wrap", gap: 10, justifyContent: "center", marginBottom: 30 }}>
-            {GUARANTEES.map((g) => (
+            {guarantees.map((g, i) => (
               <span
                 key={g}
                 style={{
@@ -731,6 +929,7 @@ export default function HomePage() {
                   fontWeight: 600,
                   color: "#e7efe9"
                 }}
+                {...cms(`home.guarantees.${i}`)}
               >
                 <span style={{ color: "#e6c680" }}>✦</span>
                 {g}
@@ -748,8 +947,9 @@ export default function HomePage() {
               padding: "16px 34px",
               borderRadius: 12
             }}
+            {...cms("home.comingCta")}
           >
-            View Coming Soon →
+            {comingCta}
           </Link>
         </div>
       </section>
@@ -763,7 +963,7 @@ export default function HomePage() {
             </h2>
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(280px,1fr))", gap: 20 }}>
-            {TESTIMONIALS.map((q) => (
+            {quoteSource.map((q) => (
               <div
                 key={q.name}
                 style={{
@@ -820,21 +1020,28 @@ export default function HomePage() {
         >
           <div style={{ flex: "1 1 360px", minWidth: 300 }}>
             <Image src="/images/zip/frigga-logo.png" alt="Frigga, Charmed Life" width={132} height={48} style={{ width: "100%", maxWidth: 132, height: "auto", marginBottom: 14 }} />
-            <h2 className="font-display" style={{ fontWeight: 400, fontSize: "clamp(21px,2.6vw,30px)", lineHeight: 1.25, margin: "0 0 10px", color: "#1c1c1c" }}>
-              Shop your lucky items for the year
+            <h2
+              className="font-display"
+              style={{ fontWeight: 400, fontSize: "clamp(21px,2.6vw,30px)", lineHeight: 1.25, margin: "0 0 10px", color: "#1c1c1c" }}
+              {...cms("home.friggaHeading")}
+            >
+              {friggaHeading}
             </h2>
-            <p style={{ fontSize: 14.5, lineHeight: 1.7, color: "#6b6862", margin: "0 0 16px", maxWidth: 440 }}>
-              Marites Allen&apos;s own line of charms, amulets, planners and almanacs, so the guidance from your consultation
-              travels with you every day.
+            <p
+              style={{ fontSize: 14.5, lineHeight: 1.7, color: "#6b6862", margin: "0 0 16px", maxWidth: 440 }}
+              {...cms("home.friggaBody")}
+            >
+              {friggaBody}
             </p>
             <div style={{ display: "flex", flexWrap: "wrap", gap: 7, marginBottom: 18 }}>
-              {FRIGGA_BROWSE.map((b) => (
+              {friggaBrowse.map((b, i) => (
                 <a
                   key={b.label}
-                  href={b.url}
+                  href={"url" in b && b.url ? b.url : "href" in b ? b.href : "#"}
                   target="_blank"
                   rel="noopener noreferrer"
                   style={{ display: "inline-block", border: "1px solid rgba(0,0,0,0.14)", padding: "7px 14px", fontSize: 12.5, fontWeight: 600, color: "#1c1c1c", background: "#fff" }}
+                  {...cms(`home.friggaBrowse.${i}.label`)}
                 >
                   {b.label}
                 </a>
@@ -842,15 +1049,23 @@ export default function HomePage() {
             </div>
             <div style={{ display: "flex", flexWrap: "wrap", gap: 11, alignItems: "center" }}>
               <a
-                href="https://www.frigga.com.ph"
+                href={friggaShopUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 style={{ display: "inline-block", background: "#1c1c1c", color: "#fff", fontSize: 11.5, fontWeight: 600, letterSpacing: 2.5, textTransform: "uppercase", padding: "14px 32px" }}
+                {...cms("home.friggaCta")}
               >
-                Shop Frigga
+                {friggaCta}
               </a>
-              {FRIGGA_REGIONS.map((r) => (
-                <a key={r.domain} href={r.url} target="_blank" rel="noopener noreferrer" style={{ fontSize: 12.5, fontWeight: 600, color: "#4a4740" }}>
+              {friggaRegions.map((r, i) => (
+                <a
+                  key={r.domain}
+                  href={r.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ fontSize: 12.5, fontWeight: 600, color: "#4a4740" }}
+                  {...cms(`home.friggaRegions.${i}.domain`)}
+                >
                   {r.domain}
                 </a>
               ))}
@@ -859,7 +1074,7 @@ export default function HomePage() {
           <div style={{ flex: "0 1 380px", minWidth: 260, perspective: 1400 }}>
             <a
               className="om3d"
-              href="https://www.frigga.com.ph"
+              href={friggaShopUrl}
               target="_blank"
               rel="noopener noreferrer"
               style={{
@@ -923,13 +1138,14 @@ export default function HomePage() {
       <section style={{ background: "linear-gradient(160deg,#1a4d3e,#0f3126)" }}>
         <div style={{ maxWidth: 1180, margin: "0 auto", padding: "clamp(32px,4vw,50px) clamp(18px,4vw,40px)", textAlign: "center" }}>
           <h2 className="font-display" style={{ fontWeight: 700, fontSize: "clamp(28px,4vw,44px)", color: "#fff", margin: "0 0 12px" }}>
-            Ready to align with your best year yet?
+            {closing?.heading || "Ready to align with your best year yet?"}
           </h2>
           <p style={{ fontSize: 17, color: "#c7ddd2", margin: "0 auto 28px", maxWidth: 560 }}>
-            Join over a million people who have turned to Marites Allen for clarity, prosperity and peace of mind.
+            {closing?.body ||
+              "Join over a million people who have turned to Marites Allen for clarity, prosperity and peace of mind."}
           </p>
           <Link
-            href="/book"
+            href={closing?.ctaHref || "/book"}
             style={{
               display: "inline-block",
               background: "linear-gradient(160deg,#e6c680,#c69a3e)",
@@ -940,7 +1156,7 @@ export default function HomePage() {
               borderRadius: 12
             }}
           >
-            Book Consultation · Coming Soon →
+            {closing?.ctaLabel || "Book Consultation · Coming Soon →"}
           </Link>
         </div>
       </section>

@@ -300,10 +300,6 @@ select:focus {
 }
 
 @media (max-width: 480px) {
-  .brandName {
-    font-size: 17px !important;
-  }
-
   .brandTag {
     display: none;
   }

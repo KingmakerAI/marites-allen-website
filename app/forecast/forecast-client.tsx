@@ -3,195 +3,11 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
-
-type YearKey = "2024" | "2025" | "2026" | "2027";
-
-const YEARS: Record<
-  YearKey,
-  { animal: string; label: string; element: string; cny: string; intro: string; lead: string; body1: string; body2: string }
-> = {
-  "2027": {
-    animal: "Sheep",
-    label: "Year of the Fire Sheep",
-    element: "Fire (Yin)",
-    cny: "February 6, 2027",
-    intro:
-      "In the Year of the Fire Sheep, the pace softens and attention turns inward. After the momentum of the Fire Horse, 2027 rewards consolidation, care and creative work. With expert guidance from Marites Allen, discover how to protect what you have built and grow it gently.",
-    lead: "Chinese New Year 2027 begins on February 6, 2027, ushering in the Year of the Fire Sheep.",
-    body1:
-      "The Sheep brings gentleness, artistry and diplomacy. Where 2026 rewarded speed and visibility, 2027 favours refinement: nurturing relationships, consolidating gains, and tending to health and home.",
-    body2:
-      "Fire keeps warmth and passion in play, but channelled through the Sheep it becomes creative rather than competitive. A strong year for the arts, hospitality, care work and anything built on trust."
-  },
-  "2026": {
-    animal: "Horse",
-    label: "Year of the Fire Horse",
-    element: "Fire (Yang)",
-    cny: "February 4, 2026",
-    intro:
-      "In the Year of the Fire Horse, harness the energy of renewal, wisdom, and growth. With expert guidance from Marites Allen, the leading Feng Shui consultant, discover how to elevate your health, wealth, love, and career through powerful Feng Shui practices. Embrace the year ahead with confidence and balance. Marites Allen is here to help you transform your life.",
-    lead: "Chinese New Year 2026 begins on February 4, 2026, ushering in the Year of the Fire Horse.",
-    body1:
-      "The year of the Fire Horse is characterized by speed, dynamism, and charisma. Where 2025 favored deep planning and strategy, 2026 rewards action, visibility, and movement. It is a time for individuals and organizations to launch projects, expand their influence, and showcase talents on bigger stages.",
-    body2:
-      "Fire is expressive and passionate; the Horse is associated with freedom, travel, and ambition. Together they favor launches, career moves, and public-facing ventures, tempered by a need to manage impulsiveness and pace yourself through a fast-moving year."
-  },
-  "2025": {
-    animal: "Snake",
-    label: "Year of the Wood Snake",
-    element: "Wood (Yin)",
-    cny: "January 29, 2025",
-    intro:
-      "The Year of the Wood Snake rewarded patience, strategy and quiet growth. Marites Allen's guidance for 2025 focused on deep planning, laying foundations that would pay off in the faster years to follow.",
-    lead: "Chinese New Year 2025 began on January 29, 2025, ushering in the Year of the Wood Snake.",
-    body1:
-      "The Wood Snake favoured wisdom, discretion and long-range thinking. It was a year for study, restructuring and careful positioning rather than bold public moves.",
-    body2:
-      "Wood brought growth and flexibility to the Snake's strategic nature, making it ideal for research, education, and building relationships that would mature later."
-  },
-  "2024": {
-    animal: "Dragon",
-    label: "Year of the Wood Dragon",
-    element: "Wood (Yang)",
-    cny: "February 10, 2024",
-    intro:
-      "The Year of the Wood Dragon brought ambition, expansion and bold vision. Marites Allen's 2024 guidance centred on scaling up and stepping into greater authority.",
-    lead: "Chinese New Year 2024 began on February 10, 2024, ushering in the Year of the Wood Dragon.",
-    body1:
-      "The Dragon is the most auspicious sign in the zodiac, associated with power, prestige and transformation. 2024 favoured big launches, leadership moves and long-held ambitions.",
-    body2:
-      "Wood added growth and vitality, making it a year of visible expansion: new ventures, new titles and new territory for those prepared to claim it."
-  }
-};
-
-const ZODIACS = [
-  {
-    id: "rat",
-    sign: "Rat",
-    years: "1936 · 1948 · 1960 · 1972 · 1984 · 1996 · 2008 · 2020",
-    text: "Flexibility and steady effort open new doors this year. Fast-moving opportunities favor those who adapt quickly rather than wait for perfect conditions.",
-    focus: "Stay nimble; say yes to well-timed opportunities rather than holding out for certainty."
-  },
-  {
-    id: "ox",
-    sign: "Ox",
-    years: "1937 · 1949 · 1961 · 1973 · 1985 · 1997 · 2009 · 2021",
-    text: "Peach Blossom energy favors relationships and social connections. A good year to widen your network and let others see your reliability.",
-    focus: "Invest in relationships and visibility, and let your consistency be noticed."
-  },
-  {
-    id: "tiger",
-    sign: "Tiger",
-    years: "1938 · 1950 · 1962 · 1974 · 1986 · 1998 · 2010 · 2022",
-    text: "Bold, well-timed moves are rewarded. The Fire Horse energy amplifies your natural courage, so channel it into one focused goal rather than several.",
-    focus: "Pick one ambitious goal and commit fully instead of splitting your energy."
-  },
-  {
-    id: "rabbit",
-    sign: "Rabbit",
-    years: "1939 · 1951 · 1963 · 1975 · 1987 · 1999 · 2011 · 2023",
-    text: "A year to nurture harmony at home and protect your energy from the year's fast pace. Prioritize rest alongside ambition.",
-    focus: "Guard your peace; strengthen the home before chasing outward growth."
-  },
-  {
-    id: "dragon",
-    sign: "Dragon",
-    years: "1940 · 1952 · 1964 · 1976 · 1988 · 2000 · 2012 · 2024",
-    text: "Long-term growth and rising influence are supported. Visibility increases, so use it deliberately rather than reactively.",
-    focus: "Build durable influence; choose which stages you step onto."
-  },
-  {
-    id: "snake",
-    sign: "Snake",
-    years: "1941 · 1953 · 1965 · 1977 · 1989 · 2001 · 2013 · 2025",
-    text: "Quietly favorable. Wise, patient planning now compounds into lasting rewards later in the year.",
-    focus: "Plan carefully early; let results accumulate rather than forcing them."
-  },
-  {
-    id: "horse",
-    sign: "Horse",
-    years: "1942 · 1954 · 1966 · 1978 · 1990 · 2002 · 2014 · 2026",
-    text: "Your year of visibility and momentum. Big moves are favored, but pace yourself, because the Fire Horse year burns bright and fast.",
-    focus: "Move decisively, then rest deliberately. Avoid burnout in your own year."
-  },
-  {
-    id: "sheep",
-    sign: "Sheep",
-    years: "1943 · 1955 · 1967 · 1979 · 1991 · 2003 · 2015",
-    text: "Prosperity flows when you enhance your lucky sectors and stay disciplined with resources amid a fast-moving year.",
-    focus: "Mind your resources; steady discipline beats impulsive spending."
-  },
-  {
-    id: "monkey",
-    sign: "Monkey",
-    years: "1944 · 1956 · 1968 · 1980 · 1992 · 2004 · 2016",
-    text: "Opportunity is abundant this year; timing and placement make the difference between a good idea and a good outcome.",
-    focus: "Time your moves well, because execution matters more than ideas this year."
-  },
-  {
-    id: "rooster",
-    sign: "Rooster",
-    years: "1945 · 1957 · 1969 · 1981 · 1993 · 2005 · 2017",
-    text: "Romance and connection are highlighted. Align your space and schedule to make room for people, not just projects.",
-    focus: "Make space for relationships alongside your ambitions."
-  },
-  {
-    id: "dog",
-    sign: "Dog",
-    years: "1946 · 1958 · 1970 · 1982 · 1994 · 2006 · 2018",
-    text: "Guard against friction and lean into peace-and-harmony practices, because the Horse year's pace can strain relationships if unchecked.",
-    focus: "Choose harmony over being right; ease tension before it escalates."
-  },
-  {
-    id: "boar",
-    sign: "Boar",
-    years: "1947 · 1959 · 1971 · 1983 · 1995 · 2007 · 2019",
-    text: "A year to consolidate luck and build steady, protected abundance, even as the year's energy encourages faster action around you.",
-    focus: "Consolidate and protect what you have while others rush ahead."
-  }
-];
-
-const STAR_DEFS = [
-  {
-    title: "1 Victory (Center)",
-    text: "New beginnings, career progress, and wisdom. Activate with water features or blue/black colors. Everyone in the family can take advantage of this good luck."
-  },
-  {
-    title: "2 Illness (Northwest)",
-    text: "Illness and low energy. Suppress with metal cures, Wu Lou, and Medicine Buddha charms. Dog and Boar personalities are afflicted."
-  },
-  {
-    title: "3 Arguments (West)",
-    text: "Arguments and legal disputes. Balance with red colors, fire elements, and Peace charms. Rooster-born could be short fused, be more patient and considerate to avoid misunderstanding and legal issues."
-  },
-  {
-    title: "4 Romance & Travel (Northeast)",
-    text: "Romance, creativity, study and travel luck. Enhance with water elements and Peach Blossom charms. Favorable for Ox and Tiger personalities."
-  },
-  {
-    title: "5 Misfortune (South)",
-    text: "The most troublesome star, bringing obstacles and loss. Suppress with metal cures and Five Element Pagoda. Horse-born should take extra care this year."
-  },
-  {
-    title: "6 Windfall (North)",
-    text: "Heaven luck, authority and unexpected gains. Activate with metal and gold elements. Favorable for Rat personalities."
-  },
-  {
-    title: "7 Robbery & Violence (Southwest)",
-    text: "Theft, betrayal and violence. Neutralize with water elements, Blue Rhino and Elephant charms. Sheep and Monkey personalities should be cautious."
-  },
-  {
-    title: "8 Wealth (East)",
-    text: "The most auspicious wealth star. Activate with earth and crystal elements, Wealth Deities and money charms. Rabbit personalities benefit most."
-  },
-  {
-    title: "9 Prosperity (Southeast)",
-    text: "Future prosperity, celebration and multiplication of luck. Enhance with fire elements and bright lights. Favorable for Dragon and Snake personalities."
-  }
-];
+import { cms } from "@/lib/cms/cms-attr";
+import type { ForecastCopy } from "@/lib/cms/page-copy-types";
 
 const LO_SHU = ["9", "5", "7", "8", "", "3", "4", "6", "2"];
 
@@ -212,23 +28,33 @@ const SHOPS = [
   { region: "🇺🇸 USA & Canada:", label: "www.frigga-usa.com", url: "https://www.frigga-usa.com" }
 ];
 
-function isYearKey(y: string | null): y is YearKey {
-  return !!y && y in YEARS;
+function isKnownYear(y: string | null, years: ForecastCopy["years"]): y is string {
+  return !!y && years.some((row) => row.year === y);
 }
 
-export function ForecastClient() {
+export function ForecastClient({ copy }: { copy: ForecastCopy }) {
+  const years = copy.years;
+  const zodiacs = copy.zodiacs;
+  const starDefs = copy.stars;
   const searchParams = useSearchParams();
-  const [year, setYear] = useState<YearKey>("2026");
+  const urlYear = searchParams.get("year");
+  const yearFromUrl = isKnownYear(urlYear, years) ? urlYear : copy.defaultYear;
+  const [year, setYear] = useState(yearFromUrl);
+  const [urlSeen, setUrlSeen] = useState(yearFromUrl);
+  if (urlSeen !== yearFromUrl) {
+    setUrlSeen(yearFromUrl);
+    setYear(yearFromUrl);
+  }
   const [activeSign, setActiveSign] = useState<string | null>(null);
   const [openStar, setOpenStar] = useState(0);
-
-  useEffect(() => {
-    const y = searchParams.get("year");
-    if (isYearKey(y)) setYear(y);
-  }, [searchParams]);
-
-  const meta = YEARS[year];
-  const active = useMemo(() => ZODIACS.find((z) => z.id === activeSign) || null, [activeSign]);
+  const meta = years.find((row) => row.year === year) || years[0];
+  const yearIndex = Math.max(
+    0,
+    years.findIndex((row) => row.year === meta?.year)
+  );
+  const active = useMemo(() => zodiacs.find((z) => z.id === activeSign) || null, [activeSign, zodiacs]);
+  const activeZodiacIndex = active ? zodiacs.findIndex((z) => z.id === active.id) : -1;
+  if (!meta) return null;
 
   return (
     <div className="page-shell page-enter">
@@ -246,15 +72,17 @@ export function ForecastClient() {
             justifyContent: "center"
           }}
         >
-          {(Object.keys(YEARS) as YearKey[])
+          {years
             .slice()
-            .reverse()
-            .map((y) => (
+            .sort((a, b) => Number(b.year) - Number(a.year))
+            .map((row) => {
+              const yi = years.findIndex((y) => y.year === row.year);
+              return (
               <Link
-                key={y}
-                href={`/forecast?year=${y}`}
+                key={row.year}
+                href={`/forecast?year=${row.year}`}
                 onClick={() => {
-                  setYear(y);
+                  setYear(row.year);
                   setActiveSign(null);
                 }}
                 style={{
@@ -262,14 +90,16 @@ export function ForecastClient() {
                   fontWeight: 700,
                   padding: "8px 14px",
                   borderRadius: 99,
-                  background: year === y ? "#c1272d" : "#fffdf8",
-                  color: year === y ? "#fff" : "#3d5348",
-                  border: `1.5px solid ${year === y ? "#c1272d" : "rgba(20,61,49,0.15)"}`
+                  background: year === row.year ? "#c1272d" : "#fffdf8",
+                  color: year === row.year ? "#fff" : "#3d5348",
+                  border: `1.5px solid ${year === row.year ? "#c1272d" : "rgba(20,61,49,0.15)"}`
                 }}
+                {...cms(`forecast.years.${yi}.year`)}
               >
-                {y}
+                {row.year}
               </Link>
-            ))}
+              );
+            })}
         </div>
       </div>
 
@@ -316,7 +146,7 @@ export function ForecastClient() {
                 textShadow: "0 2px 18px rgba(90,10,12,0.5)"
               }}
             >
-              {year}: The {meta.label}
+              {year}: The <span {...cms(`forecast.years.${yearIndex}.label`)}>{meta.label}</span>
             </h1>
             <p
               style={{
@@ -326,6 +156,7 @@ export function ForecastClient() {
                 margin: "0 auto",
                 maxWidth: 560
               }}
+              {...cms(`forecast.years.${yearIndex}.intro`)}
             >
               {meta.intro}
             </p>
@@ -389,7 +220,7 @@ export function ForecastClient() {
               margin: "0 0 clamp(26px,3.5vw,38px)"
             }}
           >
-            {year} the {meta.label}:
+            {year} the <span {...cms(`forecast.years.${yearIndex}.label`)}>{meta.label}</span>:
             <br />A Period of Growth and Renewal
           </h2>
           <div
@@ -402,11 +233,24 @@ export function ForecastClient() {
             }}
           >
             <div style={{ flex: "1 1 420px", minWidth: 290, background: "#fff", padding: "clamp(24px,3.5vw,38px)" }}>
-              <p style={{ fontSize: 16, lineHeight: 1.65, color: "#2a2a28", fontWeight: 700, margin: "0 0 16px" }}>
+              <p
+                style={{ fontSize: 16, lineHeight: 1.65, color: "#2a2a28", fontWeight: 700, margin: "0 0 16px" }}
+                {...cms(`forecast.years.${yearIndex}.lead`)}
+              >
                 {meta.lead}
               </p>
-              <p style={{ fontSize: 15.5, lineHeight: 1.7, color: "#4a4a46", margin: "0 0 14px" }}>{meta.body1}</p>
-              <p style={{ fontSize: 15.5, lineHeight: 1.7, color: "#4a4a46", margin: "0 0 22px" }}>{meta.body2}</p>
+              <p
+                style={{ fontSize: 15.5, lineHeight: 1.7, color: "#4a4a46", margin: "0 0 14px" }}
+                {...cms(`forecast.years.${yearIndex}.body1`)}
+              >
+                {meta.body1}
+              </p>
+              <p
+                style={{ fontSize: 15.5, lineHeight: 1.7, color: "#4a4a46", margin: "0 0 22px" }}
+                {...cms(`forecast.years.${yearIndex}.body2`)}
+              >
+                {meta.body2}
+              </p>
               <div style={{ textAlign: "center" }}>
                 <Link
                   href="/book"
@@ -448,7 +292,7 @@ export function ForecastClient() {
                     <div className="font-display" style={{ fontWeight: 700, fontSize: 15, color: "#a81a20", marginTop: 2 }}>
                       FENG SHUI FORECAST
                     </div>
-                    <div className="font-display" style={{ fontSize: 11.5, color: "#a81a20", fontStyle: "italic" }}>
+                    <div className="font-display" style={{ fontSize: 11.5, color: "#a81a20", fontStyle: "italic" }} {...cms(`forecast.years.${yearIndex}.label`)}>
                       {meta.label}
                     </div>
                     <div
@@ -460,11 +304,14 @@ export function ForecastClient() {
                         lineHeight: 1,
                         marginTop: 16
                       }}
+                      {...cms(`forecast.years.${yearIndex}.animal`)}
                     >
                       {meta.animal.toUpperCase()}
                     </div>
                     <div style={{ fontFamily: "Lato, system-ui, sans-serif", fontSize: 20, color: "#c1272d" }}>{year}</div>
-                    <div style={{ fontSize: 12, color: "#a81a20", marginTop: 8 }}>{meta.element}</div>
+                    <div style={{ fontSize: 12, color: "#a81a20", marginTop: 8 }} {...cms(`forecast.years.${yearIndex}.element`)}>
+                      {meta.element}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -486,12 +333,13 @@ export function ForecastClient() {
               Find your sign
             </h2>
             <p style={{ fontSize: 15.5, color: "#6b6b66", margin: 0 }}>
-              Select your Chinese zodiac animal to see what the {meta.label} holds for you.
+              Select your Chinese zodiac animal to see what the{" "}
+              <span {...cms(`forecast.years.${yearIndex}.label`)}>{meta.label}</span> holds for you.
             </p>
           </div>
 
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(160px,1fr))", gap: "clamp(12px,1.8vw,20px)" }}>
-            {ZODIACS.map((z) => (
+            {zodiacs.map((z, zi) => (
               <button
                 key={z.id}
                 type="button"
@@ -542,6 +390,7 @@ export function ForecastClient() {
                       color: "#c1272d",
                       lineHeight: 1
                     }}
+                    {...cms(`forecast.zodiacs.${zi}.sign`)}
                   >
                     {z.sign.toUpperCase()}
                   </div>
@@ -729,7 +578,7 @@ export function ForecastClient() {
             </div>
 
             <div style={{ flex: "1 1 380px", minWidth: 280, display: "flex", flexDirection: "column", gap: 6 }}>
-              {STAR_DEFS.map((s, i) => {
+              {starDefs.map((s, i) => {
                 const open = openStar === i;
                 return (
                   <button
@@ -745,7 +594,9 @@ export function ForecastClient() {
                     }}
                   >
                     <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 14 }}>
-                      <span style={{ fontSize: 15, fontWeight: 700, color: "#2c2c2c" }}>{s.title}</span>
+                      <span style={{ fontSize: 15, fontWeight: 700, color: "#2c2c2c" }} {...cms(`forecast.stars.${i}.title`)}>
+                        {s.title}
+                      </span>
                       <span
                         style={{
                           flexShrink: 0,
@@ -766,7 +617,12 @@ export function ForecastClient() {
                       </span>
                     </div>
                     {open && (
-                      <p style={{ fontSize: 14, lineHeight: 1.6, color: "#4a4a46", margin: "10px 0 0" }}>{s.text}</p>
+                      <p
+                        style={{ fontSize: 14, lineHeight: 1.6, color: "#4a4a46", margin: "10px 0 0" }}
+                        {...cms(`forecast.stars.${i}.text`)}
+                      >
+                        {s.text}
+                      </p>
                     )}
                   </button>
                 );
@@ -835,13 +691,24 @@ export function ForecastClient() {
                   lineHeight: 1.05,
                   marginTop: 6
                 }}
+                {...cms(`forecast.zodiacs.${activeZodiacIndex}.sign`)}
               >
                 {active.sign.toUpperCase()}
               </div>
-              <div style={{ fontSize: 13, color: "#ffdcc8", marginTop: 4 }}>{active.years}</div>
+              <div
+                style={{ fontSize: 13, color: "#ffdcc8", marginTop: 4 }}
+                {...cms(`forecast.zodiacs.${activeZodiacIndex}.years`)}
+              >
+                {active.years}
+              </div>
             </div>
             <div style={{ padding: "24px 28px 28px" }}>
-              <p style={{ fontSize: 16, lineHeight: 1.7, color: "#3a3a36", margin: "0 0 18px" }}>{active.text}</p>
+              <p
+                style={{ fontSize: 16, lineHeight: 1.7, color: "#3a3a36", margin: "0 0 18px" }}
+                {...cms(`forecast.zodiacs.${activeZodiacIndex}.text`)}
+              >
+                {active.text}
+              </p>
               <div
                 style={{
                   background: "#fdf3f3",
@@ -862,7 +729,12 @@ export function ForecastClient() {
                 >
                   Focus for the year
                 </div>
-                <div style={{ fontSize: 14.5, color: "#4a4a46", lineHeight: 1.55 }}>{active.focus}</div>
+                <div
+                  style={{ fontSize: 14.5, color: "#4a4a46", lineHeight: 1.55 }}
+                  {...cms(`forecast.zodiacs.${activeZodiacIndex}.focus`)}
+                >
+                  {active.focus}
+                </div>
               </div>
               <Link
                 href="/book"
@@ -900,8 +772,8 @@ export function ForecastClient() {
             Get your personal {year} reading
           </h2>
           <p style={{ fontSize: 16, color: "#5f6b60", maxWidth: 560, margin: "0 auto 26px" }}>
-            A general forecast is a starting point. A personal consultation reveals what the {meta.animal} year means
-            specifically for you.
+            A general forecast is a starting point. A personal consultation reveals what the{" "}
+            <span {...cms(`forecast.years.${yearIndex}.animal`)}>{meta.animal}</span> year means specifically for you.
           </p>
           <Link
             href="/book"

@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState, Suspense, useEffect } from "react";
+import { useMemo, useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { SiteHeader } from "@/components/site-header";
 import {
@@ -23,10 +23,16 @@ type Person = { name: string; dob: string; time: string; place: string };
 
 function BookPageInner() {
   const searchParams = useSearchParams();
-  const [view, setView] = useState<"instant" | "custom">("instant");
+  const queryKey = `${searchParams.get("bespoke")}|${searchParams.get("service")}`;
+  const [querySeen, setQuerySeen] = useState(queryKey);
+  const [view, setView] = useState<"instant" | "custom">(
+    searchParams.get("service") === "home" || searchParams.get("service") === "business" ? "custom" : "instant"
+  );
   const [step, setStep] = useState(1);
   const [maxStep, setMaxStep] = useState(1);
-  const [product, setProduct] = useState<string | null>(null);
+  const [product, setProduct] = useState<string | null>(
+    searchParams.get("service") === "personal" ? "fullreading" : null
+  );
   const [mode, setMode] = useState<string | null>(null);
   const [dateKey, setDateKey] = useState<string | null>(null);
   const [time, setTime] = useState<string | null>(null);
@@ -43,7 +49,7 @@ function BookPageInner() {
   const [pay, setPay] = useState("card");
   const [confirmed, setConfirmed] = useState(false);
   const [ref, setRef] = useState<string | null>(null);
-  const [bespoke, setBespoke] = useState(false);
+  const [bespoke, setBespoke] = useState(searchParams.get("bespoke") === "1");
   const [bespokeSubmitted, setBespokeSubmitted] = useState(false);
   const [bespokeName, setBespokeName] = useState("");
   const [bespokeEmail, setBespokeEmail] = useState("");
@@ -66,7 +72,8 @@ function BookPageInner() {
 
   const dates = useMemo(() => makeWeekdayDates(8), []);
 
-  useEffect(() => {
+  if (querySeen !== queryKey) {
+    setQuerySeen(queryKey);
     if (searchParams.get("bespoke") === "1") {
       setBespoke(true);
       setView("instant");
@@ -74,7 +81,7 @@ function BookPageInner() {
     const svc = searchParams.get("service");
     if (svc === "personal") setProduct("fullreading");
     if (svc === "home" || svc === "business") setView("custom");
-  }, [searchParams]);
+  }
 
   const prod = BOOK_PRODUCTS.find((p) => p.id === product) || null;
   const modeObj = BOOK_MODES.find((m) => m.id === mode) || null;

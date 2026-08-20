@@ -4,138 +4,8 @@ import Link from "next/link";
 import { useMemo, useState } from "react";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
-
-type Project = {
-  id: string;
-  category: string;
-  name: string;
-  summary: string;
-  body1: string;
-  body2: string;
-};
-
-const PROJECTS: Project[] = [
-  {
-    id: "sm",
-    category: "Retail",
-    name: "SM Supermalls",
-    summary: "Feng Shui consultation for major retail spaces and openings.",
-    body1:
-      "Marites Allen has consulted with SM Supermalls, one of the largest mall operators in the Philippines, on Feng Shui considerations for retail spaces, including layout energy flow and auspicious timing around openings and renovations.",
-    body2:
-      "Her work with large retail operators reflects a broader theme in her practice: applying traditional Feng Shui principles to commercial spaces where foot traffic, prosperity and customer experience are closely linked."
-  },
-  {
-    id: "bench",
-    category: "Fashion & Retail",
-    name: "Bench",
-    summary: "Long-standing Feng Shui guidance for one of the Philippines' leading clothing brands.",
-    body1:
-      "Bench founder Ben Chan has credited Feng Shui guidance from Marites Allen as part of the thinking behind the brand's growth, alongside decades of hard work building the company into a leading Philippine fashion retailer.",
-    body2:
-      "The relationship illustrates how Feng Shui consultation is often woven into long-term business relationships rather than one-off engagements, informing decisions over years rather than a single project."
-  },
-  {
-    id: "manilahouse",
-    category: "Hospitality",
-    name: "Manila House Private Club",
-    summary: "Venue for Marites Allen's annual Chinese New Year countdown and rituals.",
-    body1:
-      "Manila House Private Club in BGC, Taguig, hosts Marites Allen's annual Chinese New Year Countdown and Welcoming Ritual, where she shares her forecast for the incoming zodiac year with members and guests.",
-    body2:
-      "The venue also serves as the location for her in-person consultations, offering clients a private, members-only setting for one-on-one sessions."
-  },
-  {
-    id: "marcopolo",
-    category: "Hospitality",
-    name: "Marco Polo Hotels",
-    summary: "Speaking engagements and media conferences on annual Feng Shui forecasts.",
-    body1:
-      "Marites Allen has held media conferences and speaking engagements at Marco Polo Hotels properties, sharing her annual predictions and Feng Shui insights with press and guests ahead of the Lunar New Year.",
-    body2:
-      "These events are typically timed around the Chinese New Year season, combining her forecast presentations with hospitality partners seeking to mark the occasion for their guests and clients."
-  },
-  {
-    id: "belo",
-    category: "Wellness & Beauty",
-    name: "Belo Essentials",
-    summary: "Feng Shui guidance sought before opening new locations.",
-    body1:
-      "Belo Essentials CEO Cristalle Belo-Pitt has sought Marites Allen's Feng Shui guidance before opening new Belo Essentials locations, reflecting a broader practice among Philippine business leaders of consulting on auspicious timing and placement ahead of major openings.",
-    body2:
-      "This type of engagement, a pre-launch consultation, is one of the most common ways Marites Allen works with growing consumer brands."
-  },
-  {
-    id: "unilab",
-    category: "Corporate",
-    name: "Unilab",
-    summary: "Corporate speaking engagement on Feng Shui and business timing.",
-    body1:
-      "Marites Allen has been engaged by Unilab, one of the largest pharmaceutical companies in the Philippines, for corporate talks on Feng Shui principles as they relate to business strategy and organizational energy.",
-    body2:
-      "Corporate engagements of this kind typically combine an educational talk with guidance tailored to the company's specific goals for the year ahead."
-  },
-  {
-    id: "citibank",
-    category: "Finance",
-    name: "Citibank",
-    summary: "Speaking engagement for a financial institution audience.",
-    body1:
-      "Marites Allen has spoken to audiences at Citibank on Chinese astrology and Feng Shui as they relate to prosperity, timing and decision-making in a business context.",
-    body2:
-      "Financial institutions have been a recurring client category for her corporate speaking engagements, often around the Lunar New Year period."
-  },
-  {
-    id: "hsbc",
-    category: "Finance",
-    name: "HSBC",
-    summary: "Speaking engagement for a financial institution audience.",
-    body1:
-      "Marites Allen has presented Feng Shui and Chinese astrology insights to HSBC audiences, sharing forecasts relevant to business planning and personal decision-making for the year ahead.",
-    body2:
-      "These sessions are typically delivered as part of client-appreciation or new-year events hosted by the bank."
-  },
-  {
-    id: "accenture",
-    category: "Corporate",
-    name: "Accenture",
-    summary: "Corporate talk on Feng Shui principles and workplace energy.",
-    body1:
-      "Marites Allen has been engaged by Accenture for corporate talks exploring Feng Shui principles in relation to workplace environment and organizational energy.",
-    body2:
-      "Talks like this are often positioned as an engaging, culturally resonant addition to corporate wellness or new-year programming."
-  },
-  {
-    id: "robinsons",
-    category: "Retail",
-    name: "Robinsons Malls",
-    summary: "Feng Shui consultation and events for a major mall operator.",
-    body1:
-      "Robinsons Malls has engaged Marites Allen for Feng Shui-related consultations and public events, including forecast-sharing sessions timed around the Lunar New Year.",
-    body2:
-      "As with other mall partnerships, the focus is often on auspicious timing for promotions, openings and seasonal activations."
-  },
-  {
-    id: "nestle",
-    category: "Consumer Goods",
-    name: "Nestlé",
-    summary: "Corporate engagement on Feng Shui and prosperity themes.",
-    body1:
-      "Marites Allen has been engaged by Nestlé for corporate sessions on Feng Shui and prosperity themes, tailored to the company's audience and calendar.",
-    body2:
-      "Consumer goods companies frequently engage her around the New Year season, when interest in forecasts and prosperity guidance is highest."
-  },
-  {
-    id: "mcdo",
-    category: "Consumer Goods",
-    name: "McDonald's Philippines",
-    summary: "Corporate speaking engagement on Feng Shui themes.",
-    body1:
-      "Marites Allen has spoken at McDonald's Philippines corporate events, sharing Feng Shui and Chinese astrology insights relevant to the company's audience.",
-    body2:
-      "Her ability to make traditional Feng Shui concepts accessible to a broad, modern corporate audience is a recurring theme across these engagements."
-  }
-];
+import { cms } from "@/lib/cms/cms-attr";
+import type { ProjectsCopy } from "@/lib/cms/page-copy-types";
 
 function mark(name: string) {
   const clean = name.replace(/[^A-Za-z0-9 ]/g, " ").trim().split(/\s+/);
@@ -157,7 +27,8 @@ function mark(name: string) {
   return (words[0][0] + words[1][0]).toUpperCase();
 }
 
-export default function ProjectsPage() {
+export default function ProjectsPage({ copy }: { copy: ProjectsCopy }) {
+  const PROJECTS = copy.items;
   const [activeId, setActiveId] = useState<string | null>(null);
   const [filter, setFilter] = useState("All");
 
@@ -167,10 +38,11 @@ export default function ProjectsPage() {
       if (!c.includes(p.category)) c.push(p.category);
     });
     return c.sort();
-  }, []);
+  }, [PROJECTS]);
 
   const filters = ["All", ...cats];
   const active = PROJECTS.find((p) => p.id === activeId) || null;
+  const activeIndex = active ? PROJECTS.findIndex((p) => p.id === active.id) : -1;
   const shown = filter === "All" ? PROJECTS : PROJECTS.filter((p) => p.category === filter);
   const shownCats: string[] = [];
   shown.forEach((p) => {
@@ -185,18 +57,18 @@ export default function ProjectsPage() {
         <div>
           <section style={{ background: "linear-gradient(165deg,#1a4d3e,#0f3126)", color: "#fff" }}>
             <div style={{ maxWidth: 1180, margin: "0 auto", padding: "clamp(30px,4vw,46px) clamp(18px,4vw,40px)" }}>
-              <div style={{ fontSize: 12, fontWeight: 700, letterSpacing: 3, textTransform: "uppercase", color: "#e6c680" }}>
-                Projects
+              <div style={{ fontSize: 12, fontWeight: 700, letterSpacing: 3, textTransform: "uppercase", color: "#e6c680" }} {...cms("projects.kicker")}>
+                {copy.kicker}
               </div>
               <h1
                 className="font-display"
                 style={{ fontWeight: 700, fontSize: "clamp(30px,4.4vw,46px)", margin: "12px 0" }}
+                {...cms("projects.title")}
               >
-                Brands &amp; collaborations
+                {copy.title}
               </h1>
-              <p style={{ fontSize: 16, color: "#c7ddd2", maxWidth: 640, margin: 0 }}>
-                A selection of the brands, organizations and figures Marites Allen has consulted for and collaborated
-                with over three decades. Click any entry to read more.
+              <p style={{ fontSize: 16, color: "#c7ddd2", maxWidth: 640, margin: 0 }} {...cms("projects.body")}>
+                {copy.body}
               </p>
             </div>
           </section>
@@ -254,7 +126,9 @@ export default function ProjectsPage() {
                 <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(272px,1fr))", gap: 14 }}>
                   {shown
                     .filter((p) => p.category === cat)
-                    .map((p) => (
+                    .map((p) => {
+                      const itemIndex = PROJECTS.findIndex((row) => row.id === p.id);
+                      return (
                       <button
                         key={p.id}
                         type="button"
@@ -307,16 +181,21 @@ export default function ProjectsPage() {
                           <h3
                             className="font-display"
                             style={{ fontWeight: 600, fontSize: 17.5, color: "#143d31", margin: 0, lineHeight: 1.25 }}
+                            {...cms(`projects.items.${itemIndex}.name`)}
                           >
                             {p.name}
                           </h3>
                         </div>
-                        <p style={{ fontSize: 13.5, lineHeight: 1.55, color: "#6b7268", margin: "0 0 14px" }}>
+                        <p
+                          style={{ fontSize: 13.5, lineHeight: 1.55, color: "#6b7268", margin: "0 0 14px" }}
+                          {...cms(`projects.items.${itemIndex}.summary`)}
+                        >
                           {p.summary}
                         </p>
                         <span style={{ fontSize: 12.5, fontWeight: 700, color: "#c69a3e" }}>Read article →</span>
                       </button>
-                    ))}
+                      );
+                    })}
                 </div>
               </div>
             ))}
@@ -364,6 +243,7 @@ export default function ProjectsPage() {
               borderRadius: 99,
               padding: "3px 10px"
             }}
+            {...cms(`projects.items.${activeIndex}.category`)}
           >
             {active.category}
           </span>
@@ -377,11 +257,22 @@ export default function ProjectsPage() {
               borderBottom: "2px solid rgba(20,61,49,0.12)",
               paddingBottom: 16
             }}
+            {...cms(`projects.items.${activeIndex}.name`)}
           >
             {active.name}
           </h1>
-          <p style={{ fontSize: 17, lineHeight: 1.75, color: "#333", margin: "0 0 18px" }}>{active.body1}</p>
-          <p style={{ fontSize: 17, lineHeight: 1.75, color: "#333", margin: "0 0 18px" }}>{active.body2}</p>
+          <p
+            style={{ fontSize: 17, lineHeight: 1.75, color: "#333", margin: "0 0 18px" }}
+            {...cms(`projects.items.${activeIndex}.body1`)}
+          >
+            {active.body1}
+          </p>
+          <p
+            style={{ fontSize: 17, lineHeight: 1.75, color: "#333", margin: "0 0 18px" }}
+            {...cms(`projects.items.${activeIndex}.body2`)}
+          >
+            {active.body2}
+          </p>
           <div
             style={{
               background: "#fffdf8",

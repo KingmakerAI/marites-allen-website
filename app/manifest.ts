@@ -14,14 +14,22 @@ export default function manifest(): MetadataRoute.Manifest {
     categories: ["lifestyle", "business"],
     icons: [
       {
-        src: "/icon",
+        src: "/images/brand/icon-192.png",
         sizes: "192x192",
-        type: "image/png"
+        type: "image/png",
+        purpose: "any"
       },
       {
-        src: "/apple-icon",
-        sizes: "180x180",
-        type: "image/png"
+        src: "/images/brand/icon-512.png",
+        sizes: "512x512",
+        type: "image/png",
+        purpose: "any"
+      },
+      {
+        src: "/images/brand/icon-maskable-512.png",
+        sizes: "512x512",
+        type: "image/png",
+        purpose: "maskable"
       }
     ]
   };

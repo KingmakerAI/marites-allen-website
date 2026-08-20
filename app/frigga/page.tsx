@@ -4,62 +4,43 @@ import type { Metadata } from "next";
 import { JsonLd } from "@/components/json-ld";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
+import { cms } from "@/lib/cms/cms-attr";
+import { getCachedPageCopy } from "@/lib/cms/content";
 import { FRIGGA_SOCIAL_LINKS } from "@/lib/site-data";
 import { breadcrumbJsonLd, pageMetadata, SITE_URL } from "@/lib/seo";
 
-export const metadata: Metadata = pageMetadata({
-  title: "Frigga Charmed Life",
-  description:
-    "Shop Marites Allen's Frigga Charmed Life — Feng Shui charms, amulets, planners, almanacs and lucky fashion across the Philippines, UK, and USA stores.",
-  path: "/frigga",
-  keywords: [
-    "Frigga Charmed Life",
-    "Feng Shui charms",
-    "Feng Shui amulets",
-    "Feng Shui planner 2026",
-    "frigga.com.ph"
-  ]
-});
+export async function generateMetadata(): Promise<Metadata> {
+  const copy = await getCachedPageCopy();
+  return pageMetadata({
+    title: copy.frigga.seoTitle,
+    description: copy.frigga.seoDescription,
+    path: "/frigga",
+    keywords: [
+      "Frigga Charmed Life",
+      "Feng Shui charms",
+      "Feng Shui amulets",
+      "Feng Shui planner 2026",
+      "frigga.com.ph"
+    ]
+  });
+}
 
-const SHOPS = [
-  { flag: "🇵🇭", label: "frigga.com.ph", url: "https://www.frigga.com.ph" },
-  { flag: "🇬🇧", label: "frigga.co.uk", url: "https://www.frigga.co.uk" },
-  { flag: "🇺🇸", label: "frigga-usa.com", url: "https://www.frigga-usa.com" }
-];
+export default async function FriggaPage() {
+  const frigga = (await getCachedPageCopy()).frigga;
+  const brandJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Brand",
+    name: frigga.title,
+    url: `${SITE_URL}/frigga`,
+    logo: `${SITE_URL}/images/zip/frigga-logo.png`,
+    sameAs: FRIGGA_SOCIAL_LINKS.map((s) => s.href),
+    founder: {
+      "@type": "Person",
+      name: "Marites Allen",
+      url: SITE_URL
+    }
+  };
 
-const COLLECTIONS = [
-  { id: "wealth", title: "Wealth Amulets", desc: "Coins, ingots and wealth deities to activate abundance." },
-  { id: "love", title: "Love & Harmony", desc: "Peach Blossom charms and pairs for relationships." },
-  { id: "health", title: "Health & Longevity", desc: "Wu Lou, Medicine Buddha and metal cures." },
-  { id: "career", title: "Career & Success", desc: "Mystic knots and dragon motifs for advancement." },
-  { id: "protection", title: "Protection", desc: "Shields, rhino and elephant charms to deflect harm." },
-  { id: "travel", title: "Travel & Mentors", desc: "Amulets to attract helpful people and safe passage." },
-  { id: "jewellery", title: "Charmed Jewellery", desc: "Bracelets, rings and pendants worn daily." },
-  { id: "home", title: "Home & Décor", desc: "Scarves, wraps and pieces that dress your space." }
-];
-
-const GUIDE_PERKS = [
-  "The full annual forecast for all 12 signs",
-  "Auspicious dates for major decisions",
-  "Month-by-month Flying Star guidance",
-  "Recommended cures and enhancers"
-];
-
-const brandJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "Brand",
-  name: "Frigga Charmed Life",
-  url: `${SITE_URL}/frigga`,
-  logo: `${SITE_URL}/images/zip/frigga-logo.png`,
-  sameAs: FRIGGA_SOCIAL_LINKS.map((s) => s.href),
-  founder: {
-    "@type": "Person",
-    name: "Marites Allen",
-    url: SITE_URL
-  }
-};
-
-export default function FriggaPage() {
   return (
     <div className="page-shell page-enter">
       <JsonLd data={brandJsonLd} />
@@ -104,14 +85,18 @@ export default function FriggaPage() {
           }}
         >
           <div style={{ flex: "1 1 380px", minWidth: 290 }}>
-            <div style={{ fontSize: 12, fontWeight: 700, letterSpacing: 3, textTransform: "uppercase", color: "#e6c680" }}>
-              The brand
+            <div
+              style={{ fontSize: 12, fontWeight: 700, letterSpacing: 3, textTransform: "uppercase", color: "#e6c680" }}
+              {...cms("frigga.kicker")}
+            >
+              {frigga.kicker}
             </div>
             <h1
               className="font-display"
               style={{ fontWeight: 700, fontSize: "clamp(30px,4.4vw,50px)", lineHeight: 1.12, margin: "12px 0 14px" }}
+              {...cms("frigga.title")}
             >
-              Frigga Charmed Life
+              {frigga.title}
             </h1>
             <p
               style={{
@@ -121,14 +106,13 @@ export default function FriggaPage() {
                 margin: "0 0 24px",
                 maxWidth: 540
               }}
+              {...cms("frigga.body")}
             >
-              Marites Allen&apos;s own line of Feng Shui charms, amulets, planners and almanacs, designed so the
-              guidance from a consultation can travel with you every day. Each piece is created around authentic Feng
-              Shui principles rather than decoration alone.
+              {frigga.body}
             </p>
             <div style={{ display: "flex", flexWrap: "wrap", gap: 12 }}>
               <a
-                href="https://www.frigga.com.ph"
+                href={frigga.shopUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 style={{
@@ -139,8 +123,9 @@ export default function FriggaPage() {
                   padding: "14px 28px",
                   borderRadius: 99
                 }}
+                {...cms("frigga.shopLabel")}
               >
-                Shop Frigga →
+                {frigga.shopLabel}
               </a>
               <a
                 href="#collections"
@@ -152,8 +137,9 @@ export default function FriggaPage() {
                   padding: "14px 26px",
                   borderRadius: 99
                 }}
+                {...cms("frigga.browseLabel")}
               >
-                Browse collections
+                {frigga.browseLabel}
               </a>
             </div>
           </div>
@@ -175,7 +161,7 @@ export default function FriggaPage() {
             >
               <Image
                 src="/images/zip/frigga-logo.png"
-                alt="Frigga Charmed Life"
+                alt={frigga.title}
                 width={320}
                 height={200}
                 style={{ width: "100%", height: "auto", objectFit: "contain" }}
@@ -198,16 +184,20 @@ export default function FriggaPage() {
             gap: "clamp(14px,3vw,34px)"
           }}
         >
-          <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: 2, textTransform: "uppercase", color: "#a3946f" }}>
-            Shop by region
+          <span
+            style={{ fontSize: 11, fontWeight: 700, letterSpacing: 2, textTransform: "uppercase", color: "#a3946f" }}
+            {...cms("frigga.regionsHeading")}
+          >
+            {frigga.regionsHeading}
           </span>
-          {SHOPS.map((s) => (
+          {frigga.shops.map((s, i) => (
             <a
               key={s.label}
               href={s.url}
               target="_blank"
               rel="noopener noreferrer"
               style={{ fontSize: 14, fontWeight: 600, color: "#7d1b52" }}
+              {...cms(`frigga.shops.${i}.label`)}
             >
               {s.flag} {s.label}
             </a>
@@ -217,21 +207,25 @@ export default function FriggaPage() {
 
       <section id="collections" style={{ maxWidth: 1240, margin: "0 auto", padding: "clamp(30px,4vw,46px) clamp(18px,4vw,40px)" }}>
         <div style={{ textAlign: "center", maxWidth: 620, margin: "0 auto clamp(28px,4vw,40px)" }}>
-          <div style={{ fontSize: 12, fontWeight: 700, letterSpacing: 3, textTransform: "uppercase", color: "#c69a3e" }}>
-            Collections
+          <div
+            style={{ fontSize: 12, fontWeight: 700, letterSpacing: 3, textTransform: "uppercase", color: "#c69a3e" }}
+            {...cms("frigga.collectionsLabel")}
+          >
+            {frigga.collectionsLabel}
           </div>
           <h2
             className="font-display"
             style={{ fontWeight: 700, fontSize: "clamp(22px,2.8vw,30px)", color: "#143d31", margin: "10px 0" }}
+            {...cms("frigga.collectionsHeading")}
           >
-            Charms for every intention
+            {frigga.collectionsHeading}
           </h2>
-          <p style={{ fontSize: 15.5, color: "#6b6b66", margin: 0 }}>
-            Each collection targets a specific area of luck, chosen to match your chart and the year&apos;s energies.
+          <p style={{ fontSize: 15.5, color: "#6b6b66", margin: 0 }} {...cms("frigga.collectionsBody")}>
+            {frigga.collectionsBody}
           </p>
         </div>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(230px,1fr))", gap: 18 }}>
-          {COLLECTIONS.map((c) => (
+          {frigga.collections.map((c, i) => (
             <div
               key={c.id}
               style={{
@@ -257,12 +251,21 @@ export default function FriggaPage() {
                 </span>
               </div>
               <div style={{ padding: 18 }}>
-                <h3 className="font-display" style={{ fontWeight: 600, fontSize: 17, color: "#143d31", margin: "0 0 6px" }}>
+                <h3
+                  className="font-display"
+                  style={{ fontWeight: 600, fontSize: 17, color: "#143d31", margin: "0 0 6px" }}
+                  {...cms(`frigga.collections.${i}.title`)}
+                >
                   {c.title}
                 </h3>
-                <p style={{ fontSize: 13.5, lineHeight: 1.55, color: "#6b7268", margin: "0 0 12px" }}>{c.desc}</p>
+                <p
+                  style={{ fontSize: 13.5, lineHeight: 1.55, color: "#6b7268", margin: "0 0 12px" }}
+                  {...cms(`frigga.collections.${i}.desc`)}
+                >
+                  {c.desc}
+                </p>
                 <a
-                  href="https://www.frigga.com.ph"
+                  href={frigga.shopUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   style={{ fontSize: 13, fontWeight: 700, color: "#7d1b52" }}
@@ -288,8 +291,11 @@ export default function FriggaPage() {
           }}
         >
           <div style={{ flex: "1 1 340px", minWidth: 280 }}>
-            <div style={{ fontSize: 12, fontWeight: 700, letterSpacing: 3, textTransform: "uppercase", color: "#c1272d" }}>
-              Annual guides
+            <div
+              style={{ fontSize: 12, fontWeight: 700, letterSpacing: 3, textTransform: "uppercase", color: "#c1272d" }}
+              {...cms("frigga.guideKicker")}
+            >
+              {frigga.guideKicker}
             </div>
             <h2
               style={{
@@ -300,23 +306,27 @@ export default function FriggaPage() {
                 lineHeight: 1.25,
                 margin: "10px 0 14px"
               }}
+              {...cms("frigga.guideTitle")}
             >
-              The Feng Shui Planner &amp; Almanac
+              {frigga.guideTitle}
             </h2>
-            <p style={{ fontSize: 15.5, lineHeight: 1.7, color: "#4a4a46", margin: "0 0 18px" }}>
-              Published every year ahead of the Lunar New Year, the Planner and Almanac carry the full forecast,
-              auspicious dates, and month-by-month guidance so you can plan the year with intention.
+            <p style={{ fontSize: 15.5, lineHeight: 1.7, color: "#4a4a46", margin: "0 0 18px" }} {...cms("frigga.guideBody")}>
+              {frigga.guideBody}
             </p>
             <ul style={{ listStyle: "none", padding: 0, margin: "0 0 22px", display: "grid", gap: 9 }}>
-              {GUIDE_PERKS.map((g) => (
-                <li key={g} style={{ display: "flex", gap: 9, alignItems: "flex-start", fontSize: 14.5, color: "#3d4a41" }}>
+              {frigga.guidePerks.map((g, i) => (
+                <li
+                  key={g}
+                  style={{ display: "flex", gap: 9, alignItems: "flex-start", fontSize: 14.5, color: "#3d4a41" }}
+                  {...cms(`frigga.guidePerks.${i}`)}
+                >
                   <span style={{ color: "#c1272d", fontWeight: 700 }}>✓</span>
                   {g}
                 </li>
               ))}
             </ul>
             <a
-              href="https://www.frigga.com.ph"
+              href={frigga.shopUrl}
               target="_blank"
               rel="noopener noreferrer"
               style={{
@@ -328,8 +338,9 @@ export default function FriggaPage() {
                 padding: "14px 30px",
                 borderRadius: 99
               }}
+              {...cms("frigga.guideCta")}
             >
-              SHOP NOW →
+              {frigga.guideCta}
             </a>
           </div>
           <div style={{ flex: "1 1 340px", minWidth: 270 }}>
@@ -377,19 +388,26 @@ export default function FriggaPage() {
             <h2
               className="font-display"
               style={{ fontWeight: 700, fontSize: "clamp(22px,2.8vw,30px)", color: "#143d31", margin: "0 0 8px" }}
+              {...cms("frigga.marketplacesHeading")}
             >
-              Also available on
+              {frigga.marketplacesHeading}
             </h2>
-            <p style={{ fontSize: 15, lineHeight: 1.6, color: "#5f6b60", margin: "0 0 14px" }}>
-              Find Frigga Charmed Life on your preferred marketplace.
+            <p
+              style={{ fontSize: 15, lineHeight: 1.6, color: "#5f6b60", margin: "0 0 14px" }}
+              {...cms("frigga.marketplacesBody")}
+            >
+              {frigga.marketplacesBody}
             </p>
             <div style={{ display: "flex", flexWrap: "wrap", gap: 10 }}>
-              <span style={{ background: "#f4eee3", borderRadius: 99, padding: "9px 18px", fontSize: 14, fontWeight: 700, color: "#7d1b52" }}>
-                Shopee · Frigga Charmed Life
-              </span>
-              <span style={{ background: "#f4eee3", borderRadius: 99, padding: "9px 18px", fontSize: 14, fontWeight: 700, color: "#7d1b52" }}>
-                Lazada · Frigga Charmed Life
-              </span>
+              {frigga.marketplaces.map((item, i) => (
+                <span
+                  key={item}
+                  style={{ background: "#f4eee3", borderRadius: 99, padding: "9px 18px", fontSize: 14, fontWeight: 700, color: "#7d1b52" }}
+                  {...cms(`frigga.marketplaces.${i}`)}
+                >
+                  {item}
+                </span>
+              ))}
             </div>
             <div style={{ display: "flex", flexWrap: "wrap", gap: 10, marginTop: 14 }}>
               {FRIGGA_SOCIAL_LINKS.map((s) => (

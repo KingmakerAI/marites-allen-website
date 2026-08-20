@@ -2,158 +2,24 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
+import { submitSignupAction } from "@/app/signup/actions";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
+import { cms } from "@/lib/cms/cms-attr";
+import type { CopyVideo } from "@/lib/cms/copy-lines";
 import { emailOk } from "@/lib/site-data";
 
-const PRESS_RAW = [
-  {
-    year: 2026,
-    m: 2,
-    month: "Feb",
-    outlet: "Manila Times",
-    quote: "Destara AI: a long-planned Destiny App bridging ancient wisdom and modern technology.",
-    cta: "Read article",
-    url: "https://www.manilatimes.net"
-  },
-  {
-    year: 2026,
-    m: 1,
-    month: "Jan",
-    outlet: "Manila Bulletin",
-    quote: "Discover your luck: the Feng Shui Queen's 2026 animal sign forecast.",
-    cta: "Read article",
-    url: "https://mb.com.ph/2026/01/28/romance-and-opportunity-in-2026-feng-shui-insights-from-marites-allen"
-  },
-  {
-    year: 2026,
-    m: 1,
-    month: "Jan",
-    outlet: "Marites Allen Live",
-    quote: "What the Fire Horse 2026 will change in everyone's life.",
-    cta: "Watch",
-    url: "https://maritesallen.com/marites-allen-show/"
-  },
-  {
-    year: 2025,
-    m: 12,
-    month: "Dec",
-    outlet: "Marites Allen Live",
-    quote: "Preparing for 2026: what the Fire Horse brings.",
-    cta: "Watch",
-    url: "https://maritesallen.com/marites-allen-show/"
-  },
-  {
-    year: 2025,
-    m: 10,
-    month: "Oct",
-    outlet: "Marites Allen (blog)",
-    quote: "Mark your calendars: the Supermoon season of 2025.",
-    cta: "Read post",
-    url: "https://maritesallen.com/presss/mark-your-calendars-the-supermoon-season-of-2025/"
-  },
-  {
-    year: 2025,
-    m: 2,
-    month: "Feb",
-    outlet: "Daily Tribune",
-    quote: "How to make the most of the new lunar year.",
-    cta: "Read article",
-    url: "https://maritesallen.com/presss/how-to-make-the-most-of-new-lunar-year/"
-  },
-  {
-    year: 2025,
-    m: 1,
-    month: "Jan",
-    outlet: "Inquirer.net",
-    quote: "Feng shui expert advises beauty queens to be 'like a snake' this Chinese New Year.",
-    cta: "Read article",
-    url: "https://maritesallen.com/presss/chinese-new-year-feng-shui-expert-advises-beauty-queens-to-be-like-a-snake/"
-  },
-  {
-    year: 2025,
-    m: 1,
-    month: "Jan",
-    outlet: "NewsWatch Interviews",
-    quote: "Feng Shui expert Marites Allen on the Year of the Wooden Snake.",
-    cta: "Watch",
-    url: "https://www.youtube.com/watch?v=r27QpjNfhfk"
-  },
-  {
-    year: 2023,
-    m: 12,
-    month: "Dec",
-    outlet: "The Daily Tribune",
-    quote: "How the feng shui expert lives life to the full.",
-    cta: "Read feature",
-    url: "https://tribune.net.ph/2023/12/17/marites-allenhow-the-feng-shui-expertlives-life-to-the-full"
-  },
-  {
-    year: 2023,
-    m: 1,
-    month: "Jan",
-    outlet: "Boy Abunda · The Interviewer",
-    quote: "Marites Allen, Philippine Feng Shui Queen.",
-    cta: "Watch",
-    url: "https://www.youtube.com/watch?v=mswSQ7Utz1s"
-  },
-  {
-    year: 2022,
-    m: 2,
-    month: "Feb",
-    outlet: "Metro.Style",
-    quote: "Metro chats with Marites Allen.",
-    cta: "Read interview",
-    url: "https://maritesallen.com"
-  },
-  {
-    year: 2022,
-    m: 1,
-    month: "Jan",
-    outlet: "Tatler Asia",
-    quote: "Filipina Feng Shui Master Marites Allen's guide to a harmonious home.",
-    cta: "Read feature",
-    url: "https://www.tatlerasia.com"
-  },
-  {
-    year: 2021,
-    m: 6,
-    month: "Jun",
-    outlet: "Marites Allen",
-    quote: "Journey to Feng Shui.",
-    cta: "Watch",
-    url: "https://www.youtube.com/watch?v=kfPKazF19jw"
-  },
-  {
-    year: 2021,
-    m: 3,
-    month: "Mar",
-    outlet: "Absolutely Magazines",
-    quote: "Everything you need to know about Feng Shui, from the expert.",
-    cta: "Read interview",
-    url: "https://maritesallen.com"
-  },
-  {
-    year: 2020,
-    m: 1,
-    month: "Jan",
-    outlet: "ABS-CBN · The Bottomline",
-    quote: "Predictions for each Chinese zodiac sign.",
-    cta: "Watch",
-    url: "https://www.youtube.com/watch?v=xfLMTQCr3og"
-  },
-  {
-    year: 2017,
-    m: 11,
-    month: "Nov",
-    outlet: "Media Conference · Marco Polo",
-    quote: "Why 2018 is a prosperous year.",
-    cta: "Watch",
-    url: "https://www.youtube.com/watch?v=4RPYGf1oY_4"
-  }
-];
+export type PressItem = {
+  year: number;
+  m: number;
+  month: string;
+  outlet: string;
+  quote: string;
+  cta: string;
+  url: string;
+};
 
-const VIDEOS = [
+const FALLBACK_VIDEOS: CopyVideo[] = [
   {
     source: "Boy Abunda · The Interviewer",
     date: "Jan 2023",
@@ -198,25 +64,48 @@ const VIDEOS = [
   }
 ];
 
-export default function MediaPage() {
+export default function MediaPage({
+  press,
+  title,
+  intro,
+  pressKitTitle,
+  pressKitBody,
+  videosHeading,
+  videos,
+  contact
+}: {
+  press: PressItem[];
+  title?: string;
+  intro?: string;
+  pressKitTitle?: string;
+  pressKitBody?: string;
+  videosHeading?: string;
+  videos?: CopyVideo[];
+  contact?: { email: string; phone: string; phoneSecondary: string };
+}) {
   const [pressName, setPressName] = useState("");
   const [pressOutlet, setPressOutlet] = useState("");
   const [pressEmail, setPressEmail] = useState("");
   const [pressSent, setPressSent] = useState(false);
+  const [pressPending, setPressPending] = useState(false);
+  const [pressError, setPressError] = useState("");
   const [pressModalOpen, setPressModalOpen] = useState(false);
   const [videoModalOpen, setVideoModalOpen] = useState(false);
   const [activeVideoId, setActiveVideoId] = useState<string | null>(null);
 
   const pressReady = !!(pressName && emailOk(pressEmail));
+  const clips = videos?.length ? videos : FALLBACK_VIDEOS;
+  const email = contact?.email || "sales@frigga.co.uk";
+  const phones = [contact?.phone, contact?.phoneSecondary].filter(Boolean).join(" · ");
 
   const groupedPress = useMemo(() => {
     const years: number[] = [];
-    PRESS_RAW.forEach((p) => {
+    press.forEach((p) => {
       if (!years.includes(p.year)) years.push(p.year);
     });
     years.sort((a, b) => b - a);
     return years.map((y) => {
-      const items = PRESS_RAW.filter((p) => p.year === y).sort((a, b) => b.m - a.m);
+      const items = press.filter((p) => p.year === y).sort((a, b) => b.m - a.m);
       return {
         year: String(y),
         id: `y${y}`,
@@ -224,7 +113,7 @@ export default function MediaPage() {
         label: `${items.length} ${items.length === 1 ? "feature" : "features"}`
       };
     });
-  }, []);
+  }, [press]);
 
   return (
     <div className="page-shell page-enter">
@@ -338,11 +227,11 @@ export default function MediaPage() {
             <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: 2, textTransform: "uppercase", color: "#c69a3e" }}>
               For press &amp; media
             </div>
-            <h2 className="font-display" style={{ fontWeight: 700, fontSize: 22, color: "#143d31", margin: "8px 0 6px" }}>
-              Download the free press kit
+            <h2 className="font-display" style={{ fontWeight: 700, fontSize: 22, color: "#143d31", margin: "8px 0 6px" }} {...cms("mediaPage.pressKitTitle")}>
+              {pressKitTitle || "Download the free press kit"}
             </h2>
-            <p style={{ fontSize: 13.5, lineHeight: 1.55, color: "#6b7268", margin: "0 0 18px" }}>
-              Register your details and we&apos;ll email you the full kit.
+            <p style={{ fontSize: 13.5, lineHeight: 1.55, color: "#6b7268", margin: "0 0 18px" }} {...cms("mediaPage.pressKitBody")}>
+              {pressKitBody || "Register your details and we'll email you the full kit."}
             </p>
             <div style={{ display: "grid", gap: 10, marginBottom: 12 }}>
               <input
@@ -388,13 +277,27 @@ export default function MediaPage() {
                 }}
               />
             </div>
+            {pressError && <div style={{ color: "#8b2e2e", fontSize: 13, marginBottom: 8 }}>{pressError}</div>}
             <button
               type="button"
-              onClick={() => {
-                if (pressReady) {
-                  setPressSent(true);
-                  setPressModalOpen(false);
+              onClick={async () => {
+                if (!pressReady || pressPending) return;
+                setPressError("");
+                setPressPending(true);
+                const result = await submitSignupAction({
+                  kind: "press-kit",
+                  source: "media",
+                  email: pressEmail,
+                  name: pressName,
+                  organization: pressOutlet
+                });
+                setPressPending(false);
+                if (!result.ok) {
+                  setPressError(result.error);
+                  return;
                 }
+                setPressSent(true);
+                setPressModalOpen(false);
               }}
               style={{
                 width: "100%",
@@ -405,13 +308,13 @@ export default function MediaPage() {
                 padding: 13,
                 fontSize: 15,
                 fontWeight: 700,
-                cursor: pressReady ? "pointer" : "default",
-                opacity: pressReady ? 1 : 0.5,
-                pointerEvents: pressReady ? "auto" : "none",
+                cursor: pressReady && !pressPending ? "pointer" : "default",
+                opacity: pressReady && !pressPending ? 1 : 0.5,
+                pointerEvents: pressReady && !pressPending ? "auto" : "none",
                 border: 0
               }}
             >
-              Get the press kit
+              {pressPending ? "Sending…" : "Get the press kit"}
             </button>
           </div>
         </div>
@@ -435,8 +338,8 @@ export default function MediaPage() {
           <div style={{ display: "flex", alignItems: "center", gap: 12, minWidth: 0 }}>
             <span style={{ color: "#e6c680", fontSize: 15 }}>✦</span>
             <div>
-              <div style={{ fontSize: 14.5, fontWeight: 700, color: "#fff", lineHeight: 1.3 }}>
-                Free Press Kit for media
+              <div style={{ fontSize: 14.5, fontWeight: 700, color: "#fff", lineHeight: 1.3 }} {...cms("mediaPage.pressKitTitle")}>
+                {pressKitTitle || "Free Press Kit for media"}
               </div>
               <div style={{ fontSize: 12.5, color: "#9fbcb0" }}>
                 Bio, high-res photos, fact sheet &amp; past coverage.
@@ -480,11 +383,15 @@ export default function MediaPage() {
         <h1
           className="font-display"
           style={{ fontWeight: 700, fontSize: "clamp(26px,3.2vw,36px)", color: "#143d31", margin: "0 0 6px" }}
+          {...cms("mediaPage.title")}
         >
-          Media &amp; Press
+          {title || "Media & Press"}
         </h1>
-        <p style={{ fontSize: 15, color: "#5f6b60", margin: "0 0 22px", maxWidth: 640, lineHeight: 1.6 }}>
-          Press coverage, interviews, and features with Marites Allen — newest first.
+        <p
+          style={{ fontSize: 15, color: "#5f6b60", margin: "0 0 22px", maxWidth: 640, lineHeight: 1.6 }}
+          {...cms("mediaPage.intro")}
+        >
+          {intro || "Press coverage, interviews, and features with Marites Allen — newest first."}
         </p>
         <h2
           className="font-display"
@@ -591,15 +498,16 @@ export default function MediaPage() {
           <h2
             className="font-display"
             style={{ fontWeight: 700, fontSize: "clamp(21px,2.6vw,28px)", margin: "0 0 6px" }}
+            {...cms("mediaPage.videosHeading")}
           >
-            Television &amp; video
+            {videosHeading || "Television & video"}
           </h2>
           <p style={{ fontSize: 15, color: "#a9c6ba", margin: "0 0 20px" }}>
             Including recurring segments on <strong style={{ color: "#e6c680" }}>Marites Allen Live</strong>, her weekly
             Feng Shui broadcast.
           </p>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(280px,1fr))", gap: 20 }}>
-            {VIDEOS.map((v) => (
+            {clips.map((v) => (
               <button
                 key={`${v.yt}-${v.title}`}
                 type="button"
@@ -674,7 +582,10 @@ export default function MediaPage() {
                   <div style={{ fontSize: 12, color: "#9fbcb0", marginBottom: 5 }}>
                     {v.source} · {v.date}
                   </div>
-                  <div className="font-display" style={{ fontWeight: 600, fontSize: 16, color: "#fff", lineHeight: 1.3 }}>
+                  <div
+                    className="font-display"
+                    style={{ fontWeight: 600, fontSize: 16, color: "#fff", lineHeight: 1.3 }}
+                  >
                     {v.title}
                   </div>
                 </div>
@@ -711,9 +622,9 @@ export default function MediaPage() {
             </p>
             <div style={{ marginTop: 16, fontSize: 15, color: "#3d4a41" }}>
               <div style={{ marginBottom: 4 }}>
-                ✉ <a href="mailto:sales@frigga.co.uk">sales@frigga.co.uk</a>
+                ✉ <a href={`mailto:${email}`}>{email}</a>
               </div>
-              <div>☎ +63 920 950 9390 · +63 939 351 6424</div>
+              <div>☎ {phones || "+63 920 950 9390 · +63 939 351 6424"}</div>
             </div>
           </div>
           <Link

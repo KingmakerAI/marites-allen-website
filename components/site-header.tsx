@@ -2,23 +2,71 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
-import { FORECAST_YEARS } from "@/lib/site-data";
+import { useState } from "react";
+import { BrandLogo } from "@/components/brand-logo";
+import { useCms } from "@/components/cms-provider";
 
 type Props = {
   compact?: boolean;
   bookAsLabel?: boolean;
 };
 
+const FALLBACK_NAV = [
+  { id: "about", label: "About", href: "/about", external: false },
+  { id: "destara", label: "Destara AI", href: "/destara", external: false },
+  { id: "frigga", label: "Frigga", href: "https://www.frigga.com.ph", external: true },
+  { id: "projects", label: "Projects", href: "/projects", external: false },
+  { id: "events", label: "Events", href: "/events", external: false },
+  { id: "media", label: "Media", href: "/media", external: false }
+];
+
+function ForecastDrop() {
+  const { forecastYears } = useCms();
+  return (
+    <span className="navlink navdrop">
+      Annual Forecast ▾
+      <span className="navmenu">
+        <span>
+          {forecastYears.map((y) => (
+            <Link key={y.year} href={`/forecast?year=${y.year}`}>
+              {y.label}
+            </Link>
+          ))}
+        </span>
+      </span>
+    </span>
+  );
+}
+
 export function SiteHeader({ compact = false, bookAsLabel = false }: Props) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
-
-  useEffect(() => {
+  const [menuPath, setMenuPath] = useState(pathname);
+  if (menuPath !== pathname) {
+    setMenuPath(pathname);
     setOpen(false);
-  }, [pathname]);
+  }
+  const { nav, settings, forecastYears } = useCms();
+  const headerItems = nav.filter((n) => n.location === "header" && n.enabled);
+  const bookItem = headerItems.find((n) => n.href === "/book");
+  const menuItems = (headerItems.length ? headerItems : FALLBACK_NAV).filter((n) => n.href !== "/book");
+  const bookHref = bookItem?.href || settings?.business.bookingUrl || "/book";
+  const tagline = (settings?.general.tagline || "FENG SHUI QUEEN").toUpperCase();
+  const bookLabel = bookItem?.label || settings?.business.bookCtaLabel || settings?.business.comingSoonLabel || "Coming Soon";
 
   const active = (href: string) => (pathname === href ? " active" : "");
+  const hasForecast = menuItems.some((i) => i.href.startsWith("/forecast"));
+
+  const renderItem = (item: (typeof menuItems)[number]) =>
+    item.external || item.href.startsWith("http") ? (
+      <a key={item.id} href={item.href} target="_blank" rel="noopener noreferrer" className="navlink">
+        {item.label}
+      </a>
+    ) : (
+      <Link key={item.id} href={item.href} className={`navlink${active(item.href)}`}>
+        {item.label}
+      </Link>
+    );
 
   return (
     <header
@@ -44,19 +92,8 @@ export function SiteHeader({ compact = false, bookAsLabel = false }: Props) {
           position: "relative"
         }}
       >
-        <Link href="/" style={{ display: "flex", flexDirection: "column", lineHeight: 1, minWidth: 0 }}>
-          <span
-            className="brandName font-display"
-            style={{
-              fontWeight: 700,
-              fontSize: 20,
-              letterSpacing: 1,
-              color: "#143d31",
-              whiteSpace: "nowrap"
-            }}
-          >
-            MARITES ALLEN
-          </span>
+        <Link href="/" className="site-brand" style={{ display: "flex", flexDirection: "column", lineHeight: 1, minWidth: 0 }}>
+          <BrandLogo height={compact ? 32 : 40} />
           <span
             className="brandTag"
             style={{
@@ -64,10 +101,10 @@ export function SiteHeader({ compact = false, bookAsLabel = false }: Props) {
               letterSpacing: 2.5,
               textTransform: "uppercase",
               color: "#c69a3e",
-              marginTop: 3
+              marginTop: 5
             }}
           >
-            FENG SHUI QUEEN
+            {tagline}
           </span>
         </Link>
 
@@ -80,41 +117,12 @@ export function SiteHeader({ compact = false, bookAsLabel = false }: Props) {
             justifyContent: "center"
           }}
         >
-          <Link href="/about" className={`navlink${active("/about")}`}>
-            About
-          </Link>
-          <Link href="/destara" className={`navlink${active("/destara")}`}>
-            Destara AI
-          </Link>
-          <a
-            href="https://www.frigga.com.ph"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="navlink"
-          >
-            Frigga
-          </a>
-          <span className="navlink navdrop">
-            Annual Forecast ▾
-            <span className="navmenu">
-              <span>
-                {FORECAST_YEARS.map((y) => (
-                  <Link key={y.year} href={`/forecast?year=${y.year}`}>
-                    {y.label}
-                  </Link>
-                ))}
-              </span>
+          {menuItems.map((item, idx) => (
+            <span key={item.id} style={{ display: "contents" }}>
+              {renderItem(item)}
+              {!hasForecast && idx === 2 ? <ForecastDrop /> : null}
             </span>
-          </span>
-          <Link href="/projects" className={`navlink${active("/projects")}`}>
-            Projects
-          </Link>
-          <Link href="/events" className={`navlink${active("/events")}`}>
-            Events
-          </Link>
-          <Link href="/media" className={`navlink${active("/media")}`}>
-            Media
-          </Link>
+          ))}
         </nav>
 
         {bookAsLabel ? (
@@ -131,11 +139,11 @@ export function SiteHeader({ compact = false, bookAsLabel = false }: Props) {
               whiteSpace: "nowrap"
             }}
           >
-            Coming Soon
+            {bookLabel}
           </span>
         ) : (
           <Link
-            href="/book"
+            href={bookHref}
             className="bookNavBtn desktop-only"
             style={{
               background: "linear-gradient(160deg,#1a4d3e,#143d31)",
@@ -147,9 +155,9 @@ export function SiteHeader({ compact = false, bookAsLabel = false }: Props) {
               boxShadow: "0 8px 18px -8px rgba(20,60,45,0.6)",
               whiteSpace: "nowrap"
             }}
-            title="Book Consultation — Coming Soon"
+            title={bookLabel}
           >
-            Coming Soon
+            {bookLabel}
           </Link>
         )}
 
@@ -167,22 +175,25 @@ export function SiteHeader({ compact = false, bookAsLabel = false }: Props) {
       </div>
 
       <div className={`omDrawer${open ? " open" : ""}`}>
-        <Link href="/about">About</Link>
-        <Link href="/destara">Destara AI</Link>
-        <a href="https://www.frigga.com.ph" target="_blank" rel="noopener noreferrer">
-          Frigga
-        </a>
+        {menuItems.map((item) =>
+          item.external || item.href.startsWith("http") ? (
+            <a key={item.id} href={item.href} target="_blank" rel="noopener noreferrer">
+              {item.label}
+            </a>
+          ) : (
+            <Link key={item.id} href={item.href}>
+              {item.label}
+            </Link>
+          )
+        )}
         <div className="grpLabel">Annual Forecast</div>
-        {FORECAST_YEARS.map((y) => (
+        {forecastYears.map((y) => (
           <Link key={y.year} href={`/forecast?year=${y.year}`} className="sub">
             {y.label}
           </Link>
         ))}
-        <Link href="/projects">Projects</Link>
-        <Link href="/events">Events</Link>
-        <Link href="/media">Media</Link>
-        <Link href="/book" className="cta" title="Book Consultation — Coming Soon">
-          Coming Soon
+        <Link href={bookHref} className="cta" title={bookLabel}>
+          {bookLabel}
         </Link>
       </div>
     </header>

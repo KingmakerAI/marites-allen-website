@@ -35,21 +35,12 @@ export function EventCountdown({
     () => (endsAt ? new Date(endsAt).getTime() : start + 3 * 60 * 60 * 1000),
     [endsAt, start]
   );
-  const [now, setNow] = useState<number | null>(null);
+  const [now, setNow] = useState(() => Date.now());
 
   useEffect(() => {
-    setNow(Date.now());
     const id = window.setInterval(() => setNow(Date.now()), 1000);
     return () => window.clearInterval(id);
   }, []);
-
-  if (now == null) {
-    return (
-      <div style={{ fontSize: 13, color: accent === "gold" ? "#e6c680" : "#9fbcb0" }}>
-        Loading countdown…
-      </div>
-    );
-  }
 
   if (now >= start && now < end) {
     return (
