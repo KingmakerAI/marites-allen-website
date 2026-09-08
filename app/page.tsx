@@ -57,7 +57,7 @@ export default async function HomePage() {
           heading: heroPayload.heading || "Transform your luck, home & destiny",
           subheading: heroPayload.subheading || "",
           highlight: heroPayload.highlight,
-          ctaLabel: heroPayload.ctaLabel || "Book Consultation · Coming Soon →",
+          ctaLabel: heroPayload.ctaLabel || "Book Today",
           ctaHref: heroPayload.ctaHref || "/book",
           chartCtaLabel: heroPayload.chartCtaLabel || "Free Destiny Chart",
           rating: heroPayload.rating || "4.9 · 1,200+ verified reviews",

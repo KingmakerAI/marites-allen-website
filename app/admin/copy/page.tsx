@@ -820,7 +820,7 @@ export default async function CopyEditor({
               <section id="part-bespoke" className="shop-card admin-form">
                 <div className="shop-card-head">
                   <div>
-                    <h2>Bespoke and coming soon</h2>
+                    <h2>Bespoke and booking band</h2>
                   </div>
                 </div>
                 <label>

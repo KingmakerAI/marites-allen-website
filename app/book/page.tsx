@@ -15,7 +15,7 @@ export async function generateMetadata(): Promise<Metadata> {
     title: copy.book.seoTitle,
     description: copy.book.seoDescription,
     path: "/book",
-    keywords: ["book Feng Shui consultation", "Marites Allen booking", "consultation coming soon"]
+    keywords: ["book Feng Shui consultation", "Marites Allen booking", "consultation enquiry"]
   });
 }
 

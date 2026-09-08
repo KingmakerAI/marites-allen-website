@@ -108,12 +108,12 @@ export default function HomePage({
   const bespokeKicker = extras?.bespokeKicker || "For estates, family offices & business leaders";
   const bespokeHeading = extras?.bespokeHeading || "Bespoke Advisory, scoped around what you need";
   const bespokeCta = extras?.bespokeCta || "Enquire privately →";
-  const comingKicker = extras?.comingKicker || "Coming soon";
-  const comingHeading = extras?.comingHeading || "Online booking is on the way";
+  const comingKicker = extras?.comingKicker || "Book today";
+  const comingHeading = extras?.comingHeading || "Send your consultation enquiry";
   const comingBody =
     extras?.comingBody ||
-    "Private consultations with Marites Allen will open for booking here shortly. Enquire anytime while we finish the experience.";
-  const comingCta = extras?.comingCta || "View Coming Soon →";
+    "Tell us what you need and the team will follow up. Payment is arranged privately after your enquiry is reviewed.";
+  const comingCta = extras?.comingCta || "Book Today";
   const guarantees = extras?.guarantees?.length ? extras.guarantees : GUARANTEES;
   const friggaHeading = extras?.friggaHeading || "Shop your lucky items for the year";
   const friggaBody =
@@ -350,7 +350,7 @@ export default function HomePage({
                         borderRadius: 11
                       }}
                     >
-                      Consultation · Coming Soon →
+                      Book Today
                     </Link>
                   </div>
                 )}
@@ -438,7 +438,7 @@ export default function HomePage({
                   boxShadow: "0 14px 28px -10px rgba(198,154,62,0.6)"
                 }}
               >
-                {hero?.ctaLabel || "Book Consultation · Coming Soon →"}
+                {hero?.ctaLabel || "Book Today"}
               </Link>
               <button
                 type="button"
@@ -1156,7 +1156,7 @@ export default function HomePage({
               borderRadius: 12
             }}
           >
-            {closing?.ctaLabel || "Book Consultation · Coming Soon →"}
+            {closing?.ctaLabel || "Book Today"}
           </Link>
         </div>
       </section>

@@ -638,7 +638,7 @@ export default function MediaPage({
               borderRadius: 12
             }}
           >
-            Book Consultation · Coming Soon →
+            Book Today
           </Link>
         </div>
       </section>

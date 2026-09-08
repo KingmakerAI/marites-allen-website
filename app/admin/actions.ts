@@ -527,8 +527,8 @@ export async function saveSettingsAction(formData: FormData) {
     business: {
       bookingUrl: sanitizeText(formStr(formData, "bookingUrl"), 200),
       currency: sanitizeText(formStr(formData, "currency"), 8) || "USD",
-      comingSoonLabel: sanitizeText(formStr(formData, "comingSoonLabel"), 80) || "Coming Soon",
-      bookCtaLabel: sanitizeText(formStr(formData, "bookCtaLabel"), 80) || "Book Consultation · Coming Soon →"
+      comingSoonLabel: sanitizeText(formStr(formData, "comingSoonLabel"), 80) || "Book Today",
+      bookCtaLabel: sanitizeText(formStr(formData, "bookCtaLabel"), 80) || "Book Today"
     }
   };
   saveSettings(settings);

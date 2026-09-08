@@ -442,7 +442,7 @@ export default async function FriggaPage() {
               whiteSpace: "nowrap"
             }}
           >
-            Book Consultation · Coming Soon →
+            Book Today
           </Link>
         </div>
       </section>

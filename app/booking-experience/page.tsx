@@ -3,9 +3,9 @@ import { redirect } from "next/navigation";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = pageMetadata({
-  title: "Booking Experience — Coming Soon",
+  title: "Booking Experience",
   description:
-    "Online booking for Marites Allen consultations is coming soon. Visit the Book page for enquire options.",
+    "Consultation enquiry for Marites Allen. Visit the Book page to send your details — payment is arranged offline.",
   path: "/booking-experience",
   noIndex: true
 });

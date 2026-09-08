@@ -52,7 +52,7 @@ export function SiteHeader({ compact = false, bookAsLabel = false }: Props) {
   const menuItems = (headerItems.length ? headerItems : FALLBACK_NAV).filter((n) => n.href !== "/book");
   const bookHref = bookItem?.href || settings?.business.bookingUrl || "/book";
   const tagline = (settings?.general.tagline || "FENG SHUI QUEEN").toUpperCase();
-  const bookLabel = bookItem?.label || settings?.business.bookCtaLabel || settings?.business.comingSoonLabel || "Coming Soon";
+  const bookLabel = bookItem?.label || settings?.business.bookCtaLabel || settings?.business.comingSoonLabel || "Book Today";
 
   const active = (href: string) => (pathname === href ? " active" : "");
   const hasForecast = menuItems.some((i) => i.href.startsWith("/forecast"));

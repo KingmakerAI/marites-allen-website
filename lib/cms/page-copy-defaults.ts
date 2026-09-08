@@ -554,12 +554,12 @@ export const DEFAULT_PAGE_COPY: PageCopy = {
     bespokeKicker: "For estates, family offices & business leaders",
     bespokeHeading: "Bespoke Advisory, scoped around what you need",
     bespokeCta: "Enquire privately →",
-    comingKicker: "Coming soon",
-    comingHeading: "Online booking is on the way",
+    comingKicker: "Book today",
+    comingHeading: "Send your consultation enquiry",
     comingBody:
-      "Private consultations with Marites Allen will open for booking here shortly. Enquire anytime while we finish the experience.",
-    comingCta: "View Coming Soon →",
-    guarantees: ["Free reschedule up to 48h", "Instant confirmation", "SSL-secured booking", "One-on-one with Marites"],
+      "Tell us what you need and the team will follow up. Payment is arranged privately after your enquiry is reviewed.",
+    comingCta: "Book Today",
+    guarantees: ["Reply within 1–2 business days", "WhatsApp available", "Offline payment", "One-on-one with Marites"],
     friggaHeading: "Frigga Charmed Life",
     friggaBody: "Wearable Feng Shui charms for love, health, wealth and career.",
     friggaCta: "Shop Frigga",
@@ -580,10 +580,11 @@ export const DEFAULT_PAGE_COPY: PageCopy = {
   book: {
     seoTitle: "Book a Consultation",
     seoDescription:
-      "Enquire about a private Feng Shui consultation with Marites Allen. Online booking is being prepared.",
-    kicker: "Coming soon",
+      "Enquire about a private Feng Shui consultation with Marites Allen. The team will follow up — payment is arranged offline.",
+    kicker: "Book today",
     title: "Book Consultation",
-    intro: "Online booking is being prepared. Send an enquiry with what you need, and the team will follow up.",
+    intro:
+      "Send an enquiry with the consultation you need. The team will follow up by email or WhatsApp. Payment is handled offline.",
     formTitle: "Consultation enquiry",
     formBody: "Tell us who you are and what you're looking for. The team will use this to follow up.",
     submitLabel: "Send enquiry",

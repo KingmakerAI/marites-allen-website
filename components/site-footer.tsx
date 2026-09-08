@@ -115,7 +115,7 @@ export function SiteFooter({ variant = "full" }: Props) {
                   { id: "f", label: "Annual Forecast", href: "/forecast", external: false },
                   { id: "d", label: "Destara AI", href: "/destara", external: false },
                   { id: "m", label: "Media", href: "/media", external: false },
-                  { id: "b", label: "Book · Coming Soon", href: "/book", external: false }
+                  { id: "b", label: "Book Today", href: "/book", external: false }
                 ]
             ).map((item) =>
               item.external || item.href.startsWith("http") ? (
