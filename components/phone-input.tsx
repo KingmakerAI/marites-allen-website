@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { COUNTRIES, countryFlag, findCountry, type Country } from "@/lib/countries";
-import { darkInput } from "@/components/country-select";
+import { darkInput, orderedCountries } from "@/components/country-select";
 
 type Props = {
   countryCode: string;
@@ -24,11 +24,11 @@ export function PhoneInput({
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
   const rootRef = useRef<HTMLDivElement>(null);
-  const selected = findCountry(countryCode) || findCountry("PH");
+  const selected = countryCode ? findCountry(countryCode) : undefined;
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
-    if (!q) return COUNTRIES;
+    if (!q) return orderedCountries(COUNTRIES);
     return COUNTRIES.filter(
       (c) => c.name.toLowerCase().includes(q) || c.dial.includes(q) || c.code.toLowerCase().includes(q)
     );
@@ -38,8 +38,15 @@ export function PhoneInput({
     function onDoc(e: MouseEvent) {
       if (!rootRef.current?.contains(e.target as Node)) setOpen(false);
     }
+    function onKey(e: KeyboardEvent) {
+      if (e.key === "Escape") setOpen(false);
+    }
     document.addEventListener("mousedown", onDoc);
-    return () => document.removeEventListener("mousedown", onDoc);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("mousedown", onDoc);
+      document.removeEventListener("keydown", onKey);
+    };
   }, []);
 
   return (
@@ -48,7 +55,7 @@ export function PhoneInput({
         ref={rootRef}
         style={{
           display: "grid",
-          gridTemplateColumns: "minmax(118px, 138px) 1fr",
+          gridTemplateColumns: "minmax(120px, 135px) 1fr",
           gap: 8
         }}
       >
@@ -70,9 +77,16 @@ export function PhoneInput({
               borderColor: error ? "rgba(255,150,150,0.7)" : darkInput.border
             }}
           >
-            <span style={{ whiteSpace: "nowrap" }}>
-              <span aria-hidden>{countryFlag(selected?.code || "PH")}</span>{" "}
-              {selected?.dial || "+63"}
+            <span style={{ whiteSpace: "nowrap", color: selected ? "#f4f0e6" : "rgba(244,240,230,0.55)" }}>
+              {selected ? (
+                <>
+                  <span aria-hidden>{countryFlag(selected.code)}</span> {selected.dial}
+                </>
+              ) : (
+                <>
+                  <span aria-hidden>🌐</span> Code
+                </>
+              )}
             </span>
             <span style={{ color: "#e6c680", fontSize: 11 }}>▾</span>
           </button>
@@ -81,11 +95,12 @@ export function PhoneInput({
               role="listbox"
               style={{
                 position: "absolute",
-                zIndex: 40,
+                zIndex: 50,
                 left: 0,
                 width: 280,
+                maxWidth: "min(280px, calc(100vw - 48px))",
                 top: "calc(100% + 6px)",
-                maxHeight: 260,
+                maxHeight: 280,
                 overflow: "hidden",
                 background: "#143d31",
                 border: "1px solid rgba(230,198,128,0.4)",
@@ -98,16 +113,18 @@ export function PhoneInput({
                   autoFocus
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
-                  placeholder="Search code…"
+                  placeholder="Search code..."
+                  aria-label="Search calling codes"
                   style={{ ...darkInput, background: "#0f3126" }}
                 />
               </div>
-              <div style={{ maxHeight: 200, overflowY: "auto" }}>
+              <div style={{ maxHeight: 210, overflowY: "auto", WebkitOverflowScrolling: "touch" }}>
                 {filtered.map((c) => (
                   <button
                     key={`${c.code}-${c.dial}`}
                     type="button"
                     role="option"
+                    aria-selected={c.code === countryCode}
                     onClick={() => {
                       onCountryChange(c.code, c);
                       setOpen(false);

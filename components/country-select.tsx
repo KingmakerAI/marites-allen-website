@@ -16,6 +16,15 @@ const darkInput = {
   colorScheme: "dark" as const
 };
 
+/** Show frequently selected countries first; keep the same dataset. */
+const PRIORITY_CODES = ["PH", "GB", "US", "AU", "SG", "MY", "HK", "AE", "CA", "NZ"];
+
+function orderedCountries(list: Country[]) {
+  const priority = PRIORITY_CODES.map((code) => list.find((c) => c.code === code)).filter(Boolean) as Country[];
+  const rest = list.filter((c) => !PRIORITY_CODES.includes(c.code));
+  return [...priority, ...rest];
+}
+
 type Props = {
   value: string;
   onChange: (code: string, country: Country | undefined) => void;
@@ -27,22 +36,31 @@ export function CountrySelect({ value, onChange, error, id = "country" }: Props)
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
   const rootRef = useRef<HTMLDivElement>(null);
-  const selected = findCountry(value);
+  const selected = value ? findCountry(value) : undefined;
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
-    if (!q) return COUNTRIES;
-    return COUNTRIES.filter(
-      (c) => c.name.toLowerCase().includes(q) || c.code.toLowerCase().includes(q) || c.dial.includes(q)
-    );
+    const base = !q
+      ? orderedCountries(COUNTRIES)
+      : COUNTRIES.filter(
+          (c) => c.name.toLowerCase().includes(q) || c.code.toLowerCase().includes(q) || c.dial.includes(q)
+        );
+    return base;
   }, [query]);
 
   useEffect(() => {
     function onDoc(e: MouseEvent) {
       if (!rootRef.current?.contains(e.target as Node)) setOpen(false);
     }
+    function onKey(e: KeyboardEvent) {
+      if (e.key === "Escape") setOpen(false);
+    }
     document.addEventListener("mousedown", onDoc);
-    return () => document.removeEventListener("mousedown", onDoc);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("mousedown", onDoc);
+      document.removeEventListener("keydown", onKey);
+    };
   }, []);
 
   return (
@@ -52,6 +70,7 @@ export function CountrySelect({ value, onChange, error, id = "country" }: Props)
         id={id}
         aria-haspopup="listbox"
         aria-expanded={open}
+        aria-label="Country / Region"
         onClick={() => setOpen((v) => !v)}
         style={{
           ...darkInput,
@@ -73,7 +92,9 @@ export function CountrySelect({ value, onChange, error, id = "country" }: Props)
               {selected.name}
             </>
           ) : (
-            <span style={{ color: "rgba(244,240,230,0.55)" }}>Select your country</span>
+            <span style={{ color: "rgba(244,240,230,0.55)" }}>
+              <span aria-hidden>🌐</span> Select your country
+            </span>
           )}
         </span>
         <span style={{ color: "#e6c680", fontSize: 12 }}>▾</span>
@@ -83,11 +104,11 @@ export function CountrySelect({ value, onChange, error, id = "country" }: Props)
           role="listbox"
           style={{
             position: "absolute",
-            zIndex: 40,
+            zIndex: 50,
             left: 0,
             right: 0,
             top: "calc(100% + 6px)",
-            maxHeight: 260,
+            maxHeight: 280,
             overflow: "hidden",
             background: "#143d31",
             border: "1px solid rgba(230,198,128,0.4)",
@@ -100,11 +121,12 @@ export function CountrySelect({ value, onChange, error, id = "country" }: Props)
               autoFocus
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder="Search countries…"
+              placeholder="Search countries..."
+              aria-label="Search countries"
               style={{ ...darkInput, background: "#0f3126" }}
             />
           </div>
-          <div style={{ maxHeight: 200, overflowY: "auto" }}>
+          <div style={{ maxHeight: 210, overflowY: "auto", WebkitOverflowScrolling: "touch" }}>
             {filtered.map((c) => (
               <button
                 key={c.code}
@@ -145,4 +167,4 @@ export function CountrySelect({ value, onChange, error, id = "country" }: Props)
   );
 }
 
-export { darkInput };
+export { darkInput, orderedCountries };

@@ -261,13 +261,16 @@ function ensureLiveDefaults() {
             "Submit a consultation enquiry with Marites Allen. Our team will review your request and contact you by email or WhatsApp.";
           changed = true;
         }
-        if (!book.submitLabel || /send enquiry$/i.test(book.submitLabel)) {
-          book.submitLabel = "Send Consultation Enquiry →";
+        if (!book.submitLabel || /send (consultation )?enquiry/i.test(book.submitLabel)) {
+          book.submitLabel = "Submit Consultation Enquiry →";
           changed = true;
         }
-        if (!book.submitHint) {
+        if (
+          !book.submitHint ||
+          /once you submit your enquiry, our team will be notified/i.test(book.submitHint)
+        ) {
           book.submitHint =
-            "Once you submit your enquiry, our team will be notified. We'll review your request and contact you by email or WhatsApp regarding availability and the next steps.";
+            "Your enquiry will be sent securely to our team. We'll contact you by email or WhatsApp regarding availability and next steps.";
           changed = true;
         }
         if (!book.preferTalkHeading || /prefer to talk now/i.test(book.preferTalkHeading)) {

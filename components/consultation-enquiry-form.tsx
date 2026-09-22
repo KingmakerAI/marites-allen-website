@@ -20,7 +20,7 @@ type Props = {
 
 const labelStyle = {
   display: "grid" as const,
-  gap: 6,
+  gap: 5,
   fontSize: 12,
   fontWeight: 700,
   color: "#e6c680"
@@ -32,13 +32,13 @@ const sectionLabel = {
   letterSpacing: 1.8,
   textTransform: "uppercase" as const,
   color: "#e6c680",
-  margin: "0 0 6px"
+  margin: "0 0 4px"
 };
 
 const sectionBody = {
-  fontSize: 13.5,
-  lineHeight: 1.55,
-  color: "#c7ddd2",
+  fontSize: 13,
+  lineHeight: 1.5,
+  color: "#a8c4b6",
   margin: "0 0 14px"
 };
 
@@ -46,7 +46,47 @@ const errorText = { color: "#ffb4b4", fontSize: 12.5, marginTop: 4 };
 
 function FieldError({ message }: { message?: string }) {
   if (!message) return null;
-  return <div style={errorText}>{message}</div>;
+  return (
+    <div role="alert" style={errorText}>
+      {message}
+    </div>
+  );
+}
+
+function ProgressGuide() {
+  const steps = ["01 Personal", "02 Contact", "03 Consultation"];
+  return (
+    <div
+      aria-hidden
+      style={{
+        display: "flex",
+        flexWrap: "wrap",
+        alignItems: "center",
+        justifyContent: "center",
+        gap: 8,
+        marginBottom: 22,
+        paddingBottom: 16,
+        borderBottom: "1px solid rgba(230,198,128,0.15)"
+      }}
+    >
+      {steps.map((step, i) => (
+        <span key={step} style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
+          <span
+            style={{
+              fontSize: 11,
+              fontWeight: 700,
+              letterSpacing: 1.2,
+              textTransform: "uppercase",
+              color: "#e6c680"
+            }}
+          >
+            {step}
+          </span>
+          {i < steps.length - 1 ? <span style={{ color: "rgba(230,198,128,0.35)", fontSize: 11 }}>→</span> : null}
+        </span>
+      ))}
+    </div>
+  );
 }
 
 export function ConsultationEnquiryForm({
@@ -56,7 +96,7 @@ export function ConsultationEnquiryForm({
   preferTalkHeading = "Prefer to speak with us directly?",
   whatsappLabel = "WhatsApp Enquiry →",
   emailLabel = "Email Our Team →",
-  submitHint = "Once you submit your enquiry, our team will be notified. We'll review your request and contact you by email or WhatsApp regarding availability and the next steps."
+  submitHint = "Your enquiry will be sent securely to our team. We'll contact you by email or WhatsApp regarding availability and next steps."
 }: Props) {
   const options = useMemo(() => {
     const base = consultationOptions.length ? consultationOptions : FALLBACK_CONSULTATION_OPTIONS;
@@ -66,7 +106,7 @@ export function ConsultationEnquiryForm({
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [gender, setGender] = useState("");
-  const [countryCode, setCountryCode] = useState("PH");
+  const [countryCode, setCountryCode] = useState("");
   const [nationalPhone, setNationalPhone] = useState("");
   const [email, setEmail] = useState("");
   const [consultationType, setConsultationType] = useState("");
@@ -77,16 +117,18 @@ export function ConsultationEnquiryForm({
   const [successName, setSuccessName] = useState("");
   const [emailsSent, setEmailsSent] = useState(true);
 
-  const country = findCountry(countryCode);
-  const dialCode = country?.dial || "+63";
+  const country = countryCode ? findCountry(countryCode) : undefined;
+  const dialCode = country?.dial || "";
   const countryName = country?.name || "";
 
   function validateLocal(): Record<string, string> {
     const errors: Record<string, string> = {};
     if (!firstName.trim()) errors.firstName = "Please enter your first name.";
     if (!lastName.trim()) errors.lastName = "Please enter your last name.";
-    if (!countryCode || !countryName) errors.country = "Please select your country.";
-    if (!isValidNationalPhone(nationalPhone)) errors.phone = "Please enter a valid phone number.";
+    if (!countryCode || !countryName || !dialCode) errors.country = "Please select your country.";
+    if (!countryCode || !dialCode || !isValidNationalPhone(nationalPhone)) {
+      errors.phone = "Please enter a valid phone number.";
+    }
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
       errors.email = "Please enter a valid email address.";
     }
@@ -104,29 +146,39 @@ export function ConsultationEnquiryForm({
     if (Object.keys(errors).length) return;
 
     setPending(true);
-    const result = await submitConsultationEnquiryAction({
-      firstName: firstName.trim(),
-      lastName: lastName.trim(),
-      gender,
-      country: countryName,
-      countryCode,
-      dialCode,
-      phone: formatE164(dialCode, nationalPhone),
-      email: email.trim(),
-      consultationType,
-      message: message.trim(),
-      honeypot: ""
-    });
-    setPending(false);
+    try {
+      const result = await submitConsultationEnquiryAction({
+        firstName: firstName.trim(),
+        lastName: lastName.trim(),
+        gender,
+        country: countryName,
+        countryCode,
+        dialCode,
+        phone: formatE164(dialCode, nationalPhone),
+        email: email.trim(),
+        consultationType,
+        message: message.trim(),
+        honeypot: ""
+      });
 
-    if (!result.ok) {
-      setFieldErrors(result.fieldErrors || {});
-      setFormError(result.error);
-      return;
+      if (!result.ok) {
+        setFieldErrors(result.fieldErrors || {});
+        setFormError(
+          result.error ||
+            "We couldn't submit your enquiry right now. Please try again or contact us directly via WhatsApp or email."
+        );
+        return;
+      }
+
+      setEmailsSent(result.emailsSent);
+      setSuccessName(result.firstName);
+    } catch {
+      setFormError(
+        "We couldn't submit your enquiry right now. Please try again or contact us directly via WhatsApp or email."
+      );
+    } finally {
+      setPending(false);
     }
-
-    setEmailsSent(result.emailsSent);
-    setSuccessName(result.firstName);
   }
 
   if (successName) {
@@ -185,9 +237,19 @@ export function ConsultationEnquiryForm({
     );
   }
 
+  const selectChevron = {
+    appearance: "none" as const,
+    backgroundImage:
+      "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23e6c680' d='M1 1l5 5 5-5'/%3E%3C/svg%3E\")",
+    backgroundRepeat: "no-repeat" as const,
+    backgroundPosition: "right 14px center",
+    paddingRight: 40
+  };
+
   return (
     <>
-      <form onSubmit={onSubmit} noValidate style={{ display: "grid", gap: 22 }}>
+      <ProgressGuide />
+      <form onSubmit={onSubmit} noValidate style={{ display: "grid", gap: 28 }}>
         <input type="text" name="company_website" tabIndex={-1} autoComplete="off" aria-hidden style={{ display: "none" }} />
 
         <section>
@@ -195,11 +257,7 @@ export function ConsultationEnquiryForm({
           <p style={sectionBody}>Tell us a little about yourself.</p>
           <div style={{ display: "grid", gap: 12 }}>
             <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "1fr 1fr",
-                gap: 10
-              }}
+              style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}
               className="enquiry-name-row"
             >
               <label style={labelStyle}>
@@ -237,20 +295,17 @@ export function ConsultationEnquiryForm({
             </div>
 
             <label style={labelStyle}>
-              Gender <span style={{ fontWeight: 500, color: "#8eaea0" }}>(optional)</span>
+              <span>
+                Gender{" "}
+                <span style={{ fontWeight: 500, color: "#8eaea0", textTransform: "none", letterSpacing: 0 }}>
+                  Optional
+                </span>
+              </span>
               <select
                 name="gender"
                 value={gender}
                 onChange={(e) => setGender(e.target.value)}
-                style={{
-                  ...darkInput,
-                  appearance: "none",
-                  backgroundImage:
-                    "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23e6c680' d='M1 1l5 5 5-5'/%3E%3C/svg%3E\")",
-                  backgroundRepeat: "no-repeat",
-                  backgroundPosition: "right 14px center",
-                  paddingRight: 40
-                }}
+                style={{ ...darkInput, ...selectChevron }}
               >
                 <option value="">Select gender</option>
                 <option value="Male">Male</option>
@@ -263,7 +318,15 @@ export function ConsultationEnquiryForm({
               Country / Region
               <CountrySelect
                 value={countryCode}
-                onChange={(code) => setCountryCode(code)}
+                onChange={(code) => {
+                  setCountryCode(code);
+                  setFieldErrors((prev) => {
+                    const next = { ...prev };
+                    delete next.country;
+                    delete next.phone;
+                    return next;
+                  });
+                }}
                 error={fieldErrors.country}
               />
               <FieldError message={fieldErrors.country} />
@@ -271,8 +334,13 @@ export function ConsultationEnquiryForm({
           </div>
         </section>
 
-        <section>
-          <div style={sectionLabel}>02 · Contact Information</div>
+        <section
+          style={{
+            paddingTop: 4,
+            borderTop: "1px solid rgba(230,198,128,0.12)"
+          }}
+        >
+          <div style={{ ...sectionLabel, marginTop: 4 }}>02 · Contact Information</div>
           <p style={sectionBody}>How should our team contact you?</p>
           <div style={{ display: "grid", gap: 12 }}>
             <label style={labelStyle}>
@@ -280,7 +348,15 @@ export function ConsultationEnquiryForm({
               <PhoneInput
                 countryCode={countryCode}
                 nationalNumber={nationalPhone}
-                onCountryChange={(code) => setCountryCode(code)}
+                onCountryChange={(code) => {
+                  setCountryCode(code);
+                  setFieldErrors((prev) => {
+                    const next = { ...prev };
+                    delete next.country;
+                    delete next.phone;
+                    return next;
+                  });
+                }}
                 onNumberChange={setNationalPhone}
                 error={fieldErrors.phone}
               />
@@ -306,8 +382,13 @@ export function ConsultationEnquiryForm({
           </div>
         </section>
 
-        <section>
-          <div style={sectionLabel}>03 · Consultation Details</div>
+        <section
+          style={{
+            paddingTop: 4,
+            borderTop: "1px solid rgba(230,198,128,0.12)"
+          }}
+        >
+          <div style={{ ...sectionLabel, marginTop: 4 }}>03 · Consultation Details</div>
           <p style={sectionBody}>Tell us what you would like help with.</p>
           <div style={{ display: "grid", gap: 12 }}>
             <label style={labelStyle}>
@@ -319,12 +400,7 @@ export function ConsultationEnquiryForm({
                 onChange={(e) => setConsultationType(e.target.value)}
                 style={{
                   ...darkInput,
-                  appearance: "none",
-                  backgroundImage:
-                    "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23e6c680' d='M1 1l5 5 5-5'/%3E%3C/svg%3E\")",
-                  backgroundRepeat: "no-repeat",
-                  backgroundPosition: "right 14px center",
-                  paddingRight: 40,
+                  ...selectChevron,
                   borderColor: fieldErrors.consultationType ? "rgba(255,150,150,0.7)" : darkInput.border
                 }}
               >
@@ -361,45 +437,84 @@ export function ConsultationEnquiryForm({
           </div>
         </section>
 
-        {formError && <div style={{ color: "#ffb4b4", fontSize: 13 }}>{formError}</div>}
+        {formError ? (
+          <div
+            role="alert"
+            style={{
+              color: "#ffb4b4",
+              fontSize: 13.5,
+              lineHeight: 1.55,
+              padding: "12px 14px",
+              borderRadius: 10,
+              border: "1px solid rgba(255,150,150,0.35)",
+              background: "rgba(120,30,30,0.25)"
+            }}
+          >
+            {formError}
+          </div>
+        ) : null}
 
-        <button
-          type="submit"
-          disabled={pending}
-          style={{
-            width: "100%",
-            textAlign: "center",
-            background: "linear-gradient(160deg,#e6c680,#c69a3e)",
-            color: "#143d31",
-            borderRadius: 12,
-            padding: 14,
-            fontSize: 15,
-            fontWeight: 700,
-            border: 0,
-            cursor: pending ? "wait" : "pointer",
-            opacity: pending ? 0.75 : 1
-          }}
-        >
-          {pending ? "Sending enquiry..." : "Send Consultation Enquiry →"}
-        </button>
-
-        <p style={{ fontSize: 12.5, lineHeight: 1.55, color: "#8eaea0", margin: 0 }}>{submitHint}</p>
+        <div style={{ paddingTop: 4 }}>
+          <button
+            type="submit"
+            disabled={pending}
+            aria-busy={pending}
+            className="enquiry-submit"
+            style={{
+              width: "100%",
+              textAlign: "center",
+              background: "linear-gradient(160deg,#e6c680,#c69a3e)",
+              color: "#143d31",
+              borderRadius: 12,
+              padding: 15,
+              fontSize: 15,
+              fontWeight: 700,
+              border: 0,
+              cursor: pending ? "wait" : "pointer",
+              opacity: pending ? 0.75 : 1,
+              transition: "filter 160ms ease, transform 160ms ease"
+            }}
+          >
+            {pending ? "Submitting enquiry..." : "Submit Consultation Enquiry →"}
+          </button>
+          <p style={{ fontSize: 12.5, lineHeight: 1.55, color: "#8eaea0", margin: "12px 0 0" }}>{submitHint}</p>
+        </div>
       </form>
 
-      <p style={{ fontSize: 13, lineHeight: 1.6, color: "#c7ddd2", margin: "22px 0 12px" }}>{preferTalkHeading}</p>
-      <ChatCtaButtons
-        whatsappUrl={whatsappUrl}
-        messengerUrl={emailUrl}
-        whatsappLabel={whatsappLabel}
-        messengerLabel={emailLabel}
-        secondIsEmail
-      />
+      <div
+        style={{
+          marginTop: 28,
+          paddingTop: 22,
+          borderTop: "1px solid rgba(230,198,128,0.15)"
+        }}
+      >
+        <p style={{ fontSize: 13, lineHeight: 1.6, color: "#c7ddd2", margin: "0 0 12px" }}>{preferTalkHeading}</p>
+        <ChatCtaButtons
+          whatsappUrl={whatsappUrl}
+          messengerUrl={emailUrl}
+          whatsappLabel={whatsappLabel}
+          messengerLabel={emailLabel}
+          secondIsEmail
+        />
+      </div>
 
       <style>{`
         @media (max-width: 520px) {
           .enquiry-name-row {
             grid-template-columns: 1fr !important;
           }
+        }
+        .enquiry-submit:hover:not(:disabled) {
+          filter: brightness(1.05);
+          transform: translateY(-1px);
+        }
+        .enquiry-submit:focus-visible,
+        input:focus-visible,
+        select:focus-visible,
+        textarea:focus-visible,
+        button:focus-visible {
+          outline: 2px solid rgba(230,198,128,0.65);
+          outline-offset: 2px;
         }
       `}</style>
     </>

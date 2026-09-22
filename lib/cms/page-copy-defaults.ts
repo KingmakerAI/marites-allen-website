@@ -588,9 +588,9 @@ export const DEFAULT_PAGE_COPY: PageCopy = {
       "Submit your enquiry below. Once received, our team will review your request and contact you by email or WhatsApp to confirm the next steps.",
     formTitle: "Consultation enquiry",
     formBody: "Tell us who you are and what you're looking for. The team will use this to follow up.",
-    submitLabel: "Send Consultation Enquiry →",
+    submitLabel: "Submit Consultation Enquiry →",
     submitHint:
-      "Once you submit your enquiry, our team will be notified. We'll review your request and contact you by email or WhatsApp regarding availability and the next steps.",
+      "Your enquiry will be sent securely to our team. We'll contact you by email or WhatsApp regarding availability and next steps.",
     successTitle: "Enquiry received",
     successBody:
       "Your consultation enquiry has been received successfully. We'll contact you by email or WhatsApp regarding the next steps.",
