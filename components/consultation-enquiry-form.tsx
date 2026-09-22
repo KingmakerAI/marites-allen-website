@@ -14,11 +14,9 @@ type Props = {
   consultationOptions: string[];
   whatsappUrl: string;
   messengerUrl?: string;
-  emailUrl: string;
   preferTalkHeading?: string;
   whatsappLabel?: string;
   messengerLabel?: string;
-  emailLabel?: string;
   submitHint?: string;
 };
 
@@ -54,11 +52,9 @@ export function ConsultationEnquiryForm({
   consultationOptions,
   whatsappUrl,
   messengerUrl = MESSENGER_URL,
-  emailUrl,
   preferTalkHeading = "Prefer to speak with us directly?",
   whatsappLabel = "WhatsApp Enquiry →",
   messengerLabel = "Facebook Messenger →",
-  emailLabel = "Email Our Team →",
   submitHint = "Your enquiry will be sent securely to our team. We'll contact you by email or WhatsApp regarding availability and next steps."
 }: Props) {
   const options = useMemo(() => {
@@ -217,10 +213,8 @@ export function ConsultationEnquiryForm({
         <ChatCtaButtons
           whatsappUrl={whatsappUrl}
           messengerUrl={messengerUrl}
-          emailUrl={emailUrl}
           whatsappLabel="WhatsApp"
           messengerLabel="Messenger"
-          emailLabel="Email"
         />
       </div>
     );
@@ -484,10 +478,8 @@ export function ConsultationEnquiryForm({
         <ChatCtaButtons
           whatsappUrl={whatsappUrl}
           messengerUrl={messengerUrl}
-          emailUrl={emailUrl}
           whatsappLabel={whatsappLabel}
           messengerLabel={messengerLabel}
-          emailLabel={emailLabel}
         />
       </div>
 

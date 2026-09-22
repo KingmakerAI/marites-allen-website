@@ -3,10 +3,8 @@ import type { CSSProperties } from "react";
 type Props = {
   whatsappUrl: string;
   messengerUrl: string;
-  emailUrl: string;
   whatsappLabel?: string;
   messengerLabel?: string;
-  emailLabel?: string;
 };
 
 function WhatsAppIcon({ size = 18 }: { size?: number }) {
@@ -25,28 +23,18 @@ function MessengerIcon({ size = 18 }: { size?: number }) {
   );
 }
 
-function EmailIcon({ size = 17 }: { size?: number }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 24 24" aria-hidden fill="none" stroke="currentColor" strokeWidth="2">
-      <rect x="3" y="5" width="18" height="14" rx="2" />
-      <path d="M3 7l9 7 9-7" />
-    </svg>
-  );
-}
-
 const baseBtn: CSSProperties = {
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
   gap: 9,
   minHeight: 48,
-  padding: "12px 12px",
+  padding: "12px 14px",
   borderRadius: 12,
   fontWeight: 700,
   fontSize: 13,
   letterSpacing: 0.15,
   textDecoration: "none",
-  border: "1px solid rgba(230,198,128,0.28)",
   transition: "transform 160ms ease, box-shadow 160ms ease, filter 160ms ease"
 };
 
@@ -64,10 +52,8 @@ const iconWrap = (bg: string): CSSProperties => ({
 export function ChatCtaButtons({
   whatsappUrl,
   messengerUrl,
-  emailUrl,
   whatsappLabel = "WhatsApp Enquiry →",
-  messengerLabel = "Facebook Messenger →",
-  emailLabel = "Email Our Team →"
+  messengerLabel = "Facebook Messenger →"
 }: Props) {
   return (
     <div className="chat-cta-grid">
@@ -97,49 +83,35 @@ export function ChatCtaButtons({
         className="chat-cta chat-cta--messenger"
         style={{
           ...baseBtn,
-          background: "rgba(255,255,255,0.06)",
-          color: "#f4f0e6",
-          boxShadow: "none"
+          background: "linear-gradient(145deg, #0084ff 0%, #0066d6 55%, #0a4db3 100%)",
+          color: "#fff",
+          border: "1px solid rgba(255,255,255,0.16)",
+          boxShadow: "0 8px 20px rgba(0, 100, 210, 0.24)"
         }}
       >
-        <span style={iconWrap("rgba(230,198,128,0.16)")}>
+        <span style={iconWrap("rgba(255,255,255,0.2)")}>
           <MessengerIcon />
         </span>
         {messengerLabel}
       </a>
 
-      <a
-        href={emailUrl}
-        className="chat-cta chat-cta--email"
-        style={{
-          ...baseBtn,
-          background: "linear-gradient(160deg,#e6c680,#c69a3e)",
-          color: "#143d31",
-          border: "1px solid rgba(255,255,255,0.12)",
-          boxShadow: "0 8px 20px rgba(198, 154, 62, 0.22)"
-        }}
-      >
-        <span style={iconWrap("rgba(20,61,49,0.12)")}>
-          <EmailIcon />
-        </span>
-        {emailLabel}
-      </a>
-
       <style>{`
         .chat-cta-grid {
           display: grid;
-          grid-template-columns: repeat(3, minmax(0, 1fr));
+          grid-template-columns: 1fr 1fr;
           gap: 10px;
         }
         .chat-cta:hover {
           transform: translateY(-1px);
-          filter: brightness(1.04);
+          filter: brightness(1.05);
+        }
+        .chat-cta--whatsapp:hover {
+          box-shadow: 0 10px 24px rgba(37, 211, 102, 0.34);
         }
         .chat-cta--messenger:hover {
-          background: rgba(255,255,255,0.09) !important;
-          border-color: rgba(230,198,128,0.4);
+          box-shadow: 0 10px 24px rgba(0, 100, 210, 0.36);
         }
-        @media (max-width: 720px) {
+        @media (max-width: 520px) {
           .chat-cta-grid {
             grid-template-columns: 1fr;
           }

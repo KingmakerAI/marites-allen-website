@@ -27,10 +27,6 @@ export default async function BookPage() {
   ]);
   const book = pageCopy.book;
   const whatsapp = settings.contact.whatsapp || "639209509390";
-  const teamEmail =
-    settings.contact.email && !/frigga/i.test(settings.contact.email)
-      ? settings.contact.email
-      : "hello@maritesallen.com";
 
   const activeServices = services.filter((s) => s.active !== false).map((s) => s.name);
   const consultationOptions = activeServices.length ? activeServices : FALLBACK_CONSULTATION_OPTIONS;
@@ -116,11 +112,9 @@ export default async function BookPage() {
               consultationOptions={consultationOptions}
               whatsappUrl={`https://wa.me/${whatsapp}`}
               messengerUrl={MESSENGER_URL}
-              emailUrl={`mailto:${teamEmail}`}
               preferTalkHeading={book.preferTalkHeading}
               whatsappLabel={book.whatsappLabel}
               messengerLabel="Facebook Messenger →"
-              emailLabel={book.emailLabel || "Email Our Team →"}
               submitHint={book.submitHint}
             />
           </div>
