@@ -1,8 +1,9 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { COUNTRIES, countryFlag, findCountry, type Country } from "@/lib/countries";
+import { CountryFlag } from "@/components/country-flag";
 import { darkInput, orderedCountries } from "@/components/country-select";
+import { COUNTRIES, findCountry, type Country } from "@/lib/countries";
 
 type Props = {
   countryCode: string;
@@ -55,7 +56,7 @@ export function PhoneInput({
         ref={rootRef}
         style={{
           display: "grid",
-          gridTemplateColumns: "minmax(120px, 135px) 1fr",
+          gridTemplateColumns: "minmax(120px, 140px) 1fr",
           gap: 8
         }}
       >
@@ -77,14 +78,23 @@ export function PhoneInput({
               borderColor: error ? "rgba(255,150,150,0.7)" : darkInput.border
             }}
           >
-            <span style={{ whiteSpace: "nowrap", color: selected ? "#f4f0e6" : "rgba(244,240,230,0.55)" }}>
+            <span
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 6,
+                whiteSpace: "nowrap",
+                color: selected ? "#f4f0e6" : "rgba(244,240,230,0.55)"
+              }}
+            >
               {selected ? (
                 <>
-                  <span aria-hidden>{countryFlag(selected.code)}</span> {selected.dial}
+                  <CountryFlag code={selected.code} title={selected.name} size={16} />
+                  {selected.dial}
                 </>
               ) : (
                 <>
-                  <span aria-hidden>🌐</span> Code
+                  <CountryFlag size={16} /> Code
                 </>
               )}
             </span>
@@ -115,6 +125,7 @@ export function PhoneInput({
                   onChange={(e) => setQuery(e.target.value)}
                   placeholder="Search code..."
                   aria-label="Search calling codes"
+                  className="enquiry-field"
                   style={{ ...darkInput, background: "#0f3126" }}
                 />
               </div>
@@ -144,7 +155,7 @@ export function PhoneInput({
                       textAlign: "left"
                     }}
                   >
-                    <span aria-hidden>{countryFlag(c.code)}</span>
+                    <CountryFlag code={c.code} title={c.name} />
                     <span style={{ flex: 1 }}>{c.name}</span>
                     <span style={{ color: "#e6c680" }}>{c.dial}</span>
                   </button>

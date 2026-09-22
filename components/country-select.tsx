@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { COUNTRIES, countryFlag, findCountry, type Country } from "@/lib/countries";
+import { CountryFlag } from "@/components/country-flag";
+import { COUNTRIES, findCountry, type Country } from "@/lib/countries";
 
 const darkInput = {
   width: "100%",
@@ -83,17 +84,15 @@ export function CountrySelect({ value, onChange, error, id = "country" }: Props)
           borderColor: error ? "rgba(255,150,150,0.7)" : darkInput.border
         }}
       >
-        <span>
+        <span style={{ display: "inline-flex", alignItems: "center", gap: 10, minWidth: 0 }}>
           {selected ? (
             <>
-              <span aria-hidden style={{ marginRight: 8 }}>
-                {countryFlag(selected.code)}
-              </span>
-              {selected.name}
+              <CountryFlag code={selected.code} title={selected.name} />
+              <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{selected.name}</span>
             </>
           ) : (
-            <span style={{ color: "rgba(244,240,230,0.55)" }}>
-              <span aria-hidden>🌐</span> Select your country
+            <span style={{ color: "rgba(244,240,230,0.55)", display: "inline-flex", alignItems: "center", gap: 8 }}>
+              <CountryFlag /> Select your country
             </span>
           )}
         </span>
@@ -123,6 +122,7 @@ export function CountrySelect({ value, onChange, error, id = "country" }: Props)
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Search countries..."
               aria-label="Search countries"
+              className="enquiry-field"
               style={{ ...darkInput, background: "#0f3126" }}
             />
           </div>
@@ -152,7 +152,7 @@ export function CountrySelect({ value, onChange, error, id = "country" }: Props)
                   textAlign: "left"
                 }}
               >
-                <span aria-hidden>{countryFlag(c.code)}</span>
+                <CountryFlag code={c.code} title={c.name} />
                 <span style={{ flex: 1 }}>{c.name}</span>
                 <span style={{ color: "#e6c680", fontSize: 12 }}>{c.dial}</span>
               </button>
