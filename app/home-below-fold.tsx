@@ -281,6 +281,99 @@ export default function HomeBelowFold({
         </div>
       </section>
 
+
+      <section id="frigga" style={{ background: "#fbfaf8", borderTop: "1px solid rgba(0,0,0,0.07)", borderBottom: "1px solid rgba(0,0,0,0.07)" }}>
+        <div
+          style={{
+            maxWidth: 1180,
+            margin: "0 auto",
+            padding: "clamp(34px,4.5vw,54px) clamp(18px,4vw,40px)",
+            display: "flex",
+            flexWrap: "wrap",
+            gap: "clamp(24px,3.5vw,44px)",
+            alignItems: "center"
+          }}
+        >
+          <div style={{ flex: "1 1 360px", minWidth: 300 }}>
+            <Image src="/images/zip/frigga-logo.png" alt="Frigga, Charmed Life" width={132} height={48} style={{ width: "100%", maxWidth: 132, height: "auto", marginBottom: 14 }} />
+            <h2
+              className="font-display"
+              style={{ fontWeight: 400, fontSize: "clamp(21px,2.6vw,30px)", lineHeight: 1.25, margin: "0 0 10px", color: "#1c1c1c" }}
+              {...cms("home.friggaHeading")}
+            >
+              {friggaHeading}
+            </h2>
+            <p
+              style={{ fontSize: 14.5, lineHeight: 1.7, color: "#6b6862", margin: "0 0 16px", maxWidth: 440 }}
+              {...cms("home.friggaBody")}
+            >
+              {friggaBody}
+            </p>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 7, marginBottom: 18 }}>
+              {friggaBrowse.map((b, i) => (
+                <a
+                  key={b.label}
+                  href={"url" in b && b.url ? b.url : "href" in b ? b.href : "#"}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ display: "inline-block", border: "1px solid rgba(0,0,0,0.14)", padding: "7px 14px", fontSize: 12.5, fontWeight: 600, color: "#1c1c1c", background: "#fff" }}
+                  {...cms(`home.friggaBrowse.${i}.label`)}
+                >
+                  {b.label}
+                </a>
+              ))}
+            </div>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 11, alignItems: "center" }}>
+              <a
+                href={friggaShopUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ display: "inline-block", background: "#1c1c1c", color: "#fff", fontSize: 11.5, fontWeight: 600, letterSpacing: 2.5, textTransform: "uppercase", padding: "14px 32px" }}
+                {...cms("home.friggaCta")}
+              >
+                {friggaCta}
+              </a>
+              {friggaRegions.map((r, i) => (
+                <a
+                  key={r.domain}
+                  href={r.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ fontSize: 12.5, fontWeight: 600, color: "#4a4740" }}
+                  {...cms(`home.friggaRegions.${i}.domain`)}
+                >
+                  {r.domain}
+                </a>
+              ))}
+            </div>
+          </div>
+          <div style={{ flex: "0 1 380px", minWidth: 260, perspective: 1400 }}>
+            <a
+              className="om3d"
+              href={friggaShopUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                display: "block",
+                transform: "rotateX(8deg) rotateY(-10deg)",
+                borderRadius: 9,
+                overflow: "hidden",
+                boxShadow: "0 34px 60px -28px rgba(0,0,0,0.4)"
+              }}
+            >
+              <div style={{ display: "flex", alignItems: "center", gap: 7, background: "#3d3835", padding: "7px 11px" }}>
+                <span style={{ width: 8, height: 8, borderRadius: "50%", background: "#ff5f57" }} />
+                <span style={{ width: 8, height: 8, borderRadius: "50%", background: "#febc2e" }} />
+                <span style={{ width: 8, height: 8, borderRadius: "50%", background: "#28c840" }} />
+                <span style={{ flex: 1, background: "rgba(255,255,255,0.12)", borderRadius: 99, padding: "4px 11px", fontSize: 10.5, color: "#d9d2cd", marginLeft: 5 }}>
+                  frigga.com.ph
+                </span>
+              </div>
+              <Image src="/images/zip/frigga-site.webp" alt="The Frigga Charmed Life online store" width={760} height={480} sizes="(max-width: 768px) 100vw, 560px" style={{ display: "block", width: "100%", height: "auto" }} />
+            </a>
+          </div>
+        </div>
+      </section>
       {showServices ? (
       <section id="services" style={{ maxWidth: 820, margin: "0 auto", padding: "clamp(34px,4.5vw,56px) clamp(18px,4vw,40px)" }}>
         <div style={{ textAlign: "center", maxWidth: 640, margin: "0 auto 28px" }}>
@@ -540,98 +633,7 @@ export default function HomeBelowFold({
         </div>
       </section>
 
-      <section style={{ background: "#fbfaf8", borderTop: "1px solid rgba(0,0,0,0.07)", borderBottom: "1px solid rgba(0,0,0,0.07)" }}>
-        <div
-          style={{
-            maxWidth: 1180,
-            margin: "0 auto",
-            padding: "clamp(34px,4.5vw,54px) clamp(18px,4vw,40px)",
-            display: "flex",
-            flexWrap: "wrap",
-            gap: "clamp(24px,3.5vw,44px)",
-            alignItems: "center"
-          }}
-        >
-          <div style={{ flex: "1 1 360px", minWidth: 300 }}>
-            <Image src="/images/zip/frigga-logo.png" alt="Frigga, Charmed Life" width={132} height={48} style={{ width: "100%", maxWidth: 132, height: "auto", marginBottom: 14 }} />
-            <h2
-              className="font-display"
-              style={{ fontWeight: 400, fontSize: "clamp(21px,2.6vw,30px)", lineHeight: 1.25, margin: "0 0 10px", color: "#1c1c1c" }}
-              {...cms("home.friggaHeading")}
-            >
-              {friggaHeading}
-            </h2>
-            <p
-              style={{ fontSize: 14.5, lineHeight: 1.7, color: "#6b6862", margin: "0 0 16px", maxWidth: 440 }}
-              {...cms("home.friggaBody")}
-            >
-              {friggaBody}
-            </p>
-            <div style={{ display: "flex", flexWrap: "wrap", gap: 7, marginBottom: 18 }}>
-              {friggaBrowse.map((b, i) => (
-                <a
-                  key={b.label}
-                  href={"url" in b && b.url ? b.url : "href" in b ? b.href : "#"}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{ display: "inline-block", border: "1px solid rgba(0,0,0,0.14)", padding: "7px 14px", fontSize: 12.5, fontWeight: 600, color: "#1c1c1c", background: "#fff" }}
-                  {...cms(`home.friggaBrowse.${i}.label`)}
-                >
-                  {b.label}
-                </a>
-              ))}
-            </div>
-            <div style={{ display: "flex", flexWrap: "wrap", gap: 11, alignItems: "center" }}>
-              <a
-                href={friggaShopUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{ display: "inline-block", background: "#1c1c1c", color: "#fff", fontSize: 11.5, fontWeight: 600, letterSpacing: 2.5, textTransform: "uppercase", padding: "14px 32px" }}
-                {...cms("home.friggaCta")}
-              >
-                {friggaCta}
-              </a>
-              {friggaRegions.map((r, i) => (
-                <a
-                  key={r.domain}
-                  href={r.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{ fontSize: 12.5, fontWeight: 600, color: "#4a4740" }}
-                  {...cms(`home.friggaRegions.${i}.domain`)}
-                >
-                  {r.domain}
-                </a>
-              ))}
-            </div>
-          </div>
-          <div style={{ flex: "0 1 380px", minWidth: 260, perspective: 1400 }}>
-            <a
-              className="om3d"
-              href={friggaShopUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{
-                display: "block",
-                transform: "rotateX(8deg) rotateY(-10deg)",
-                borderRadius: 9,
-                overflow: "hidden",
-                boxShadow: "0 34px 60px -28px rgba(0,0,0,0.4)"
-              }}
-            >
-              <div style={{ display: "flex", alignItems: "center", gap: 7, background: "#3d3835", padding: "7px 11px" }}>
-                <span style={{ width: 8, height: 8, borderRadius: "50%", background: "#ff5f57" }} />
-                <span style={{ width: 8, height: 8, borderRadius: "50%", background: "#febc2e" }} />
-                <span style={{ width: 8, height: 8, borderRadius: "50%", background: "#28c840" }} />
-                <span style={{ flex: 1, background: "rgba(255,255,255,0.12)", borderRadius: 99, padding: "4px 11px", fontSize: 10.5, color: "#d9d2cd", marginLeft: 5 }}>
-                  frigga.com.ph
-                </span>
-              </div>
-              <Image src="/images/zip/frigga-site.webp" alt="The Frigga Charmed Life online store" width={760} height={480} sizes="(max-width: 768px) 100vw, 560px" style={{ display: "block", width: "100%", height: "auto" }} />
-            </a>
-          </div>
-        </div>
-      </section>
+
 
       <section id="faq" style={{ maxWidth: 820, margin: "0 auto", padding: "clamp(34px,4.5vw,56px) clamp(18px,4vw,40px)" }}>
         <div style={{ textAlign: "center", marginBottom: 40 }}>
