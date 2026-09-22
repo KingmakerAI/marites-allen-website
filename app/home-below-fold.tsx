@@ -36,8 +36,11 @@ export default function HomeBelowFold({
   showServices?: boolean;
 }) {
   const [openFaq, setOpenFaq] = useState(0);
+  const [selectedServiceId, setSelectedServiceId] = useState<string | null>(null);
   const faqSource = faqInput?.length ? faqInput : FAQ_DATA;
   const serviceSource = services?.length ? services : HOME_SERVICES;
+  const selectedService =
+    serviceSource.find((s) => s.id === (selectedServiceId || serviceSource[0]?.id)) || serviceSource[0];
   const quoteSource = testimonials?.length ? testimonials : TESTIMONIALS;
   const aboutKicker = extras?.aboutKicker || "Meet Marites Allen";
   const aboutHeading = extras?.aboutHeading || "The name the world trusts for Feng Shui";
@@ -287,8 +290,8 @@ export default function HomeBelowFold({
       </section>
 
       {showServices ? (
-      <section id="services" style={{ maxWidth: 1180, margin: "0 auto", padding: "clamp(34px,4.5vw,56px) clamp(18px,4vw,40px)" }}>
-        <div style={{ textAlign: "center", maxWidth: 640, margin: "0 auto 26px" }}>
+      <section id="services" style={{ maxWidth: 820, margin: "0 auto", padding: "clamp(34px,4.5vw,56px) clamp(18px,4vw,40px)" }}>
+        <div style={{ textAlign: "center", maxWidth: 640, margin: "0 auto 28px" }}>
           <div
             style={{ fontSize: 12, fontWeight: 700, letterSpacing: 3, textTransform: "uppercase", color: "#4a4740" }}
             {...cms("home.servicesKicker")}
@@ -306,84 +309,153 @@ export default function HomeBelowFold({
             {servicesBody}
           </p>
         </div>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(280px,1fr))", gap: 22 }}>
-          {serviceSource.map((s) => (
-            <div
-              key={s.id}
-              style={{
-                background: "#fffdf8",
-                border: "1px solid rgba(20,61,49,0.1)",
-                borderRadius: 20,
-                padding: 28,
-                display: "flex",
-                flexDirection: "column",
-                boxShadow: "0 12px 30px -18px rgba(20,60,45,0.35)"
-              }}
-            >
-              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                <div
-                  className="font-display"
-                  style={{
-                    width: 52,
-                    height: 52,
-                    borderRadius: "50%",
-                    border: "1.5px solid #c69a3e",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    fontWeight: 700,
-                    fontSize: 20,
-                    color: "#1a4d3e"
-                  }}
-                >
-                  {s.num}
-                </div>
-                {s.popular && (
-                  <span style={{ fontSize: 10, fontWeight: 700, letterSpacing: 0.5, textTransform: "uppercase", color: "#1a4d3e", background: "#e6c680", borderRadius: 99, padding: "3px 10px" }}>
-                    Most booked
-                  </span>
-                )}
-              </div>
-              <h3 className="font-display" style={{ fontWeight: 600, fontSize: 21, color: "#143d31", margin: "18px 0 8px" }}>
-                {s.title}
-              </h3>
-              <p style={{ fontSize: 14, lineHeight: 1.6, color: "#6b7268", margin: "0 0 16px" }}>{s.tagline}</p>
-              {s.includes.length > 0 ? (
-                <>
-                  <div style={{ fontSize: 12, fontWeight: 700, letterSpacing: 0.5, textTransform: "uppercase", color: "#4a4740", marginBottom: 8 }}>
-                    You&apos;ll receive
-                  </div>
-                  <ul style={{ listStyle: "none", padding: 0, margin: "0 0 18px", display: "grid", gap: 7, flex: 1 }}>
-                    {s.includes.map((inc) => (
-                      <li key={inc} style={{ display: "flex", gap: 8, alignItems: "flex-start", fontSize: 13.5, color: "#3d4a41" }}>
-                        <span style={{ color: "#1a4d3e", fontWeight: 700 }}>✓</span>
-                        {inc}
-                      </li>
-                    ))}
-                  </ul>
-                </>
-              ) : (
-                <div style={{ flex: 1 }} />
-              )}
-              <div style={{ fontSize: 13, color: "#6b6862", marginBottom: 16 }}>{s.duration}</div>
-              <Link
-                href={`/book?service=${s.id}`}
+
+        <label
+          style={{
+            display: "block",
+            fontSize: 12,
+            fontWeight: 700,
+            letterSpacing: 1.2,
+            textTransform: "uppercase",
+            color: "#4a4740",
+            marginBottom: 10
+          }}
+        >
+          Choose a consultation
+        </label>
+        <div style={{ position: "relative", marginBottom: 18 }}>
+          <select
+            value={selectedService?.id || ""}
+            onChange={(e) => setSelectedServiceId(e.target.value)}
+            aria-label="Choose a consultation"
+            style={{
+              width: "100%",
+              appearance: "none",
+              WebkitAppearance: "none",
+              background: "#fffdf8",
+              border: "1.5px solid rgba(20,61,49,0.18)",
+              borderRadius: 14,
+              padding: "16px 48px 16px 18px",
+              fontSize: 16,
+              fontWeight: 600,
+              color: "#143d31",
+              fontFamily: "inherit",
+              boxShadow: "0 12px 28px -20px rgba(20,60,45,0.35)",
+              cursor: "pointer"
+            }}
+          >
+            {serviceSource.map((s) => (
+              <option key={s.id} value={s.id}>
+                {s.num}. {s.title}
+                {s.popular ? " · Most booked" : ""}
+              </option>
+            ))}
+          </select>
+          <span
+            aria-hidden
+            style={{
+              position: "absolute",
+              right: 18,
+              top: "50%",
+              transform: "translateY(-50%)",
+              color: "#c69a3e",
+              fontSize: 18,
+              pointerEvents: "none"
+            }}
+          >
+            ▾
+          </span>
+        </div>
+
+        {selectedService ? (
+          <div
+            style={{
+              background: "#fffdf8",
+              border: "1px solid rgba(20,61,49,0.1)",
+              borderRadius: 20,
+              padding: "clamp(22px,3vw,32px)",
+              boxShadow: "0 12px 30px -18px rgba(20,60,45,0.35)"
+            }}
+          >
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 12, alignItems: "center", marginBottom: 14 }}>
+              <div
+                className="font-display"
                 style={{
-                  display: "block",
-                  textAlign: "center",
-                  background: "linear-gradient(160deg,#1a4d3e,#143d31)",
-                  color: "#fff",
-                  fontSize: 15,
+                  width: 48,
+                  height: 48,
+                  borderRadius: "50%",
+                  border: "1.5px solid #c69a3e",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
                   fontWeight: 700,
-                  padding: 13,
-                  borderRadius: 11
+                  fontSize: 18,
+                  color: "#1a4d3e"
                 }}
               >
-                Book this consultation
-              </Link>
+                {selectedService.num}
+              </div>
+              <div style={{ flex: "1 1 200px" }}>
+                <h3 className="font-display" style={{ fontWeight: 600, fontSize: "clamp(20px,2.5vw,26px)", color: "#143d31", margin: 0 }}>
+                  {selectedService.title}
+                </h3>
+                {selectedService.popular ? (
+                  <span
+                    style={{
+                      display: "inline-block",
+                      marginTop: 6,
+                      fontSize: 10,
+                      fontWeight: 700,
+                      letterSpacing: 0.5,
+                      textTransform: "uppercase",
+                      color: "#1a4d3e",
+                      background: "#e6c680",
+                      borderRadius: 99,
+                      padding: "3px 10px"
+                    }}
+                  >
+                    Most booked
+                  </span>
+                ) : null}
+              </div>
             </div>
-          ))}
-        </div>
+            <p style={{ fontSize: 15, lineHeight: 1.65, color: "#6b7268", margin: "0 0 18px" }}>{selectedService.tagline}</p>
+            {selectedService.includes.length > 0 ? (
+              <>
+                <div style={{ fontSize: 12, fontWeight: 700, letterSpacing: 0.5, textTransform: "uppercase", color: "#4a4740", marginBottom: 8 }}>
+                  You&apos;ll receive
+                </div>
+                <ul style={{ listStyle: "none", padding: 0, margin: "0 0 18px", display: "grid", gap: 8 }}>
+                  {selectedService.includes.map((inc) => (
+                    <li key={inc} style={{ display: "flex", gap: 8, alignItems: "flex-start", fontSize: 14, color: "#3d4a41" }}>
+                      <span style={{ color: "#1a4d3e", fontWeight: 700 }}>✓</span>
+                      {inc}
+                    </li>
+                  ))}
+                </ul>
+              </>
+            ) : null}
+            {selectedService.duration ? (
+              <div style={{ fontSize: 13, color: "#6b6862", marginBottom: 18 }}>{selectedService.duration}</div>
+            ) : null}
+            <Link
+              href={`/book?service=${selectedService.id}`}
+              style={{
+                display: "inline-block",
+                textAlign: "center",
+                background: "linear-gradient(160deg,#1a4d3e,#143d31)",
+                color: "#fff",
+                fontSize: 15,
+                fontWeight: 700,
+                padding: "14px 28px",
+                borderRadius: 11
+              }}
+            >
+              Book this consultation
+            </Link>
+          </div>
+        ) : null}
+
         <Link
           href="/book?bespoke=1"
           style={{
