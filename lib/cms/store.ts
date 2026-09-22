@@ -82,7 +82,8 @@ export function readStore(): StoreData {
   const storePath = getStorePath();
   try {
     if (!fs.existsSync(storePath)) return emptyStore();
-    const raw = fs.readFileSync(storePath, "utf8");
+    // Strip UTF-8 BOM (common on OneDrive / Windows editors) so JSON.parse succeeds.
+    const raw = fs.readFileSync(storePath, "utf8").replace(/^\uFEFF/, "");
     const parsed = JSON.parse(raw) as Partial<StoreData>;
     return { ...emptyStore(), ...parsed, signups: parsed.signups || [], pageCopy: parsed.pageCopy || null, bootstrap: parsed.bootstrap || {} };
   } catch {

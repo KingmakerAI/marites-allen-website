@@ -21,7 +21,13 @@ const FAIL_MESSAGE =
 
 export async function submitConsultationEnquiryAction(raw: unknown): Promise<ConsultationEnquiryResult> {
   try {
-    ensureSeeded();
+    try {
+      ensureSeeded();
+    } catch (err) {
+      // Seed/store may be read-only on some hosts; enquiry can still succeed via email.
+      console.error("[consultation-enquiry] ensureSeeded failed", err);
+    }
+
     const parsed = consultationEnquirySchema.safeParse(raw);
     if (!parsed.success) {
       const fieldErrors: Record<string, string> = {};
@@ -65,34 +71,40 @@ export async function submitConsultationEnquiryAction(raw: unknown): Promise<Con
     const submittedAt = new Date().toISOString();
     const marketing = Boolean(marketingConsent);
 
-    saveSignup({
-      kind: "booking-waitlist",
-      email,
-      name: fullName,
-      phone,
-      organization: "",
-      notes: message,
-      source: "book",
-      status: "new",
-      fields: {
-        firstName,
-        lastName,
-        gender: gender || "",
-        country,
-        countryCode,
-        dialCode,
-        consultationType,
-        first_name: firstName,
-        last_name: lastName,
-        consultation_type: consultationType,
-        message,
-        privacy_acknowledged: privacyAcknowledged ? "true" : "false",
-        privacy_acknowledged_at: submittedAt,
-        privacy_policy_version: PRIVACY_POLICY_VERSION,
-        marketing_consent: marketing ? "true" : "false",
-        marketing_consent_at: marketing ? submittedAt : ""
-      }
-    });
+    let saved = false;
+    try {
+      saveSignup({
+        kind: "booking-waitlist",
+        email,
+        name: fullName,
+        phone,
+        organization: "",
+        notes: message,
+        source: "book",
+        status: "new",
+        fields: {
+          firstName,
+          lastName,
+          gender: gender || "",
+          country,
+          countryCode,
+          dialCode,
+          consultationType,
+          first_name: firstName,
+          last_name: lastName,
+          consultation_type: consultationType,
+          message,
+          privacy_acknowledged: privacyAcknowledged ? "true" : "false",
+          privacy_acknowledged_at: submittedAt,
+          privacy_policy_version: PRIVACY_POLICY_VERSION,
+          marketing_consent: marketing ? "true" : "false",
+          marketing_consent_at: marketing ? submittedAt : ""
+        }
+      });
+      saved = true;
+    } catch (err) {
+      console.error("[consultation-enquiry] saveSignup failed", err);
+    }
 
     const notifyPayload = {
       firstName,
@@ -117,10 +129,17 @@ export async function submitConsultationEnquiryAction(raw: unknown): Promise<Con
       notifyCustomerConsultationEnquiry(notifyPayload)
     ]);
 
+    const emailsSent = Boolean(teamOk && customerOk);
+
+    // Succeed if we persisted OR at least one notification went out.
+    if (!saved && !teamOk && !customerOk) {
+      return { ok: false, error: FAIL_MESSAGE };
+    }
+
     return {
       ok: true,
       firstName,
-      emailsSent: Boolean(teamOk && customerOk)
+      emailsSent
     };
   } catch (err) {
     console.error("[consultation-enquiry] submit failed", err);

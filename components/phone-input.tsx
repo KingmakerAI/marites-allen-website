@@ -159,7 +159,6 @@ export function PhoneInput({
               <span style={{ flex: 1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
                 {c.name}
               </span>
-              <span style={{ color: "#e6c680", flexShrink: 0 }}>{c.dial}</span>
             </button>
           ))}
         </div>
@@ -173,7 +172,7 @@ export function PhoneInput({
         ref={rootRef}
         style={{
           display: "grid",
-          gridTemplateColumns: "minmax(120px, 140px) 1fr",
+          gridTemplateColumns: "72px 1fr",
           gap: 8
         }}
       >
@@ -206,14 +205,9 @@ export function PhoneInput({
               }}
             >
               {selected ? (
-                <>
-                  <CountryFlag code={selected.code} title={selected.name} size={16} />
-                  {selected.dial}
-                </>
+                <CountryFlag code={selected.code} title={`${selected.name} ${selected.dial}`} size={18} />
               ) : (
-                <>
-                  <CountryFlag size={16} /> Code
-                </>
+                <CountryFlag size={18} />
               )}
             </span>
             <span style={{ color: "#e6c680", fontSize: 11 }}>▾</span>
@@ -252,7 +246,9 @@ export function isValidNationalPhone(national: string): boolean {
 }
 
 export function formatE164(dial: string, national: string): string {
-  const digits = national.replace(/\D/g, "");
+  let digits = national.replace(/\D/g, "");
   const code = dial.replace(/\D/g, "");
+  // Drop a single leading 0 used in national dialing (e.g. PH 09… → +639…).
+  if (digits.startsWith("0") && digits.length > 1) digits = digits.slice(1);
   return `+${code}${digits}`;
 }
