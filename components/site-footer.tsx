@@ -9,20 +9,57 @@ type Props = {
   variant?: "full" | "minimal";
 };
 
+const headingStyle = {
+  fontSize: 11,
+  fontWeight: 700,
+  letterSpacing: 1.6,
+  textTransform: "uppercase" as const,
+  color: "#e6c680",
+  marginBottom: 10
+};
+
+const linkStyle = {
+  color: "#c7ddd2",
+  fontSize: 13,
+  lineHeight: 1.35,
+  textDecoration: "none" as const
+};
+
+const handleStyle = {
+  color: "#7fa093",
+  fontSize: 12,
+  marginLeft: 6
+};
+
+const DEFAULT_EXPLORE = [
+  { id: "a", label: "About", href: "/about", external: false },
+  { id: "p", label: "Projects", href: "/projects", external: false },
+  { id: "e", label: "Events", href: "/events", external: false },
+  { id: "f", label: "Annual Forecast", href: "/forecast", external: false },
+  { id: "d", label: "Destara AI", href: "/destara", external: false },
+  { id: "m", label: "Media", href: "/media", external: false }
+];
+
 export function SiteFooter({ variant = "full" }: Props) {
   const { settings, nav } = useCms();
   const social = settings?.social?.length ? settings.social : SOCIAL_LINKS;
   const friggaSocial = settings?.friggaSocial?.length ? settings.friggaSocial : FRIGGA_SOCIAL_LINKS;
-  const footerNav = nav.filter((n) => n.location === "footer" && n.enabled);
+  const footerNav = nav.filter((n) => n.location === "footer" && n.enabled && n.href !== "/book");
+  const explore = footerNav.length ? footerNav : DEFAULT_EXPLORE;
   const contact = settings?.contact;
-  const tagline = settings?.general.tagline || "FENG SHUI QUEEN";
+  const tagline = settings?.general.tagline || "THE FENG SHUI QUEEN";
+  const email =
+    contact?.email && !/frigga/i.test(contact.email) ? contact.email : "hello@maritesallen.com";
+  const phone = contact?.phone || "+63 920 950 9390";
+  const phoneSecondary = contact?.phoneSecondary || "+63 939 351 6424";
+  const whatsapp = contact?.whatsapp || "639209509390";
 
   if (variant === "minimal") {
     return (
       <footer
         style={{
           borderTop: "1px solid rgba(20,61,49,0.1)",
-          padding: "28px clamp(18px,4vw,40px)",
+          padding: "18px clamp(18px,4vw,40px)",
           display: "flex",
           flexWrap: "wrap",
           gap: 12,
@@ -31,240 +68,205 @@ export function SiteFooter({ variant = "full" }: Props) {
           background: "#efe8d8"
         }}
       >
-        <div>
-          <BrandLogo height={28} maxWidth={220} />
-        </div>
+        <BrandLogo height={26} maxWidth={200} />
         <div style={{ display: "flex", flexWrap: "wrap", gap: 14, alignItems: "center" }}>
-          {social.slice(0, 4).map((s) => (
-            <a
-              key={s.id}
-              href={s.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{ fontSize: 12, color: "#5f6b60", fontWeight: 600 }}
-            >
-              {s.label}
-            </a>
-          ))}
-          <div style={{ fontSize: 12, color: "#6b6862" }}>© 2026 Marites Allen. All rights reserved.</div>
+          <Link href="/privacy" style={{ fontSize: 12, color: "#5f6b60", fontWeight: 600 }}>
+            Privacy Policy
+          </Link>
+          <Link href="/book" style={{ fontSize: 12, color: "#143d31", fontWeight: 700 }}>
+            Book a Consultation →
+          </Link>
+          <div style={{ fontSize: 12, color: "#6b6862" }}>© 2026 Marites Allen.</div>
         </div>
       </footer>
     );
   }
 
   return (
-    <footer style={{ background: "#0c2a20" }}>
-      <div
-        style={{
-          maxWidth: 1180,
-          margin: "0 auto",
-          padding: "48px clamp(18px,4vw,40px)",
-          display: "flex",
-          flexWrap: "wrap",
-          gap: 32,
-          justifyContent: "space-between"
-        }}
-      >
-        <div style={{ flex: "1 1 260px" }}>
+    <footer className="site-footer" style={{ background: "#0c2a20" }}>
+      <div className="site-footer-main">
+        <div className="site-footer-brand">
           <div
             style={{
               display: "inline-block",
               background: "#efe8d8",
-              borderRadius: 12,
-              padding: "12px 14px 10px"
+              borderRadius: 10,
+              padding: "8px 10px 7px"
             }}
           >
-            <BrandLogo height={34} maxWidth={240} />
+            <BrandLogo height={28} maxWidth={200} />
           </div>
           <div
             style={{
-              fontSize: 12,
-              letterSpacing: 2,
+              fontSize: 11,
+              letterSpacing: 1.8,
               textTransform: "uppercase",
               color: "#e6c680",
-              marginTop: 4
+              marginTop: 8
             }}
           >
             {tagline.toUpperCase()}
           </div>
-          <p style={{ fontSize: 13.5, lineHeight: 1.6, color: "#9fbcb0", margin: "14px 0 0", maxWidth: 280 }}>
-            Official channels for live sessions, forecasts, and brand updates from Marites Allen and Frigga Charmed
-            Life.
+          <p style={{ fontSize: 13, lineHeight: 1.45, color: "#9fbcb0", margin: "8px 0 0", maxWidth: 260 }}>
+            Official channels for Marites Allen and Frigga Charmed Life.
           </p>
         </div>
-        <div style={{ flex: "0 1 auto" }}>
-          <div
-            style={{
-              fontSize: 12,
-              fontWeight: 700,
-              letterSpacing: 1.5,
-              textTransform: "uppercase",
-              color: "#e6c680",
-              marginBottom: 12
-            }}
-          >
-            Explore
-          </div>
-          <div style={{ display: "flex", flexDirection: "column", gap: 9 }}>
-            {(footerNav.length
-              ? footerNav
-              : [
-                  { id: "a", label: "About", href: "/about", external: false },
-                  { id: "p", label: "Projects", href: "/projects", external: false },
-                  { id: "e", label: "Events", href: "/events", external: false },
-                  { id: "f", label: "Annual Forecast", href: "/forecast", external: false },
-                  { id: "d", label: "Destara AI", href: "/destara", external: false },
-                  { id: "m", label: "Media", href: "/media", external: false },
-                  { id: "b", label: "Book Consultation", href: "/book", external: false }
-                ]
-            ).map((item) =>
+
+        <div>
+          <div style={headingStyle}>Explore</div>
+          <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+            {explore.map((item) =>
               item.external || item.href.startsWith("http") ? (
-                <a key={item.id} href={item.href} target="_blank" rel="noopener noreferrer" style={{ color: "#c7ddd2", fontSize: 14 }}>
+                <a key={item.id} href={item.href} target="_blank" rel="noopener noreferrer" style={linkStyle}>
                   {item.label}
                 </a>
               ) : (
-                <Link
-                  key={item.id}
-                  href={item.href}
-                  style={{ color: item.href === "/book" ? "#e6c680" : "#c7ddd2", fontSize: 14, fontWeight: item.href === "/book" ? 700 : 400 }}
-                >
+                <Link key={item.id} href={item.href} className="site-footer-link" style={linkStyle}>
                   {item.label}
                 </Link>
               )
             )}
           </div>
         </div>
-        <div style={{ flex: "0 1 auto" }}>
-          <div
-            style={{
-              fontSize: 12,
-              fontWeight: 700,
-              letterSpacing: 1.5,
-              textTransform: "uppercase",
-              color: "#e6c680",
-              marginBottom: 12
-            }}
-          >
-            Contact
-          </div>
-          <div style={{ display: "flex", flexDirection: "column", gap: 9, fontSize: 14, color: "#c7ddd2" }}>
-            <a href={`mailto:${contact?.email || "sales@frigga.co.uk"}`} style={{ color: "#c7ddd2" }}>
-              {contact?.email || "sales@frigga.co.uk"}
-            </a>
-            <a href={`mailto:${contact?.emailSecondary || "connect@frigga.co.uk"}`} style={{ color: "#c7ddd2" }}>
-              {contact?.emailSecondary || "connect@frigga.co.uk"}
+
+        <div>
+          <div style={headingStyle}>Contact</div>
+          <div style={{ display: "flex", flexDirection: "column", gap: 6, fontSize: 13, color: "#c7ddd2" }}>
+            <a href={`mailto:${email}`} className="site-footer-link" style={linkStyle}>
+              {email}
             </a>
             <a
-              href={`https://wa.me/${contact?.whatsapp || "639209509390"}`}
+              href={`https://wa.me/${whatsapp}`}
               target="_blank"
               rel="noopener noreferrer"
-              style={{ color: "#c7ddd2" }}
+              className="site-footer-link"
+              style={linkStyle}
             >
-              WhatsApp · {contact?.phone || "+63 920 950 9390"}
+              WhatsApp · {phone}
             </a>
-            <span>{contact?.phoneSecondary || "+63 939 351 6424"}</span>
-            <a href="https://destara.app" target="_blank" rel="noopener noreferrer" style={{ color: "#c7ddd2" }}>
+            <span style={{ color: "#c7ddd2" }}>{phoneSecondary}</span>
+            <a
+              href="https://destara.app"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="site-footer-link"
+              style={linkStyle}
+            >
               destara.app
             </a>
-            <div style={{ marginTop: 16 }}>
-              <Link href="/book" style={{ color: "#e6c680", fontWeight: 700, fontSize: 14 }}>
-                Book a consultation →
-              </Link>
-            </div>
           </div>
         </div>
-        <div style={{ flex: "1 1 220px", minWidth: 200 }}>
-          <div
-            style={{
-              fontSize: 12,
-              fontWeight: 700,
-              letterSpacing: 1.5,
-              textTransform: "uppercase",
-              color: "#e6c680",
-              marginBottom: 12
-            }}
-          >
-            Follow Marites
-          </div>
-          <div style={{ display: "flex", flexDirection: "column", gap: 9, fontSize: 14 }}>
+
+        <div>
+          <div style={headingStyle}>Follow Marites</div>
+          <div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
             {social.map((s) => (
               <a
                 key={s.id}
                 href={s.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                style={{ color: "#c7ddd2" }}
+                className="site-footer-link"
+                style={linkStyle}
                 title={s.handle}
               >
                 {s.label}
-                <span style={{ color: "#7fa093", fontSize: 12, marginLeft: 6 }}>{s.handle.startsWith("@") ? s.handle : ""}</span>
+                {s.handle.startsWith("@") ? <span style={handleStyle}>{s.handle}</span> : null}
               </a>
             ))}
           </div>
-          <div
-            style={{
-              fontSize: 12,
-              fontWeight: 700,
-              letterSpacing: 1.5,
-              textTransform: "uppercase",
-              color: "#e6c680",
-              margin: "22px 0 12px"
-            }}
-          >
-            Frigga Charmed Life
-          </div>
-          <div style={{ display: "flex", flexDirection: "column", gap: 9, fontSize: 14 }}>
+
+          <div style={{ ...headingStyle, marginTop: 16, marginBottom: 8, fontSize: 10 }}>Frigga Charmed Life</div>
+          <div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
             {friggaSocial.map((s) => (
               <a
                 key={s.id}
                 href={s.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                style={{ color: "#c7ddd2" }}
+                className="site-footer-link"
+                style={{ ...linkStyle, fontSize: 12.5 }}
                 title={s.handle}
               >
                 {s.label}
-                <span style={{ color: "#7fa093", fontSize: 12, marginLeft: 6 }}>
-                  {s.handle.startsWith("@") ? s.handle : ""}
-                </span>
+                {s.handle.startsWith("@") ? <span style={handleStyle}>{s.handle}</span> : null}
               </a>
             ))}
             <a
               href="https://www.frigga.com.ph"
               target="_blank"
               rel="noopener noreferrer"
-              style={{ color: "#c7ddd2" }}
+              className="site-footer-link"
+              style={{ ...linkStyle, fontSize: 12.5 }}
             >
               Shop · frigga.com.ph
             </a>
           </div>
         </div>
       </div>
-      <div style={{ borderTop: "1px solid rgba(255,255,255,0.1)" }}>
-        <div
-          style={{
-            maxWidth: 1180,
-            margin: "0 auto",
-            padding: "16px clamp(18px,4vw,40px)",
-            fontSize: 12,
-            color: "#7fa093",
-            display: "flex",
-            flexWrap: "wrap",
-            gap: 12,
-            alignItems: "center",
-            justifyContent: "center"
-          }}
-        >
+
+      <div style={{ borderTop: "1px solid rgba(255,255,255,0.08)" }}>
+        <div className="site-footer-bottom">
           <span>© 2026 Marites Allen.</span>
-          <Link href="/privacy" style={{ color: "#c7ddd2" }}>
+          <span style={{ color: "#5f7a6e" }}>·</span>
+          <Link href="/privacy" className="site-footer-link" style={{ color: "#c7ddd2" }}>
             Privacy Policy
           </Link>
           <span style={{ color: "#5f7a6e" }}>·</span>
-          <Link href="/book" style={{ color: "#e6c680" }}>
-            Book a Consultation
+          <Link href="/book" style={{ color: "#e6c680", fontWeight: 700 }}>
+            Book a Consultation →
           </Link>
         </div>
       </div>
+
+      <style>{`
+        .site-footer-main {
+          max-width: 1160px;
+          margin: 0 auto;
+          padding: 48px clamp(16px, 3vw, 36px) 28px;
+          display: grid;
+          grid-template-columns: 1.25fr 0.85fr 1fr 1.15fr;
+          gap: 28px 32px;
+          align-items: start;
+        }
+        .site-footer-bottom {
+          max-width: 1160px;
+          margin: 0 auto;
+          padding: 14px clamp(16px, 3vw, 36px);
+          font-size: 12px;
+          color: #7fa093;
+          display: flex;
+          flex-wrap: wrap;
+          gap: 10px;
+          align-items: center;
+          justify-content: center;
+          min-height: 46px;
+        }
+        .site-footer-link:hover {
+          color: #e6c680 !important;
+        }
+        @media (max-width: 900px) {
+          .site-footer-main {
+            grid-template-columns: 1fr 1fr;
+            padding: 36px 18px 22px;
+            gap: 24px 20px;
+          }
+        }
+        @media (max-width: 560px) {
+          .site-footer-main {
+            grid-template-columns: 1fr;
+            padding: 28px 16px 18px;
+            gap: 22px;
+          }
+          .site-footer-brand {
+            text-align: left;
+          }
+          .site-footer-bottom {
+            justify-content: flex-start;
+            gap: 8px 10px;
+          }
+        }
+      `}</style>
     </footer>
   );
 }
