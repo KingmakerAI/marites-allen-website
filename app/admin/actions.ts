@@ -81,14 +81,14 @@ export async function loginAction(formData: FormData) {
     password: formStr(formData, "password")
   });
   const next = formStr(formData, "next") || "/admin/dashboard";
-  if (!parsed.success) redirect("/admin/login?error=invalid");
+  if (!parsed.success) redirect("/adminportal?error=invalid");
 
   const hdrs = await headers();
   const ip = hdrs.get("x-forwarded-for")?.split(",")[0]?.trim() || hdrs.get("x-real-ip") || "local";
-  if (!rateLimitLogin(fingerprint(ip))) redirect("/admin/login?error=rate");
+  if (!rateLimitLogin(fingerprint(ip))) redirect("/adminportal?error=rate");
 
   const user = authenticate(parsed.data.email, parsed.data.password);
-  if (!user) redirect("/admin/login?error=invalid");
+  if (!user) redirect("/adminportal?error=invalid");
 
   const remember = formBool(formData, "remember");
   const session = createSession(user.id, remember);
@@ -122,11 +122,11 @@ export async function changePasswordAction(formData: FormData) {
   const confirm = formStr(formData, "confirmPassword");
   const hdrs = await headers();
   const ip = hdrs.get("x-forwarded-for")?.split(",")[0]?.trim() || hdrs.get("x-real-ip") || "local";
-  if (!rateLimitLogin(fingerprint(ip + ":change"))) redirect("/admin/login?view=change&error=rate");
-  if (nextPassword.length < 10) redirect("/admin/login?view=change&error=weak");
-  if (nextPassword !== confirm) redirect("/admin/login?view=change&error=mismatch");
+  if (!rateLimitLogin(fingerprint(ip + ":change"))) redirect("/adminportal?view=change&error=rate");
+  if (nextPassword.length < 10) redirect("/adminportal?view=change&error=weak");
+  if (nextPassword !== confirm) redirect("/adminportal?view=change&error=mismatch");
   const user = changePasswordWithCurrent(email, current, nextPassword);
-  if (!user) redirect("/admin/login?view=change&error=invalid");
+  if (!user) redirect("/adminportal?view=change&error=invalid");
   logAudit(user.id, "users", user.id, "password-change");
   await signInUser(user.id);
 }
@@ -135,9 +135,9 @@ export async function requestResetAction(formData: FormData) {
   const email = formStr(formData, "email").toLowerCase();
   const hdrs = await headers();
   const ip = hdrs.get("x-forwarded-for")?.split(",")[0]?.trim() || hdrs.get("x-real-ip") || "local";
-  if (!rateLimitReset(fingerprint(ip + ":reset"))) redirect("/admin/login?view=forgot&error=rate");
+  if (!rateLimitReset(fingerprint(ip + ":reset"))) redirect("/adminportal?view=forgot&error=rate");
   await requestPasswordReset(email);
-  redirect(`/admin/login?view=reset&email=${encodeURIComponent(email)}&sent=1`);
+  redirect(`/adminportal?view=reset&email=${encodeURIComponent(email)}&sent=1`);
 }
 
 export async function completeResetAction(formData: FormData) {
@@ -147,11 +147,11 @@ export async function completeResetAction(formData: FormData) {
   const confirm = formStr(formData, "confirmPassword");
   const hdrs = await headers();
   const ip = hdrs.get("x-forwarded-for")?.split(",")[0]?.trim() || hdrs.get("x-real-ip") || "local";
-  if (!rateLimitReset(fingerprint(ip + ":complete"))) redirect("/admin/login?view=reset&error=rate");
-  if (nextPassword.length < 10) redirect(`/admin/login?view=reset&email=${encodeURIComponent(email)}&error=weak`);
-  if (nextPassword !== confirm) redirect(`/admin/login?view=reset&email=${encodeURIComponent(email)}&error=mismatch`);
+  if (!rateLimitReset(fingerprint(ip + ":complete"))) redirect("/adminportal?view=reset&error=rate");
+  if (nextPassword.length < 10) redirect(`/adminportal?view=reset&email=${encodeURIComponent(email)}&error=weak`);
+  if (nextPassword !== confirm) redirect(`/adminportal?view=reset&email=${encodeURIComponent(email)}&error=mismatch`);
   const user = completePasswordReset(email, code, nextPassword);
-  if (!user) redirect(`/admin/login?view=reset&email=${encodeURIComponent(email)}&error=reset`);
+  if (!user) redirect(`/adminportal?view=reset&email=${encodeURIComponent(email)}&error=reset`);
   logAudit(user.id, "users", user.id, "password-reset");
   await signInUser(user.id);
 }
@@ -171,7 +171,7 @@ export async function logoutAction() {
   const token = jar.get(SESSION_COOKIE)?.value;
   if (token) destroySession(token);
   jar.delete(SESSION_COOKIE);
-  redirect("/admin/login");
+  redirect("/adminportal");
 }
 
 export async function savePageAction(formData: FormData) {

@@ -252,29 +252,10 @@ export function SiteFooter({ variant = "full" }: Props) {
             flexWrap: "wrap",
             gap: 12,
             alignItems: "center",
-            justifyContent: "space-between"
+            justifyContent: "center"
           }}
         >
           <span>© 2026 Marites Allen. Secure booking · SSL encrypted · Free reschedule up to 48h.</span>
-          <Link
-            href="/admin"
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: 6,
-              background: "rgba(255,255,255,0.08)",
-              border: "1px solid rgba(230,198,128,0.3)",
-              color: "#e6c680",
-              fontSize: 11.5,
-              fontWeight: 700,
-              padding: "7px 14px",
-              borderRadius: 8,
-              whiteSpace: "nowrap",
-              flexShrink: 0
-            }}
-          >
-            Admin Login
-          </Link>
         </div>
       </div>
     </footer>

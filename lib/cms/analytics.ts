@@ -135,6 +135,7 @@ export function isBotUserAgent(ua: string) {
 export function shouldSkipPath(pathname: string) {
   return (
     pathname.startsWith("/admin") ||
+    pathname.startsWith("/adminportal") ||
     pathname.startsWith("/api") ||
     pathname.startsWith("/_next") ||
     pathname === "/icon" ||

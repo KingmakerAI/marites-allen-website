@@ -1,6 +1,7 @@
 export const RESERVED_PAGE_SLUGS = new Set([
   "about",
   "admin",
+  "adminportal",
   "api",
   "apple-icon",
   "articles",

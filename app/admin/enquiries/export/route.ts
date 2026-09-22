@@ -11,7 +11,7 @@ function csvCell(value: string) {
 
 export async function GET(request: Request) {
   const user = await getSessionUser();
-  if (!user) return NextResponse.redirect(new URL("/admin/login", request.url));
+  if (!user) return NextResponse.redirect(new URL("/adminportal", request.url));
   ensureSeeded();
 
   const { searchParams } = new URL(request.url);
