@@ -12,12 +12,10 @@ import { MESSENGER_URL, PRIVACY_POLICY_PATH } from "@/lib/privacy";
 type Props = {
   consultationOptions: string[];
   whatsappUrl: string;
-  emailUrl: string;
   messengerUrl?: string;
   preferTalkHeading?: string;
   whatsappLabel?: string;
   messengerLabel?: string;
-  emailLabel?: string;
   submitHint?: string;
   compact?: boolean;
 };
@@ -96,12 +94,10 @@ function ProgressGuide({ compact }: { compact?: boolean }) {
 export function ConsultationEnquiryForm({
   consultationOptions,
   whatsappUrl,
-  emailUrl,
   messengerUrl = MESSENGER_URL,
   preferTalkHeading = "Prefer to speak with us directly?",
   whatsappLabel = "WhatsApp Enquiry →",
   messengerLabel = "Facebook Messenger →",
-  emailLabel = "Email Our Team →",
   submitHint = "Your enquiry will be sent securely to our team. We'll contact you by email or WhatsApp regarding availability and next steps.",
   compact = false
 }: Props) {
@@ -252,10 +248,8 @@ export function ConsultationEnquiryForm({
         <ChatCtaButtons
           whatsappUrl={whatsappUrl}
           messengerUrl={messengerUrl}
-          emailUrl={emailUrl}
           whatsappLabel="WhatsApp"
           messengerLabel="Messenger"
-          emailLabel="Email"
         />
       </div>
     );
@@ -604,10 +598,8 @@ export function ConsultationEnquiryForm({
         <ChatCtaButtons
           whatsappUrl={whatsappUrl}
           messengerUrl={messengerUrl}
-          emailUrl={emailUrl}
           whatsappLabel={whatsappLabel}
           messengerLabel={messengerLabel}
-          emailLabel={emailLabel}
         />
       </div>
 

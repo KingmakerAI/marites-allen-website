@@ -3,7 +3,7 @@ import type { CSSProperties } from "react";
 type Props = {
   whatsappUrl: string;
   messengerUrl: string;
-  emailUrl: string;
+  emailUrl?: string;
   whatsappLabel?: string;
   messengerLabel?: string;
   emailLabel?: string;
@@ -21,15 +21,6 @@ function MessengerIcon({ size = 18 }: { size?: number }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" aria-hidden fill="currentColor">
       <path d="M12 0C5.373 0 0 4.975 0 11.111c0 3.497 1.745 6.616 4.472 8.652V24l4.086-2.242c1.09.301 2.246.464 3.442.464 6.627 0 12-4.974 12-11.111C24 4.975 18.627 0 12 0zm1.193 14.963l-3.056-3.259-5.963 3.259L10.732 8.1l3.131 3.259L19.752 8.1l-6.559 6.863z" />
-    </svg>
-  );
-}
-
-function EmailIcon({ size = 17 }: { size?: number }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 24 24" aria-hidden fill="none" stroke="currentColor" strokeWidth="2">
-      <rect x="3" y="5" width="18" height="14" rx="2" />
-      <path d="M3 7l9 7 9-7" />
     </svg>
   );
 }
@@ -64,10 +55,8 @@ const iconWrap = (bg: string): CSSProperties => ({
 export function ChatCtaButtons({
   whatsappUrl,
   messengerUrl,
-  emailUrl,
   whatsappLabel = "WhatsApp Enquiry →",
-  messengerLabel = "Facebook Messenger →",
-  emailLabel = "Email Our Team →"
+  messengerLabel = "Facebook Messenger →"
 }: Props) {
   return (
     <div className="chat-cta-grid">
@@ -107,26 +96,10 @@ export function ChatCtaButtons({
         {messengerLabel}
       </a>
 
-      <a
-        href={emailUrl}
-        className="chat-cta chat-cta--email"
-        style={{
-          ...baseBtn,
-          background: "linear-gradient(160deg,#e6c680,#c69a3e)",
-          color: "#143d31",
-          boxShadow: "0 8px 20px rgba(198, 154, 62, 0.28)"
-        }}
-      >
-        <span style={iconWrap("rgba(20,61,49,0.12)")}>
-          <EmailIcon />
-        </span>
-        {emailLabel}
-      </a>
-
       <style>{`
         .chat-cta-grid {
           display: grid;
-          grid-template-columns: repeat(3, minmax(0, 1fr));
+          grid-template-columns: 1fr 1fr;
           gap: 10px;
         }
         .chat-cta:hover {
@@ -139,10 +112,7 @@ export function ChatCtaButtons({
         .chat-cta--messenger:hover {
           box-shadow: 0 10px 24px rgba(43, 90, 150, 0.38);
         }
-        .chat-cta--email:hover {
-          box-shadow: 0 10px 24px rgba(198, 154, 62, 0.38);
-        }
-        @media (max-width: 720px) {
+        @media (max-width: 520px) {
           .chat-cta-grid {
             grid-template-columns: 1fr;
           }
