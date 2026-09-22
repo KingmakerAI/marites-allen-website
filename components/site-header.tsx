@@ -70,13 +70,16 @@ export function SiteHeader({ compact = false, bookAsLabel = false }: Props) {
 
   return (
     <header
+      className="site-header"
       style={{
         position: "sticky",
         top: 0,
-        zIndex: 50,
-        background: "rgba(246,241,231,0.92)",
-        backdropFilter: "blur(10px)",
-        borderBottom: "1px solid rgba(20,61,49,0.1)"
+        zIndex: 100,
+        background: "rgba(246,241,231,0.97)",
+        backdropFilter: "blur(12px)",
+        WebkitBackdropFilter: "blur(12px)",
+        borderBottom: "1px solid rgba(20,61,49,0.1)",
+        boxShadow: "0 8px 24px -18px rgba(20,60,45,0.45)"
       }}
     >
       <div

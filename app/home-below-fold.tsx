@@ -8,7 +8,6 @@ import {
   FAQ_DATA,
   FRIGGA_BROWSE,
   FRIGGA_REGIONS,
-  GUARANTEES,
   HOME_SERVICES,
   SPEAKING_CLIENTS,
   TESTIMONIALS
@@ -71,13 +70,6 @@ export default function HomeBelowFold({
   const bespokeKicker = extras?.bespokeKicker || "For estates, family offices & business leaders";
   const bespokeHeading = extras?.bespokeHeading || "Bespoke Advisory, scoped around what you need";
   const bespokeCta = extras?.bespokeCta || "Enquire privately →";
-  const comingKicker = extras?.comingKicker || "Book today";
-  const comingHeading = extras?.comingHeading || "Send your consultation enquiry";
-  const comingBody =
-    extras?.comingBody ||
-    "Tell us what you need and the team will follow up. Payment is arranged privately after your enquiry is reviewed.";
-  const comingCta = extras?.comingCta || "Book Consultation";
-  const guarantees = extras?.guarantees?.length ? extras.guarantees : GUARANTEES;
   const friggaHeading = extras?.friggaHeading || "Shop your lucky items for the year";
   const friggaBody =
     extras?.friggaBody ||
@@ -495,70 +487,6 @@ export default function HomeBelowFold({
         </Link>
       </section>
       ) : null}
-
-      <section id="book" style={{ maxWidth: 1180, margin: "0 auto", padding: "clamp(34px,4.5vw,56px) clamp(18px,4vw,40px)" }}>
-        <div
-          style={{
-            background: "linear-gradient(155deg,#1a4d3e,#0f3126)",
-            borderRadius: 24,
-            padding: "clamp(28px,3.6vw,42px)",
-            textAlign: "center",
-            boxShadow: "0 30px 70px -30px rgba(20,60,45,0.5)"
-          }}
-        >
-          <div style={{ fontSize: 12, fontWeight: 700, letterSpacing: 3, textTransform: "uppercase", color: "#e6c680" }} {...cms("home.comingKicker")}>
-            {comingKicker}
-          </div>
-          <h2
-            className="font-display"
-            style={{ fontWeight: 700, fontSize: "clamp(24px,3vw,32px)", color: "#fff", margin: "10px 0 12px" }}
-            {...cms("home.comingHeading")}
-          >
-            {comingHeading}
-          </h2>
-          <p style={{ fontSize: 16, color: "#c7ddd2", margin: "0 auto 28px", maxWidth: 520 }} {...cms("home.comingBody")}>
-            {comingBody}
-          </p>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: 10, justifyContent: "center", marginBottom: 30 }}>
-            {guarantees.map((g, i) => (
-              <span
-                key={g}
-                style={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: 7,
-                  background: "rgba(255,255,255,0.08)",
-                  border: "1px solid rgba(255,255,255,0.18)",
-                  borderRadius: 99,
-                  padding: "8px 15px",
-                  fontSize: 13,
-                  fontWeight: 600,
-                  color: "#e7efe9"
-                }}
-                {...cms(`home.guarantees.${i}`)}
-              >
-                <span style={{ color: "#e6c680" }}>✦</span>
-                {g}
-              </span>
-            ))}
-          </div>
-          <Link
-            href="/book"
-            style={{
-              display: "inline-block",
-              background: "linear-gradient(160deg,#e6c680,#c69a3e)",
-              color: "#143d31",
-              fontSize: 16,
-              fontWeight: 700,
-              padding: "16px 34px",
-              borderRadius: 12
-            }}
-            {...cms("home.comingCta")}
-          >
-            {comingCta}
-          </Link>
-        </div>
-      </section>
 
       <section id="reviews" style={{ background: "#efe8d8" }}>
         <div style={{ maxWidth: 1180, margin: "0 auto", padding: "clamp(34px,4.5vw,54px) clamp(18px,4vw,40px)" }}>
