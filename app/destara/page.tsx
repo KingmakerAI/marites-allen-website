@@ -160,7 +160,7 @@ export default async function DestaraPage() {
                   }}
                 >
                   <Image
-                    src="/images/zip/destara-app.png"
+                    src="/images/zip/destara-app.webp"
                     alt={destara.caption}
                     width={626}
                     height={1078}
@@ -230,11 +230,11 @@ export default async function DestaraPage() {
 
             <div style={{ padding: "20px 18px 22px" }}>
               <Image
-                src="/images/zip/destara-logo.png"
+                src="/images/zip/destara-logo.webp"
                 alt={destara.title}
                 width={1600}
                 height={515}
-                unoptimized
+                sizes="(max-width: 768px) 90vw, 360px"
                 style={{
                   width: "100%",
                   height: "auto",

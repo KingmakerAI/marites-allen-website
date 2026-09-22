@@ -52,7 +52,7 @@ const EVENTS: CmsEvent[] = [
     liveUrl: "",
     ctaHref: "https://wa.me/639209509390",
     ctaLabel: "Enquire on WhatsApp",
-    imageUrl: "/images/events/meet-greet-cleansing-ritual.png",
+    imageUrl: "/images/events/meet-greet-cleansing-ritual.webp",
     tagline: "Protect your space · Attract positive energy · Create harmony",
     status: "published",
     sortOrder: 1
@@ -72,7 +72,7 @@ const EVENTS: CmsEvent[] = [
     liveUrl: "https://www.facebook.com/MaritesAllen168/",
     ctaHref: "https://www.facebook.com/MaritesAllen168/",
     ctaLabel: "Watch on Facebook",
-    imageUrl: "/images/events/ghost-month-2026-live.png",
+    imageUrl: "/images/events/ghost-month-2026-live.webp",
     tagline: "Be informed. Be prepared. Be protected.",
     status: "published",
     sortOrder: 2
@@ -242,6 +242,12 @@ function ensureLiveDefaults() {
     for (const item of store.navigation || []) {
       if (item.href === "/book" && BOOK_TODAY_LABELS.has(item.label)) {
         item.label = "Coming Soon";
+        changed = true;
+      }
+    }
+    for (const event of store.events || []) {
+      if (event.imageUrl?.endsWith(".png") && event.imageUrl.includes("/images/events/")) {
+        event.imageUrl = event.imageUrl.replace(/\.png$/i, ".webp");
         changed = true;
       }
     }

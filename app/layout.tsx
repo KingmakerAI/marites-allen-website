@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import { Lato, Playfair_Display } from "next/font/google";
 import { CmsProvider } from "@/components/cms-provider";
 import { JsonLd } from "@/components/json-ld";
 import { VisitBeacon } from "@/components/visit-beacon";
@@ -14,6 +15,21 @@ import {
   websiteJsonLd
 } from "@/lib/seo";
 import "./globals.css";
+
+const playfair = Playfair_Display({
+  subsets: ["latin"],
+  weight: ["500", "600", "700", "800"],
+  style: ["normal", "italic"],
+  variable: "--font-playfair",
+  display: "swap"
+});
+
+const lato = Lato({
+  subsets: ["latin"],
+  weight: ["400", "700"],
+  variable: "--font-lato",
+  display: "swap"
+});
 
 export const viewport: Viewport = {
   themeColor: "#143d31",
@@ -100,8 +116,8 @@ export default async function RootLayout({
 }>) {
   const [settings, nav, pageCopy] = await Promise.all([getCachedSettings(), getCachedNav(), getCachedPageCopy()]);
   return (
-    <html lang="en" data-scroll-behavior="smooth">
-      <body>
+    <html lang="en" data-scroll-behavior="smooth" className={`${playfair.variable} ${lato.variable}`}>
+      <body className={lato.className}>
         <JsonLd data={personJsonLd()} />
         <JsonLd data={websiteJsonLd()} />
         <JsonLd data={professionalServiceJsonLd()} />
