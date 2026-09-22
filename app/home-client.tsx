@@ -108,12 +108,12 @@ export default function HomePage({
   const bespokeKicker = extras?.bespokeKicker || "For estates, family offices & business leaders";
   const bespokeHeading = extras?.bespokeHeading || "Bespoke Advisory, scoped around what you need";
   const bespokeCta = extras?.bespokeCta || "Enquire privately →";
-  const comingKicker = extras?.comingKicker || "Book today";
-  const comingHeading = extras?.comingHeading || "Send your consultation enquiry";
+  const comingKicker = extras?.comingKicker || "Coming soon";
+  const comingHeading = extras?.comingHeading || "Online booking is on the way";
   const comingBody =
     extras?.comingBody ||
-    "Tell us what you need and the team will follow up. Payment is arranged privately after your enquiry is reviewed.";
-  const comingCta = extras?.comingCta || "Book Today";
+    "Private consultations with Marites Allen will open for booking here shortly. Enquire anytime while we finish the experience.";
+  const comingCta = extras?.comingCta || "View Coming Soon →";
   const guarantees = extras?.guarantees?.length ? extras.guarantees : GUARANTEES;
   const friggaHeading = extras?.friggaHeading || "Shop your lucky items for the year";
   const friggaBody =
@@ -350,7 +350,7 @@ export default function HomePage({
                         borderRadius: 11
                       }}
                     >
-                      Book Today
+                      Coming Soon
                     </Link>
                   </div>
                 )}
@@ -438,7 +438,7 @@ export default function HomePage({
                   boxShadow: "0 14px 28px -10px rgba(198,154,62,0.6)"
                 }}
               >
-                {hero?.ctaLabel || "Book Today"}
+                {hero?.ctaLabel || "Coming Soon"}
               </Link>
               <button
                 type="button"
@@ -1156,7 +1156,7 @@ export default function HomePage({
               borderRadius: 12
             }}
           >
-            {closing?.ctaLabel || "Book Today"}
+            {closing?.ctaLabel || "Coming Soon"}
           </Link>
         </div>
       </section>

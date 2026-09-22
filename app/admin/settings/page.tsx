@@ -111,11 +111,11 @@ export default async function SettingsPage({
               </label>
               <label>
                 Words on the top booking button
-                <input name="comingSoonLabel" defaultValue={s.business.comingSoonLabel || "Book Today"} />
+                <input name="comingSoonLabel" defaultValue={s.business.comingSoonLabel || "Coming Soon"} />
               </label>
               <label>
                 Words on other booking buttons
-                <input name="bookCtaLabel" defaultValue={s.business.bookCtaLabel || "Book Today"} />
+                <input name="bookCtaLabel" defaultValue={s.business.bookCtaLabel || "Coming Soon"} />
               </label>
             </div>
           </div>

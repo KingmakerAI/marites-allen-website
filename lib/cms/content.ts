@@ -26,7 +26,7 @@ const fallbackSettings = (): SiteSettings => ({
     description: "Private Feng Shui consultations with Marites Allen.",
     ogImage: "/opengraph-image"
   },
-  business: { bookingUrl: "/book", currency: "USD", comingSoonLabel: "Book Today", bookCtaLabel: "Book Today" }
+  business: { bookingUrl: "/book", currency: "USD", comingSoonLabel: "Coming Soon", bookCtaLabel: "Coming Soon" }
 });
 
 export const getCachedSettings = unstable_cache(

@@ -554,11 +554,11 @@ export const DEFAULT_PAGE_COPY: PageCopy = {
     bespokeKicker: "For estates, family offices & business leaders",
     bespokeHeading: "Bespoke Advisory, scoped around what you need",
     bespokeCta: "Enquire privately →",
-    comingKicker: "Book today",
-    comingHeading: "Send your consultation enquiry",
+    comingKicker: "Coming soon",
+    comingHeading: "Online booking is on the way",
     comingBody:
-      "Tell us what you need and the team will follow up. Payment is arranged privately after your enquiry is reviewed.",
-    comingCta: "Book Today",
+      "Private consultations with Marites Allen will open for booking here shortly. Enquire anytime while we finish the experience.",
+    comingCta: "View Coming Soon →",
     guarantees: ["Reply within 1–2 business days", "WhatsApp available", "Offline payment", "One-on-one with Marites"],
     friggaHeading: "Frigga Charmed Life",
     friggaBody: "Wearable Feng Shui charms for love, health, wealth and career.",
@@ -578,13 +578,13 @@ export const DEFAULT_PAGE_COPY: PageCopy = {
     ]
   },
   book: {
-    seoTitle: "Book a Consultation",
+    seoTitle: "Book a Consultation — Coming Soon",
     seoDescription:
-      "Enquire about a private Feng Shui consultation with Marites Allen. The team will follow up — payment is arranged offline.",
-    kicker: "Book today",
+      "Online booking for Marites Allen Feng Shui consultations is coming soon. Send an enquiry and the team will follow up.",
+    kicker: "Coming soon",
     title: "Book Consultation",
     intro:
-      "Send an enquiry with the consultation you need. The team will follow up by email or WhatsApp. Payment is handled offline.",
+      "Online booking is being prepared. Send an enquiry with what you need, and the team will follow up.",
     formTitle: "Consultation enquiry",
     formBody: "Tell us who you are and what you're looking for. The team will use this to follow up.",
     submitLabel: "Send enquiry",

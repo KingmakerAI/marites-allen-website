@@ -185,7 +185,7 @@ export function ForecastClient({ copy }: { copy: ForecastCopy }) {
                   borderRadius: 99
                 }}
               >
-                Book Today
+                Coming Soon
               </Link>
             </div>
           </div>
@@ -749,7 +749,7 @@ export function ForecastClient({ copy }: { copy: ForecastCopy }) {
                   borderRadius: 99
                 }}
               >
-                Book Today →
+                Coming Soon →
               </Link>
             </div>
           </div>
@@ -787,7 +787,7 @@ export function ForecastClient({ copy }: { copy: ForecastCopy }) {
               borderRadius: 12
             }}
           >
-            Book Today
+            Coming Soon
           </Link>
         </div>
       </section>
