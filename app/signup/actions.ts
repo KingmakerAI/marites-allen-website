@@ -3,6 +3,7 @@
 import { headers } from "next/headers";
 import { fingerprint } from "@/lib/cms/crypto";
 import { rateLimitLogin } from "@/lib/cms/auth";
+import { notifyBookingEnquiry } from "@/lib/cms/notify";
 import { saveSignup } from "@/lib/cms/repo";
 import { ensureSeeded } from "@/lib/cms/seed";
 import { signupInputSchema } from "@/lib/cms/validation";
@@ -21,7 +22,7 @@ export async function submitSignupAction(raw: unknown): Promise<SignupResult> {
     return { ok: false, error: "Too many attempts. Please try again later." };
   }
 
-  saveSignup({
+  const saved = saveSignup({
     kind: parsed.data.kind,
     email: parsed.data.email,
     name: parsed.data.name,
@@ -31,5 +32,19 @@ export async function submitSignupAction(raw: unknown): Promise<SignupResult> {
     source: parsed.data.source,
     fields: parsed.data.fields
   });
+
+  if (parsed.data.kind === "booking-waitlist") {
+    void notifyBookingEnquiry({
+      kind: saved.kind,
+      email: saved.email,
+      name: saved.name,
+      phone: saved.phone,
+      organization: saved.organization,
+      notes: saved.notes,
+      source: saved.source,
+      fields: saved.fields
+    });
+  }
+
   return { ok: true };
 }

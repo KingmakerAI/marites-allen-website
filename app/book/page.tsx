@@ -28,7 +28,7 @@ export default async function BookPage() {
   ]);
   const book = pageCopy.book;
   const whatsapp = settings.contact.whatsapp || "639209509390";
-  const email = settings.contact.email || "sales@frigga.co.uk";
+  const messengerUrl = "https://m.me/166449603402286";
   const featured = services.filter((s) => s.featured).slice(0, 3);
   const listed = featured.length ? featured : services.slice(0, 3);
 
@@ -175,7 +175,9 @@ export default async function BookPage() {
                 {book.whatsappLabel}
               </a>
               <a
-                href={`mailto:${email}?subject=Consultation%20enquiry`}
+                href={messengerUrl}
+                target="_blank"
+                rel="noopener noreferrer"
                 style={{
                   display: "inline-block",
                   background: "rgba(255,255,255,0.06)",
@@ -187,7 +189,7 @@ export default async function BookPage() {
                   borderRadius: 10
                 }}
               >
-                Email {email}
+                Message on Messenger
               </a>
             </div>
           </div>
