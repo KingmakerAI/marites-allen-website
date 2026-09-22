@@ -5,6 +5,7 @@ import { useMemo, useState, type FormEvent } from "react";
 import { submitConsultationEnquiryAction } from "@/app/signup/consultation-enquiry";
 import { CountrySelect, darkInput } from "@/components/country-select";
 import { ChatCtaButtons } from "@/components/chat-cta-buttons";
+import { DarkSelect } from "@/components/dark-select";
 import { formatE164, isValidNationalPhone, PhoneInput } from "@/components/phone-input";
 import { FALLBACK_CONSULTATION_OPTIONS, findCountry } from "@/lib/countries";
 import { MESSENGER_URL, PRIVACY_POLICY_PATH } from "@/lib/privacy";
@@ -255,15 +256,6 @@ export function ConsultationEnquiryForm({
     );
   }
 
-  const selectChevron = {
-    appearance: "none" as const,
-    backgroundImage:
-      "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23e6c680' d='M1 1l5 5 5-5'/%3E%3C/svg%3E\")",
-    backgroundRepeat: "no-repeat" as const,
-    backgroundPosition: "right 14px center",
-    paddingRight: 40
-  };
-
   return (
     <>
       <ProgressGuide compact={compact} />
@@ -292,7 +284,9 @@ export function ConsultationEnquiryForm({
                   style={{
                     ...darkInput,
                     padding: compact ? "9px 12px" : darkInput.padding,
-                    borderColor: fieldErrors.firstName ? "rgba(255,150,150,0.7)" : darkInput.border
+                    background: "#214c40",
+                    color: "#f8f4ea",
+                    borderColor: fieldErrors.firstName ? "rgba(255,150,150,0.7)" : "rgba(230,198,128,0.5)"
                   }}
                 />
                 <FieldError message={fieldErrors.firstName} />
@@ -309,7 +303,9 @@ export function ConsultationEnquiryForm({
                   style={{
                     ...darkInput,
                     padding: compact ? "9px 12px" : darkInput.padding,
-                    borderColor: fieldErrors.lastName ? "rgba(255,150,150,0.7)" : darkInput.border
+                    background: "#214c40",
+                    color: "#f8f4ea",
+                    borderColor: fieldErrors.lastName ? "rgba(255,150,150,0.7)" : "rgba(230,198,128,0.5)"
                   }}
                 />
                 <FieldError message={fieldErrors.lastName} />
@@ -331,21 +327,13 @@ export function ConsultationEnquiryForm({
                     Optional
                   </span>
                 </span>
-                <select
-                  name="gender"
+                <DarkSelect
                   value={gender}
-                  onChange={(e) => setGender(e.target.value)}
-                  style={{
-                    ...darkInput,
-                    ...selectChevron,
-                    padding: compact ? "9px 40px 9px 12px" : undefined
-                  }}
-                >
-                  <option value="">Select gender</option>
-                  <option value="Male">Male</option>
-                  <option value="Female">Female</option>
-                  <option value="Prefer not to say">Prefer not to say</option>
-                </select>
+                  placeholder="Select gender"
+                  compact={compact}
+                  options={["Male", "Female", "Prefer not to say"]}
+                  onChange={setGender}
+                />
               </label>
 
               <label style={labelStyle}>
@@ -412,7 +400,9 @@ export function ConsultationEnquiryForm({
                 style={{
                   ...darkInput,
                   padding: compact ? "9px 12px" : darkInput.padding,
-                  borderColor: fieldErrors.email ? "rgba(255,150,150,0.7)" : darkInput.border
+                  background: "#214c40",
+                  color: "#f8f4ea",
+                  borderColor: fieldErrors.email ? "rgba(255,150,150,0.7)" : "rgba(230,198,128,0.5)"
                 }}
               />
               <FieldError message={fieldErrors.email} />
@@ -433,27 +423,21 @@ export function ConsultationEnquiryForm({
           <div style={{ display: "grid", gap: compact ? 10 : 12 }}>
             <label style={labelStyle}>
               What type of consultation are you interested in?
-              <select
-                name="consultationType"
-                required
+              <DarkSelect
                 value={consultationType}
-                onChange={(e) => setConsultationType(e.target.value)}
-                style={{
-                  ...darkInput,
-                  ...selectChevron,
-                  padding: compact ? "9px 40px 9px 12px" : undefined,
-                  borderColor: fieldErrors.consultationType ? "rgba(255,150,150,0.7)" : darkInput.border
+                placeholder="Choose a consultation"
+                compact={compact}
+                error={fieldErrors.consultationType}
+                options={options}
+                onChange={(value) => {
+                  setConsultationType(value);
+                  setFieldErrors((prev) => {
+                    const next = { ...prev };
+                    delete next.consultationType;
+                    return next;
+                  });
                 }}
-              >
-                <option value="" disabled>
-                  Choose a consultation
-                </option>
-                {options.map((opt) => (
-                  <option key={opt} value={opt}>
-                    {opt}
-                  </option>
-                ))}
-              </select>
+              />
               <FieldError message={fieldErrors.consultationType} />
             </label>
 
@@ -471,7 +455,9 @@ export function ConsultationEnquiryForm({
                   resize: "vertical",
                   minHeight: compact ? 72 : 120,
                   padding: compact ? "9px 12px" : darkInput.padding,
-                  borderColor: fieldErrors.message ? "rgba(255,150,150,0.7)" : darkInput.border
+                  background: "#214c40",
+                  color: "#f8f4ea",
+                  borderColor: fieldErrors.message ? "rgba(255,150,150,0.7)" : "rgba(230,198,128,0.5)"
                 }}
               />
               <FieldError message={fieldErrors.message} />

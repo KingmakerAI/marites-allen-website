@@ -5,14 +5,14 @@ import { COUNTRIES, countryFlag, findCountry, type Country } from "@/lib/countri
 
 const darkInput = {
   width: "100%",
-  background: "#1a3d33",
-  border: "1px solid rgba(230,198,128,0.45)",
+  background: "#214c40",
+  border: "1px solid rgba(230,198,128,0.5)",
   borderRadius: 10,
   padding: "11px 13px",
   fontFamily: "Lato, system-ui, sans-serif",
   fontSize: 15,
   lineHeight: 1.4,
-  color: "#f4f0e6",
+  color: "#f8f4ea",
   colorScheme: "dark" as const
 };
 
