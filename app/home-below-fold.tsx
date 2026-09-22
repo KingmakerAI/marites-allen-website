@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   DESTARA_BENEFITS,
   FAQ_DATA,
@@ -36,6 +36,7 @@ export default function HomeBelowFold({
 }) {
   const [openFaq, setOpenFaq] = useState(0);
   const [selectedServiceId, setSelectedServiceId] = useState<string | null>(null);
+  const [servicesMenuOpen, setServicesMenuOpen] = useState(false);
   const faqSource = faqInput?.length ? faqInput : FAQ_DATA;
   const serviceSource = services?.length ? services : HOME_SERVICES;
   const selectedService =
@@ -86,6 +87,15 @@ export default function HomeBelowFold({
       })),
     [openFaq, faqSource]
   );
+
+  useEffect(() => {
+    if (!servicesMenuOpen) return;
+    function onKey(e: KeyboardEvent) {
+      if (e.key === "Escape") setServicesMenuOpen(false);
+    }
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [servicesMenuOpen]);
 
   return (
     <>
@@ -395,100 +405,215 @@ export default function HomeBelowFold({
           </p>
         </div>
 
-        <label
-          style={{
-            display: "block",
-            fontSize: 12,
-            fontWeight: 700,
-            letterSpacing: 1.2,
-            textTransform: "uppercase",
-            color: "#4a4740",
-            marginBottom: 10
-          }}
-        >
-          Choose a consultation
-        </label>
-        <div style={{ position: "relative", marginBottom: 18 }}>
-          <select
-            value={selectedService?.id || ""}
-            onChange={(e) => setSelectedServiceId(e.target.value)}
-            aria-label="Choose a consultation"
-            style={{
-              width: "100%",
-              appearance: "none",
-              WebkitAppearance: "none",
-              background: "#fffdf8",
-              border: "1.5px solid rgba(20,61,49,0.18)",
-              borderRadius: 14,
-              padding: "16px 48px 16px 18px",
-              fontSize: 16,
-              fontWeight: 600,
-              color: "#143d31",
-              fontFamily: "inherit",
-              boxShadow: "0 12px 28px -20px rgba(20,60,45,0.35)",
-              cursor: "pointer"
-            }}
-          >
-            {serviceSource.map((s) => (
-              <option key={s.id} value={s.id}>
-                {s.num}. {s.title}
-                {s.popular ? " · Most booked" : ""}
-              </option>
-            ))}
-          </select>
-          <span
-            aria-hidden
-            style={{
-              position: "absolute",
-              right: 18,
-              top: "50%",
-              transform: "translateY(-50%)",
-              color: "#c69a3e",
-              fontSize: 18,
-              pointerEvents: "none"
-            }}
-          >
-            ▾
-          </span>
-        </div>
-
         {selectedService ? (
           <div
             style={{
               background: "#fffdf8",
-              border: "1px solid rgba(20,61,49,0.1)",
-              borderRadius: 20,
-              padding: "clamp(22px,3vw,32px)",
-              boxShadow: "0 12px 30px -18px rgba(20,60,45,0.35)"
+              border: "1px solid rgba(20,61,49,0.12)",
+              borderRadius: 22,
+              overflow: "hidden",
+              boxShadow: "0 16px 40px -22px rgba(20,60,45,0.4)"
             }}
           >
-            <div style={{ display: "flex", flexWrap: "wrap", gap: 12, alignItems: "center", marginBottom: 14 }}>
+            <div
+              style={{
+                padding: "18px 18px 0",
+                background: "linear-gradient(180deg, rgba(26,77,62,0.06), transparent 70%)"
+              }}
+            >
               <div
-                className="font-display"
                 style={{
-                  width: 48,
-                  height: 48,
-                  borderRadius: "50%",
-                  border: "1.5px solid #c69a3e",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
+                  fontSize: 11,
                   fontWeight: 700,
-                  fontSize: 18,
-                  color: "#1a4d3e"
+                  letterSpacing: 1.4,
+                  textTransform: "uppercase",
+                  color: "#5c6b60",
+                  marginBottom: 8,
+                  paddingLeft: 2
                 }}
               >
-                {selectedService.num}
+                Choose a consultation
               </div>
-              <div style={{ flex: "1 1 200px" }}>
-                <h3 className="font-display" style={{ fontWeight: 600, fontSize: "clamp(20px,2.5vw,26px)", color: "#143d31", margin: 0 }}>
+              <div style={{ position: "relative", marginBottom: servicesMenuOpen ? 10 : 0 }}>
+                <button
+                  type="button"
+                  aria-haspopup="listbox"
+                  aria-expanded={servicesMenuOpen}
+                  aria-label="Choose a consultation"
+                  onClick={() => setServicesMenuOpen((v) => !v)}
+                  style={{
+                    width: "100%",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    gap: 12,
+                    background: "linear-gradient(160deg,#1a4d3e,#143d31)",
+                    color: "#fff",
+                    border: "1px solid rgba(230,198,128,0.35)",
+                    borderRadius: 14,
+                    padding: "15px 16px",
+                    cursor: "pointer",
+                    textAlign: "left",
+                    boxShadow: "0 10px 24px -14px rgba(20,60,45,0.55)",
+                    fontFamily: "inherit"
+                  }}
+                >
+                  <span style={{ display: "flex", alignItems: "center", gap: 12, minWidth: 0 }}>
+                    <span
+                      className="font-display"
+                      style={{
+                        flexShrink: 0,
+                        width: 36,
+                        height: 36,
+                        borderRadius: "50%",
+                        border: "1.5px solid #e6c680",
+                        display: "inline-flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        fontWeight: 700,
+                        fontSize: 13,
+                        color: "#e6c680"
+                      }}
+                    >
+                      {selectedService.num}
+                    </span>
+                    <span style={{ minWidth: 0 }}>
+                      <span
+                        style={{
+                          display: "block",
+                          fontSize: 11,
+                          fontWeight: 700,
+                          letterSpacing: 1.2,
+                          textTransform: "uppercase",
+                          color: "rgba(230,198,128,0.85)",
+                          marginBottom: 2
+                        }}
+                      >
+                        {servicesMenuOpen ? "Tap to close" : "Tap to change"}
+                      </span>
+                      <span
+                        style={{
+                          display: "block",
+                          fontSize: 15,
+                          fontWeight: 700,
+                          color: "#fff",
+                          overflow: "hidden",
+                          textOverflow: "ellipsis",
+                          whiteSpace: "nowrap"
+                        }}
+                      >
+                        {selectedService.title}
+                        {selectedService.popular ? " · Most booked" : ""}
+                      </span>
+                    </span>
+                  </span>
+                  <span
+                    aria-hidden
+                    style={{
+                      flexShrink: 0,
+                      width: 34,
+                      height: 34,
+                      borderRadius: 10,
+                      background: "#e6c680",
+                      color: "#143d31",
+                      display: "inline-flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      fontWeight: 800,
+                      fontSize: 16,
+                      transform: servicesMenuOpen ? "rotate(180deg)" : "none",
+                      transition: "transform 0.18s ease"
+                    }}
+                  >
+                    ▾
+                  </span>
+                </button>
+
+                {servicesMenuOpen ? (
+                  <div
+                    role="listbox"
+                    aria-label="Consultation options"
+                    style={{
+                      marginTop: 8,
+                      maxHeight: 280,
+                      overflowY: "auto",
+                      background: "#0f3126",
+                      border: "1px solid rgba(230,198,128,0.35)",
+                      borderRadius: 14,
+                      boxShadow: "0 18px 40px -18px rgba(0,0,0,0.45)"
+                    }}
+                  >
+                    {serviceSource.map((s) => {
+                      const active = s.id === selectedService.id;
+                      return (
+                        <button
+                          key={s.id}
+                          type="button"
+                          role="option"
+                          aria-selected={active}
+                          onClick={() => {
+                            setSelectedServiceId(s.id);
+                            setServicesMenuOpen(false);
+                          }}
+                          style={{
+                            width: "100%",
+                            display: "flex",
+                            alignItems: "center",
+                            gap: 12,
+                            padding: "12px 14px",
+                            background: active ? "rgba(230,198,128,0.14)" : "transparent",
+                            border: 0,
+                            borderBottom: "1px solid rgba(230,198,128,0.12)",
+                            color: "#f4f0e6",
+                            cursor: "pointer",
+                            textAlign: "left",
+                            fontFamily: "inherit"
+                          }}
+                        >
+                          <span
+                            className="font-display"
+                            style={{
+                              width: 30,
+                              height: 30,
+                              borderRadius: "50%",
+                              border: `1px solid ${active ? "#e6c680" : "rgba(230,198,128,0.35)"}`,
+                              display: "inline-flex",
+                              alignItems: "center",
+                              justifyContent: "center",
+                              fontSize: 12,
+                              fontWeight: 700,
+                              color: "#e6c680",
+                              flexShrink: 0
+                            }}
+                          >
+                            {s.num}
+                          </span>
+                          <span style={{ flex: 1, fontSize: 14, fontWeight: active ? 700 : 600, lineHeight: 1.35 }}>
+                            {s.title}
+                            {s.popular ? (
+                              <span style={{ display: "block", marginTop: 2, fontSize: 11, fontWeight: 700, color: "#e6c680" }}>
+                                Most booked
+                              </span>
+                            ) : null}
+                          </span>
+                          {active ? <span style={{ color: "#e6c680", fontWeight: 700 }}>✓</span> : null}
+                        </button>
+                      );
+                    })}
+                  </div>
+                ) : null}
+              </div>
+            </div>
+
+            <div style={{ padding: "clamp(18px,2.5vw,28px)" }}>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: 12, alignItems: "center", marginBottom: 12 }}>
+                <h3 className="font-display" style={{ fontWeight: 600, fontSize: "clamp(20px,2.5vw,26px)", color: "#143d31", margin: 0, flex: "1 1 200px" }}>
                   {selectedService.title}
                 </h3>
                 {selectedService.popular ? (
                   <span
                     style={{
                       display: "inline-block",
-                      marginTop: 6,
                       fontSize: 10,
                       fontWeight: 700,
                       letterSpacing: 0.5,
@@ -496,48 +621,51 @@ export default function HomeBelowFold({
                       color: "#1a4d3e",
                       background: "#e6c680",
                       borderRadius: 99,
-                      padding: "3px 10px"
+                      padding: "4px 10px"
                     }}
                   >
                     Most booked
                   </span>
                 ) : null}
               </div>
+              <p style={{ fontSize: 15, lineHeight: 1.65, color: "#6b7268", margin: "0 0 18px" }}>{selectedService.tagline}</p>
+              {selectedService.includes.length > 0 ? (
+                <>
+                  <div style={{ fontSize: 12, fontWeight: 700, letterSpacing: 0.5, textTransform: "uppercase", color: "#4a4740", marginBottom: 8 }}>
+                    You&apos;ll receive
+                  </div>
+                  <ul style={{ listStyle: "none", padding: 0, margin: "0 0 18px", display: "grid", gap: 8 }}>
+                    {selectedService.includes.map((inc) => (
+                      <li key={inc} style={{ display: "flex", gap: 8, alignItems: "flex-start", fontSize: 14, color: "#3d4a41" }}>
+                        <span style={{ color: "#1a4d3e", fontWeight: 700 }}>✓</span>
+                        {inc}
+                      </li>
+                    ))}
+                  </ul>
+                </>
+              ) : null}
+              {selectedService.duration ? (
+                <div style={{ fontSize: 13, color: "#6b6862", marginBottom: 18 }}>{selectedService.duration}</div>
+              ) : null}
+              <Link
+                href={`/book?service=${selectedService.id}`}
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  width: "100%",
+                  textAlign: "center",
+                  background: "linear-gradient(160deg,#1a4d3e,#143d31)",
+                  color: "#fff",
+                  fontSize: 15,
+                  fontWeight: 700,
+                  padding: "15px 28px",
+                  borderRadius: 12
+                }}
+              >
+                Book this consultation
+              </Link>
             </div>
-            <p style={{ fontSize: 15, lineHeight: 1.65, color: "#6b7268", margin: "0 0 18px" }}>{selectedService.tagline}</p>
-            {selectedService.includes.length > 0 ? (
-              <>
-                <div style={{ fontSize: 12, fontWeight: 700, letterSpacing: 0.5, textTransform: "uppercase", color: "#4a4740", marginBottom: 8 }}>
-                  You&apos;ll receive
-                </div>
-                <ul style={{ listStyle: "none", padding: 0, margin: "0 0 18px", display: "grid", gap: 8 }}>
-                  {selectedService.includes.map((inc) => (
-                    <li key={inc} style={{ display: "flex", gap: 8, alignItems: "flex-start", fontSize: 14, color: "#3d4a41" }}>
-                      <span style={{ color: "#1a4d3e", fontWeight: 700 }}>✓</span>
-                      {inc}
-                    </li>
-                  ))}
-                </ul>
-              </>
-            ) : null}
-            {selectedService.duration ? (
-              <div style={{ fontSize: 13, color: "#6b6862", marginBottom: 18 }}>{selectedService.duration}</div>
-            ) : null}
-            <Link
-              href={`/book?service=${selectedService.id}`}
-              style={{
-                display: "inline-block",
-                textAlign: "center",
-                background: "linear-gradient(160deg,#1a4d3e,#143d31)",
-                color: "#fff",
-                fontSize: 15,
-                fontWeight: 700,
-                padding: "14px 28px",
-                borderRadius: 11
-              }}
-            >
-              Book this consultation
-            </Link>
           </div>
         ) : null}
 
