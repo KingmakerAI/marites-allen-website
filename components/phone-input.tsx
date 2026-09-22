@@ -162,9 +162,16 @@ export function PhoneInput({
           placeholder="Enter your phone number"
           value={nationalNumber}
           onChange={(e) => onNumberChange(e.target.value.replace(/[^\d\s-]/g, ""))}
+          className="enquiry-field"
           style={{
             ...darkInput,
-            borderColor: error ? "rgba(255,150,150,0.7)" : darkInput.border
+            background: "#214c40",
+            backgroundColor: "#214c40",
+            color: "#f8f4ea",
+            WebkitTextFillColor: "#f8f4ea",
+            caretColor: "#f8f4ea",
+            colorScheme: "dark",
+            borderColor: error ? "rgba(255,150,150,0.7)" : "rgba(230,198,128,0.5)"
           }}
         />
       </div>

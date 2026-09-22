@@ -223,8 +223,12 @@ export function ConsultationEnquiryForm({
   const inputStyle = {
     ...darkInput,
     background: "#214c40",
+    backgroundColor: "#214c40",
     color: "#f8f4ea",
-    borderColor: "rgba(230,198,128,0.5)"
+    borderColor: "rgba(230,198,128,0.5)",
+    colorScheme: "dark" as const,
+    WebkitTextFillColor: "#f8f4ea",
+    caretColor: "#f8f4ea"
   };
 
   return (
@@ -248,6 +252,7 @@ export function ConsultationEnquiryForm({
                   placeholder="Enter your first name"
                   value={firstName}
                   onChange={(e) => setFirstName(e.target.value)}
+                  className="enquiry-field"
                   style={{
                     ...inputStyle,
                     borderColor: fieldErrors.firstName ? "rgba(255,150,150,0.7)" : inputStyle.borderColor
@@ -264,6 +269,7 @@ export function ConsultationEnquiryForm({
                   placeholder="Enter your last name"
                   value={lastName}
                   onChange={(e) => setLastName(e.target.value)}
+                  className="enquiry-field"
                   style={{
                     ...inputStyle,
                     borderColor: fieldErrors.lastName ? "rgba(255,150,150,0.7)" : inputStyle.borderColor
@@ -316,6 +322,7 @@ export function ConsultationEnquiryForm({
                 placeholder="you@example.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                className="enquiry-field"
                 style={{
                   ...inputStyle,
                   borderColor: fieldErrors.email ? "rgba(255,150,150,0.7)" : inputStyle.borderColor
@@ -353,6 +360,7 @@ export function ConsultationEnquiryForm({
                 placeholder="Tell us about your situation, goals, questions, or what you would like guidance on..."
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
+                className="enquiry-field"
                 style={{
                   ...inputStyle,
                   resize: "vertical",
@@ -489,13 +497,31 @@ export function ConsultationEnquiryForm({
             grid-template-columns: 1fr !important;
           }
         }
+        .enquiry-field,
+        .enquiry-field:hover,
+        .enquiry-field:focus,
+        .enquiry-field:active {
+          background-color: #214c40 !important;
+          background: #214c40 !important;
+          color: #f8f4ea !important;
+          -webkit-text-fill-color: #f8f4ea !important;
+          caret-color: #f8f4ea;
+        }
+        .enquiry-field:-webkit-autofill,
+        .enquiry-field:-webkit-autofill:hover,
+        .enquiry-field:-webkit-autofill:focus,
+        .enquiry-field:-webkit-autofill:active {
+          -webkit-text-fill-color: #f8f4ea !important;
+          caret-color: #f8f4ea;
+          box-shadow: 0 0 0 1000px #214c40 inset !important;
+          transition: background-color 99999s ease-out;
+        }
         .enquiry-submit:hover:not(:disabled) {
           filter: brightness(1.05);
           transform: translateY(-1px);
         }
         .enquiry-submit:focus-visible,
-        input:focus-visible,
-        textarea:focus-visible,
+        .enquiry-field:focus-visible,
         button:focus-visible {
           outline: 2px solid rgba(230,198,128,0.65);
           outline-offset: 2px;
