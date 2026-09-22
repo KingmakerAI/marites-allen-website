@@ -68,12 +68,12 @@ export default function HomeBelowFold({
   const bespokeKicker = extras?.bespokeKicker || "For estates, family offices & business leaders";
   const bespokeHeading = extras?.bespokeHeading || "Bespoke Advisory, scoped around what you need";
   const bespokeCta = extras?.bespokeCta || "Enquire privately →";
-  const comingKicker = extras?.comingKicker || "Coming soon";
-  const comingHeading = extras?.comingHeading || "Online booking is on the way";
+  const comingKicker = extras?.comingKicker || "Book today";
+  const comingHeading = extras?.comingHeading || "Send your consultation enquiry";
   const comingBody =
     extras?.comingBody ||
-    "Private consultations with Marites Allen will open for booking here shortly. Enquire anytime while we finish the experience.";
-  const comingCta = extras?.comingCta || "View Coming Soon →";
+    "Tell us what you need and the team will follow up. Payment is arranged privately after your enquiry is reviewed.";
+  const comingCta = extras?.comingCta || "Book Consultation";
   const guarantees = extras?.guarantees?.length ? extras.guarantees : GUARANTEES;
   const friggaHeading = extras?.friggaHeading || "Shop your lucky items for the year";
   const friggaBody =
@@ -690,7 +690,7 @@ export default function HomeBelowFold({
               borderRadius: 12
             }}
           >
-            {closing?.ctaLabel || "Coming Soon"}
+            {closing?.ctaLabel || "Book Consultation"}
           </Link>
         </div>
       </section>

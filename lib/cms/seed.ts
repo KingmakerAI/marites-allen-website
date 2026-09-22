@@ -98,7 +98,7 @@ const DEFAULT_SETTINGS: SiteSettings = {
       "Private Feng Shui consultations, BaZi destiny readings, Destara AI, annual forecasts, and Frigga charms.",
     ogImage: "/opengraph-image"
   },
-  business: { bookingUrl: "/book", currency: "USD", comingSoonLabel: "Coming Soon", bookCtaLabel: "Coming Soon" }
+  business: { bookingUrl: "/book", currency: "USD", comingSoonLabel: "Book Consultation", bookCtaLabel: "Book Consultation" }
 };
 
 const LIVE_HOME_SECTIONS = [
@@ -112,7 +112,7 @@ const LIVE_HOME_SECTIONS = [
       subheading:
         "Private consultations with the Philippines' Feng Shui Queen, the first Filipina Master in Feng Shui, who has advised business leaders and families from Manila to London.",
       highlight: "the Philippines' Feng Shui Queen",
-      ctaLabel: "Coming Soon",
+      ctaLabel: "Book Consultation",
       ctaHref: "/book",
       chartCtaLabel: "Free Destiny Chart",
       rating: "4.9 · 1,200+ verified reviews",
@@ -149,13 +149,22 @@ const LIVE_HOME_SECTIONS = [
     payload: {
       heading: "Ready to align with your best year yet?",
       body: "Join over a million people who have turned to Marites Allen for clarity, prosperity and peace of mind.",
-      ctaLabel: "Coming Soon",
+      ctaLabel: "Book Consultation",
       ctaHref: "/book"
     }
   }
 ];
 
-const BOOK_TODAY_LABELS = new Set(["Book Today", "Book today", "Start booking →", "Book now", "Book a full consultation →", "Book Your Consultation →"]);
+const COMING_SOON_LABELS = new Set([
+  "Coming Soon",
+  "Coming soon",
+  "Book Consultation · Coming Soon →",
+  "Book · Coming Soon",
+  "View Coming Soon →",
+  "Consultation · Coming Soon →",
+  "Book Today",
+  "Book today"
+]);
 
 function ensureLiveDefaults() {
   mutateStoreIfChanged((store) => {
@@ -173,19 +182,19 @@ function ensureLiveDefaults() {
     for (const section of store.homeSections) {
       const payload = section.payload as Record<string, unknown> | undefined;
       if (!payload || typeof payload.ctaLabel !== "string") continue;
-      if (BOOK_TODAY_LABELS.has(payload.ctaLabel)) {
-        payload.ctaLabel = "Coming Soon";
+      if (COMING_SOON_LABELS.has(payload.ctaLabel)) {
+        payload.ctaLabel = "Book Consultation";
         if (!payload.ctaHref) payload.ctaHref = "/book";
         changed = true;
       }
     }
     if (store.settings) {
-      if (!store.settings.business.comingSoonLabel || BOOK_TODAY_LABELS.has(store.settings.business.comingSoonLabel)) {
-        store.settings.business.comingSoonLabel = "Coming Soon";
+      if (!store.settings.business.comingSoonLabel || COMING_SOON_LABELS.has(store.settings.business.comingSoonLabel)) {
+        store.settings.business.comingSoonLabel = "Book Consultation";
         changed = true;
       }
-      if (!store.settings.business.bookCtaLabel || BOOK_TODAY_LABELS.has(store.settings.business.bookCtaLabel)) {
-        store.settings.business.bookCtaLabel = "Coming Soon";
+      if (!store.settings.business.bookCtaLabel || COMING_SOON_LABELS.has(store.settings.business.bookCtaLabel)) {
+        store.settings.business.bookCtaLabel = "Book Consultation";
         changed = true;
       }
       if (!store.settings.business.bookingUrl) {
@@ -203,45 +212,49 @@ function ensureLiveDefaults() {
     } else {
       const home = store.pageCopy.home;
       if (home) {
-        if (!home.comingKicker || /book today/i.test(home.comingKicker)) {
-          home.comingKicker = "Coming soon";
+        if (!home.comingKicker || /coming soon/i.test(home.comingKicker)) {
+          home.comingKicker = "Book today";
           changed = true;
         }
-        if (!home.comingHeading || /send your consultation|book today/i.test(home.comingHeading)) {
-          home.comingHeading = "Online booking is on the way";
+        if (!home.comingHeading || /on the way|coming soon/i.test(home.comingHeading)) {
+          home.comingHeading = "Send your consultation enquiry";
           changed = true;
         }
-        if (!home.comingBody || /payment is arranged|tell us what you need/i.test(home.comingBody)) {
+        if (!home.comingBody || /will open|shortly|finish the experience/i.test(home.comingBody)) {
           home.comingBody =
-            "Private consultations with Marites Allen will open for booking here shortly. Enquire anytime while we finish the experience.";
+            "Tell us what you need and the team will follow up. Payment is arranged privately after your enquiry is reviewed.";
           changed = true;
         }
-        if (!home.comingCta || BOOK_TODAY_LABELS.has(home.comingCta)) {
-          home.comingCta = "View Coming Soon →";
+        if (!home.comingCta || COMING_SOON_LABELS.has(home.comingCta)) {
+          home.comingCta = "Book Consultation";
           changed = true;
         }
       }
       const book = store.pageCopy.book;
       if (book) {
-        if (!book.kicker || /book today/i.test(book.kicker)) {
-          book.kicker = "Coming soon";
+        if (!book.kicker || /coming soon/i.test(book.kicker)) {
+          book.kicker = "Book today";
           changed = true;
         }
-        if (!book.intro || /payment is handled offline|send an enquiry with the consultation/i.test(book.intro)) {
+        if (!book.intro || /being prepared|coming soon/i.test(book.intro)) {
           book.intro =
-            "Online booking is being prepared. Send an enquiry with what you need, and the team will follow up.";
+            "Send an enquiry with the consultation you need. The team will follow up by email or WhatsApp. Payment is handled offline.";
           changed = true;
         }
-        if (!book.seoDescription || /payment is arranged offline/i.test(book.seoDescription)) {
+        if (!book.seoTitle || /coming soon/i.test(book.seoTitle)) {
+          book.seoTitle = "Book a Consultation";
+          changed = true;
+        }
+        if (!book.seoDescription || /coming soon|being prepared/i.test(book.seoDescription)) {
           book.seoDescription =
-            "Online booking for Marites Allen Feng Shui consultations is coming soon. Send an enquiry and the team will follow up.";
+            "Enquire about a private Feng Shui consultation with Marites Allen. The team will follow up — payment is arranged offline.";
           changed = true;
         }
       }
     }
     for (const item of store.navigation || []) {
-      if (item.href === "/book" && BOOK_TODAY_LABELS.has(item.label)) {
-        item.label = "Coming Soon";
+      if (item.href === "/book" && COMING_SOON_LABELS.has(item.label)) {
+        item.label = "Book Consultation";
         changed = true;
       }
     }
@@ -369,7 +382,7 @@ export function ensureSeeded() {
           ["Projects", "/projects", false],
           ["Events", "/events", false],
           ["Media", "/media", false],
-          ["Coming Soon", "/book", false]
+          ["Book Consultation", "/book", false]
         ] as const;
         store.navigation = [
           ...header.map(([label, href, external], i) => ({
@@ -389,7 +402,7 @@ export function ensureSeeded() {
             ["Annual Forecast", "/forecast"],
             ["Destara AI", "/destara"],
             ["Media", "/media"],
-            ["Coming Soon", "/book"]
+            ["Book Consultation", "/book"]
           ].map(([label, href], i) => ({
             id: `nav-f-${i}`,
             label,

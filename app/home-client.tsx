@@ -286,7 +286,7 @@ export default function HomePage({
                         borderRadius: 11
                       }}
                     >
-                      Coming Soon
+                      Book Consultation
                     </Link>
                   </div>
                 )}
@@ -374,7 +374,7 @@ export default function HomePage({
                   boxShadow: "0 14px 28px -10px rgba(198,154,62,0.6)"
                 }}
               >
-                {hero?.ctaLabel || "Coming Soon"}
+                {hero?.ctaLabel || "Book Consultation"}
               </Link>
               <button
                 type="button"
