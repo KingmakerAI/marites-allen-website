@@ -208,7 +208,7 @@ function ensureLiveDefaults() {
       store.pageCopy = mergePageCopy(null);
       changed = true;
     } else {
-      const home = store.pageCopy.homeExtras;
+      const home = store.pageCopy.home;
       if (home) {
         if (!home.comingKicker || /coming soon/i.test(home.comingKicker)) {
           home.comingKicker = "Book today";
