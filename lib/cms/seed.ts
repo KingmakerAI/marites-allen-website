@@ -237,15 +237,18 @@ function ensureLiveDefaults() {
         }
         if (
           !book.intro ||
-          /being prepared|coming soon|payment is handled offline|payment is arranged/i.test(book.intro)
+          /being prepared|coming soon|payment|for your needs/i.test(book.intro)
         ) {
           book.intro =
-            "Tell us what you're looking for and our team will help you find the right consultation for your needs.";
+            "Tell us what you're looking for and our team will help you find the right consultation.";
           changed = true;
         }
-        if (!book.introSecondary || /payment/i.test(book.introSecondary)) {
+        if (
+          !book.introSecondary ||
+          /payment|submit your enquiry below|confirm the next steps/i.test(book.introSecondary)
+        ) {
           book.introSecondary =
-            "Submit your enquiry below. Once received, our team will review your request and contact you by email or WhatsApp to confirm the next steps.";
+            "We'll review your enquiry and contact you by email or WhatsApp regarding availability and next steps.";
           changed = true;
         }
         if (!book.title || /coming soon/i.test(book.title) || book.title === "Book Consultation") {

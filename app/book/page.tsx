@@ -27,6 +27,10 @@ export default async function BookPage() {
   ]);
   const book = pageCopy.book;
   const whatsapp = settings.contact.whatsapp || "639209509390";
+  const teamEmail =
+    settings.contact.email && !/frigga/i.test(settings.contact.email)
+      ? settings.contact.email
+      : "hello@maritesallen.com";
 
   const activeServices = services.filter((s) => s.active !== false).map((s) => s.name);
   const consultationOptions = activeServices.length ? activeServices : FALLBACK_CONSULTATION_OPTIONS;
@@ -42,7 +46,6 @@ export default async function BookPage() {
       <SiteHeader bookAsLabel />
 
       <section
-        className="book-section"
         style={{
           background: "linear-gradient(165deg,#0f3126 0%,#06140f 100%)",
           color: "#fff",
@@ -62,7 +65,7 @@ export default async function BookPage() {
                 background: "#e6c680",
                 borderRadius: 99,
                 padding: "5px 12px",
-                marginBottom: 14
+                marginBottom: 16
               }}
               {...cms("book.kicker")}
             >
@@ -74,7 +77,7 @@ export default async function BookPage() {
                 fontWeight: 700,
                 fontSize: "clamp(28px,3.4vw,42px)",
                 lineHeight: 1.12,
-                margin: "0 0 12px"
+                margin: "0 0 14px"
               }}
               {...cms("book.title")}
             >
@@ -86,7 +89,7 @@ export default async function BookPage() {
                 lineHeight: 1.55,
                 color: "#c7ddd2",
                 margin: "0 0 10px",
-                maxWidth: 420
+                maxWidth: 400
               }}
               {...cms("book.intro")}
             >
@@ -99,7 +102,7 @@ export default async function BookPage() {
                   lineHeight: 1.55,
                   color: "#a8c4b6",
                   margin: 0,
-                  maxWidth: 420
+                  maxWidth: 400
                 }}
                 {...cms("book.introSecondary")}
               >
@@ -113,11 +116,12 @@ export default async function BookPage() {
               consultationOptions={consultationOptions}
               whatsappUrl={`https://wa.me/${whatsapp}`}
               messengerUrl={MESSENGER_URL}
+              emailUrl={`mailto:${teamEmail}`}
               preferTalkHeading={book.preferTalkHeading}
               whatsappLabel={book.whatsappLabel}
               messengerLabel="Facebook Messenger →"
+              emailLabel={book.emailLabel || "Email Our Team →"}
               submitHint={book.submitHint}
-              compact
             />
           </div>
         </div>
@@ -129,23 +133,23 @@ export default async function BookPage() {
         .book-shell {
           max-width: 1180px;
           margin: 0 auto;
-          padding: 28px clamp(16px, 3vw, 36px) 36px;
+          padding: 32px clamp(16px, 3vw, 36px) 40px;
           display: grid;
-          grid-template-columns: minmax(260px, 0.9fr) minmax(0, 1.2fr);
-          gap: clamp(20px, 3vw, 36px);
+          grid-template-columns: minmax(280px, 0.9fr) minmax(0, 1.2fr);
+          gap: clamp(24px, 3.5vw, 40px);
           align-items: start;
           min-height: calc(100vh - 88px);
         }
         .book-intro {
           position: sticky;
           top: 96px;
-          padding-top: 12px;
+          padding-top: 18px;
         }
         .book-form-card {
           background: rgba(255,255,255,0.05);
           border: 1px solid rgba(230,198,128,0.25);
           border-radius: 16px;
-          padding: 18px 18px 16px;
+          padding: 24px 22px 20px;
           text-align: left;
           max-height: calc(100vh - 112px);
           overflow-y: auto;
@@ -170,7 +174,7 @@ export default async function BookPage() {
           .book-form-card {
             max-height: none;
             overflow: visible;
-            padding: 18px 16px;
+            padding: 20px 16px;
           }
         }
       `}</style>

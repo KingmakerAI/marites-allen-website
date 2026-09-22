@@ -14,6 +14,7 @@ export type ConsultationEnquiryNotifyInput = {
   message: string;
   submittedAt: string;
   marketingConsent?: boolean;
+  privacyAcknowledged?: boolean;
 };
 
 function escapeHtml(value: string) {
@@ -128,6 +129,7 @@ export async function notifyTeamConsultationEnquiry(input: ConsultationEnquiryNo
   }
 
   const marketingLine = `Marketing consent: ${input.marketingConsent ? "Yes" : "No"}`;
+  const privacyLine = `Privacy consent: ${input.privacyAcknowledged === false ? "No" : "Yes"}`;
 
   const text = [
     "NEW CONSULTATION ENQUIRY",
@@ -135,7 +137,6 @@ export async function notifyTeamConsultationEnquiry(input: ConsultationEnquiryNo
     "Personal Information",
     `First Name: ${input.firstName}`,
     `Last Name: ${input.lastName}`,
-    `Gender: ${input.gender || "—"}`,
     `Country / Region: ${input.country}`,
     "",
     "Contact Information",
@@ -148,6 +149,7 @@ export async function notifyTeamConsultationEnquiry(input: ConsultationEnquiryNo
     "What they're looking for:",
     input.message,
     "",
+    privacyLine,
     marketingLine,
     "",
     "Submitted:",
@@ -161,11 +163,11 @@ export async function notifyTeamConsultationEnquiry(input: ConsultationEnquiryNo
       <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 18px;">
         ${detailRow("First Name", input.firstName)}
         ${detailRow("Last Name", input.lastName)}
-        ${detailRow("Gender", input.gender || "—")}
         ${detailRow("Country / Region", input.country)}
         ${detailRow("Phone / WhatsApp", input.phone)}
         ${detailRow("Email", input.email)}
         ${detailRow("Consultation", input.consultationType)}
+        ${detailRow("Privacy consent", input.privacyAcknowledged === false ? "No" : "Yes")}
         ${detailRow("Marketing consent", input.marketingConsent ? "Yes" : "No")}
         ${detailRow("Submitted", input.submittedAt)}
       </table>
@@ -195,49 +197,31 @@ export async function notifyCustomerConsultationEnquiry(input: ConsultationEnqui
   }
 
   const text = [
-    `Dear ${input.firstName},`,
+    `Hi ${input.firstName},`,
     "",
-    "Thank you for contacting Marites Allen.",
+    "Thank you for your consultation enquiry.",
     "",
-    "We've received your consultation enquiry and our team has been notified.",
+    "We've received your request and our team will review the details you've provided. We'll contact you by email or WhatsApp regarding availability and the next steps.",
     "",
-    "Your enquiry:",
+    "Warm regards,",
     "",
-    `Consultation: ${input.consultationType}`,
-    "",
-    "What you're looking for:",
-    input.message,
-    "",
-    "Our team will review your request and contact you by email or WhatsApp regarding availability and the next steps.",
-    "",
-    "We look forward to speaking with you.",
-    "",
-    "Marites Allen Team",
-    "The Feng Shui Queen"
+    "Marites Allen Team"
   ].join("\n");
 
   const html = emailShell(
     "Enquiry Received",
     `
-      <p style="margin:0 0 14px;color:#f4f0e6;font-size:16px;">Dear ${escapeHtml(input.firstName)},</p>
-      <p style="margin:0 0 14px;">Thank you for contacting Marites Allen.</p>
-      <p style="margin:0 0 18px;">We've received your consultation enquiry and our team has been notified.</p>
-      <div style="margin:0 0 18px;padding:14px 16px;background:rgba(255,255,255,0.04);border:1px solid rgba(230,198,128,0.2);border-radius:12px;">
-        <div style="font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#e6c680;margin-bottom:10px;">Your enquiry</div>
-        <div style="margin-bottom:10px;"><span style="color:#e6c680;">Consultation:</span> <span style="color:#f4f0e6;">${escapeHtml(input.consultationType)}</span></div>
-        <div style="font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#e6c680;margin:12px 0 8px;">What you're looking for</div>
-        <div style="color:#f4f0e6;font-size:14px;line-height:1.65;white-space:pre-wrap;">${escapeHtml(input.message)}</div>
-      </div>
-      <p style="margin:0 0 14px;">Our team will review your request and contact you by email or WhatsApp regarding availability and the next steps.</p>
-      <p style="margin:0 0 18px;">We look forward to speaking with you.</p>
-      <p style="margin:0;color:#e6c680;font-weight:700;">Marites Allen Team<br /><span style="font-weight:500;color:#c7ddd2;">The Feng Shui Queen</span></p>
+      <p style="margin:0 0 14px;color:#f4f0e6;font-size:16px;">Hi ${escapeHtml(input.firstName)},</p>
+      <p style="margin:0 0 14px;">Thank you for your consultation enquiry.</p>
+      <p style="margin:0 0 18px;">We've received your request and our team will review the details you've provided. We'll contact you by email or WhatsApp regarding availability and the next steps.</p>
+      <p style="margin:0;color:#e6c680;font-weight:700;">Warm regards,<br /><span style="font-weight:500;color:#c7ddd2;">Marites Allen Team</span></p>
     `
   );
 
   return sendResendEmail({
     from,
     to: [input.email],
-    subject: "We've Received Your Consultation Enquiry",
+    subject: "We've received your consultation enquiry — Marites Allen",
     text,
     html
   });

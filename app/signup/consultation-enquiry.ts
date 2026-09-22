@@ -104,6 +104,7 @@ export async function submitConsultationEnquiryAction(raw: unknown): Promise<Con
       consultationType,
       message,
       marketingConsent: marketing,
+      privacyAcknowledged: Boolean(privacyAcknowledged),
       submittedAt: new Date(submittedAt).toLocaleString("en-GB", {
         timeZone: "Asia/Manila",
         dateStyle: "full",

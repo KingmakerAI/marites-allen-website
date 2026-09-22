@@ -583,17 +583,16 @@ export const DEFAULT_PAGE_COPY: PageCopy = {
       "Submit a consultation enquiry with Marites Allen. Our team will review your request and contact you by email or WhatsApp.",
     kicker: "Book today",
     title: "Book a Consultation",
-    intro: "Tell us what you're looking for and our team will help you find the right consultation for your needs.",
+    intro: "Tell us what you're looking for and our team will help you find the right consultation.",
     introSecondary:
-      "Submit your enquiry below. Once received, our team will review your request and contact you by email or WhatsApp to confirm the next steps.",
+      "We'll review your enquiry and contact you by email or WhatsApp regarding availability and next steps.",
     formTitle: "Consultation enquiry",
-    formBody: "Tell us who you are and what you're looking for. The team will use this to follow up.",
+    formBody: "",
     submitLabel: "Submit Consultation Enquiry →",
     submitHint:
       "Your enquiry will be sent securely to our team. We'll contact you by email or WhatsApp regarding availability and next steps.",
     successTitle: "Enquiry received",
-    successBody:
-      "Your consultation enquiry has been received successfully. We'll contact you by email or WhatsApp regarding the next steps.",
+    successBody: "Your consultation enquiry has been received. We'll contact you by email or WhatsApp regarding the next steps.",
     preferTalkHeading: "Prefer to speak with us directly?",
     whatsappLabel: "WhatsApp Enquiry →",
     emailLabel: "Email Our Team →"
