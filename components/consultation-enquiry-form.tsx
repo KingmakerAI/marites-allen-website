@@ -279,9 +279,10 @@ export function ConsultationEnquiryForm({
               </label>
             </div>
 
-            <label style={labelStyle}>
-              Country / Region
+            <div style={labelStyle}>
+              <label htmlFor="country">Country / Region</label>
               <CountrySelect
+                id="country"
                 value={regionCountryCode}
                 onChange={(code) => {
                   setRegionCountryCode(code);
@@ -291,16 +292,17 @@ export function ConsultationEnquiryForm({
                 error={fieldErrors.country}
               />
               <FieldError message={fieldErrors.country} />
-            </label>
+            </div>
           </div>
         </section>
 
         <section style={{ borderTop: "1px solid rgba(230,198,128,0.12)", paddingTop: 22 }}>
           <div style={sectionLabel}>02 · Contact Information</div>
           <div style={{ display: "grid", gap: 14 }}>
-            <label style={labelStyle}>
-              Phone / WhatsApp Number
+            <div style={labelStyle}>
+              <label htmlFor="phone">Phone / WhatsApp Number</label>
               <PhoneInput
+                id="phone"
                 countryCode={phoneCountryCode}
                 nationalNumber={nationalPhone}
                 onCountryChange={(code) => {
@@ -311,7 +313,7 @@ export function ConsultationEnquiryForm({
                 error={fieldErrors.phone}
               />
               <FieldError message={fieldErrors.phone} />
-            </label>
+            </div>
             <label style={labelStyle}>
               Email Address
               <input

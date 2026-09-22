@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { CountryFlag } from "@/components/country-flag";
 import { COUNTRIES, findCountry, type Country } from "@/lib/countries";
 
@@ -26,6 +27,8 @@ function orderedCountries(list: Country[]) {
   return [...priority, ...rest];
 }
 
+type MenuPos = { top: number; left: number; width: number; maxHeight: number };
+
 type Props = {
   value: string;
   onChange: (code: string, country: Country | undefined) => void;
@@ -36,7 +39,10 @@ type Props = {
 export function CountrySelect({ value, onChange, error, id = "country" }: Props) {
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
+  const [menuPos, setMenuPos] = useState<MenuPos | null>(null);
   const rootRef = useRef<HTMLDivElement>(null);
+  const buttonRef = useRef<HTMLButtonElement>(null);
+  const menuRef = useRef<HTMLDivElement>(null);
   const selected = value ? findCountry(value) : undefined;
 
   const filtered = useMemo(() => {
@@ -49,9 +55,43 @@ export function CountrySelect({ value, onChange, error, id = "country" }: Props)
     return base;
   }, [query]);
 
+  useLayoutEffect(() => {
+    if (!open || !buttonRef.current) {
+      setMenuPos(null);
+      return;
+    }
+
+    function place() {
+      const rect = buttonRef.current!.getBoundingClientRect();
+      const gap = 6;
+      const preferred = 280;
+      const spaceBelow = window.innerHeight - rect.bottom - gap - 8;
+      const spaceAbove = rect.top - gap - 8;
+      const openUp = spaceBelow < 180 && spaceAbove > spaceBelow;
+      const maxHeight = Math.min(preferred, Math.max(160, openUp ? spaceAbove : spaceBelow));
+      const top = openUp ? rect.top - gap - maxHeight : rect.bottom + gap;
+      setMenuPos({
+        top: Math.max(8, top),
+        left: rect.left,
+        width: rect.width,
+        maxHeight
+      });
+    }
+
+    place();
+    window.addEventListener("resize", place);
+    window.addEventListener("scroll", place, true);
+    return () => {
+      window.removeEventListener("resize", place);
+      window.removeEventListener("scroll", place, true);
+    };
+  }, [open]);
+
   useEffect(() => {
     function onDoc(e: MouseEvent) {
-      if (!rootRef.current?.contains(e.target as Node)) setOpen(false);
+      const target = e.target as Node;
+      if (rootRef.current?.contains(target) || menuRef.current?.contains(target)) return;
+      setOpen(false);
     }
     function onKey(e: KeyboardEvent) {
       if (e.key === "Escape") setOpen(false);
@@ -64,9 +104,84 @@ export function CountrySelect({ value, onChange, error, id = "country" }: Props)
     };
   }, []);
 
+  const menu =
+    open &&
+    menuPos &&
+    createPortal(
+      <div
+        ref={menuRef}
+        role="listbox"
+        style={{
+          position: "fixed",
+          zIndex: 1000,
+          top: menuPos.top,
+          left: menuPos.left,
+          width: menuPos.width,
+          maxHeight: menuPos.maxHeight,
+          overflow: "hidden",
+          background: "#143d31",
+          border: "1px solid rgba(230,198,128,0.4)",
+          borderRadius: 12,
+          boxShadow: "0 16px 40px rgba(0,0,0,0.35)",
+          display: "flex",
+          flexDirection: "column"
+        }}
+      >
+        <div style={{ padding: 10, borderBottom: "1px solid rgba(230,198,128,0.2)", flexShrink: 0 }}>
+          <input
+            autoFocus
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="Search countries..."
+            aria-label="Search countries"
+            className="enquiry-field"
+            style={{ ...darkInput, background: "#0f3126" }}
+          />
+        </div>
+        <div style={{ overflowY: "auto", WebkitOverflowScrolling: "touch", flex: 1 }}>
+          {filtered.map((c) => (
+            <button
+              key={c.code}
+              type="button"
+              role="option"
+              aria-selected={c.code === value}
+              onClick={() => {
+                onChange(c.code, c);
+                setOpen(false);
+                setQuery("");
+              }}
+              style={{
+                display: "flex",
+                width: "100%",
+                alignItems: "center",
+                gap: 10,
+                padding: "10px 14px",
+                background: c.code === value ? "rgba(230,198,128,0.12)" : "transparent",
+                border: 0,
+                color: "#f4f0e6",
+                fontSize: 14,
+                cursor: "pointer",
+                textAlign: "left"
+              }}
+            >
+              <CountryFlag code={c.code} title={c.name} />
+              <span style={{ flex: 1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                {c.name}
+              </span>
+            </button>
+          ))}
+          {!filtered.length && (
+            <div style={{ padding: 14, color: "#c7ddd2", fontSize: 13 }}>No countries match.</div>
+          )}
+        </div>
+      </div>,
+      document.body
+    );
+
   return (
     <div ref={rootRef} style={{ position: "relative" }}>
       <button
+        ref={buttonRef}
         type="button"
         id={id}
         aria-haspopup="listbox"
@@ -98,71 +213,7 @@ export function CountrySelect({ value, onChange, error, id = "country" }: Props)
         </span>
         <span style={{ color: "#e6c680", fontSize: 12 }}>▾</span>
       </button>
-      {open && (
-        <div
-          role="listbox"
-          style={{
-            position: "absolute",
-            zIndex: 50,
-            left: 0,
-            right: 0,
-            top: "calc(100% + 6px)",
-            maxHeight: 280,
-            overflow: "hidden",
-            background: "#143d31",
-            border: "1px solid rgba(230,198,128,0.4)",
-            borderRadius: 12,
-            boxShadow: "0 16px 40px rgba(0,0,0,0.35)"
-          }}
-        >
-          <div style={{ padding: 10, borderBottom: "1px solid rgba(230,198,128,0.2)" }}>
-            <input
-              autoFocus
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              placeholder="Search countries..."
-              aria-label="Search countries"
-              className="enquiry-field"
-              style={{ ...darkInput, background: "#0f3126" }}
-            />
-          </div>
-          <div style={{ maxHeight: 210, overflowY: "auto", WebkitOverflowScrolling: "touch" }}>
-            {filtered.map((c) => (
-              <button
-                key={c.code}
-                type="button"
-                role="option"
-                aria-selected={c.code === value}
-                onClick={() => {
-                  onChange(c.code, c);
-                  setOpen(false);
-                  setQuery("");
-                }}
-                style={{
-                  display: "flex",
-                  width: "100%",
-                  alignItems: "center",
-                  gap: 10,
-                  padding: "10px 14px",
-                  background: c.code === value ? "rgba(230,198,128,0.12)" : "transparent",
-                  border: 0,
-                  color: "#f4f0e6",
-                  fontSize: 14,
-                  cursor: "pointer",
-                  textAlign: "left"
-                }}
-              >
-                <CountryFlag code={c.code} title={c.name} />
-                <span style={{ flex: 1 }}>{c.name}</span>
-                <span style={{ color: "#e6c680", fontSize: 12 }}>{c.dial}</span>
-              </button>
-            ))}
-            {!filtered.length && (
-              <div style={{ padding: 14, color: "#c7ddd2", fontSize: 13 }}>No countries match.</div>
-            )}
-          </div>
-        </div>
-      )}
+      {menu}
     </div>
   );
 }

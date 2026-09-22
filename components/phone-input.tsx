@@ -1,9 +1,12 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { CountryFlag } from "@/components/country-flag";
 import { darkInput, orderedCountries } from "@/components/country-select";
 import { COUNTRIES, findCountry, type Country } from "@/lib/countries";
+
+type MenuPos = { top: number; left: number; width: number; maxHeight: number };
 
 type Props = {
   countryCode: string;
@@ -24,7 +27,10 @@ export function PhoneInput({
 }: Props) {
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
+  const [menuPos, setMenuPos] = useState<MenuPos | null>(null);
   const rootRef = useRef<HTMLDivElement>(null);
+  const buttonRef = useRef<HTMLButtonElement>(null);
+  const menuRef = useRef<HTMLDivElement>(null);
   const selected = countryCode ? findCountry(countryCode) : undefined;
 
   const filtered = useMemo(() => {
@@ -35,9 +41,48 @@ export function PhoneInput({
     );
   }, [query]);
 
+  useLayoutEffect(() => {
+    if (!open || !buttonRef.current) {
+      setMenuPos(null);
+      return;
+    }
+
+    function place() {
+      const rect = buttonRef.current!.getBoundingClientRect();
+      const gap = 6;
+      const menuWidth = Math.min(300, Math.max(rect.width, 260), window.innerWidth - 24);
+      const preferred = 280;
+      const spaceBelow = window.innerHeight - rect.bottom - gap - 8;
+      const spaceAbove = rect.top - gap - 8;
+      const openUp = spaceBelow < 180 && spaceAbove > spaceBelow;
+      const maxHeight = Math.min(preferred, Math.max(160, openUp ? spaceAbove : spaceBelow));
+      const top = openUp ? rect.top - gap - maxHeight : rect.bottom + gap;
+      let left = rect.left;
+      if (left + menuWidth > window.innerWidth - 12) {
+        left = Math.max(12, window.innerWidth - menuWidth - 12);
+      }
+      setMenuPos({
+        top: Math.max(8, top),
+        left,
+        width: menuWidth,
+        maxHeight
+      });
+    }
+
+    place();
+    window.addEventListener("resize", place);
+    window.addEventListener("scroll", place, true);
+    return () => {
+      window.removeEventListener("resize", place);
+      window.removeEventListener("scroll", place, true);
+    };
+  }, [open]);
+
   useEffect(() => {
     function onDoc(e: MouseEvent) {
-      if (!rootRef.current?.contains(e.target as Node)) setOpen(false);
+      const target = e.target as Node;
+      if (rootRef.current?.contains(target) || menuRef.current?.contains(target)) return;
+      setOpen(false);
     }
     function onKey(e: KeyboardEvent) {
       if (e.key === "Escape") setOpen(false);
@@ -49,6 +94,78 @@ export function PhoneInput({
       document.removeEventListener("keydown", onKey);
     };
   }, []);
+
+  const menu =
+    open &&
+    menuPos &&
+    createPortal(
+      <div
+        ref={menuRef}
+        role="listbox"
+        style={{
+          position: "fixed",
+          zIndex: 1000,
+          top: menuPos.top,
+          left: menuPos.left,
+          width: menuPos.width,
+          maxHeight: menuPos.maxHeight,
+          overflow: "hidden",
+          background: "#143d31",
+          border: "1px solid rgba(230,198,128,0.4)",
+          borderRadius: 12,
+          boxShadow: "0 16px 40px rgba(0,0,0,0.35)",
+          display: "flex",
+          flexDirection: "column"
+        }}
+      >
+        <div style={{ padding: 10, borderBottom: "1px solid rgba(230,198,128,0.2)", flexShrink: 0 }}>
+          <input
+            autoFocus
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="Search code..."
+            aria-label="Search calling codes"
+            className="enquiry-field"
+            style={{ ...darkInput, background: "#0f3126" }}
+          />
+        </div>
+        <div style={{ overflowY: "auto", WebkitOverflowScrolling: "touch", flex: 1 }}>
+          {filtered.map((c) => (
+            <button
+              key={`${c.code}-${c.dial}`}
+              type="button"
+              role="option"
+              aria-selected={c.code === countryCode}
+              onClick={() => {
+                onCountryChange(c.code, c);
+                setOpen(false);
+                setQuery("");
+              }}
+              style={{
+                display: "flex",
+                width: "100%",
+                alignItems: "center",
+                gap: 10,
+                padding: "10px 14px",
+                background: c.code === countryCode ? "rgba(230,198,128,0.12)" : "transparent",
+                border: 0,
+                color: "#f4f0e6",
+                fontSize: 13,
+                cursor: "pointer",
+                textAlign: "left"
+              }}
+            >
+              <CountryFlag code={c.code} title={c.name} />
+              <span style={{ flex: 1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                {c.name}
+              </span>
+              <span style={{ color: "#e6c680", flexShrink: 0 }}>{c.dial}</span>
+            </button>
+          ))}
+        </div>
+      </div>,
+      document.body
+    );
 
   return (
     <div>
@@ -62,6 +179,7 @@ export function PhoneInput({
       >
         <div style={{ position: "relative" }}>
           <button
+            ref={buttonRef}
             type="button"
             aria-label="Country calling code"
             aria-haspopup="listbox"
@@ -100,69 +218,7 @@ export function PhoneInput({
             </span>
             <span style={{ color: "#e6c680", fontSize: 11 }}>▾</span>
           </button>
-          {open && (
-            <div
-              role="listbox"
-              style={{
-                position: "absolute",
-                zIndex: 50,
-                left: 0,
-                width: 280,
-                maxWidth: "min(280px, calc(100vw - 48px))",
-                top: "calc(100% + 6px)",
-                maxHeight: 280,
-                overflow: "hidden",
-                background: "#143d31",
-                border: "1px solid rgba(230,198,128,0.4)",
-                borderRadius: 12,
-                boxShadow: "0 16px 40px rgba(0,0,0,0.35)"
-              }}
-            >
-              <div style={{ padding: 10, borderBottom: "1px solid rgba(230,198,128,0.2)" }}>
-                <input
-                  autoFocus
-                  value={query}
-                  onChange={(e) => setQuery(e.target.value)}
-                  placeholder="Search code..."
-                  aria-label="Search calling codes"
-                  className="enquiry-field"
-                  style={{ ...darkInput, background: "#0f3126" }}
-                />
-              </div>
-              <div style={{ maxHeight: 210, overflowY: "auto", WebkitOverflowScrolling: "touch" }}>
-                {filtered.map((c) => (
-                  <button
-                    key={`${c.code}-${c.dial}`}
-                    type="button"
-                    role="option"
-                    aria-selected={c.code === countryCode}
-                    onClick={() => {
-                      onCountryChange(c.code, c);
-                      setOpen(false);
-                      setQuery("");
-                    }}
-                    style={{
-                      display: "flex",
-                      width: "100%",
-                      alignItems: "center",
-                      gap: 10,
-                      padding: "10px 14px",
-                      background: c.code === countryCode ? "rgba(230,198,128,0.12)" : "transparent",
-                      border: 0,
-                      color: "#f4f0e6",
-                      fontSize: 13,
-                      cursor: "pointer",
-                      textAlign: "left"
-                    }}
-                  >
-                    <CountryFlag code={c.code} title={c.name} />
-                    <span style={{ flex: 1 }}>{c.name}</span>
-                    <span style={{ color: "#e6c680" }}>{c.dial}</span>
-                  </button>
-                ))}
-              </div>
-            </div>
-          )}
+          {menu}
         </div>
         <input
           id={id}
