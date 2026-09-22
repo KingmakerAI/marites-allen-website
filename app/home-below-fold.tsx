@@ -68,9 +68,6 @@ export default function HomeBelowFold({
   const servicesBody =
     extras?.servicesBody ||
     "Every session is one-on-one with Marites, online or in person. Each one includes a personalized analysis, a written action plan, and a follow-up window.";
-  const bespokeKicker = extras?.bespokeKicker || "For estates, family offices & business leaders";
-  const bespokeHeading = extras?.bespokeHeading || "Bespoke Advisory, scoped around what you need";
-  const bespokeCta = extras?.bespokeCta || "Enquire privately →";
   const friggaHeading = extras?.friggaHeading || "Shop your lucky items for the year";
   const friggaBody =
     extras?.friggaBody ||
@@ -385,8 +382,8 @@ export default function HomeBelowFold({
         </div>
       </section>
       {showServices ? (
-      <section id="services" style={{ maxWidth: 820, margin: "0 auto", padding: "clamp(34px,4.5vw,56px) clamp(18px,4vw,40px)" }}>
-        <div style={{ textAlign: "center", maxWidth: 640, margin: "0 auto 28px" }}>
+      <section id="services" style={{ maxWidth: 760, margin: "0 auto", padding: "clamp(34px,4.5vw,56px) clamp(18px,4vw,40px)" }}>
+        <div style={{ textAlign: "center", maxWidth: 600, margin: "0 auto 26px" }}>
           <div
             style={{ fontSize: 12, fontWeight: 700, letterSpacing: 3, textTransform: "uppercase", color: "#4a4740" }}
             {...cms("home.servicesKicker")}
@@ -408,244 +405,208 @@ export default function HomeBelowFold({
         {selectedService ? (
           <div
             style={{
-              background: "#fffdf8",
               border: "1px solid rgba(20,61,49,0.12)",
-              borderRadius: 22,
-              overflow: "hidden",
-              boxShadow: "0 16px 40px -22px rgba(20,60,45,0.4)"
+              borderRadius: 20,
+              overflow: "visible",
+              background: "#fffdf8",
+              boxShadow: "0 18px 44px -24px rgba(20,60,45,0.45)"
             }}
           >
             <div
               style={{
-                padding: "18px 18px 0",
-                background: "linear-gradient(180deg, rgba(26,77,62,0.06), transparent 70%)"
+                background: "linear-gradient(155deg,#1a4d3e 0%,#0f3126 100%)",
+                padding: "20px clamp(16px,3vw,24px)",
+                borderRadius: "20px 20px 0 0",
+                position: "relative"
               }}
             >
               <div
                 style={{
                   fontSize: 11,
                   fontWeight: 700,
-                  letterSpacing: 1.4,
+                  letterSpacing: 1.6,
                   textTransform: "uppercase",
-                  color: "#5c6b60",
-                  marginBottom: 8,
-                  paddingLeft: 2
+                  color: "rgba(230,198,128,0.85)",
+                  marginBottom: 12
                 }}
               >
                 Choose a consultation
               </div>
-              <div style={{ position: "relative", marginBottom: servicesMenuOpen ? 10 : 0 }}>
-                <button
-                  type="button"
-                  aria-haspopup="listbox"
-                  aria-expanded={servicesMenuOpen}
-                  aria-label="Choose a consultation"
-                  onClick={() => setServicesMenuOpen((v) => !v)}
-                  style={{
-                    width: "100%",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                    gap: 12,
-                    background: "linear-gradient(160deg,#1a4d3e,#143d31)",
-                    color: "#fff",
-                    border: "1px solid rgba(230,198,128,0.35)",
-                    borderRadius: 14,
-                    padding: "15px 16px",
-                    cursor: "pointer",
-                    textAlign: "left",
-                    boxShadow: "0 10px 24px -14px rgba(20,60,45,0.55)",
-                    fontFamily: "inherit"
-                  }}
-                >
-                  <span style={{ display: "flex", alignItems: "center", gap: 12, minWidth: 0 }}>
-                    <span
-                      className="font-display"
-                      style={{
-                        flexShrink: 0,
-                        width: 36,
-                        height: 36,
-                        borderRadius: "50%",
-                        border: "1.5px solid #e6c680",
-                        display: "inline-flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        fontWeight: 700,
-                        fontSize: 13,
-                        color: "#e6c680"
-                      }}
-                    >
-                      {selectedService.num}
-                    </span>
-                    <span style={{ minWidth: 0 }}>
-                      <span
-                        style={{
-                          display: "block",
-                          fontSize: 11,
-                          fontWeight: 700,
-                          letterSpacing: 1.2,
-                          textTransform: "uppercase",
-                          color: "rgba(230,198,128,0.85)",
-                          marginBottom: 2
-                        }}
-                      >
-                        {servicesMenuOpen ? "Tap to close" : "Tap to change"}
-                      </span>
-                      <span
-                        style={{
-                          display: "block",
-                          fontSize: 15,
-                          fontWeight: 700,
-                          color: "#fff",
-                          overflow: "hidden",
-                          textOverflow: "ellipsis",
-                          whiteSpace: "nowrap"
-                        }}
-                      >
-                        {selectedService.title}
-                        {selectedService.popular ? " · Most booked" : ""}
-                      </span>
-                    </span>
-                  </span>
+
+              <button
+                type="button"
+                aria-haspopup="listbox"
+                aria-expanded={servicesMenuOpen}
+                aria-label="Choose a consultation"
+                onClick={() => setServicesMenuOpen((v) => !v)}
+                style={{
+                  width: "100%",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  gap: 14,
+                  background: "#e6c680",
+                  color: "#143d31",
+                  border: 0,
+                  borderRadius: 12,
+                  padding: "14px 14px 14px 16px",
+                  cursor: "pointer",
+                  textAlign: "left",
+                  fontFamily: "inherit",
+                  boxShadow: "0 8px 20px -10px rgba(0,0,0,0.45)"
+                }}
+              >
+                <span style={{ display: "flex", alignItems: "center", gap: 12, minWidth: 0 }}>
                   <span
-                    aria-hidden
+                    className="font-display"
                     style={{
                       flexShrink: 0,
-                      width: 34,
-                      height: 34,
-                      borderRadius: 10,
-                      background: "#e6c680",
-                      color: "#143d31",
+                      width: 38,
+                      height: 38,
+                      borderRadius: "50%",
+                      background: "#143d31",
+                      color: "#e6c680",
                       display: "inline-flex",
                       alignItems: "center",
                       justifyContent: "center",
-                      fontWeight: 800,
-                      fontSize: 16,
-                      transform: servicesMenuOpen ? "rotate(180deg)" : "none",
-                      transition: "transform 0.18s ease"
+                      fontWeight: 700,
+                      fontSize: 14
                     }}
                   >
-                    ▾
+                    {selectedService.num}
                   </span>
-                </button>
+                  <span style={{ minWidth: 0 }}>
+                    <span style={{ display: "block", fontSize: 11, fontWeight: 800, letterSpacing: 1.1, textTransform: "uppercase", marginBottom: 2 }}>
+                      {servicesMenuOpen ? "Close list" : "Browse options"}
+                    </span>
+                    <span
+                      style={{
+                        display: "block",
+                        fontSize: 15,
+                        fontWeight: 700,
+                        lineHeight: 1.3,
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                        whiteSpace: "nowrap"
+                      }}
+                    >
+                      {selectedService.title}
+                    </span>
+                  </span>
+                </span>
+                <span
+                  aria-hidden
+                  style={{
+                    flexShrink: 0,
+                    width: 36,
+                    height: 36,
+                    borderRadius: 10,
+                    background: "#143d31",
+                    color: "#e6c680",
+                    display: "inline-flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    fontWeight: 800,
+                    fontSize: 16,
+                    transform: servicesMenuOpen ? "rotate(180deg)" : "none",
+                    transition: "transform 0.18s ease"
+                  }}
+                >
+                  ▾
+                </span>
+              </button>
 
-                {servicesMenuOpen ? (
-                  <div
-                    role="listbox"
-                    aria-label="Consultation options"
-                    style={{
-                      marginTop: 8,
-                      maxHeight: 280,
-                      overflowY: "auto",
-                      background: "#0f3126",
-                      border: "1px solid rgba(230,198,128,0.35)",
-                      borderRadius: 14,
-                      boxShadow: "0 18px 40px -18px rgba(0,0,0,0.45)"
-                    }}
-                  >
-                    {serviceSource.map((s) => {
-                      const active = s.id === selectedService.id;
-                      return (
-                        <button
-                          key={s.id}
-                          type="button"
-                          role="option"
-                          aria-selected={active}
-                          onClick={() => {
-                            setSelectedServiceId(s.id);
-                            setServicesMenuOpen(false);
-                          }}
+              {servicesMenuOpen ? (
+                <div
+                  role="listbox"
+                  aria-label="Consultation options"
+                  style={{
+                    position: "absolute",
+                    left: 16,
+                    right: 16,
+                    top: "calc(100% - 8px)",
+                    zIndex: 20,
+                    maxHeight: 300,
+                    overflowY: "auto",
+                    background: "#fffdf8",
+                    border: "1px solid rgba(20,61,49,0.16)",
+                    borderRadius: 14,
+                    boxShadow: "0 22px 48px -18px rgba(0,0,0,0.4)"
+                  }}
+                >
+                  {serviceSource.map((s, idx) => {
+                    const active = s.id === selectedService.id;
+                    return (
+                      <button
+                        key={s.id}
+                        type="button"
+                        role="option"
+                        aria-selected={active}
+                        onClick={() => {
+                          setSelectedServiceId(s.id);
+                          setServicesMenuOpen(false);
+                        }}
+                        style={{
+                          width: "100%",
+                          display: "flex",
+                          alignItems: "center",
+                          gap: 12,
+                          padding: "13px 14px",
+                          background: active ? "rgba(26,77,62,0.08)" : "transparent",
+                          border: 0,
+                          borderBottom:
+                            idx === serviceSource.length - 1 ? 0 : "1px solid rgba(20,61,49,0.08)",
+                          color: "#143d31",
+                          cursor: "pointer",
+                          textAlign: "left",
+                          fontFamily: "inherit"
+                        }}
+                      >
+                        <span
+                          className="font-display"
                           style={{
-                            width: "100%",
-                            display: "flex",
+                            width: 30,
+                            height: 30,
+                            borderRadius: "50%",
+                            border: `1.5px solid ${active ? "#c69a3e" : "rgba(20,61,49,0.2)"}`,
+                            display: "inline-flex",
                             alignItems: "center",
-                            gap: 12,
-                            padding: "12px 14px",
-                            background: active ? "rgba(230,198,128,0.14)" : "transparent",
-                            border: 0,
-                            borderBottom: "1px solid rgba(230,198,128,0.12)",
-                            color: "#f4f0e6",
-                            cursor: "pointer",
-                            textAlign: "left",
-                            fontFamily: "inherit"
+                            justifyContent: "center",
+                            fontSize: 12,
+                            fontWeight: 700,
+                            color: "#1a4d3e",
+                            flexShrink: 0
                           }}
                         >
-                          <span
-                            className="font-display"
-                            style={{
-                              width: 30,
-                              height: 30,
-                              borderRadius: "50%",
-                              border: `1px solid ${active ? "#e6c680" : "rgba(230,198,128,0.35)"}`,
-                              display: "inline-flex",
-                              alignItems: "center",
-                              justifyContent: "center",
-                              fontSize: 12,
-                              fontWeight: 700,
-                              color: "#e6c680",
-                              flexShrink: 0
-                            }}
-                          >
-                            {s.num}
-                          </span>
-                          <span style={{ flex: 1, fontSize: 14, fontWeight: active ? 700 : 600, lineHeight: 1.35 }}>
-                            {s.title}
-                            {s.popular ? (
-                              <span style={{ display: "block", marginTop: 2, fontSize: 11, fontWeight: 700, color: "#e6c680" }}>
-                                Most booked
-                              </span>
-                            ) : null}
-                          </span>
-                          {active ? <span style={{ color: "#e6c680", fontWeight: 700 }}>✓</span> : null}
-                        </button>
-                      );
-                    })}
-                  </div>
-                ) : null}
-              </div>
+                          {s.num}
+                        </span>
+                        <span style={{ flex: 1, fontSize: 14, fontWeight: active ? 700 : 600, lineHeight: 1.35 }}>
+                          {s.title}
+                        </span>
+                        {active ? <span style={{ color: "#1a4d3e", fontWeight: 700 }}>✓</span> : null}
+                      </button>
+                    );
+                  })}
+                </div>
+              ) : null}
             </div>
 
-            <div style={{ padding: "clamp(18px,2.5vw,28px)" }}>
-              <div style={{ display: "flex", flexWrap: "wrap", gap: 12, alignItems: "center", marginBottom: 12 }}>
-                <h3 className="font-display" style={{ fontWeight: 600, fontSize: "clamp(20px,2.5vw,26px)", color: "#143d31", margin: 0, flex: "1 1 200px" }}>
-                  {selectedService.title}
-                </h3>
-                {selectedService.popular ? (
-                  <span
-                    style={{
-                      display: "inline-block",
-                      fontSize: 10,
-                      fontWeight: 700,
-                      letterSpacing: 0.5,
-                      textTransform: "uppercase",
-                      color: "#1a4d3e",
-                      background: "#e6c680",
-                      borderRadius: 99,
-                      padding: "4px 10px"
-                    }}
-                  >
-                    Most booked
-                  </span>
-                ) : null}
-              </div>
-              <p style={{ fontSize: 15, lineHeight: 1.65, color: "#6b7268", margin: "0 0 18px" }}>{selectedService.tagline}</p>
+            <div style={{ padding: "clamp(20px,3vw,28px)" }}>
+              <p style={{ fontSize: 15.5, lineHeight: 1.65, color: "#5f6b60", margin: "0 0 18px" }}>
+                {selectedService.tagline}
+              </p>
               {selectedService.includes.length > 0 ? (
-                <>
-                  <div style={{ fontSize: 12, fontWeight: 700, letterSpacing: 0.5, textTransform: "uppercase", color: "#4a4740", marginBottom: 8 }}>
-                    You&apos;ll receive
-                  </div>
-                  <ul style={{ listStyle: "none", padding: 0, margin: "0 0 18px", display: "grid", gap: 8 }}>
-                    {selectedService.includes.map((inc) => (
-                      <li key={inc} style={{ display: "flex", gap: 8, alignItems: "flex-start", fontSize: 14, color: "#3d4a41" }}>
-                        <span style={{ color: "#1a4d3e", fontWeight: 700 }}>✓</span>
-                        {inc}
-                      </li>
-                    ))}
-                  </ul>
-                </>
+                <ul style={{ listStyle: "none", padding: 0, margin: "0 0 20px", display: "grid", gap: 9 }}>
+                  {selectedService.includes.map((inc) => (
+                    <li key={inc} style={{ display: "flex", gap: 9, alignItems: "flex-start", fontSize: 14, color: "#3d4a41" }}>
+                      <span style={{ color: "#1a4d3e", fontWeight: 700, marginTop: 1 }}>✓</span>
+                      {inc}
+                    </li>
+                  ))}
+                </ul>
               ) : null}
               {selectedService.duration ? (
-                <div style={{ fontSize: 13, color: "#6b6862", marginBottom: 18 }}>{selectedService.duration}</div>
+                <div style={{ fontSize: 13, color: "#6b6862", marginBottom: 16 }}>{selectedService.duration}</div>
               ) : null}
               <Link
                 href={`/book?service=${selectedService.id}`}
@@ -663,49 +624,11 @@ export default function HomeBelowFold({
                   borderRadius: 12
                 }}
               >
-                Book this consultation
+                Book this consultation →
               </Link>
             </div>
           </div>
         ) : null}
-
-        <Link
-          href="/book?bespoke=1"
-          style={{
-            marginTop: 22,
-            background: "linear-gradient(120deg,#1a4d3e,#0f3126)",
-            border: "1px solid rgba(230,198,128,0.3)",
-            borderRadius: 16,
-            padding: "20px 26px",
-            display: "flex",
-            flexWrap: "wrap",
-            gap: 16,
-            alignItems: "center",
-            justifyContent: "space-between"
-          }}
-        >
-          <div>
-            <div
-              style={{ fontSize: 11, fontWeight: 700, letterSpacing: 1.5, textTransform: "uppercase", color: "#e6c680" }}
-              {...cms("home.bespokeKicker")}
-            >
-              {bespokeKicker}
-            </div>
-            <div
-              className="font-display"
-              style={{ fontWeight: 600, fontSize: 19, color: "#fff", marginTop: 4 }}
-              {...cms("home.bespokeHeading")}
-            >
-              {bespokeHeading}
-            </div>
-          </div>
-          <span
-            style={{ background: "#e6c680", color: "#143d31", fontWeight: 700, padding: "12px 24px", borderRadius: 10, flexShrink: 0 }}
-            {...cms("home.bespokeCta")}
-          >
-            {bespokeCta}
-          </span>
-        </Link>
       </section>
       ) : null}
 
