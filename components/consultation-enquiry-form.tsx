@@ -19,6 +19,7 @@ type Props = {
   messengerLabel?: string;
   emailLabel?: string;
   submitHint?: string;
+  compact?: boolean;
 };
 
 const labelStyle = {
@@ -56,7 +57,7 @@ function FieldError({ message }: { message?: string }) {
   );
 }
 
-function ProgressGuide() {
+function ProgressGuide({ compact }: { compact?: boolean }) {
   const steps = ["01 Personal", "02 Contact", "03 Consultation"];
   return (
     <div
@@ -66,26 +67,26 @@ function ProgressGuide() {
         flexWrap: "wrap",
         alignItems: "center",
         justifyContent: "center",
-        gap: 8,
-        marginBottom: 22,
-        paddingBottom: 16,
+        gap: compact ? 6 : 8,
+        marginBottom: compact ? 12 : 22,
+        paddingBottom: compact ? 10 : 16,
         borderBottom: "1px solid rgba(230,198,128,0.15)"
       }}
     >
       {steps.map((step, i) => (
-        <span key={step} style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
+        <span key={step} style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
           <span
             style={{
-              fontSize: 11,
+              fontSize: 10,
               fontWeight: 700,
-              letterSpacing: 1.2,
+              letterSpacing: 1.1,
               textTransform: "uppercase",
               color: "#e6c680"
             }}
           >
             {step}
           </span>
-          {i < steps.length - 1 ? <span style={{ color: "rgba(230,198,128,0.35)", fontSize: 11 }}>→</span> : null}
+          {i < steps.length - 1 ? <span style={{ color: "rgba(230,198,128,0.35)", fontSize: 10 }}>→</span> : null}
         </span>
       ))}
     </div>
@@ -101,7 +102,8 @@ export function ConsultationEnquiryForm({
   whatsappLabel = "WhatsApp Enquiry →",
   messengerLabel = "Facebook Messenger →",
   emailLabel = "Email Our Team →",
-  submitHint = "Your enquiry will be sent securely to our team. We'll contact you by email or WhatsApp regarding availability and next steps."
+  submitHint = "Your enquiry will be sent securely to our team. We'll contact you by email or WhatsApp regarding availability and next steps.",
+  compact = false
 }: Props) {
   const options = useMemo(() => {
     const base = consultationOptions.length ? consultationOptions : FALLBACK_CONSULTATION_OPTIONS;
@@ -270,14 +272,16 @@ export function ConsultationEnquiryForm({
 
   return (
     <>
-      <ProgressGuide />
-      <form onSubmit={onSubmit} noValidate style={{ display: "grid", gap: 28 }}>
+      <ProgressGuide compact={compact} />
+      <form onSubmit={onSubmit} noValidate style={{ display: "grid", gap: compact ? 16 : 28 }}>
         <input type="text" name="company_website" tabIndex={-1} autoComplete="off" aria-hidden style={{ display: "none" }} />
 
         <section>
           <div style={sectionLabel}>01 · Personal Information</div>
-          <p style={sectionBody}>Tell us a little about yourself.</p>
-          <div style={{ display: "grid", gap: 12 }}>
+          <p style={{ ...sectionBody, margin: compact ? "0 0 10px" : sectionBody.margin }}>
+            Tell us a little about yourself.
+          </p>
+          <div style={{ display: "grid", gap: compact ? 10 : 12 }}>
             <div
               style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}
               className="enquiry-name-row"
@@ -293,6 +297,7 @@ export function ConsultationEnquiryForm({
                   onChange={(e) => setFirstName(e.target.value)}
                   style={{
                     ...darkInput,
+                    padding: compact ? "9px 12px" : darkInput.padding,
                     borderColor: fieldErrors.firstName ? "rgba(255,150,150,0.7)" : darkInput.border
                   }}
                 />
@@ -309,6 +314,7 @@ export function ConsultationEnquiryForm({
                   onChange={(e) => setLastName(e.target.value)}
                   style={{
                     ...darkInput,
+                    padding: compact ? "9px 12px" : darkInput.padding,
                     borderColor: fieldErrors.lastName ? "rgba(255,150,150,0.7)" : darkInput.border
                   }}
                 />
@@ -316,55 +322,70 @@ export function ConsultationEnquiryForm({
               </label>
             </div>
 
-            <label style={labelStyle}>
-              <span>
-                Gender{" "}
-                <span style={{ fontWeight: 500, color: "#8eaea0", textTransform: "none", letterSpacing: 0 }}>
-                  Optional
+            <div
+              className="enquiry-meta-row"
+              style={{
+                display: "grid",
+                gridTemplateColumns: compact ? "0.85fr 1.15fr" : "1fr",
+                gap: 10
+              }}
+            >
+              <label style={labelStyle}>
+                <span>
+                  Gender{" "}
+                  <span style={{ fontWeight: 500, color: "#8eaea0", textTransform: "none", letterSpacing: 0 }}>
+                    Optional
+                  </span>
                 </span>
-              </span>
-              <select
-                name="gender"
-                value={gender}
-                onChange={(e) => setGender(e.target.value)}
-                style={{ ...darkInput, ...selectChevron }}
-              >
-                <option value="">Select gender</option>
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
-                <option value="Prefer not to say">Prefer not to say</option>
-              </select>
-            </label>
+                <select
+                  name="gender"
+                  value={gender}
+                  onChange={(e) => setGender(e.target.value)}
+                  style={{
+                    ...darkInput,
+                    ...selectChevron,
+                    padding: compact ? "9px 40px 9px 12px" : undefined
+                  }}
+                >
+                  <option value="">Select gender</option>
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
+                  <option value="Prefer not to say">Prefer not to say</option>
+                </select>
+              </label>
 
-            <label style={labelStyle}>
-              Country / Region
-              <CountrySelect
-                value={countryCode}
-                onChange={(code) => {
-                  setCountryCode(code);
-                  setFieldErrors((prev) => {
-                    const next = { ...prev };
-                    delete next.country;
-                    delete next.phone;
-                    return next;
-                  });
-                }}
-                error={fieldErrors.country}
-              />
-              <FieldError message={fieldErrors.country} />
-            </label>
+              <label style={labelStyle}>
+                Country / Region
+                <CountrySelect
+                  value={countryCode}
+                  onChange={(code) => {
+                    setCountryCode(code);
+                    setFieldErrors((prev) => {
+                      const next = { ...prev };
+                      delete next.country;
+                      delete next.phone;
+                      return next;
+                    });
+                  }}
+                  error={fieldErrors.country}
+                />
+                <FieldError message={fieldErrors.country} />
+              </label>
+            </div>
           </div>
         </section>
 
         <section
           style={{
-            paddingTop: 4,
+            paddingTop: compact ? 2 : 4,
             borderTop: "1px solid rgba(230,198,128,0.12)"
           }}
         >
-          <div style={{ ...sectionLabel, marginTop: 4 }}>02 · Contact Information</div>
-          <p style={sectionBody}>How should our team contact you?</p>
-          <div style={{ display: "grid", gap: 12 }}>
+          <div style={{ ...sectionLabel, marginTop: compact ? 2 : 4 }}>02 · Contact Information</div>
+          <p style={{ ...sectionBody, margin: compact ? "0 0 10px" : sectionBody.margin }}>
+            How should our team contact you?
+          </p>
+          <div style={{ display: "grid", gap: compact ? 10 : 12 }}>
             <label style={labelStyle}>
               Phone / WhatsApp Number
               <PhoneInput
@@ -396,6 +417,7 @@ export function ConsultationEnquiryForm({
                 onChange={(e) => setEmail(e.target.value)}
                 style={{
                   ...darkInput,
+                  padding: compact ? "9px 12px" : darkInput.padding,
                   borderColor: fieldErrors.email ? "rgba(255,150,150,0.7)" : darkInput.border
                 }}
               />
@@ -406,13 +428,15 @@ export function ConsultationEnquiryForm({
 
         <section
           style={{
-            paddingTop: 4,
+            paddingTop: compact ? 2 : 4,
             borderTop: "1px solid rgba(230,198,128,0.12)"
           }}
         >
-          <div style={{ ...sectionLabel, marginTop: 4 }}>03 · Consultation Details</div>
-          <p style={sectionBody}>Tell us what you would like help with.</p>
-          <div style={{ display: "grid", gap: 12 }}>
+          <div style={{ ...sectionLabel, marginTop: compact ? 2 : 4 }}>03 · Consultation Details</div>
+          <p style={{ ...sectionBody, margin: compact ? "0 0 10px" : sectionBody.margin }}>
+            Tell us what you would like help with.
+          </p>
+          <div style={{ display: "grid", gap: compact ? 10 : 12 }}>
             <label style={labelStyle}>
               What type of consultation are you interested in?
               <select
@@ -423,6 +447,7 @@ export function ConsultationEnquiryForm({
                 style={{
                   ...darkInput,
                   ...selectChevron,
+                  padding: compact ? "9px 40px 9px 12px" : undefined,
                   borderColor: fieldErrors.consultationType ? "rgba(255,150,150,0.7)" : darkInput.border
                 }}
               >
@@ -443,14 +468,15 @@ export function ConsultationEnquiryForm({
               <textarea
                 name="message"
                 required
-                rows={5}
+                rows={compact ? 3 : 5}
                 placeholder="Tell us about your situation, goals, questions, or what you would like guidance on..."
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
                 style={{
                   ...darkInput,
                   resize: "vertical",
-                  minHeight: 120,
+                  minHeight: compact ? 72 : 120,
+                  padding: compact ? "9px 12px" : darkInput.padding,
                   borderColor: fieldErrors.message ? "rgba(255,150,150,0.7)" : darkInput.border
                 }}
               />
@@ -569,12 +595,12 @@ export function ConsultationEnquiryForm({
 
       <div
         style={{
-          marginTop: 28,
-          paddingTop: 22,
+          marginTop: compact ? 18 : 28,
+          paddingTop: compact ? 14 : 22,
           borderTop: "1px solid rgba(230,198,128,0.15)"
         }}
       >
-        <p style={{ fontSize: 13, lineHeight: 1.6, color: "#c7ddd2", margin: "0 0 12px" }}>{preferTalkHeading}</p>
+        <p style={{ fontSize: 13, lineHeight: 1.6, color: "#c7ddd2", margin: "0 0 10px" }}>{preferTalkHeading}</p>
         <ChatCtaButtons
           whatsappUrl={whatsappUrl}
           messengerUrl={messengerUrl}
@@ -587,7 +613,8 @@ export function ConsultationEnquiryForm({
 
       <style>{`
         @media (max-width: 520px) {
-          .enquiry-name-row {
+          .enquiry-name-row,
+          .enquiry-meta-row {
             grid-template-columns: 1fr !important;
           }
         }
