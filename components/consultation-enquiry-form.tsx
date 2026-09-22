@@ -7,13 +7,16 @@ import { CountrySelect, darkInput } from "@/components/country-select";
 import { ChatCtaButtons } from "@/components/chat-cta-buttons";
 import { formatE164, isValidNationalPhone, PhoneInput } from "@/components/phone-input";
 import { FALLBACK_CONSULTATION_OPTIONS, findCountry } from "@/lib/countries";
+import { MESSENGER_URL, PRIVACY_POLICY_PATH } from "@/lib/privacy";
 
 type Props = {
   consultationOptions: string[];
   whatsappUrl: string;
   emailUrl: string;
+  messengerUrl?: string;
   preferTalkHeading?: string;
   whatsappLabel?: string;
+  messengerLabel?: string;
   emailLabel?: string;
   submitHint?: string;
 };
@@ -93,8 +96,10 @@ export function ConsultationEnquiryForm({
   consultationOptions,
   whatsappUrl,
   emailUrl,
+  messengerUrl = MESSENGER_URL,
   preferTalkHeading = "Prefer to speak with us directly?",
   whatsappLabel = "WhatsApp Enquiry →",
+  messengerLabel = "Facebook Messenger →",
   emailLabel = "Email Our Team →",
   submitHint = "Your enquiry will be sent securely to our team. We'll contact you by email or WhatsApp regarding availability and next steps."
 }: Props) {
@@ -111,6 +116,8 @@ export function ConsultationEnquiryForm({
   const [email, setEmail] = useState("");
   const [consultationType, setConsultationType] = useState("");
   const [message, setMessage] = useState("");
+  const [privacyAcknowledged, setPrivacyAcknowledged] = useState(false);
+  const [marketingConsent, setMarketingConsent] = useState(false);
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const [formError, setFormError] = useState("");
   const [pending, setPending] = useState(false);
@@ -134,6 +141,9 @@ export function ConsultationEnquiryForm({
     }
     if (!consultationType) errors.consultationType = "Please select a consultation.";
     if (!message.trim()) errors.message = "Please tell us what you're looking for.";
+    if (!privacyAcknowledged) {
+      errors.privacyAcknowledged = "Please confirm that you have read and agree to the Privacy Policy.";
+    }
     return errors;
   }
 
@@ -158,6 +168,8 @@ export function ConsultationEnquiryForm({
         email: email.trim(),
         consultationType,
         message: message.trim(),
+        privacyAcknowledged,
+        marketingConsent,
         honeypot: ""
       });
 
@@ -228,11 +240,21 @@ export function ConsultationEnquiryForm({
             fontSize: 14,
             padding: "13px 22px",
             borderRadius: 12,
-            textDecoration: "none"
+            textDecoration: "none",
+            marginBottom: 22
           }}
         >
           Return to Home
         </Link>
+        <p style={{ fontSize: 13, color: "#a8c4b6", margin: "0 0 12px" }}>Or contact us directly:</p>
+        <ChatCtaButtons
+          whatsappUrl={whatsappUrl}
+          messengerUrl={messengerUrl}
+          emailUrl={emailUrl}
+          whatsappLabel="WhatsApp"
+          messengerLabel="Messenger"
+          emailLabel="Email"
+        />
       </div>
     );
   }
@@ -454,6 +476,70 @@ export function ConsultationEnquiryForm({
           </div>
         ) : null}
 
+        <div style={{ display: "grid", gap: 12, paddingTop: 2 }}>
+          <label
+            style={{
+              display: "grid",
+              gridTemplateColumns: "18px 1fr",
+              gap: 10,
+              alignItems: "start",
+              fontSize: 12.5,
+              lineHeight: 1.55,
+              color: "#c7ddd2",
+              cursor: "pointer"
+            }}
+          >
+            <input
+              type="checkbox"
+              checked={privacyAcknowledged}
+              onChange={(e) => {
+                setPrivacyAcknowledged(e.target.checked);
+                if (e.target.checked) {
+                  setFieldErrors((prev) => {
+                    const next = { ...prev };
+                    delete next.privacyAcknowledged;
+                    return next;
+                  });
+                }
+              }}
+              style={{ marginTop: 3, accentColor: "#e6c680", width: 16, height: 16 }}
+            />
+            <span>
+              I agree that Marites Allen may collect and use the information I provide to respond to my consultation
+              enquiry. I have read the{" "}
+              <Link href={PRIVACY_POLICY_PATH} target="_blank" rel="noopener noreferrer" style={{ color: "#e6c680" }}>
+                Privacy Policy
+              </Link>
+              .
+            </span>
+          </label>
+          <FieldError message={fieldErrors.privacyAcknowledged} />
+
+          <label
+            style={{
+              display: "grid",
+              gridTemplateColumns: "18px 1fr",
+              gap: 10,
+              alignItems: "start",
+              fontSize: 12.5,
+              lineHeight: 1.55,
+              color: "#a8c4b6",
+              cursor: "pointer"
+            }}
+          >
+            <input
+              type="checkbox"
+              checked={marketingConsent}
+              onChange={(e) => setMarketingConsent(e.target.checked)}
+              style={{ marginTop: 3, accentColor: "#e6c680", width: 16, height: 16 }}
+            />
+            <span>
+              I would like to receive occasional updates, announcements and offers from Marites Allen by email or
+              WhatsApp.
+            </span>
+          </label>
+        </div>
+
         <div style={{ paddingTop: 4 }}>
           <button
             type="submit"
@@ -491,10 +577,11 @@ export function ConsultationEnquiryForm({
         <p style={{ fontSize: 13, lineHeight: 1.6, color: "#c7ddd2", margin: "0 0 12px" }}>{preferTalkHeading}</p>
         <ChatCtaButtons
           whatsappUrl={whatsappUrl}
-          messengerUrl={emailUrl}
+          messengerUrl={messengerUrl}
+          emailUrl={emailUrl}
           whatsappLabel={whatsappLabel}
-          messengerLabel={emailLabel}
-          secondIsEmail
+          messengerLabel={messengerLabel}
+          emailLabel={emailLabel}
         />
       </div>
 

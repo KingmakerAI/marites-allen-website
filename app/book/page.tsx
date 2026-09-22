@@ -4,6 +4,7 @@ import { JsonLd } from "@/components/json-ld";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { FALLBACK_CONSULTATION_OPTIONS } from "@/lib/countries";
+import { MESSENGER_URL } from "@/lib/privacy";
 import { cms } from "@/lib/cms/cms-attr";
 import { getCachedPageCopy, getCachedServices, getCachedSettings } from "@/lib/cms/content";
 import { breadcrumbJsonLd, pageMetadata } from "@/lib/seo";
@@ -131,9 +132,11 @@ export default async function BookPage() {
             <ConsultationEnquiryForm
               consultationOptions={consultationOptions}
               whatsappUrl={`https://wa.me/${whatsapp}`}
+              messengerUrl={MESSENGER_URL}
               emailUrl={`mailto:${teamEmail}`}
               preferTalkHeading={book.preferTalkHeading}
               whatsappLabel={book.whatsappLabel}
+              messengerLabel="Facebook Messenger →"
               emailLabel={book.emailLabel || "Email Our Team →"}
               submitHint={book.submitHint}
             />

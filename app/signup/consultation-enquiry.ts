@@ -10,6 +10,7 @@ import {
 import { saveSignup } from "@/lib/cms/repo";
 import { ensureSeeded } from "@/lib/cms/seed";
 import { consultationEnquirySchema } from "@/lib/cms/validation";
+import { PRIVACY_POLICY_VERSION } from "@/lib/privacy";
 
 export type ConsultationEnquiryResult =
   | { ok: true; firstName: string; emailsSent: boolean }
@@ -55,11 +56,14 @@ export async function submitConsultationEnquiryAction(raw: unknown): Promise<Con
       phone,
       email,
       consultationType,
-      message
+      message,
+      privacyAcknowledged,
+      marketingConsent
     } = parsed.data;
 
     const fullName = `${firstName} ${lastName}`.trim();
     const submittedAt = new Date().toISOString();
+    const marketing = Boolean(marketingConsent);
 
     saveSignup({
       kind: "booking-waitlist",
@@ -81,7 +85,12 @@ export async function submitConsultationEnquiryAction(raw: unknown): Promise<Con
         first_name: firstName,
         last_name: lastName,
         consultation_type: consultationType,
-        message
+        message,
+        privacy_acknowledged: privacyAcknowledged ? "true" : "false",
+        privacy_acknowledged_at: submittedAt,
+        privacy_policy_version: PRIVACY_POLICY_VERSION,
+        marketing_consent: marketing ? "true" : "false",
+        marketing_consent_at: marketing ? submittedAt : ""
       }
     });
 
@@ -94,6 +103,7 @@ export async function submitConsultationEnquiryAction(raw: unknown): Promise<Con
       email,
       consultationType,
       message,
+      marketingConsent: marketing,
       submittedAt: new Date(submittedAt).toLocaleString("en-GB", {
         timeZone: "Asia/Manila",
         dateStyle: "full",

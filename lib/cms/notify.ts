@@ -13,6 +13,7 @@ export type ConsultationEnquiryNotifyInput = {
   consultationType: string;
   message: string;
   submittedAt: string;
+  marketingConsent?: boolean;
 };
 
 function escapeHtml(value: string) {
@@ -126,6 +127,8 @@ export async function notifyTeamConsultationEnquiry(input: ConsultationEnquiryNo
     return false;
   }
 
+  const marketingLine = `Marketing consent: ${input.marketingConsent ? "Yes" : "No"}`;
+
   const text = [
     "NEW CONSULTATION ENQUIRY",
     "",
@@ -145,6 +148,8 @@ export async function notifyTeamConsultationEnquiry(input: ConsultationEnquiryNo
     "What they're looking for:",
     input.message,
     "",
+    marketingLine,
+    "",
     "Submitted:",
     input.submittedAt
   ].join("\n");
@@ -161,6 +166,7 @@ export async function notifyTeamConsultationEnquiry(input: ConsultationEnquiryNo
         ${detailRow("Phone / WhatsApp", input.phone)}
         ${detailRow("Email", input.email)}
         ${detailRow("Consultation", input.consultationType)}
+        ${detailRow("Marketing consent", input.marketingConsent ? "Yes" : "No")}
         ${detailRow("Submitted", input.submittedAt)}
       </table>
       <div style="margin:0;padding:14px 16px;background:rgba(255,255,255,0.04);border:1px solid rgba(230,198,128,0.2);border-radius:12px;">

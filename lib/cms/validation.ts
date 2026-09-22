@@ -186,6 +186,10 @@ export const consultationEnquirySchema = z.object({
   email: z.string().trim().email("Please enter a valid email address.").max(160),
   consultationType: z.string().trim().min(1, "Please select a consultation.").max(160),
   message: z.string().trim().min(1, "Please tell us what you're looking for.").max(4000),
+  privacyAcknowledged: z
+    .boolean()
+    .refine((v) => v === true, { message: "Please confirm that you have read and agree to the Privacy Policy." }),
+  marketingConsent: z.boolean().optional().default(false),
   honeypot: z.string().max(200).optional().default("")
 });
 

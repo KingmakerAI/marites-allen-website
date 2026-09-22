@@ -255,7 +255,14 @@ export function SiteFooter({ variant = "full" }: Props) {
             justifyContent: "center"
           }}
         >
-          <span>© 2026 Marites Allen. Secure booking · SSL encrypted · Free reschedule up to 48h.</span>
+          <span>© 2026 Marites Allen.</span>
+          <Link href="/privacy" style={{ color: "#c7ddd2" }}>
+            Privacy Policy
+          </Link>
+          <span style={{ color: "#5f7a6e" }}>·</span>
+          <Link href="/book" style={{ color: "#e6c680" }}>
+            Book a Consultation
+          </Link>
         </div>
       </div>
     </footer>
