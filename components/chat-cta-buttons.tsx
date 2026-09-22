@@ -3,6 +3,8 @@ type Props = {
   messengerUrl: string;
   whatsappLabel?: string;
   messengerLabel?: string;
+  /** When true, second button uses an email icon and mailto-friendly styling. */
+  secondIsEmail?: boolean;
 };
 
 function WhatsAppIcon({ size = 20 }: { size?: number }) {
@@ -21,11 +23,21 @@ function MessengerIcon({ size = 20 }: { size?: number }) {
   );
 }
 
+function EmailIcon({ size = 20 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" aria-hidden fill="none" stroke="currentColor" strokeWidth="2">
+      <rect x="3" y="5" width="18" height="14" rx="2" />
+      <path d="M3 7l9 7 9-7" />
+    </svg>
+  );
+}
+
 export function ChatCtaButtons({
   whatsappUrl,
   messengerUrl,
   whatsappLabel = "WhatsApp",
-  messengerLabel = "Messenger"
+  messengerLabel = "Messenger",
+  secondIsEmail = false
 }: Props) {
   return (
     <div
@@ -51,7 +63,7 @@ export function ChatCtaButtons({
           background: "linear-gradient(165deg, #2fe074 0%, #25d366 45%, #1ebe57 100%)",
           color: "#fff",
           fontWeight: 700,
-          fontSize: 14,
+          fontSize: 13,
           letterSpacing: 0.2,
           textDecoration: "none",
           boxShadow: "0 8px 20px rgba(37, 211, 102, 0.28)",
@@ -67,7 +79,8 @@ export function ChatCtaButtons({
             width: 28,
             height: 28,
             borderRadius: 999,
-            background: "rgba(255,255,255,0.22)"
+            background: "rgba(255,255,255,0.22)",
+            flexShrink: 0
           }}
         >
           <WhatsAppIcon size={16} />
@@ -77,9 +90,9 @@ export function ChatCtaButtons({
 
       <a
         href={messengerUrl}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="chat-cta chat-cta--messenger"
+        target={secondIsEmail ? undefined : "_blank"}
+        rel={secondIsEmail ? undefined : "noopener noreferrer"}
+        className={`chat-cta ${secondIsEmail ? "chat-cta--email" : "chat-cta--messenger"}`}
         style={{
           display: "flex",
           alignItems: "center",
@@ -88,13 +101,17 @@ export function ChatCtaButtons({
           minHeight: 48,
           padding: "12px 14px",
           borderRadius: 12,
-          background: "linear-gradient(135deg, #00c6ff 0%, #0078ff 48%, #a033ff 100%)",
-          color: "#fff",
+          background: secondIsEmail
+            ? "linear-gradient(160deg,#e6c680,#c69a3e)"
+            : "linear-gradient(135deg, #00c6ff 0%, #0078ff 48%, #a033ff 100%)",
+          color: secondIsEmail ? "#143d31" : "#fff",
           fontWeight: 700,
-          fontSize: 14,
+          fontSize: 13,
           letterSpacing: 0.2,
           textDecoration: "none",
-          boxShadow: "0 8px 20px rgba(0, 120, 255, 0.28)",
+          boxShadow: secondIsEmail
+            ? "0 8px 20px rgba(198, 154, 62, 0.28)"
+            : "0 8px 20px rgba(0, 120, 255, 0.28)",
           border: "1px solid rgba(255,255,255,0.18)",
           transition: "transform 160ms ease, box-shadow 160ms ease, filter 160ms ease"
         }}
@@ -107,10 +124,11 @@ export function ChatCtaButtons({
             width: 28,
             height: 28,
             borderRadius: 999,
-            background: "rgba(255,255,255,0.22)"
+            background: secondIsEmail ? "rgba(20,61,49,0.12)" : "rgba(255,255,255,0.22)",
+            flexShrink: 0
           }}
         >
-          <MessengerIcon size={16} />
+          {secondIsEmail ? <EmailIcon size={15} /> : <MessengerIcon size={16} />}
         </span>
         {messengerLabel}
       </a>
@@ -126,12 +144,15 @@ export function ChatCtaButtons({
         .chat-cta--messenger:hover {
           box-shadow: 0 10px 24px rgba(0, 120, 255, 0.38);
         }
+        .chat-cta--email:hover {
+          box-shadow: 0 10px 24px rgba(198, 154, 62, 0.38);
+        }
         @media (max-width: 420px) {
           .chat-cta {
-            font-size: 13px !important;
+            font-size: 12px !important;
             gap: 8px !important;
-            padding-left: 10px !important;
-            padding-right: 10px !important;
+            padding-left: 8px !important;
+            padding-right: 8px !important;
           }
         }
       `}</style>

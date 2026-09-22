@@ -164,9 +164,28 @@ export const signupInputSchema = z.object({
   name: z.string().max(120).optional().default(""),
   phone: z.string().max(40).optional().default(""),
   organization: z.string().max(160).optional().default(""),
-  notes: z.string().max(2000).optional().default(""),
+  notes: z.string().max(4000).optional().default(""),
   source: z.string().max(80).optional().default(""),
   fields: z.record(z.string(), z.string().max(400)).optional().default({}),
+  honeypot: z.string().max(200).optional().default("")
+});
+
+export const consultationEnquirySchema = z.object({
+  firstName: z.string().trim().min(1, "Please enter your first name.").max(80),
+  lastName: z.string().trim().min(1, "Please enter your last name.").max(80),
+  gender: z.string().max(40).optional().default(""),
+  country: z.string().trim().min(1, "Please select your country.").max(120),
+  countryCode: z.string().trim().min(2, "Please select your country.").max(2),
+  dialCode: z.string().trim().min(1, "Please select your country.").max(8),
+  phone: z
+    .string()
+    .trim()
+    .min(8, "Please enter a valid phone number.")
+    .max(24)
+    .regex(/^\+\d{7,18}$/, "Please enter a valid phone number."),
+  email: z.string().trim().email("Please enter a valid email address.").max(160),
+  consultationType: z.string().trim().min(1, "Please select a consultation.").max(160),
+  message: z.string().trim().min(1, "Please tell us what you're looking for.").max(4000),
   honeypot: z.string().max(200).optional().default("")
 });
 

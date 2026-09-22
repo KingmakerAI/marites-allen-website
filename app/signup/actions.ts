@@ -34,7 +34,7 @@ export async function submitSignupAction(raw: unknown): Promise<SignupResult> {
   });
 
   if (parsed.data.kind === "booking-waitlist") {
-    void notifyBookingEnquiry({
+    await notifyBookingEnquiry({
       kind: saved.kind,
       email: saved.email,
       name: saved.name,

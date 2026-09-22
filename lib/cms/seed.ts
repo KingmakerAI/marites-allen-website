@@ -84,8 +84,8 @@ const DEFAULT_PAGES: CmsPage[] = [];
 const DEFAULT_SETTINGS: SiteSettings = {
   general: { siteName: "Marites Allen", tagline: "The Feng Shui Queen", logoUrl: "/images/brand/marites-allen-logo.png" },
   contact: {
-    email: "sales@frigga.co.uk",
-    emailSecondary: "connect@frigga.co.uk",
+    email: "hello@maritesallen.com",
+    emailSecondary: "hello@maritesallen.com",
     phone: "+63 920 950 9390",
     phoneSecondary: "+63 939 351 6424",
     whatsapp: "639209509390"
@@ -219,9 +219,9 @@ function ensureLiveDefaults() {
           home.comingHeading = "Send your consultation enquiry";
           changed = true;
         }
-        if (!home.comingBody || /will open|shortly|finish the experience/i.test(home.comingBody)) {
+        if (!home.comingBody || /will open|shortly|finish the experience|payment/i.test(home.comingBody)) {
           home.comingBody =
-            "Tell us what you need and the team will follow up. Payment is arranged privately after your enquiry is reviewed.";
+            "Tell us what you need and the team will follow up by email or WhatsApp.";
           changed = true;
         }
         if (!home.comingCta || COMING_SOON_LABELS.has(home.comingCta)) {
@@ -235,21 +235,62 @@ function ensureLiveDefaults() {
           book.kicker = "Book today";
           changed = true;
         }
-        if (!book.intro || /being prepared|coming soon/i.test(book.intro)) {
+        if (
+          !book.intro ||
+          /being prepared|coming soon|payment is handled offline|payment is arranged/i.test(book.intro)
+        ) {
           book.intro =
-            "Send an enquiry with the consultation you need. The team will follow up by email or WhatsApp. Payment is handled offline.";
+            "Tell us what you're looking for and our team will help you find the right consultation for your needs.";
+          changed = true;
+        }
+        if (!book.introSecondary || /payment/i.test(book.introSecondary)) {
+          book.introSecondary =
+            "Submit your enquiry below. Once received, our team will review your request and contact you by email or WhatsApp to confirm the next steps.";
+          changed = true;
+        }
+        if (!book.title || /coming soon/i.test(book.title) || book.title === "Book Consultation") {
+          book.title = "Book a Consultation";
           changed = true;
         }
         if (!book.seoTitle || /coming soon/i.test(book.seoTitle)) {
           book.seoTitle = "Book a Consultation";
           changed = true;
         }
-        if (!book.seoDescription || /coming soon|being prepared/i.test(book.seoDescription)) {
+        if (!book.seoDescription || /coming soon|being prepared|payment/i.test(book.seoDescription)) {
           book.seoDescription =
-            "Enquire about a private Feng Shui consultation with Marites Allen. The team will follow up — payment is arranged offline.";
+            "Submit a consultation enquiry with Marites Allen. Our team will review your request and contact you by email or WhatsApp.";
+          changed = true;
+        }
+        if (!book.submitLabel || /send enquiry$/i.test(book.submitLabel)) {
+          book.submitLabel = "Send Consultation Enquiry →";
+          changed = true;
+        }
+        if (!book.submitHint) {
+          book.submitHint =
+            "Once you submit your enquiry, our team will be notified. We'll review your request and contact you by email or WhatsApp regarding availability and the next steps.";
+          changed = true;
+        }
+        if (!book.preferTalkHeading || /prefer to talk now/i.test(book.preferTalkHeading)) {
+          book.preferTalkHeading = "Prefer to speak with us directly?";
+          changed = true;
+        }
+        if (!book.whatsappLabel || /whatsapp enquire/i.test(book.whatsappLabel)) {
+          book.whatsappLabel = "WhatsApp Enquiry →";
+          changed = true;
+        }
+        if (!book.emailLabel) {
+          book.emailLabel = "Email Our Team →";
           changed = true;
         }
       }
+    }
+    if (store.settings?.contact?.email && /frigga/i.test(store.settings.contact.email)) {
+      store.settings.contact.email = "hello@maritesallen.com";
+      changed = true;
+    }
+    if (store.settings?.contact?.emailSecondary && /frigga/i.test(store.settings.contact.emailSecondary)) {
+      store.settings.contact.emailSecondary = "hello@maritesallen.com";
+      changed = true;
     }
     for (const item of store.navigation || []) {
       if (item.href === "/book" && COMING_SOON_LABELS.has(item.label)) {

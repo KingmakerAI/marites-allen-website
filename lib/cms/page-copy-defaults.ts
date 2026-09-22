@@ -557,7 +557,7 @@ export const DEFAULT_PAGE_COPY: PageCopy = {
     comingKicker: "Book today",
     comingHeading: "Send your consultation enquiry",
     comingBody:
-      "Tell us what you need and the team will follow up. Payment is arranged privately after your enquiry is reviewed.",
+      "Tell us what you need and the team will follow up by email or WhatsApp.",
     comingCta: "Book Consultation",
     guarantees: ["Reply within 1–2 business days", "WhatsApp available", "Offline payment", "One-on-one with Marites"],
     friggaHeading: "Frigga Charmed Life",
@@ -580,18 +580,23 @@ export const DEFAULT_PAGE_COPY: PageCopy = {
   book: {
     seoTitle: "Book a Consultation",
     seoDescription:
-      "Enquire about a private Feng Shui consultation with Marites Allen. The team will follow up — payment is arranged offline.",
+      "Submit a consultation enquiry with Marites Allen. Our team will review your request and contact you by email or WhatsApp.",
     kicker: "Book today",
-    title: "Book Consultation",
-    intro:
-      "Send an enquiry with the consultation you need. The team will follow up by email or WhatsApp. Payment is handled offline.",
+    title: "Book a Consultation",
+    intro: "Tell us what you're looking for and our team will help you find the right consultation for your needs.",
+    introSecondary:
+      "Submit your enquiry below. Once received, our team will review your request and contact you by email or WhatsApp to confirm the next steps.",
     formTitle: "Consultation enquiry",
     formBody: "Tell us who you are and what you're looking for. The team will use this to follow up.",
-    submitLabel: "Send enquiry",
+    submitLabel: "Send Consultation Enquiry →",
+    submitHint:
+      "Once you submit your enquiry, our team will be notified. We'll review your request and contact you by email or WhatsApp regarding availability and the next steps.",
     successTitle: "Enquiry received",
-    successBody: "We'll review what you're looking for and follow up by email. WhatsApp remains available if you need help sooner.",
-    preferTalkHeading: "Prefer to talk now?",
-    whatsappLabel: "WhatsApp enquire →"
+    successBody:
+      "Your consultation enquiry has been received successfully. We'll contact you by email or WhatsApp regarding the next steps.",
+    preferTalkHeading: "Prefer to speak with us directly?",
+    whatsappLabel: "WhatsApp Enquiry →",
+    emailLabel: "Email Our Team →"
   },
   eventsPage: {
     seoTitle: "Events & Speaking",

@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
-import { ChatCtaButtons } from "@/components/chat-cta-buttons";
+import { ConsultationEnquiryForm } from "@/components/consultation-enquiry-form";
 import { JsonLd } from "@/components/json-ld";
-import { SignupForm } from "@/components/signup-form";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
+import { FALLBACK_CONSULTATION_OPTIONS } from "@/lib/countries";
 import { cms } from "@/lib/cms/cms-attr";
 import { getCachedPageCopy, getCachedServices, getCachedSettings } from "@/lib/cms/content";
 import { breadcrumbJsonLd, pageMetadata } from "@/lib/seo";
@@ -26,14 +26,20 @@ export default async function BookPage() {
   ]);
   const book = pageCopy.book;
   const whatsapp = settings.contact.whatsapp || "639209509390";
-  const messengerUrl = "https://m.me/166449603402286";
+  const teamEmail =
+    settings.contact.email && !/frigga/i.test(settings.contact.email)
+      ? settings.contact.email
+      : "hello@maritesallen.com";
+
+  const activeServices = services.filter((s) => s.active !== false).map((s) => s.name);
+  const consultationOptions = activeServices.length ? activeServices : FALLBACK_CONSULTATION_OPTIONS;
 
   return (
     <div className="page-shell page-enter">
       <JsonLd
         data={breadcrumbJsonLd([
           { name: "Home", path: "/" },
-          { name: "Book Consultation", path: "/book" }
+          { name: "Book a Consultation", path: "/book" }
         ])}
       />
       <SiteHeader bookAsLabel />
@@ -87,13 +93,29 @@ export default async function BookPage() {
               fontSize: "clamp(16px,2vw,19px)",
               lineHeight: 1.65,
               color: "#c7ddd2",
-              margin: "0 auto 28px",
+              margin: "0 auto 12px",
               maxWidth: 560
             }}
             {...cms("book.intro")}
           >
             {book.intro}
           </p>
+          {book.introSecondary ? (
+            <p
+              style={{
+                fontSize: 15,
+                lineHeight: 1.65,
+                color: "#a8c4b6",
+                margin: "0 auto 28px",
+                maxWidth: 560
+              }}
+              {...cms("book.introSecondary")}
+            >
+              {book.introSecondary}
+            </p>
+          ) : (
+            <div style={{ marginBottom: 28 }} />
+          )}
 
           <div
             style={{
@@ -102,64 +124,19 @@ export default async function BookPage() {
               borderRadius: 18,
               padding: "clamp(22px,3vw,32px)",
               textAlign: "left",
-              maxWidth: 520,
+              maxWidth: 560,
               margin: "0 auto"
             }}
           >
-            <div
-              style={{
-                fontSize: 12,
-                fontWeight: 700,
-                letterSpacing: 1.5,
-                textTransform: "uppercase",
-                color: "#e6c680",
-                marginBottom: 10
-              }}
-              {...cms("book.formTitle")}
-            >
-              {book.formTitle}
-            </div>
-            <p style={{ fontSize: 14.5, lineHeight: 1.6, color: "#c7ddd2", margin: "0 0 16px" }} {...cms("book.formBody")}>
-              {book.formBody}
-            </p>
-            <SignupForm
-              kind="booking-waitlist"
-              source="book"
-              showName
-              showPhone
-              showNotes
-              notesLabel="What are you looking for?"
-              extraFields={[
-                {
-                  name: "service",
-                  label: "What do you need help with",
-                  required: true,
-                  placeholder: "Choose a consultation",
-                  options: [
-                    ...services.map((s) => ({ value: s.name, label: s.name })),
-                    { value: "Not sure yet", label: "Not sure yet" }
-                  ]
-                }
-              ]}
-              submitLabel={book.submitLabel}
-              successTitle={book.successTitle}
-              successBody={book.successBody}
-              variant="dark"
+            <ConsultationEnquiryForm
+              consultationOptions={consultationOptions}
+              whatsappUrl={`https://wa.me/${whatsapp}`}
+              emailUrl={`mailto:${teamEmail}`}
+              preferTalkHeading={book.preferTalkHeading}
+              whatsappLabel={book.whatsappLabel}
+              emailLabel={book.emailLabel || "Email Our Team →"}
+              submitHint={book.submitHint}
             />
-            <p
-              style={{ fontSize: 13, lineHeight: 1.6, color: "#c7ddd2", margin: "18px 0 12px" }}
-              {...cms("book.preferTalkHeading")}
-            >
-              {book.preferTalkHeading}
-            </p>
-            <div {...cms("book.whatsappLabel")}>
-              <ChatCtaButtons
-                whatsappUrl={`https://wa.me/${whatsapp}`}
-                messengerUrl={messengerUrl}
-                whatsappLabel="WhatsApp"
-                messengerLabel="Messenger"
-              />
-            </div>
           </div>
         </div>
       </section>

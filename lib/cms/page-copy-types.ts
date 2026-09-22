@@ -160,13 +160,16 @@ export type BookCopy = {
   kicker: string;
   title: string;
   intro: string;
+  introSecondary: string;
   formTitle: string;
   formBody: string;
   submitLabel: string;
+  submitHint: string;
   successTitle: string;
   successBody: string;
   preferTalkHeading: string;
   whatsappLabel: string;
+  emailLabel: string;
 };
 
 export type EventsPageCopy = {

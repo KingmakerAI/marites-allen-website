@@ -470,7 +470,7 @@ export function saveSignup(input: Omit<Signup, "id" | "createdAt" | "status"> & 
       existing.name = sanitizeText(input.name || existing.name, 120);
       existing.phone = sanitizeText(input.phone || existing.phone, 40);
       existing.organization = sanitizeText(input.organization || existing.organization, 160);
-      existing.notes = sanitizeText(input.notes || existing.notes, 2000);
+      existing.notes = sanitizeText(input.notes || existing.notes, 4000);
       existing.source = sanitizeText(input.source || existing.source, 80);
       existing.fields = { ...existing.fields, ...input.fields };
       if (existing.status === "archived") existing.status = "new";
@@ -483,7 +483,7 @@ export function saveSignup(input: Omit<Signup, "id" | "createdAt" | "status"> & 
       name: sanitizeText(input.name || "", 120),
       phone: sanitizeText(input.phone || "", 40),
       organization: sanitizeText(input.organization || "", 160),
-      notes: sanitizeText(input.notes || "", 2000),
+      notes: sanitizeText(input.notes || "", 4000),
       source: sanitizeText(input.source || "", 80),
       fields: Object.fromEntries(
         Object.entries(input.fields || {}).map(([k, v]) => [k, sanitizeText(v, 400)])
