@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { ChatCtaButtons } from "@/components/chat-cta-buttons";
 import { JsonLd } from "@/components/json-ld";
 import { SignupForm } from "@/components/signup-form";
 import { SiteFooter } from "@/components/site-footer";
@@ -151,41 +152,13 @@ export default async function BookPage() {
             >
               {book.preferTalkHeading}
             </p>
-            <div style={{ display: "flex", flexWrap: "wrap", gap: 10 }}>
-              <a
-                href={`https://wa.me/${whatsapp}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{
-                  display: "inline-block",
-                  background: "linear-gradient(160deg,#e6c680,#c69a3e)",
-                  color: "#143d31",
-                  fontWeight: 700,
-                  fontSize: 14,
-                  padding: "12px 18px",
-                  borderRadius: 10
-                }}
-                {...cms("book.whatsappLabel")}
-              >
-                {book.whatsappLabel}
-              </a>
-              <a
-                href={messengerUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{
-                  display: "inline-block",
-                  background: "rgba(255,255,255,0.06)",
-                  border: "1px solid rgba(230,198,128,0.35)",
-                  color: "#fff",
-                  fontWeight: 700,
-                  fontSize: 14,
-                  padding: "12px 18px",
-                  borderRadius: 10
-                }}
-              >
-                Message on Messenger
-              </a>
+            <div {...cms("book.whatsappLabel")}>
+              <ChatCtaButtons
+                whatsappUrl={`https://wa.me/${whatsapp}`}
+                messengerUrl={messengerUrl}
+                whatsappLabel="WhatsApp"
+                messengerLabel="Messenger"
+              />
             </div>
           </div>
         </div>
