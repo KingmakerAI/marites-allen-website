@@ -24,7 +24,6 @@ export async function submitConsultationEnquiryAction(raw: unknown): Promise<Con
     try {
       ensureSeeded();
     } catch (err) {
-      // Seed/store may be read-only on some hosts; enquiry can still succeed via email.
       console.error("[consultation-enquiry] ensureSeeded failed", err);
     }
 
@@ -71,6 +70,27 @@ export async function submitConsultationEnquiryAction(raw: unknown): Promise<Con
     const submittedAt = new Date().toISOString();
     const marketing = Boolean(marketingConsent);
 
+    const notifyPayload = {
+      firstName,
+      lastName,
+      gender: gender || "",
+      country,
+      phone,
+      email,
+      consultationType,
+      message,
+      marketingConsent: marketing,
+      privacyAcknowledged: Boolean(privacyAcknowledged),
+      submittedAt: new Date(submittedAt).toLocaleString("en-GB", {
+        timeZone: "Asia/Manila",
+        dateStyle: "full",
+        timeStyle: "short"
+      })
+    };
+
+    // Always leave a structured log trail (visible in Vercel function logs).
+    console.info("[consultation-enquiry] received", JSON.stringify(notifyPayload));
+
     let saved = false;
     try {
       saveSignup({
@@ -106,41 +126,32 @@ export async function submitConsultationEnquiryAction(raw: unknown): Promise<Con
       console.error("[consultation-enquiry] saveSignup failed", err);
     }
 
-    const notifyPayload = {
-      firstName,
-      lastName,
-      gender: gender || "",
-      country,
-      phone,
-      email,
-      consultationType,
-      message,
-      marketingConsent: marketing,
-      privacyAcknowledged: Boolean(privacyAcknowledged),
-      submittedAt: new Date(submittedAt).toLocaleString("en-GB", {
-        timeZone: "Asia/Manila",
-        dateStyle: "full",
-        timeStyle: "short"
-      })
-    };
-
     const [teamOk, customerOk] = await Promise.all([
       notifyTeamConsultationEnquiry(notifyPayload),
       notifyCustomerConsultationEnquiry(notifyPayload)
     ]);
 
-    const emailsSent = Boolean(teamOk && customerOk);
+    const emailsSent = Boolean(teamOk || customerOk);
+    const resendConfigured = Boolean(
+      (process.env.RESEND_API_KEY || "").trim() &&
+        (process.env.BOOKING_FROM_EMAIL || process.env.RESET_FROM_EMAIL || "").trim()
+    );
 
-    // Succeed if we persisted OR at least one notification went out.
-    if (!saved && !teamOk && !customerOk) {
-      return { ok: false, error: FAIL_MESSAGE };
+    if (saved || emailsSent) {
+      return { ok: true, firstName, emailsSent };
     }
 
-    return {
-      ok: true,
-      firstName,
-      emailsSent
-    };
+    if (!resendConfigured) {
+      console.error("[consultation-enquiry] no persistence and Resend is not configured");
+      return {
+        ok: false,
+        error:
+          "Enquiry email is not configured yet. Please contact us on WhatsApp or Messenger, or try again shortly."
+      };
+    }
+
+    console.error("[consultation-enquiry] save and Resend both failed");
+    return { ok: false, error: FAIL_MESSAGE };
   } catch (err) {
     console.error("[consultation-enquiry] submit failed", err);
     return { ok: false, error: FAIL_MESSAGE };

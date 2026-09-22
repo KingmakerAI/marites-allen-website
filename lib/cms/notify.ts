@@ -84,7 +84,7 @@ async function sendResendEmail(payload: {
   html: string;
   replyTo?: string;
 }) {
-  const key = process.env.RESEND_API_KEY;
+  const key = (process.env.RESEND_API_KEY || "").trim();
   if (!key) return false;
   try {
     const res = await fetch("https://api.resend.com/emails", {
@@ -115,10 +115,10 @@ async function sendResendEmail(payload: {
 }
 
 function mailConfig() {
-  const from = process.env.BOOKING_FROM_EMAIL || process.env.RESET_FROM_EMAIL;
-  const to = process.env.BOOKING_NOTIFY_TO || "hello@maritesallen.com";
-  const key = process.env.RESEND_API_KEY;
-  return { from, to, key };
+  const from = (process.env.BOOKING_FROM_EMAIL || process.env.RESET_FROM_EMAIL || "").trim();
+  const to = (process.env.BOOKING_NOTIFY_TO || "hello@maritesallen.com").trim();
+  const key = (process.env.RESEND_API_KEY || "").trim();
+  return { from: from || undefined, to, key: key || undefined };
 }
 
 export async function notifyTeamConsultationEnquiry(input: ConsultationEnquiryNotifyInput) {

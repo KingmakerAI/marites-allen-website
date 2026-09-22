@@ -74,8 +74,13 @@ function emptyStore(): StoreData {
 }
 
 export function getStorePath() {
+  if (process.env.CMS_JSON_PATH) return process.env.CMS_JSON_PATH;
+  // Vercel’s app filesystem is read-only; keep a mutable copy under /tmp.
+  if (process.env.VERCEL) {
+    return path.join("/tmp", "ma-cms.json");
+  }
   const root = process.cwd();
-  return process.env.CMS_JSON_PATH || path.join(/* turbopackIgnore: true */ root, "data", "cms.json");
+  return path.join(/* turbopackIgnore: true */ root, "data", "cms.json");
 }
 
 export function readStore(): StoreData {

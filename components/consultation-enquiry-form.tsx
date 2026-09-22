@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { useMemo, useState, type FormEvent } from "react";
-import { submitConsultationEnquiryAction } from "@/app/signup/consultation-enquiry";
 import { CountrySelect, darkInput } from "@/components/country-select";
 import { ChatCtaButtons } from "@/components/chat-cta-buttons";
 import { DarkSelect } from "@/components/dark-select";
@@ -120,26 +119,35 @@ export function ConsultationEnquiryForm({
 
     setPending(true);
     try {
-      const result = await submitConsultationEnquiryAction({
-        firstName: firstName.trim(),
-        lastName: lastName.trim(),
-        gender: "",
-        country: countryName,
-        countryCode: regionCountryCode,
-        dialCode,
-        phone: formatE164(dialCode, nationalPhone),
-        email: email.trim(),
-        consultationType,
-        message: message.trim(),
-        privacyAcknowledged,
-        marketingConsent,
-        honeypot: ""
+      const res = await fetch("/api/consultation-enquiry", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          firstName: firstName.trim(),
+          lastName: lastName.trim(),
+          gender: "",
+          country: countryName,
+          countryCode: regionCountryCode,
+          dialCode,
+          phone: formatE164(dialCode, nationalPhone),
+          email: email.trim(),
+          consultationType,
+          message: message.trim(),
+          privacyAcknowledged,
+          marketingConsent,
+          honeypot: ""
+        })
       });
 
-      if (!result.ok) {
-        setFieldErrors(result.fieldErrors || {});
+      const result = (await res.json().catch(() => null)) as
+        | { ok: true; firstName: string; emailsSent: boolean }
+        | { ok: false; error?: string; fieldErrors?: Record<string, string> }
+        | null;
+
+      if (!result || !result.ok) {
+        setFieldErrors(result && "fieldErrors" in result ? result.fieldErrors || {} : {});
         setFormError(
-          result.error ||
+          (result && "error" in result && result.error) ||
             "We couldn't submit your enquiry right now. Please try again or contact us directly via WhatsApp or email."
         );
         return;
