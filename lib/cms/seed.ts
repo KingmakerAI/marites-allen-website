@@ -114,7 +114,6 @@ const LIVE_HOME_SECTIONS = [
       highlight: "the Philippines' Feng Shui Queen",
       ctaLabel: "Book Consultation",
       ctaHref: "/book",
-      chartCtaLabel: "Free Destiny Chart",
       rating: "4.9 · 1,200+ verified reviews",
       imageUrl: "/images/zip/marites-1.webp",
       imageAlt: "Marites Allen, Feng Shui Master"

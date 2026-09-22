@@ -59,7 +59,6 @@ export default async function HomePage() {
           highlight: heroPayload.highlight,
           ctaLabel: heroPayload.ctaLabel || "Book Consultation",
           ctaHref: heroPayload.ctaHref || "/book",
-          chartCtaLabel: heroPayload.chartCtaLabel || "Free Destiny Chart",
           rating: heroPayload.rating || "4.9 · 1,200+ verified reviews",
           imageUrl: heroPayload.imageUrl || "/images/zip/marites-1.webp",
           imageAlt: heroPayload.imageAlt || "Marites Allen, Feng Shui Master"

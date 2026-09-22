@@ -564,7 +564,6 @@ export async function saveHomepageAllAction(formData: FormData) {
       highlight: sanitizeText(formStr(formData, "highlight"), 120),
       ctaLabel: sanitizeText(formStr(formData, "ctaLabel"), 80),
       ctaHref: sanitizeText(formStr(formData, "ctaHref"), 200) || "/book",
-      chartCtaLabel: sanitizeText(formStr(formData, "chartCtaLabel"), 80),
       rating: sanitizeText(formStr(formData, "rating"), 80),
       imageUrl: sanitizeText(formStr(formData, "imageUrl"), 300),
       imageAlt: sanitizeText(formStr(formData, "imageAlt"), 160)

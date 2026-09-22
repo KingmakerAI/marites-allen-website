@@ -98,10 +98,6 @@ export default async function HomepageEditor({
                 <input name="ctaHref" defaultValue={heroPayload.ctaHref || "/book"} />
               </label>
               <label>
-                Destiny chart button
-                <input name="chartCtaLabel" defaultValue={heroPayload.chartCtaLabel || "Free Destiny Chart"} />
-              </label>
-              <label>
                 Photo URL
                 <input name="imageUrl" defaultValue={heroPayload.imageUrl || "/images/zip/marites-1.webp"} />
               </label>
