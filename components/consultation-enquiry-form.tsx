@@ -17,6 +17,7 @@ type Props = {
   whatsappLabel?: string;
   messengerLabel?: string;
   submitHint?: string;
+  onSuccess?: () => void;
 };
 
 const labelStyle = {
@@ -54,7 +55,8 @@ export function ConsultationEnquiryForm({
   preferTalkHeading = "Prefer to speak with us directly?",
   whatsappLabel = "WhatsApp Enquiry →",
   messengerLabel = "Facebook Messenger →",
-  submitHint = "Your enquiry will be sent securely to our team. We'll contact you by email or WhatsApp regarding availability and next steps."
+  submitHint = "Your enquiry will be sent securely to our team. We'll contact you by email or WhatsApp regarding availability and next steps.",
+  onSuccess
 }: Props) {
   const options = useMemo(() => {
     const base = consultationOptions.length ? consultationOptions : FALLBACK_CONSULTATION_OPTIONS;
@@ -155,6 +157,7 @@ export function ConsultationEnquiryForm({
 
       setEmailsSent(result.emailsSent);
       setSuccessName(result.firstName);
+      onSuccess?.();
     } catch {
       setFormError(
         "We couldn't submit your enquiry right now. Please try again or contact us directly via WhatsApp or email."

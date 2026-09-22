@@ -1,11 +1,10 @@
 import type { Metadata } from "next";
-import { ConsultationEnquiryForm } from "@/components/consultation-enquiry-form";
+import { BookEnquirySection } from "@/components/book-enquiry-section";
 import { JsonLd } from "@/components/json-ld";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { FALLBACK_CONSULTATION_OPTIONS } from "@/lib/countries";
 import { MESSENGER_URL } from "@/lib/privacy";
-import { cms } from "@/lib/cms/cms-attr";
 import { getCachedPageCopy, getCachedServices, getCachedSettings } from "@/lib/cms/content";
 import { breadcrumbJsonLd, pageMetadata } from "@/lib/seo";
 
@@ -48,77 +47,19 @@ export default async function BookPage() {
           borderBottom: "1px solid rgba(230,198,128,0.15)"
         }}
       >
-        <div className="book-shell">
-          <aside className="book-intro">
-            <div
-              style={{
-                display: "inline-block",
-                fontSize: 11,
-                fontWeight: 700,
-                letterSpacing: 2.5,
-                textTransform: "uppercase",
-                color: "#143d31",
-                background: "#e6c680",
-                borderRadius: 99,
-                padding: "5px 12px",
-                marginBottom: 16
-              }}
-              {...cms("book.kicker")}
-            >
-              {book.kicker}
-            </div>
-            <h1
-              className="font-display"
-              style={{
-                fontWeight: 700,
-                fontSize: "clamp(28px,3.4vw,42px)",
-                lineHeight: 1.12,
-                margin: "0 0 14px"
-              }}
-              {...cms("book.title")}
-            >
-              {book.title}
-            </h1>
-            <p
-              style={{
-                fontSize: "clamp(14px,1.5vw,16px)",
-                lineHeight: 1.55,
-                color: "#c7ddd2",
-                margin: "0 0 10px",
-                maxWidth: 400
-              }}
-              {...cms("book.intro")}
-            >
-              {book.intro}
-            </p>
-            {book.introSecondary ? (
-              <p
-                style={{
-                  fontSize: 13.5,
-                  lineHeight: 1.55,
-                  color: "#a8c4b6",
-                  margin: 0,
-                  maxWidth: 400
-                }}
-                {...cms("book.introSecondary")}
-              >
-                {book.introSecondary}
-              </p>
-            ) : null}
-          </aside>
-
-          <div className="book-form-card">
-            <ConsultationEnquiryForm
-              consultationOptions={consultationOptions}
-              whatsappUrl={`https://wa.me/${whatsapp}`}
-              messengerUrl={MESSENGER_URL}
-              preferTalkHeading={book.preferTalkHeading}
-              whatsappLabel={book.whatsappLabel}
-              messengerLabel="Facebook Messenger →"
-              submitHint={book.submitHint}
-            />
-          </div>
-        </div>
+        <BookEnquirySection
+          kicker={book.kicker}
+          title={book.title}
+          intro={book.intro}
+          introSecondary={book.introSecondary}
+          consultationOptions={consultationOptions}
+          whatsappUrl={`https://wa.me/${whatsapp}`}
+          messengerUrl={MESSENGER_URL}
+          preferTalkHeading={book.preferTalkHeading}
+          whatsappLabel={book.whatsappLabel}
+          messengerLabel="Facebook Messenger →"
+          submitHint={book.submitHint}
+        />
       </section>
 
       <SiteFooter />
@@ -132,6 +73,12 @@ export default async function BookPage() {
           grid-template-columns: minmax(280px, 0.9fr) minmax(0, 1.2fr);
           gap: clamp(24px, 3.5vw, 40px);
           align-items: start;
+          min-height: calc(100vh - 88px);
+        }
+        .book-shell--success {
+          grid-template-columns: 1fr;
+          justify-items: center;
+          align-items: center;
           min-height: calc(100vh - 88px);
         }
         .book-intro {
@@ -148,6 +95,13 @@ export default async function BookPage() {
           max-height: calc(100vh - 112px);
           overflow-y: auto;
           overscroll-behavior: contain;
+          width: 100%;
+        }
+        .book-shell--success .book-form-card {
+          max-width: 560px;
+          max-height: none;
+          overflow: visible;
+          padding: 36px 28px 28px;
         }
         @media (max-width: 960px) {
           .book-shell {
@@ -155,6 +109,9 @@ export default async function BookPage() {
             min-height: auto;
             padding-top: 24px;
             padding-bottom: 28px;
+          }
+          .book-shell--success {
+            min-height: calc(100vh - 120px);
           }
           .book-intro {
             position: static;
@@ -169,6 +126,9 @@ export default async function BookPage() {
             max-height: none;
             overflow: visible;
             padding: 20px 16px;
+          }
+          .book-shell--success .book-form-card {
+            padding: 28px 18px 22px;
           }
         }
       `}</style>
