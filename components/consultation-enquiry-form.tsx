@@ -517,6 +517,19 @@ export function ConsultationEnquiryForm({
           -webkit-text-fill-color: #f8f4ea !important;
           caret-color: #f8f4ea;
         }
+        .enquiry-field::placeholder {
+          color: rgba(200, 214, 204, 0.42) !important;
+          -webkit-text-fill-color: rgba(200, 214, 204, 0.42) !important;
+          opacity: 1;
+        }
+        .enquiry-field::-webkit-input-placeholder {
+          color: rgba(200, 214, 204, 0.42) !important;
+          -webkit-text-fill-color: rgba(200, 214, 204, 0.42) !important;
+        }
+        .enquiry-field::-moz-placeholder {
+          color: rgba(200, 214, 204, 0.42) !important;
+          opacity: 1;
+        }
         .enquiry-field:-webkit-autofill,
         .enquiry-field:-webkit-autofill:hover,
         .enquiry-field:-webkit-autofill:focus,
