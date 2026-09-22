@@ -52,12 +52,19 @@ export function SignupForm({
   const dark = variant === "dark";
   const inputStyle = {
     width: "100%",
-    background: dark ? "rgba(255,255,255,0.06)" : "#f9f5ec",
-    border: dark ? "1px solid rgba(230,198,128,0.28)" : "1.5px solid #cdd8d0",
+    background: dark ? "#1a3d33" : "#f9f5ec",
+    border: dark ? "1px solid rgba(230,198,128,0.45)" : "1.5px solid #cdd8d0",
     borderRadius: 10,
     padding: "11px 13px",
     fontFamily: "Lato, system-ui, sans-serif",
-    color: dark ? "#fff" : "#2a2a28"
+    fontSize: 15,
+    lineHeight: 1.4,
+    color: dark ? "#f4f0e6" : "#2a2a28",
+    colorScheme: dark ? ("dark" as const) : ("light" as const)
+  } as const;
+  const optionStyle = {
+    background: dark ? "#143d31" : "#fff",
+    color: dark ? "#f4f0e6" : "#2a2a28"
   } as const;
 
   async function onSubmit(formData: FormData) {
@@ -143,12 +150,30 @@ export function SignupForm({
         <label key={field.name} style={{ display: "grid", gap: 5, fontSize: 12, fontWeight: 700, color: dark ? "#e6c680" : "#3d5348" }}>
           {field.label}
           {field.options?.length ? (
-            <select name={field.name} required={field.required} style={inputStyle} defaultValue="">
-              <option value="" disabled>
+            <select
+              name={field.name}
+              required={field.required}
+              style={{
+                ...inputStyle,
+                appearance: "none" as const,
+                WebkitAppearance: "none" as const,
+                MozAppearance: "none" as const,
+                backgroundImage: dark
+                  ? "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23e6c680' d='M1 1l5 5 5-5'/%3E%3C/svg%3E\")"
+                  : "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%233d5348' d='M1 1l5 5 5-5'/%3E%3C/svg%3E\")",
+                backgroundRepeat: "no-repeat",
+                backgroundPosition: "right 14px center",
+                backgroundSize: "12px 8px",
+                paddingRight: 40,
+                cursor: "pointer"
+              }}
+              defaultValue=""
+            >
+              <option value="" disabled style={optionStyle}>
                 {field.placeholder || "Select…"}
               </option>
               {field.options.map((option) => (
-                <option key={option.value} value={option.value}>
+                <option key={option.value} value={option.value} style={optionStyle}>
                   {option.label}
                 </option>
               ))}

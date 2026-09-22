@@ -136,7 +136,7 @@ export default async function BookPage() {
               extraFields={[
                 {
                   name: "service",
-                  label: "Consultation",
+                  label: "What do you need help with",
                   required: true,
                   placeholder: "Choose a consultation",
                   options: [
