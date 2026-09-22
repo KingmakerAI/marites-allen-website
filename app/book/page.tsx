@@ -1,12 +1,10 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { JsonLd } from "@/components/json-ld";
 import { SignupForm } from "@/components/signup-form";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { cms } from "@/lib/cms/cms-attr";
-import { getCachedPageCopy, getCachedPricing, getCachedServices, getCachedSettings } from "@/lib/cms/content";
-import { formatServicePrice } from "@/lib/cms/map-services";
+import { getCachedPageCopy, getCachedServices, getCachedSettings } from "@/lib/cms/content";
 import { breadcrumbJsonLd, pageMetadata } from "@/lib/seo";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -20,17 +18,14 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function BookPage() {
-  const [settings, services, pricing, pageCopy] = await Promise.all([
+  const [settings, services, pageCopy] = await Promise.all([
     getCachedSettings(),
     getCachedServices(),
-    getCachedPricing(),
     getCachedPageCopy()
   ]);
   const book = pageCopy.book;
   const whatsapp = settings.contact.whatsapp || "639209509390";
   const messengerUrl = "https://m.me/166449603402286";
-  const featured = services.filter((s) => s.featured).slice(0, 3);
-  const listed = featured.length ? featured : services.slice(0, 3);
 
   return (
     <div className="page-shell page-enter">
@@ -107,7 +102,7 @@ export default async function BookPage() {
               padding: "clamp(22px,3vw,32px)",
               textAlign: "left",
               maxWidth: 520,
-              margin: "0 auto 28px"
+              margin: "0 auto"
             }}
           >
             <div
@@ -192,36 +187,6 @@ export default async function BookPage() {
                 Message on Messenger
               </a>
             </div>
-          </div>
-
-          {listed.length > 0 && (
-            <div style={{ textAlign: "left", maxWidth: 520, margin: "0 auto 28px" }}>
-              {listed.map((s) => {
-                const price = pricing.find((p) => p.serviceId === s.id);
-                const priceLabel = formatServicePrice(price);
-                return (
-                  <div key={s.id} style={{ color: "#c7ddd2", marginBottom: 10, fontSize: 14 }}>
-                    <strong style={{ color: "#fff" }}>{s.name}</strong>
-                    {priceLabel ? <span style={{ color: "#e6c680" }}> · {priceLabel}</span> : null}
-                    <div>{s.description}</div>
-                  </div>
-                );
-              })}
-            </div>
-          )}
-
-          <div style={{ display: "flex", flexWrap: "wrap", gap: 12, justifyContent: "center" }}>
-            <Link href="/destara" style={{ color: "#e6c680", fontWeight: 700, fontSize: 14 }}>
-              Try Destara AI →
-            </Link>
-            <span style={{ color: "#5f7a6e" }}>·</span>
-            <Link href="/events" style={{ color: "#e6c680", fontWeight: 700, fontSize: 14 }}>
-              View events →
-            </Link>
-            <span style={{ color: "#5f7a6e" }}>·</span>
-            <Link href="/" style={{ color: "#e6c680", fontWeight: 700, fontSize: 14 }}>
-              Back home →
-            </Link>
           </div>
         </div>
       </section>
