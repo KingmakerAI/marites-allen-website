@@ -13,7 +13,8 @@ import {
 } from "../site-data";
 import { hashPassword, newId, nowIso, slugify } from "./crypto";
 import { mergePageCopy } from "./page-copy-defaults";
-import { mutateStore, mutateStoreIfChanged, readStore } from "./store";
+import { repairDeep } from "./repair-text";
+import { allowEphemeralWrites, endEphemeralWrites, mutateStore, mutateStoreIfChanged, readStore } from "./store";
 import { ensureOwnerAccounts } from "./auth";
 import type { Article, CmsEvent, CmsPage, SiteSettings } from "./types";
 
@@ -168,6 +169,12 @@ const COMING_SOON_LABELS = new Set([
 async function ensureLiveDefaults() {
   await mutateStoreIfChanged((store) => {
     let changed = false;
+    const before = JSON.stringify(store);
+    const repaired = repairDeep(store);
+    if (JSON.stringify(repaired) !== before) {
+      Object.assign(store, repaired);
+      changed = true;
+    }
     if (!store.homeSections) {
       store.homeSections = [];
       changed = true;
@@ -325,15 +332,37 @@ async function ensureLiveDefaults() {
   });
 }
 
-export async function ensureSeeded() {
+async function seedNow() {
+  allowEphemeralWrites();
+  try {
+    await seedBody();
+  } finally {
+    endEphemeralWrites();
+  }
+}
+
+let seeded: Promise<void> | null = null;
+
+export function ensureSeeded() {
+  if (process.env.CMS_JSON_PATH) return seedNow();
+  if (!seeded) {
+    seeded = seedNow().catch((err) => {
+      seeded = null;
+      throw err;
+    });
+  }
+  return seeded;
+}
+
+async function seedBody() {
   const existing = await readStore();
   if (!(existing.adminUsers.length && existing.articles.length && existing.settings)) {
     await mutateStore((store) => {
-      if (!store.adminUsers.length) {
+      if (!store.adminUsers.length && process.env.ADMIN_PASSWORD) {
         store.adminUsers.push({
           id: newId(),
           email: (process.env.ADMIN_EMAIL || "admin@maritesallen.com").toLowerCase(),
-          passwordHash: hashPassword(process.env.ADMIN_PASSWORD || "change-this-password"),
+          passwordHash: hashPassword(process.env.ADMIN_PASSWORD),
           role: "owner",
           createdAt: nowIso(),
           lastLoginAt: null

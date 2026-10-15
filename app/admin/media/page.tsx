@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { requireUser } from "@/lib/cms/auth";
 import { listMedia, mediaInUse } from "@/lib/cms/repo";
 import { deleteMediaAction, updateMediaAltAction, uploadMediaAction } from "../actions";
@@ -25,7 +26,7 @@ export default async function MediaPage({
         <label>
           Choose a picture
           <input type="file" name="file" accept="image/jpeg,image/png,image/webp,image/gif" required />
-          <span className="field-hint">JPG, PNG, WebP, or GIF. Keep it under 8MB.</span>
+          <span className="field-hint">JPG, PNG, WebP, or GIF. Keep it under 4MB.</span>
         </label>
         <label>
           Describe this photo
@@ -46,8 +47,7 @@ export default async function MediaPage({
           const used = usedIds.has(m.id);
           return (
             <div key={m.id} className="admin-card media-card">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={m.path} alt={m.altText} />
+              <Image src={m.path} alt={m.altText} width={480} height={320} sizes="(max-width: 800px) 100vw, 320px" style={{ width: "100%", height: "auto", objectFit: "cover" }} />
               <div style={{ fontSize: 12, marginTop: 8 }}>{m.filename}</div>
               <form action={updateMediaAltAction}>
                 <input type="hidden" name="id" value={m.id} />

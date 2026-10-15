@@ -107,11 +107,12 @@ export default async function DashboardPage({
   const range = parseAnalyticsRange(q.range);
   const stats = await dashboardStats();
   const visits = analyticsSummary(range);
+  const signups = await listSignups();
   const messages = bucketTimestamps(
-    (await listSignups()).map((row) => row.createdAt),
+    signups.map((row) => row.createdAt),
     range
   );
-  const enquiries = (await listSignups()).slice(0, 8);
+  const enquiries = signups.slice(0, 8);
   const drafts = (await listArticles({ status: "draft" })).slice(0, 6);
   const today = new Intl.DateTimeFormat("en-PH", {
     weekday: "long",
@@ -139,7 +140,7 @@ export default async function DashboardPage({
         <div>
           <h1 className="admin-h1">{greeting()}</h1>
           <p className="admin-sub" style={{ marginBottom: 0 }}>
-            {today}. These numbers are from the live website.
+            {today}. {process.env.VERCEL ? "Visitor counts are not being recorded on the live site yet." : "These numbers are from the live website."}
           </p>
         </div>
         <Link className="btn secondary" href="/" target="_blank">

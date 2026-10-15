@@ -1,10 +1,11 @@
 import { NextResponse } from "next/server";
 import { newId } from "@/lib/cms/crypto";
-import { isBotUserAgent, recordVisit, shouldSkipPath } from "@/lib/cms/analytics";
+import { analyticsIsRecorded, isBotUserAgent, recordVisit, shouldSkipPath } from "@/lib/cms/analytics";
 
 const COOKIE = "ma_vid";
 
 export async function POST(request: Request) {
+  if (!analyticsIsRecorded()) return NextResponse.json({ ok: true, recorded: false });
   const ua = request.headers.get("user-agent") || "";
   if (isBotUserAgent(ua)) return NextResponse.json({ ok: true });
 
@@ -27,6 +28,7 @@ export async function POST(request: Request) {
     res.cookies.set(COOKIE, visitorId, {
       httpOnly: true,
       sameSite: "lax",
+      secure: process.env.NODE_ENV === "production",
       maxAge: 60 * 60 * 24 * 365,
       path: "/"
     });

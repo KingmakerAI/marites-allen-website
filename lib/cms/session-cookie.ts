@@ -12,10 +12,12 @@ export class SessionSecretError extends Error {
   }
 }
 
-/** Same key on every server. ADMIN_SESSION_SECRET overrides it when set. */
-export function sessionSecret(): string {
+/** Production must set ADMIN_SESSION_SECRET. Local dev and tests use a stable fallback. */
+export function sessionSecret(): string | null {
   const fromEnv = process.env.ADMIN_SESSION_SECRET?.trim();
-  return fromEnv || DEV_SESSION_SECRET;
+  if (fromEnv) return fromEnv;
+  if (process.env.VERCEL || process.env.NODE_ENV === "production") return null;
+  return DEV_SESSION_SECRET;
 }
 
 function encodeBase64Url(bytes: Uint8Array) {
@@ -41,6 +43,7 @@ async function hmacKey(secret: string) {
 
 export async function signSessionCookie(claims: SessionClaims) {
   const secret = sessionSecret();
+  if (!secret) throw new SessionSecretError();
   const body = encodeBase64Url(new TextEncoder().encode(JSON.stringify(claims)));
   const signature = new Uint8Array(await crypto.subtle.sign("HMAC", await hmacKey(secret), new TextEncoder().encode(body)));
   return `${body}.${encodeBase64Url(signature)}`;
@@ -48,6 +51,7 @@ export async function signSessionCookie(claims: SessionClaims) {
 
 export async function readSessionCookie(value: string, options?: { allowExpired?: boolean }): Promise<SessionClaims | null> {
   const secret = sessionSecret();
+  if (!secret) return null;
   const dot = value.indexOf(".");
   if (dot <= 0) return null;
   const body = value.slice(0, dot);

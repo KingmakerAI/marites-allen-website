@@ -79,7 +79,7 @@ function SearchPalette({ onClose }: { onClose: () => void }) {
   }, []);
 
   useEffect(() => {
-    if (!query.trim()) return;
+    if (query.trim().length < 2) return;
     const controller = new AbortController();
     const timer = setTimeout(() => {
       fetch(`/admin/api/search?q=${encodeURIComponent(query)}`, { signal: controller.signal })
@@ -96,7 +96,8 @@ function SearchPalette({ onClose }: { onClose: () => void }) {
     };
   }, [query]);
 
-  const rows = query.trim() ? hits : recent;
+  const searching = query.trim().length >= 2;
+  const rows = searching ? hits : recent;
   const selected = Math.min(rawSelected, Math.max(rows.length - 1, 0));
 
   const open = useCallback(
@@ -137,9 +138,9 @@ function SearchPalette({ onClose }: { onClose: () => void }) {
           </button>
         </div>
         <div className="palette-results">
-          {!query.trim() && rows.length > 0 && <div className="palette-label">Recent</div>}
-          {query.trim() && rows.length === 0 && <div className="palette-empty">No matches for “{query}”</div>}
-          {!query.trim() && rows.length === 0 && (
+          {!searching && rows.length > 0 && <div className="palette-label">Recent</div>}
+          {searching && rows.length === 0 && <div className="palette-empty">No matches for “{query}”</div>}
+          {!searching && rows.length === 0 && (
             <div className="palette-empty">Type a name to find it.</div>
           )}
           {rows.map((hit, i) => (

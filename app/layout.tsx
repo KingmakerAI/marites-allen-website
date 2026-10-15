@@ -122,7 +122,7 @@ export default async function RootLayout({
         <JsonLd data={websiteJsonLd()} />
         <JsonLd data={professionalServiceJsonLd()} />
         <CmsProvider settings={settings} nav={nav} forecastYears={pageCopy.forecast.navYears}>
-          <VisitBeacon />
+          {process.env.VERCEL ? null : <VisitBeacon />}
           {children}
         </CmsProvider>
       </body>

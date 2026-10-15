@@ -100,11 +100,11 @@ async function sendResendEmail(payload: {
         subject: payload.subject,
         text: payload.text,
         html: payload.html
-      })
+      }),
+      signal: AbortSignal.timeout(5000)
     });
     if (!res.ok) {
-      const body = await res.text().catch(() => "");
-      console.error("[notify] Resend failed", res.status, body);
+      console.error("[notify] Resend failed", res.status);
       return false;
     }
     return true;

@@ -45,7 +45,7 @@ export type StoreData = {
   auditLog: AuditLog[];
   signups: Signup[];
   pageCopy: PageCopy | null;
-  bootstrap?: { owners?: string };
+  bootstrap?: { owners?: string; attempts?: { key: string; count: number; resetAt: number }[] };
 };
 
 const EMPTY: StoreData = {
@@ -109,16 +109,33 @@ export function getStorePath() {
   return path.join(/* turbopackIgnore: true */ root, "data", "cms.json");
 }
 
+let fileMemo: { path: string; mtime: number; data: StoreData } | null = null;
+
 function readFileStore(): StoreData {
   const storePath = getStorePath();
   try {
     if (!fs.existsSync(storePath)) return emptyStore();
+    const mtime = fs.statSync(storePath).mtimeMs;
+    if (fileMemo && fileMemo.path === storePath && fileMemo.mtime === mtime) return structuredClone(fileMemo.data);
     // Strip UTF-8 BOM (common on OneDrive / Windows editors) so JSON.parse succeeds.
     const raw = fs.readFileSync(storePath, "utf8").replace(/^\uFEFF/, "");
-    return normalize(JSON.parse(raw) as Partial<StoreData>);
+    const data = normalize(JSON.parse(raw) as Partial<StoreData>);
+    fileMemo = { path: storePath, mtime, data };
+    return structuredClone(data);
   } catch {
     return emptyStore();
   }
+}
+
+let ephemeralWrites = 0;
+
+/** Seed may write a scratch copy. A real save on Vercel may not. */
+export function allowEphemeralWrites() {
+  ephemeralWrites += 1;
+}
+
+export function endEphemeralWrites() {
+  ephemeralWrites = Math.max(0, ephemeralWrites - 1);
 }
 
 function writeFileStore(data: StoreData) {
@@ -188,8 +205,16 @@ export async function readStore(): Promise<StoreData> {
 }
 
 export async function writeStore(data: StoreData) {
+  if (process.env.VERCEL && !useBlobStore() && ephemeralWrites === 0) {
+    throw new Error("BLOB_READ_WRITE_TOKEN is not set. This save was not stored.");
+  }
   if (!useBlobStore()) {
     writeFileStore(data);
+    try {
+      fileMemo = { path: getStorePath(), mtime: fs.statSync(getStorePath()).mtimeMs, data: structuredClone(data) };
+    } catch {
+      fileMemo = null;
+    }
     return;
   }
   await writeBlobStore(data);

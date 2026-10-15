@@ -5,7 +5,17 @@ import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { hashPassword, slugify, verifyPassword } from "./crypto";
 import { readSessionCookie, safeAdminNext, signSessionCookie } from "./session-cookie";
 import { formatArticleBody, sanitizeHtml } from "./sanitize";
+import { repairMojibake } from "./repair-text";
 import type { StoreData } from "./store";
+
+describe("repair-text", () => {
+  it("repairs UTF-8 misread as Windows-1252", () => {
+    expect(repairMojibake("Read her full story \u00E2\u2020\u2019")).toBe("Read her full story \u2192");
+    expect(repairMojibake("4.9 \u00C2\u00B7 1,200+ verified")).toBe("4.9 \u00B7 1,200+ verified");
+    expect(repairMojibake("Nestl\u00C3\u00A9")).toBe("Nestl\u00E9");
+    expect(repairMojibake("clean text")).toBe("clean text");
+  });
+});
 
 describe("crypto", () => {
   it("hashes and verifies passwords", () => {
@@ -24,14 +34,15 @@ describe("crypto", () => {
     expect((await readSessionCookie(cookie))?.email).toBe("owner@example.com");
 
     const [body, signature] = cookie.split(".");
-    const tampered = `${body}.${signature.slice(0, -1)}${signature.endsWith("a") ? "b" : "a"}`;
+    const flip = signature[2] === "A" ? "B" : "A";
+    const tampered = `${body}.${signature.slice(0, 2)}${flip}${signature.slice(3)}`;
     expect(await readSessionCookie(tampered)).toBeNull();
 
     const expired = await signSessionCookie({ id: "sess-1", email: "owner@example.com", exp: Date.now() - 1000 });
     expect(await readSessionCookie(expired)).toBeNull();
   });
 
-  it("signs a production cookie with the built-in key when no secret is set", async () => {
+  it("refuses to sign a production cookie when the secret is missing", async () => {
     const env = process.env as { NODE_ENV?: string; ADMIN_SESSION_SECRET?: string; VERCEL?: string };
     const prevNode = env.NODE_ENV;
     const prevSecret = env.ADMIN_SESSION_SECRET;
@@ -40,8 +51,9 @@ describe("crypto", () => {
     env.VERCEL = "1";
     delete env.ADMIN_SESSION_SECRET;
     try {
-      const cookie = await signSessionCookie({ id: "sess-1", email: "owner@example.com", exp: Date.now() + 60_000 });
-      expect((await readSessionCookie(cookie))?.email).toBe("owner@example.com");
+      await expect(signSessionCookie({ id: "sess-1", email: "owner@example.com", exp: Date.now() + 60_000 })).rejects.toThrow(
+        /ADMIN_SESSION_SECRET/
+      );
     } finally {
       env.NODE_ENV = prevNode;
       if (prevSecret === undefined) delete env.ADMIN_SESSION_SECRET;
@@ -321,11 +333,9 @@ describe("cms repository", () => {
     expect(await authenticate("maritesallen@gmail.com", "IamLUCKY168!")).toBeNull();
     expect(await authenticate("maritesallen@gmail.com", "NewLucky168!")).toBeTruthy();
 
-    await requestPasswordReset("cap10kirck@gmail.com");
-    const note = fs.readFileSync(path.join(dir, "last-password-reset.txt"), "utf8");
-    const code = note.match(/Code: ([A-Z0-9]+)/)?.[1];
-    expect(code).toBeTruthy();
-    const reset = await completePasswordReset("cap10kirck@gmail.com", code!, "ResetLucky168!");
+    const requested = await requestPasswordReset("cap10kirck@gmail.com");
+    expect(requested.testCode).toBeTruthy();
+    const reset = await completePasswordReset("cap10kirck@gmail.com", requested.testCode!, "ResetLucky168!");
     expect(reset?.email).toBe("cap10kirck@gmail.com");
     expect(await authenticate("cap10kirck@gmail.com", "ResetLucky168!")).toBeTruthy();
   });
