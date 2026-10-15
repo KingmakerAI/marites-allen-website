@@ -413,6 +413,7 @@ async function ensureLiveDefaults() {
       }
     }
     const FORECAST_2027_STAMP = "forecast-2027-v2-2026-10-16";
+    store.bootstrap = store.bootstrap || {};
     if (store.bootstrap.forecast2027 !== FORECAST_2027_STAMP) {
       const defaults = mergePageCopy(null).forecast;
       const y2027 = defaults.years.find((row) => row.year === "2027");
