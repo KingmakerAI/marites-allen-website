@@ -11,6 +11,7 @@ import {
   loginAction,
   requestResetAction
 } from "@/app/admin/actions";
+import { PasswordField } from "./password-field";
 import "@/app/admin/admin.css";
 
 export const metadata = pageMetadata({
@@ -91,10 +92,13 @@ export default async function AdminPortalPage({
                 Email
                 <input type="email" name="email" required autoComplete="username" defaultValue={email} />
               </label>
-              <label>
-                Password
-                <input type="password" name="password" required autoComplete="current-password" minLength={8} />
-              </label>
+              <PasswordField
+                name="password"
+                label="Password"
+                autoComplete="current-password"
+                minLength={8}
+                forgotHref="/adminportal?view=forgot"
+              />
               <label className="admin-login-remember">
                 <input type="checkbox" name="remember" defaultChecked={Boolean(rememberedEmail)} />
                 Remember me on this computer
@@ -111,19 +115,20 @@ export default async function AdminPortalPage({
                 Email
                 <input type="email" name="email" required autoComplete="username" defaultValue={email} />
               </label>
-              <label>
-                Current password
-                <input type="password" name="currentPassword" required autoComplete="current-password" minLength={8} />
-              </label>
-              <label>
-                New password
-                <input type="password" name="newPassword" required autoComplete="new-password" minLength={10} />
-                <span className="field-hint">At least 10 characters.</span>
-              </label>
-              <label>
-                Type the new password again
-                <input type="password" name="confirmPassword" required autoComplete="new-password" minLength={10} />
-              </label>
+              <PasswordField name="currentPassword" label="Current password" autoComplete="current-password" minLength={8} />
+              <PasswordField
+                name="newPassword"
+                label="New password"
+                autoComplete="new-password"
+                minLength={10}
+                hint="At least 10 characters."
+              />
+              <PasswordField
+                name="confirmPassword"
+                label="Type the new password again"
+                autoComplete="new-password"
+                minLength={10}
+              />
               <button className="btn" type="submit">
                 Save and sign in
               </button>
@@ -152,15 +157,19 @@ export default async function AdminPortalPage({
                 Reset code
                 <input name="code" required autoComplete="one-time-code" />
               </label>
-              <label>
-                New password
-                <input type="password" name="newPassword" required autoComplete="new-password" minLength={10} />
-                <span className="field-hint">At least 10 characters.</span>
-              </label>
-              <label>
-                Type the new password again
-                <input type="password" name="confirmPassword" required autoComplete="new-password" minLength={10} />
-              </label>
+              <PasswordField
+                name="newPassword"
+                label="New password"
+                autoComplete="new-password"
+                minLength={10}
+                hint="At least 10 characters."
+              />
+              <PasswordField
+                name="confirmPassword"
+                label="Type the new password again"
+                autoComplete="new-password"
+                minLength={10}
+              />
               <button className="btn" type="submit">
                 Save and sign in
               </button>
