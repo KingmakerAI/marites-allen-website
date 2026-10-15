@@ -16,11 +16,22 @@ export async function generateMetadata({
   const copy = await getCachedPageCopy();
   const query = await searchParams;
   const year = chosenYear(query.year, copy.forecast.years, copy.forecast.defaultYear);
+  const is2027 = year === "2027";
   return pageMetadata({
-    title: `${year} Annual Forecast`,
-    description: `Marites Allen's ${year} annual forecast, the twelve animal signs, and the Marites Allen ${year} books.`,
+    title: is2027
+      ? "Marites Allen 2027 Forecast, Year of the Fire Sheep"
+      : `${year} Annual Forecast`,
+    description: is2027
+      ? "2026 was about movement. 2027 is about making that movement meaningful. Marites Allen's Fire Sheep forecast, twelve sign teasers, and 2027 Almanac, Planner and Horoscope Guides."
+      : `Marites Allen's ${year} annual forecast, the twelve animal signs, and the Marites Allen ${year} books.`,
     path: `/forecast?year=${year}`,
-    keywords: [`${year} forecast`, "annual Feng Shui forecast", `Chinese zodiac ${year}`, "Marites Allen horoscope"]
+    keywords: [
+      `${year} forecast`,
+      "annual Feng Shui forecast",
+      `Chinese zodiac ${year}`,
+      "Marites Allen horoscope",
+      ...(is2027 ? ["Fire Sheep", "Horoscope Guide", "Feng Shui Almanac 2027"] : [])
+    ]
   });
 }
 

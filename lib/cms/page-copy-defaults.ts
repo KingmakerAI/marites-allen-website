@@ -321,7 +321,7 @@ export const DEFAULT_PAGE_COPY: PageCopy = {
   forecast: {
     seoTitle: "Chinese New Year forecast",
     seoDescription: "Marites Allen's Chinese New Year forecast, Flying Stars, and guidance for all 12 zodiac signs.",
-    defaultYear: "2026",
+    defaultYear: "2027",
     navYears: [
       { year: "2027", label: "2027 · Year of the Fire Sheep" },
       { year: "2026", label: "2026 · Year of the Fire Horse" },
@@ -334,14 +334,13 @@ export const DEFAULT_PAGE_COPY: PageCopy = {
         animal: "Sheep",
         label: "Year of the Fire Sheep",
         element: "Fire (Yin)",
-        cny: "February 6, 2027",
+        cny: "6 February 2027",
         intro:
-          "In the Year of the Fire Sheep, the pace softens and attention turns inward. After the momentum of the Fire Horse, 2027 rewards consolidation, care and creative work. With expert guidance from Marites Allen, discover how to protect what you have built and grow it gently.",
-        lead: "Chinese New Year 2027 begins on February 6, 2027, ushering in the Year of the Fire Sheep.",
+          "2026 was about movement. 2027 is about making that movement meaningful. The Feng Shui year of the Fire Sheep begins on 4 February 2027, the Start of Spring. Lunar New Year follows on 6 February. Read the teaser, find your sign, and prepare early.",
+        lead: "Chinese New Year 2027 begins on 6 February 2027.",
         body1:
-          "The Sheep brings gentleness, artistry and diplomacy. Where 2026 rewarded speed and visibility, 2027 favours refinement: nurturing relationships, consolidating gains, and tending to health and home.",
-        body2:
-          "Fire keeps warmth and passion in play, but channelled through the Sheep it becomes creative rather than competitive. A strong year for the arts, hospitality, care work and anything built on trust."
+          "Do not confuse speed with progress. Build carefully, strengthen what works, and allow good things time to grow.",
+        body2: "Yin Fire provides the light. Earth provides the foundation."
       },
       {
         year: "2026",
@@ -391,123 +390,91 @@ export const DEFAULT_PAGE_COPY: PageCopy = {
         id: "rat",
         sign: "Rat",
         years: "1936 · 1948 · 1960 · 1972 · 1984 · 1996 · 2008 · 2020",
-        text: "Flexibility and steady effort open new doors this year. Fast-moving opportunities favor those who adapt quickly rather than wait for perfect conditions.",
-        focus: "Stay nimble; say yes to well-timed opportunities rather than holding out for certainty."
+        text: "A year to prepare.",
+        focus: "A year to prepare"
       },
       {
         id: "ox",
         sign: "Ox",
         years: "1937 · 1949 · 1961 · 1973 · 1985 · 1997 · 2009 · 2021",
-        text: "Peach Blossom energy favors relationships and social connections. A good year to widen your network and let others see your reliability.",
-        focus: "Invest in relationships and visibility, and let your consistency be noticed."
+        text: "Choose your battles wisely.",
+        focus: "Choose your battles wisely"
       },
       {
         id: "tiger",
         sign: "Tiger",
         years: "1938 · 1950 · 1962 · 1974 · 1986 · 1998 · 2010 · 2022",
-        text: "Bold, well-timed moves are rewarded. The Fire Horse energy amplifies your natural courage, so channel it into one focused goal rather than several.",
-        focus: "Pick one ambitious goal and commit fully instead of splitting your energy."
+        text: "Think before you react.",
+        focus: "Think before you react"
       },
       {
         id: "rabbit",
         sign: "Rabbit",
         years: "1939 · 1951 · 1963 · 1975 · 1987 · 1999 · 2011 · 2023",
-        text: "A year to nurture harmony at home and protect your energy from the year's fast pace. Prioritize rest alongside ambition.",
-        focus: "Guard your peace; strengthen the home before chasing outward growth."
+        text: "",
+        focus: ""
       },
       {
         id: "dragon",
         sign: "Dragon",
         years: "1940 · 1952 · 1964 · 1976 · 1988 · 2000 · 2012 · 2024",
-        text: "Long-term growth and rising influence are supported. Visibility increases, so use it deliberately rather than reactively.",
-        focus: "Build durable influence; choose which stages you step onto."
+        text: "Turn opportunity into progress.",
+        focus: "Turn opportunity into progress"
       },
       {
         id: "snake",
         sign: "Snake",
         years: "1941 · 1953 · 1965 · 1977 · 1989 · 2001 · 2013 · 2025",
-        text: "Quietly favorable. Wise, patient planning now compounds into lasting rewards later in the year.",
-        focus: "Plan carefully early; let results accumulate rather than forcing them."
+        text: "Turn strategy into progress.",
+        focus: "Turn strategy into progress"
       },
       {
         id: "horse",
         sign: "Horse",
         years: "1942 · 1954 · 1966 · 1978 · 1990 · 2002 · 2014 · 2026",
-        text: "Your year of visibility and momentum. Big moves are favored, but pace yourself, because the Fire Horse year burns bright and fast.",
-        focus: "Move decisively, then rest deliberately. Avoid burnout in your own year."
+        text: "Grow through the right connections.",
+        focus: "Grow through the right connections"
       },
       {
         id: "sheep",
         sign: "Sheep",
         years: "1943 · 1955 · 1967 · 1979 · 1991 · 2003 · 2015",
-        text: "Prosperity flows when you enhance your lucky sectors and stay disciplined with resources amid a fast-moving year.",
-        focus: "Mind your resources; steady discipline beats impulsive spending."
+        text: "Change, support, personal growth.",
+        focus: "Change, support, personal growth"
       },
       {
         id: "monkey",
         sign: "Monkey",
         years: "1944 · 1956 · 1968 · 1980 · 1992 · 2004 · 2016",
-        text: "Opportunity is abundant this year; timing and placement make the difference between a good idea and a good outcome.",
-        focus: "Time your moves well, because execution matters more than ideas this year."
+        text: "Use the right connections.",
+        focus: "Use the right connections"
       },
       {
         id: "rooster",
         sign: "Rooster",
         years: "1945 · 1957 · 1969 · 1981 · 1993 · 2005 · 2017",
-        text: "Romance and connection are highlighted. Align your space and schedule to make room for people, not just projects.",
-        focus: "Make space for relationships alongside your ambitions."
+        text: "Protect your energy.",
+        focus: "Protect your energy"
       },
       {
         id: "dog",
         sign: "Dog",
         years: "1946 · 1958 · 1970 · 1982 · 1994 · 2006 · 2018",
-        text: "Guard against friction and lean into peace-and-harmony practices, because the Horse year's pace can strain relationships if unchecked.",
-        focus: "Choose harmony over being right; ease tension before it escalates."
+        text: "Move forward with purpose.",
+        focus: "Move forward with purpose"
       },
       {
         id: "boar",
         sign: "Boar",
         years: "1947 · 1959 · 1971 · 1983 · 1995 · 2007 · 2019",
-        text: "A year to consolidate luck and build steady, protected abundance, even as the year's energy encourages faster action around you.",
-        focus: "Consolidate and protect what you have while others rush ahead."
+        text: "Build on momentum.",
+        focus: "Build on momentum"
       }
     ],
     stars: [
       {
-        title: "1 Victory (Center)",
-        text: "New beginnings, career progress, and wisdom. Activate with water features or blue/black colors. Everyone in the family can take advantage of this good luck."
-      },
-      {
-        title: "2 Illness (Northwest)",
-        text: "Illness and low energy. Suppress with metal cures, Wu Lou, and Medicine Buddha charms. Dog and Boar personalities are afflicted."
-      },
-      {
-        title: "3 Arguments (West)",
-        text: "Arguments and legal disputes. Balance with red colors, fire elements, and Peace charms. Rooster-born could be short fused, be more patient and considerate to avoid misunderstanding and legal issues."
-      },
-      {
-        title: "4 Romance & Travel (Northeast)",
-        text: "Romance, creativity, study and travel luck. Enhance with water elements and Peach Blossom charms. Favorable for Ox and Tiger personalities."
-      },
-      {
-        title: "5 Misfortune (South)",
-        text: "The most troublesome star, bringing obstacles and loss. Suppress with metal cures and Five Element Pagoda. Horse-born should take extra care this year."
-      },
-      {
-        title: "6 Windfall (North)",
-        text: "Heaven luck, authority and unexpected gains. Activate with metal and gold elements. Favorable for Rat personalities."
-      },
-      {
-        title: "7 Robbery & Violence (Southwest)",
-        text: "Theft, betrayal and violence. Neutralize with water elements, Blue Rhino and Elephant charms. Sheep and Monkey personalities should be cautious."
-      },
-      {
-        title: "8 Wealth (East)",
-        text: "The most auspicious wealth star. Activate with earth and crystal elements, Wealth Deities and money charms. Rabbit personalities benefit most."
-      },
-      {
-        title: "9 Prosperity (Southeast)",
-        text: "Future prosperity, celebration and multiplication of luck. Enhance with fire elements and bright lights. Favorable for Dragon and Snake personalities."
+        title: "Flying Stars for 2027",
+        text: "The stars shift on 4 February 2027, the Start of Spring. Some sectors of your home and office bring support, and some need care. The full chart, with what to place and where, is in the Marites Allen 2027 Feng Shui Almanac and the Marites Allen 2027 Horoscope Guides."
       }
     ]
   },

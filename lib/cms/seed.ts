@@ -412,6 +412,24 @@ async function ensureLiveDefaults() {
         changed = true;
       }
     }
+    const FORECAST_2027_STAMP = "forecast-2027-v2-2026-10-16";
+    if (store.bootstrap.forecast2027 !== FORECAST_2027_STAMP) {
+      const defaults = mergePageCopy(null).forecast;
+      const y2027 = defaults.years.find((row) => row.year === "2027");
+      const applyForecast = (copy: NonNullable<typeof store.pageCopy>) => {
+        if (!y2027) return;
+        copy.forecast.defaultYear = "2027";
+        copy.forecast.zodiacs = structuredClone(defaults.zodiacs);
+        copy.forecast.stars = structuredClone(defaults.stars);
+        const idx = copy.forecast.years.findIndex((row) => row.year === "2027");
+        if (idx >= 0) copy.forecast.years[idx] = structuredClone(y2027);
+        else copy.forecast.years.unshift(structuredClone(y2027));
+      };
+      if (store.pageCopy) applyForecast(store.pageCopy);
+      if (store.pageCopyDraft) applyForecast(store.pageCopyDraft);
+      store.bootstrap.forecast2027 = FORECAST_2027_STAMP;
+      changed = true;
+    }
     return changed;
   });
 }

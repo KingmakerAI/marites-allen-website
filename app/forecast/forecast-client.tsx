@@ -7,17 +7,39 @@ import { SiteHeader } from "@/components/site-header";
 import { cms } from "@/lib/cms/cms-attr";
 import type { ForecastCopy } from "@/lib/cms/page-copy-types";
 
-const SHOPS = [
-  { region: "Philippines & Asia:", label: "frigga.com.ph", url: "https://frigga.com.ph" },
-  { region: "UK & Europe:", label: "frigga.co.uk", url: "https://frigga.co.uk" },
-  { region: "USA & Canada:", label: "frigga-usa.com", url: "https://frigga-usa.com" }
-];
+const BOOK_PRODUCTS = [
+  {
+    id: "almanac",
+    name: "Marites Allen 2027 Feng Shui Almanac",
+    price: "1,299 pesos",
+    ships: "from 31 Oct 2026",
+    href: "https://frigga.com.ph/products/marites-allen-feng-shui-almanac-2027",
+    image: "/images/books/2027/almanac.webp",
+    alt: "Marites Allen 2027 Feng Shui Almanac cover"
+  },
+  {
+    id: "planner",
+    name: "Marites Allen 2027 Feng Shui Planner",
+    price: "1,299 pesos",
+    ships: "from 31 Oct 2026",
+    href: "https://frigga.com.ph/products/marites-allen-feng-shui-planner-2027",
+    image: "/images/books/2027/planner.webp",
+    alt: "Marites Allen 2027 Feng Shui Planner cover"
+  },
+  {
+    id: "guides",
+    name: "Marites Allen 2027 Horoscope Guides, Rat to Boar",
+    price: "899 pesos each",
+    ships: "from 15 Nov 2026",
+    href: "https://frigga.com.ph/products/rat-horoscope-guide-2027",
+    image: "/images/books/2027/rat.webp",
+    alt: "Marites Allen 2027 Horoscope Guide cover, Rat"
+  }
+] as const;
 
-const BOOKS = [
-  { name: "Marites Allen Feng Shui Almanac 2027", price: "PHP 1,299", ships: "Ships from 31 Oct 2026" },
-  { name: "Marites Allen Feng Shui Planner 2027", price: "PHP 1,299", ships: "Ships from 31 Oct 2026" },
-  { name: "Marites Allen 2027 Horoscope Guides, Rat to Boar", price: "PHP 899 each", ships: "Ships from 15 Nov 2026" }
-];
+function guideProductUrl(signId: string) {
+  return `https://frigga.com.ph/products/${signId}-horoscope-guide-2027`;
+}
 
 function isKnownYear(y: string | null, years: ForecastCopy["years"]): y is string {
   return !!y && years.some((row) => row.year === y);
@@ -120,7 +142,13 @@ export function ForecastClient({ copy, initialYear }: { copy: ForecastCopy; init
                 textShadow: "0 2px 18px rgba(90,10,12,0.5)"
               }}
             >
-              {year}: The <span {...cms(`forecast.years.${yearIndex}.label`)}>{meta.label}</span>
+              {year === "2027" ? (
+                <>Marites Allen 2027 Forecast, Year of the Fire Sheep</>
+              ) : (
+                <>
+                  {year}: The <span {...cms(`forecast.years.${yearIndex}.label`)}>{meta.label}</span>
+                </>
+              )}
             </h1>
             <p
               style={{
@@ -316,7 +344,7 @@ export function ForecastClient({ copy, initialYear }: { copy: ForecastCopy; init
             {zodiacs.map((z, zi) => (
               <a
                 key={z.id}
-                href="https://frigga.com.ph"
+                href={guideProductUrl(z.id)}
                 target="_blank"
                 rel="noopener noreferrer"
                 style={{
@@ -394,74 +422,83 @@ export function ForecastClient({ copy, initialYear }: { copy: ForecastCopy; init
         </div>
       </section>
 
+      {year === "2027" ? (
       <section style={{ background: "#fdf6e3" }}>
         <div
           style={{
             maxWidth: 1240,
             margin: "0 auto",
-            padding: "clamp(28px,3.6vw,44px) clamp(18px,4vw,40px)",
-            display: "flex",
-            flexWrap: "wrap",
-            gap: "clamp(24px,3.5vw,44px)",
-            alignItems: "center"
+            padding: "clamp(28px,3.6vw,44px) clamp(18px,4vw,40px)"
           }}
         >
-          <div style={{ flex: "1 1 360px", minWidth: 280 }}>
-            <h2
-              style={{
-                fontFamily: "Lato, system-ui, sans-serif",
-                fontWeight: 900,
-                fontSize: "clamp(21px,2.6vw,29px)",
-                color: "#2c2c2c",
-                lineHeight: 1.25,
-                margin: "0 0 14px"
-              }}
-            >
-              {year === "2027" ? "Marites Allen 2027 Books" : `Shop the ${year} guides`}
-            </h2>
-            <div style={{ width: 56, height: 3, background: "#1a4d8f", marginBottom: 18 }} />
-            {year === "2027" && (
-              <div style={{ display: "flex", flexDirection: "column", gap: 14, marginBottom: 20 }}>
-                {BOOKS.map((book) => (
-                  <div key={book.name}>
-                    <div style={{ fontSize: 16, fontWeight: 700, color: "#2c2c2c" }}>{book.name}</div>
-                    <div style={{ fontSize: 14, color: "#4a4a46" }}>{book.price} · {book.ships}</div>
-                  </div>
-                ))}
-              </div>
-            )}
-            <div style={{ fontSize: 15, fontWeight: 700, color: "#2c2c2c", marginBottom: 10 }}>Shop</div>
-            <div style={{ display: "flex", flexDirection: "column", gap: 9, marginBottom: 20, paddingLeft: 6 }}>
-              {SHOPS.map((s) => (
-                <div key={s.url} style={{ fontSize: 15, color: "#4a4a46" }}>
-                  {s.region}{" "}
-                  <a href={s.url} target="_blank" rel="noopener noreferrer" style={{ color: "#1a5fb4", fontWeight: 600 }}>
-                    {s.label}
-                  </a>
+          <h2
+            style={{
+              fontFamily: "Lato, system-ui, sans-serif",
+              fontWeight: 900,
+              fontSize: "clamp(21px,2.6vw,29px)",
+              color: "#2c2c2c",
+              lineHeight: 1.25,
+              margin: "0 0 14px"
+            }}
+          >
+            Marites Allen 2027 Books
+          </h2>
+          <div style={{ width: 56, height: 3, background: "#1a4d8f", marginBottom: 22 }} />
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit,minmax(220px,1fr))",
+              gap: 22,
+              alignItems: "start"
+            }}
+          >
+            {BOOK_PRODUCTS.map((book) => (
+              <div key={book.id} style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+                <div
+                  style={{
+                    position: "relative",
+                    width: "100%",
+                    aspectRatio: "1 / 1",
+                    background: "#efe8d8",
+                    borderRadius: 8,
+                    overflow: "hidden"
+                  }}
+                >
+                  <Image
+                    src={book.image}
+                    alt={book.alt}
+                    fill
+                    sizes="(max-width: 700px) 90vw, 280px"
+                    style={{ objectFit: "cover" }}
+                  />
                 </div>
-              ))}
-            </div>
-          </div>
-          <div style={{ flex: "1 1 380px", minWidth: 290, textAlign: "center" }}>
-            <a
-              href="https://frigga.com.ph"
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{
-                display: "inline-block",
-                background: "#e8271f",
-                color: "#fff",
-                fontSize: 15,
-                fontWeight: 700,
-                padding: "14px 34px",
-                borderRadius: 99
-              }}
-            >
-              SHOP NOW →
-            </a>
+                <div style={{ fontSize: 16, fontWeight: 700, color: "#2c2c2c" }}>{book.name}</div>
+                <div style={{ fontSize: 14, color: "#4a4a46" }}>
+                  {book.price}, {book.ships}
+                </div>
+                <a
+                  href={book.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    display: "inline-block",
+                    alignSelf: "flex-start",
+                    background: "#e8271f",
+                    color: "#fff",
+                    fontSize: 14,
+                    fontWeight: 700,
+                    padding: "12px 22px",
+                    borderRadius: 99
+                  }}
+                >
+                  Shop on frigga.com.ph
+                </a>
+              </div>
+            ))}
           </div>
         </div>
       </section>
+      ) : null}
 
       <section id="flying-stars" style={{ background: "#f6f1e7" }}>
         <div style={{ maxWidth: 820, margin: "0 auto", padding: "clamp(28px,3.6vw,44px) clamp(18px,4vw,40px)" }}>
@@ -470,7 +507,7 @@ export function ForecastClient({ copy, initialYear }: { copy: ForecastCopy; init
           </h2>
           <p style={{ fontSize: 16.5, lineHeight: 1.7, color: "#3a3a36", margin: 0 }}>
             {year === "2027"
-              ? "The stars shift on 4 February 2027, the Start of Spring, not at the Lunar New Year. Some sectors of your home and office bring support this year, and some need care. The full Flying Star chart, with what to place and where, is in the Marites Allen 2027 Feng Shui Almanac and the Marites Allen 2027 Horoscope Guides."
+              ? "The stars shift on 4 February 2027, the Start of Spring. Some sectors of your home and office bring support, and some need care. The full chart, with what to place and where, is in the Marites Allen 2027 Feng Shui Almanac and the Marites Allen 2027 Horoscope Guides."
               : "The full Flying Star chart, with what to place and where, is in the Marites Allen almanac and Horoscope Guides for this year."}
           </p>
         </div>

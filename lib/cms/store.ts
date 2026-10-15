@@ -50,6 +50,7 @@ export type StoreData = {
   bootstrap?: {
     owners?: string;
     maritesPassword?: string;
+    forecast2027?: string;
     attempts?: { key: string; count: number; resetAt: number }[];
   };
 };
