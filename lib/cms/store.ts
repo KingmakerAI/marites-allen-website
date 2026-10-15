@@ -47,7 +47,11 @@ export type StoreData = {
   pageCopy: PageCopy | null;
   /** Working copy for Live Edit / Copy screens. Publish copies this to pageCopy. */
   pageCopyDraft: PageCopy | null;
-  bootstrap?: { owners?: string; attempts?: { key: string; count: number; resetAt: number }[] };
+  bootstrap?: {
+    owners?: string;
+    maritesPassword?: string;
+    attempts?: { key: string; count: number; resetAt: number }[];
+  };
 };
 
 const EMPTY: StoreData = {
