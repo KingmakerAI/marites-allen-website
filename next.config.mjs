@@ -7,12 +7,21 @@ const nextConfig = {
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
     remotePatterns: [{ protocol: "https", hostname: "*.public.blob.vercel-storage.com" }]
   },
+  async redirects() {
+    return [
+      {
+        source: "/booking-experience",
+        destination: "/book",
+        permanent: true
+      }
+    ];
+  },
   async headers() {
     return [
       {
         source: "/(.*)",
         headers: [
-          { key: "Strict-Transport-Security", value: "max-age=31536000" },
+          { key: "Strict-Transport-Security", value: "max-age=31536000; includeSubDomains" },
           { key: "X-Content-Type-Options", value: "nosniff" },
           { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
           { key: "X-Frame-Options", value: "SAMEORIGIN" },

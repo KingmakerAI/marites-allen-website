@@ -8,7 +8,7 @@ import {
   type AnalyticsPoint,
   type AnalyticsRange
 } from "@/lib/cms/analytics";
-import { dashboardStats, listArticles, listSignups } from "@/lib/cms/repo";
+import { dashboardStats, hasUnpublishedPageCopy, listArticles, listSignups } from "@/lib/cms/repo";
 import { ensureSeeded } from "@/lib/cms/seed";
 import { persistenceMode } from "@/lib/cms/store";
 import type { SignupKind } from "@/lib/cms/types";
@@ -114,6 +114,7 @@ export default async function DashboardPage({
   );
   const enquiries = signups.slice(0, 8);
   const drafts = (await listArticles({ status: "draft" })).slice(0, 6);
+  const pageCopyDraft = await hasUnpublishedPageCopy();
   const today = new Intl.DateTimeFormat("en-PH", {
     weekday: "long",
     month: "long",
@@ -153,6 +154,12 @@ export default async function DashboardPage({
           Stories and photos saved here can disappear when the server restarts. Connect Vercel Blob (BLOB_READ_WRITE_TOKEN) so new articles stay on the website.
         </div>
       )}
+      {pageCopyDraft ? (
+        <div className="flash">
+          There is an unpublished page draft.{" "}
+          <Link href="/admin/live?page=/about">Open Live Edit</Link> and press Publish when it is ready.
+        </div>
+      ) : null}
 
       <nav className="dash-ranges" aria-label="Time range">
         {ANALYTICS_RANGES.map((row) => (

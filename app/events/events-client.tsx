@@ -28,6 +28,7 @@ export type FeaturedEvent = {
   liveHref?: string;
   liveLabel?: string;
   tagline: string;
+  ended?: boolean;
 };
 
 const FALLBACK_TALKS: CopyTalk[] = [
@@ -272,47 +273,49 @@ export default function EventsPage({
                     <EventCountdown
                       startsAt={event.startsAt}
                       endsAt={event.endsAt}
-                      liveHref={event.liveHref}
+                      liveHref={event.ended ? undefined : event.liveHref}
                       liveLabel={event.liveLabel}
                     />
 
-                    <div style={{ marginTop: "auto", paddingTop: 4 }}>
-                      {isExternal ? (
-                        <a
-                          href={event.ctaHref}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          style={{
-                            display: "inline-block",
-                            background: "linear-gradient(160deg,#1a4d3e,#143d31)",
-                            border: "1px solid rgba(230,198,128,0.35)",
-                            color: "#fff",
-                            fontWeight: 700,
-                            fontSize: 14,
-                            padding: "12px 18px",
-                            borderRadius: 10
-                          }}
-                        >
-                          {event.ctaLabel} →
-                        </a>
-                      ) : (
-                        <Link
-                          href={event.ctaHref}
-                          style={{
-                            display: "inline-block",
-                            background: "linear-gradient(160deg,#1a4d3e,#143d31)",
-                            border: "1px solid rgba(230,198,128,0.35)",
-                            color: "#fff",
-                            fontWeight: 700,
-                            fontSize: 14,
-                            padding: "12px 18px",
-                            borderRadius: 10
-                          }}
-                        >
-                          {event.ctaLabel} →
-                        </Link>
-                      )}
-                    </div>
+                    {!event.ended ? (
+                      <div style={{ marginTop: "auto", paddingTop: 4 }}>
+                        {isExternal ? (
+                          <a
+                            href={event.ctaHref}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            style={{
+                              display: "inline-block",
+                              background: "linear-gradient(160deg,#1a4d3e,#143d31)",
+                              border: "1px solid rgba(230,198,128,0.35)",
+                              color: "#fff",
+                              fontWeight: 700,
+                              fontSize: 14,
+                              padding: "12px 18px",
+                              borderRadius: 10
+                            }}
+                          >
+                            {event.ctaLabel} →
+                          </a>
+                        ) : (
+                          <Link
+                            href={event.ctaHref}
+                            style={{
+                              display: "inline-block",
+                              background: "linear-gradient(160deg,#1a4d3e,#143d31)",
+                              border: "1px solid rgba(230,198,128,0.35)",
+                              color: "#fff",
+                              fontWeight: 700,
+                              fontSize: 14,
+                              padding: "12px 18px",
+                              borderRadius: 10
+                            }}
+                          >
+                            {event.ctaLabel} →
+                          </Link>
+                        )}
+                      </div>
+                    ) : null}
                   </div>
                 </article>
               );

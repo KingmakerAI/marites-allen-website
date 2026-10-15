@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { requireUser } from "@/lib/cms/auth";
-import { getPageCopy, listMedia } from "@/lib/cms/repo";
+import { getEditablePageCopy, hasUnpublishedPageCopy, listMedia } from "@/lib/cms/repo";
 import {
+  publishPageCopyAction,
   saveAboutCopyAction,
   saveDestaraCopyAction,
   saveForecastCopyAction,
@@ -82,21 +83,31 @@ export default async function CopyEditor({
   await requireUser();
   const q = await searchParams;
   const page = PAGES.find((p) => p.id === q.tab) || PAGES[0];
-  const copy = await getPageCopy();
+  const copy = await getEditablePageCopy();
+  const unpublished = await hasUnpublishedPageCopy();
   const photos = (await listMedia()).map((m) => ({ path: m.path, altText: m.altText, filename: m.filename }));
-  const saveLabel = page.id === "home" ? "Save homepage extras" : `Save ${page.label}`;
+  const saveLabel = page.id === "home" ? "Save draft" : `Save ${page.label} draft`;
+  const returnTo = `/admin/copy?tab=${page.id}`;
 
   return (
     <div className="shop-page">
       <ShopHead
         title={`Edit ${page.label}`}
-        sub={`${page.blurb} Prefer the live page when you only need to change words.`}
+        sub={`${page.blurb} Saves stay in draft until you publish.`}
         backHref="/admin/pages"
         backLabel="All pages"
         viewHref={`/admin/live?page=${encodeURIComponent(page.path)}`}
         viewLabel="Edit live page"
       />
       <Flash saved={q.saved} />
+      {unpublished ? (
+        <form action={publishPageCopyAction} style={{ marginBottom: 16 }}>
+          <input type="hidden" name="returnTo" value={returnTo} />
+          <button className="btn" type="submit">
+            Publish draft to the live website
+          </button>
+        </form>
+      ) : null}
 
       <div className="shop-body shop-body-studio">
         <nav className="shop-toc" aria-label="Which page to edit">

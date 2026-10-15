@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Lato, Playfair_Display } from "next/font/google";
 import { CmsProvider } from "@/components/cms-provider";
 import { JsonLd } from "@/components/json-ld";
+import { CookieNotice } from "@/components/cookie-notice";
 import { VisitBeacon } from "@/components/visit-beacon";
 import { getCachedNav, getCachedPageCopy, getCachedSettings } from "@/lib/cms/content";
 import {
@@ -98,12 +99,13 @@ export async function generateMetadata(): Promise<Metadata> {
     },
     icons: {
       icon: [
+        { url: "/icon", type: "image/png" },
         { url: "/favicon.ico", sizes: "48x48" },
         { url: "/images/brand/icon-32.png", sizes: "32x32", type: "image/png" },
         { url: "/images/brand/icon-192.png", sizes: "192x192", type: "image/png" },
         { url: "/images/brand/icon-512.png", sizes: "512x512", type: "image/png" }
       ],
-      apple: [{ url: "/images/brand/icon-192.png", sizes: "192x192", type: "image/png" }],
+      apple: [{ url: "/apple-icon", type: "image/png" }],
       shortcut: "/images/brand/icon-32.png"
     }
   };
@@ -122,8 +124,12 @@ export default async function RootLayout({
         <JsonLd data={websiteJsonLd()} />
         <JsonLd data={professionalServiceJsonLd()} />
         <CmsProvider settings={settings} nav={nav} forecastYears={pageCopy.forecast.navYears}>
-          {process.env.VERCEL ? null : <VisitBeacon />}
-          {children}
+          <a href="#main" className="skip-link">
+            Skip to content
+          </a>
+          <VisitBeacon />
+          <CookieNotice />
+          <main id="main">{children}</main>
         </CmsProvider>
       </body>
     </html>

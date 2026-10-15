@@ -331,7 +331,9 @@ export async function deleteEvent(id: string) {
 }
 
 export async function listTestimonials() {
-  return (await readStore()).testimonials.sort((a, b) => a.sortOrder - b.sortOrder);
+  return (await readStore()).testimonials
+    .map((t) => ({ ...t, consentOnFile: Boolean(t.consentOnFile) }))
+    .sort((a, b) => a.sortOrder - b.sortOrder);
 }
 
 export async function saveTestimonial(row: Testimonial) {
@@ -533,6 +535,18 @@ export async function getPageCopy() {
   return mergePageCopy((await readStore()).pageCopy);
 }
 
+/** Draft working copy for admin editors. Falls back to the published copy. */
+export async function getEditablePageCopy() {
+  const store = await readStore();
+  return mergePageCopy(store.pageCopyDraft || store.pageCopy);
+}
+
+export async function hasUnpublishedPageCopy() {
+  const store = await readStore();
+  if (!store.pageCopyDraft) return false;
+  return JSON.stringify(mergePageCopy(store.pageCopyDraft)) !== JSON.stringify(mergePageCopy(store.pageCopy));
+}
+
 export type AdminSearchHit = {
   type: string;
   label: string;
@@ -592,13 +606,34 @@ export async function searchAdmin(query: string, limit = 12): Promise<AdminSearc
   return hits.slice(0, limit);
 }
 
+/** Write the public (published) page copy. Prefer savePageCopyDraft + publishPageCopy in admin. */
 export async function savePageCopy(copy: PageCopy) {
   await mutateStore((store) => {
     store.pageCopy = copy;
+    store.pageCopyDraft = structuredClone(copy);
   });
   bust(CMS_TAGS.pageCopy);
   bust(CMS_TAGS.home);
   return copy;
+}
+
+export async function savePageCopyDraft(copy: PageCopy) {
+  await mutateStore((store) => {
+    store.pageCopyDraft = copy;
+  });
+  return copy;
+}
+
+export async function publishPageCopy() {
+  const store = await readStore();
+  const draft = mergePageCopy(store.pageCopyDraft || store.pageCopy);
+  await mutateStore((next) => {
+    next.pageCopy = structuredClone(draft);
+    next.pageCopyDraft = structuredClone(draft);
+  });
+  bust(CMS_TAGS.pageCopy);
+  bust(CMS_TAGS.home);
+  return draft;
 }
 
 const COPY_ROOTS = new Set([
@@ -662,9 +697,9 @@ function setStringAtPath(root: unknown, segments: string[], value: string) {
   obj[leaf] = value;
 }
 
-/** Apply one or more text patches to PageCopy by dotted path (e.g. about.title). */
+/** Apply one or more text patches to the draft PageCopy by dotted path (e.g. about.title). */
 export async function setCopyPaths(patches: Array<{ path: string; value: string }>) {
-  const copy = structuredClone(await getPageCopy());
+  const copy = structuredClone(await getEditablePageCopy());
   for (const patch of patches) {
     const segments = pathSegments(patch.path);
     if (!segments.length || !COPY_ROOTS.has(segments[0])) {
@@ -676,13 +711,13 @@ export async function setCopyPaths(patches: Array<{ path: string; value: string 
     }
     setStringAtPath(copy, segments, sanitizeText(patch.value, 8000));
   }
-  return await savePageCopy(copy);
+  return await savePageCopyDraft(copy);
 }
 
 export async function getCopyPathValue(path: string) {
   const segments = pathSegments(path);
   if (!segments.length || !COPY_ROOTS.has(segments[0])) return null;
-  const value = getAtPath(await getPageCopy(), segments);
+  const value = getAtPath(await getEditablePageCopy(), segments);
   return typeof value === "string" ? value : null;
 }
 

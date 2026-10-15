@@ -45,6 +45,8 @@ export type StoreData = {
   auditLog: AuditLog[];
   signups: Signup[];
   pageCopy: PageCopy | null;
+  /** Working copy for Live Edit / Copy screens. Publish copies this to pageCopy. */
+  pageCopyDraft: PageCopy | null;
   bootstrap?: { owners?: string; attempts?: { key: string; count: number; resetAt: number }[] };
 };
 
@@ -66,6 +68,7 @@ const EMPTY: StoreData = {
   auditLog: [],
   signups: [],
   pageCopy: null,
+  pageCopyDraft: null,
   bootstrap: {}
 };
 
@@ -81,6 +84,7 @@ function normalize(parsed: Partial<StoreData>): StoreData {
     ...parsed,
     signups: parsed.signups || [],
     pageCopy: parsed.pageCopy || null,
+    pageCopyDraft: parsed.pageCopyDraft || null,
     bootstrap: parsed.bootstrap || {}
   };
 }

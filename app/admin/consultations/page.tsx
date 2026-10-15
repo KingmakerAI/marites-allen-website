@@ -1,5 +1,5 @@
 import { requireUser } from "@/lib/cms/auth";
-import { getPageCopy, listPricing, listServices } from "@/lib/cms/repo";
+import { getEditablePageCopy, listPricing, listServices } from "@/lib/cms/repo";
 import type { ConsultationService, PricingRow } from "@/lib/cms/types";
 import { deleteServiceAction, saveBookCopyAction, saveServiceAction } from "../actions";
 import { ConfirmSubmit } from "../admin-shell";
@@ -108,7 +108,7 @@ export default async function ConsultationsPage({
   const q = await searchParams;
   const services = await listServices();
   const pricing = await listPricing();
-  const book = (await getPageCopy()).book;
+  const book = (await getEditablePageCopy()).book;
 
   return (
     <div>

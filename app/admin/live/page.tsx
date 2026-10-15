@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { requireUser } from "@/lib/cms/auth";
+import { hasUnpublishedPageCopy } from "@/lib/cms/repo";
 import { SITE_PAGES } from "@/lib/cms/site-pages";
 import { Flash, ShopHead } from "../ui";
 import { LiveEditor } from "./live-editor";
@@ -16,12 +17,13 @@ export default async function LiveEditPage({
   const pagePath = q.page && ALLOWED.has(q.page) ? q.page : "/about";
   const page = SITE_PAGES.find((p) => p.href === pagePath) || SITE_PAGES.find((p) => p.id === "about")!;
   const returnTo = `/admin/live?page=${encodeURIComponent(page.href)}`;
+  const hasDraft = await hasUnpublishedPageCopy();
 
   return (
     <div className="shop-page live-page">
       <ShopHead
         title={`Edit ${page.title}`}
-        sub="This is the real website. Click the words you want to change, then press Save."
+        sub="Click the words you want to change. Save stores a draft; Publish updates the live site."
         backHref="/admin/pages"
         backLabel="All pages"
         viewHref={page.href}
@@ -38,7 +40,7 @@ export default async function LiveEditPage({
         </nav>
       </ShopHead>
       <Flash saved={q.saved} error={q.error} />
-      <LiveEditor pagePath={page.href} pageTitle={page.title} returnTo={returnTo} />
+      <LiveEditor pagePath={page.href} pageTitle={page.title} returnTo={returnTo} hasDraft={hasDraft} />
     </div>
   );
 }

@@ -141,6 +141,8 @@ export type Testimonial = {
   text: string;
   initial: string;
   featured: boolean;
+  /** Named people stay off the public site until this is true. */
+  consentOnFile: boolean;
   sortOrder: number;
 };
 

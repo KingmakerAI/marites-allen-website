@@ -16,10 +16,13 @@ export const RESERVED_PAGE_SLUGS = new Set([
   "icon",
   "media",
   "opengraph-image",
+  "privacy",
   "projects",
   "robots.txt",
   "signup",
-  "sitemap.xml"
+  "sitemap.xml",
+  "terms",
+  "cookies"
 ]);
 
 export function isReservedPageSlug(slug: string) {

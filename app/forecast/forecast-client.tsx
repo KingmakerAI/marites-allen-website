@@ -372,6 +372,21 @@ export function ForecastClient({ copy, initialYear }: { copy: ForecastCopy; init
                   <div style={{ fontFamily: "Lato, system-ui, sans-serif", fontSize: "clamp(13px,1.3vw,16px)", color: "#c1272d" }} {...cms(`forecast.zodiacs.${zi}.years`)}>
                     {z.years}
                   </div>
+                  {z.focus ? (
+                    <p
+                      style={{
+                        fontFamily: "Lato, system-ui, sans-serif",
+                        fontSize: 11,
+                        lineHeight: 1.35,
+                        color: "#8d1418",
+                        margin: "8px 4px 0",
+                        minHeight: "2.7em"
+                      }}
+                      {...cms(`forecast.zodiacs.${zi}.focus`)}
+                    >
+                      {z.focus}
+                    </p>
+                  ) : null}
                 </div>
               </a>
             ))}

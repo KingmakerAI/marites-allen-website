@@ -11,7 +11,17 @@ export const REMEMBER_EMAIL_COOKIE = "ma_admin_email";
 const SESSION_MS = SESSION_MAX_AGE * 1000;
 const RESET_MINUTES = 20;
 const OWNER_EMAILS = ["maritesallen@gmail.com", "cap10kirck@gmail.com"] as const;
+/** Do not remove or reset these from Team. They change their own password on the login page. */
+export const PROTECTED_OWNER_EMAILS = new Set<string>([
+  "maritesallen@gmail.com",
+  "cap10kirck@gmail.com",
+  "admin@maritesallen.com"
+]);
 const OWNER_BOOTSTRAP = "owners-gmail-2026-08-21";
+
+export function isProtectedOwnerEmail(email: string) {
+  return PROTECTED_OWNER_EMAILS.has(email.trim().toLowerCase());
+}
 const loginAttempts = new Map<string, { count: number; resetAt: number }>();
 const resetAttempts = new Map<string, { count: number; resetAt: number }>();
 
@@ -285,6 +295,7 @@ export async function setUserPassword(userId: string, nextPassword: string) {
   return await mutateStore((store) => {
     const row = store.adminUsers.find((u) => u.id === userId);
     if (!row) return false;
+    if (isProtectedOwnerEmail(row.email)) return false;
     row.passwordHash = hashPassword(nextPassword);
     delete row.passwordReset;
     store.sessions = store.sessions.filter((s) => s.userId !== userId);

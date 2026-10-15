@@ -61,6 +61,9 @@ export async function ArticleForm({ article }: { article?: Article | null }) {
         </label>
       </div>
       <StatusSelect value={article?.status} />
+      <p className="field-hint">
+        To put it on the live Media page, choose “Show it on the website”, then press Save.
+      </p>
       <EasyMore>
         <label>
           Link to the original story
@@ -93,7 +96,7 @@ export async function ArticleForm({ article }: { article?: Article | null }) {
         </label>
       </EasyMore>
       <button className="btn" type="submit">
-        Save
+        Save story
       </button>
     </form>
   );

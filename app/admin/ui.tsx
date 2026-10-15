@@ -2,8 +2,24 @@ import Link from "next/link";
 import { ConfirmSubmit } from "./admin-shell";
 
 export function Flash({ saved, error }: { saved?: string; error?: string }) {
+  if (saved === "draft") {
+    return <div className="flash">Saved as a draft. Press Publish when you want the public site to update.</div>;
+  }
+  if (saved === "published") {
+    return <div className="flash">Published — the live website now shows this version.</div>;
+  }
   if (saved) return <div className="flash">Saved — this change is on the live website now.</div>;
-  if (error) return <div className="flash error">{error === "inuse" ? "This is still being used, so it cannot be deleted yet." : error === "self" ? "You cannot delete your own login." : error}</div>;
+  if (error) {
+    return (
+      <div className="flash error">
+        {error === "inuse"
+          ? "This is still being used, so it cannot be deleted yet."
+          : error === "self"
+            ? "You cannot delete your own login."
+            : error}
+      </div>
+    );
+  }
   return null;
 }
 
