@@ -2,11 +2,9 @@
 
 import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
-import fs from "fs";
-import path from "path";
 import { authenticate, cookieOptions, createSession, destroySession, getSessionUser, logAudit, rateLimitLogin, rateLimitReset, SESSION_COOKIE, REMEMBER_EMAIL_COOKIE, changePasswordWithCurrent, requestPasswordReset, completePasswordReset, setUserPassword } from "@/lib/cms/auth";
 import { fingerprint, hashPassword, newId, nowIso, slugify } from "@/lib/cms/crypto";
-import { mutateStore } from "@/lib/cms/store";
+import { mutateStore, removeStoredFile, storeUploadedFile } from "@/lib/cms/store";
 import { sanitizeHtml, sanitizeText } from "@/lib/cms/sanitize";
 import {
   deleteArticle,
@@ -87,11 +85,11 @@ export async function loginAction(formData: FormData) {
   const ip = hdrs.get("x-forwarded-for")?.split(",")[0]?.trim() || hdrs.get("x-real-ip") || "local";
   if (!rateLimitLogin(fingerprint(ip))) redirect("/adminportal?error=rate");
 
-  const user = authenticate(parsed.data.email, parsed.data.password);
+  const user = await authenticate(parsed.data.email, parsed.data.password);
   if (!user) redirect("/adminportal?error=invalid");
 
   const remember = formBool(formData, "remember");
-  const session = createSession(user.id, remember);
+  const session = await createSession(user.id, remember);
   const jar = await cookies();
   jar.set(SESSION_COOKIE, session.token, cookieOptions(session.expiresAt));
   if (remember) {
@@ -109,7 +107,7 @@ export async function loginAction(formData: FormData) {
 }
 
 async function signInUser(userId: string, next = "/admin/dashboard", remember = false) {
-  const session = createSession(userId, remember);
+  const session = await createSession(userId, remember);
   const jar = await cookies();
   jar.set(SESSION_COOKIE, session.token, cookieOptions(session.expiresAt));
   redirect(next.startsWith("/admin") ? next : "/admin/dashboard");
@@ -125,9 +123,9 @@ export async function changePasswordAction(formData: FormData) {
   if (!rateLimitLogin(fingerprint(ip + ":change"))) redirect("/adminportal?view=change&error=rate");
   if (nextPassword.length < 10) redirect("/adminportal?view=change&error=weak");
   if (nextPassword !== confirm) redirect("/adminportal?view=change&error=mismatch");
-  const user = changePasswordWithCurrent(email, current, nextPassword);
+  const user = await changePasswordWithCurrent(email, current, nextPassword);
   if (!user) redirect("/adminportal?view=change&error=invalid");
-  logAudit(user.id, "users", user.id, "password-change");
+  await logAudit(user.id, "users", user.id, "password-change");
   await signInUser(user.id);
 }
 
@@ -150,9 +148,9 @@ export async function completeResetAction(formData: FormData) {
   if (!rateLimitReset(fingerprint(ip + ":complete"))) redirect("/adminportal?view=reset&error=rate");
   if (nextPassword.length < 10) redirect(`/adminportal?view=reset&email=${encodeURIComponent(email)}&error=weak`);
   if (nextPassword !== confirm) redirect(`/adminportal?view=reset&email=${encodeURIComponent(email)}&error=mismatch`);
-  const user = completePasswordReset(email, code, nextPassword);
+  const user = await completePasswordReset(email, code, nextPassword);
   if (!user) redirect(`/adminportal?view=reset&email=${encodeURIComponent(email)}&error=reset`);
-  logAudit(user.id, "users", user.id, "password-reset");
+  await logAudit(user.id, "users", user.id, "password-reset");
   await signInUser(user.id);
 }
 
@@ -161,15 +159,15 @@ export async function setUserPasswordAction(formData: FormData) {
   const id = formStr(formData, "id");
   const nextPassword = formStr(formData, "password");
   if (nextPassword.length < 10) redirect("/admin/users?error=weak");
-  if (!setUserPassword(id, nextPassword)) redirect("/admin/users?error=invalid");
-  logAudit(actorUser.id, "users", id, "password-set");
+  if (!await setUserPassword(id, nextPassword)) redirect("/admin/users?error=invalid");
+  await logAudit(actorUser.id, "users", id, "password-set");
   redirect("/admin/users?saved=1");
 }
 
 export async function logoutAction() {
   const jar = await cookies();
   const token = jar.get(SESSION_COOKIE)?.value;
-  if (token) destroySession(token);
+  if (token) await destroySession(token);
   jar.delete(SESSION_COOKIE);
   redirect("/adminportal");
 }
@@ -192,26 +190,26 @@ export async function savePageAction(formData: FormData) {
     seoDescription: formStr(formData, "seoDescription"),
     ogImageId: formStr(formData, "ogImageId") || null
   });
-  const page = savePage({
+  const page = await savePage({
     ...parsed,
     slug: isReservedPageSlug(parsed.slug) ? `${parsed.slug}-page` : parsed.slug
   });
-  logAudit(user.id, "pages", page.id, parsed.id ? "update" : "create");
+  await logAudit(user.id, "pages", page.id, parsed.id ? "update" : "create");
   redirect(`/admin/pages/${page.id}?saved=1`);
 }
 
 export async function deletePageAction(formData: FormData) {
   const user = await actor();
   const id = formStr(formData, "id");
-  deletePage(id);
-  logAudit(user.id, "pages", id, "delete");
+  await deletePage(id);
+  await logAudit(user.id, "pages", id, "delete");
   redirect("/admin/pages");
 }
 
 export async function duplicatePageAction(formData: FormData) {
   const user = await actor();
-  const copy = duplicatePage(formStr(formData, "id"));
-  if (copy) logAudit(user.id, "pages", copy.id, "duplicate");
+  const copy = await duplicatePage(formStr(formData, "id"));
+  if (copy) await logAudit(user.id, "pages", copy.id, "duplicate");
   redirect(copy ? `/admin/pages/${copy.id}` : "/admin/pages");
 }
 
@@ -239,16 +237,16 @@ export async function saveArticleAction(formData: FormData) {
     seoTitle: formStr(formData, "seoTitle"),
     seoDescription: formStr(formData, "seoDescription")
   });
-  const article = saveArticle(parsed);
-  logAudit(user.id, "articles", article.id, parsed.id ? "update" : "create");
+  const article = await saveArticle(parsed);
+  await logAudit(user.id, "articles", article.id, parsed.id ? "update" : "create");
   redirect(`/admin/articles/${article.id}?saved=1`);
 }
 
 export async function deleteArticleAction(formData: FormData) {
   const user = await actor();
   const id = formStr(formData, "id");
-  deleteArticle(id);
-  logAudit(user.id, "articles", id, "delete");
+  await deleteArticle(id);
+  await logAudit(user.id, "articles", id, "delete");
   redirect("/admin/articles");
 }
 
@@ -260,16 +258,16 @@ export async function saveCategoryAction(formData: FormData) {
     slug: formStr(formData, "slug") || slugify(formStr(formData, "name")),
     description: formStr(formData, "description")
   });
-  const row = saveCategory(parsed);
-  logAudit(user.id, "categories", row.id, parsed.id ? "update" : "create");
+  const row = await saveCategory(parsed);
+  await logAudit(user.id, "categories", row.id, parsed.id ? "update" : "create");
   redirect("/admin/categories?saved=1");
 }
 
 export async function deleteCategoryAction(formData: FormData) {
   const user = await actor();
   const id = formStr(formData, "id");
-  deleteCategory(id);
-  logAudit(user.id, "categories", id, "delete");
+  await deleteCategory(id);
+  await logAudit(user.id, "categories", id, "delete");
   redirect("/admin/categories");
 }
 
@@ -284,14 +282,11 @@ export async function uploadMediaAction(formData: FormData) {
   const ext = file.type === "image/jpeg" ? ".jpg" : file.type === "image/png" ? ".png" : file.type === "image/gif" ? ".gif" : ".webp";
   const id = newId();
   const filename = `${id}${ext}`;
-  const rel = `/uploads/${filename}`;
-  const dest = path.join(process.cwd(), "public", "uploads", filename);
-  fs.mkdirSync(path.dirname(dest), { recursive: true });
-  fs.writeFileSync(dest, Buffer.from(await file.arrayBuffer()));
-  saveMedia({
+  const storedPath = await storeUploadedFile(filename, Buffer.from(await file.arrayBuffer()), file.type);
+  await saveMedia({
     id,
     filename: sanitizeText(file.name, 120) || filename,
-    path: rel,
+    path: storedPath,
     mimeType: file.type,
     size: file.size,
     width: null,
@@ -299,31 +294,28 @@ export async function uploadMediaAction(formData: FormData) {
     altText: sanitizeText(formStr(formData, "altText"), 160),
     createdAt: nowIso()
   });
-  logAudit(user.id, "media", id, "upload");
+  await logAudit(user.id, "media", id, "upload");
   redirect("/admin/media?saved=1");
 }
 
 export async function updateMediaAltAction(formData: FormData) {
   const user = await actor();
   const id = formStr(formData, "id");
-  mutateStore((store) => {
+  await mutateStore((store) => {
     const row = store.media.find((m) => m.id === id);
     if (row) row.altText = sanitizeText(formStr(formData, "altText"), 160);
   });
-  logAudit(user.id, "media", id, "update");
+  await logAudit(user.id, "media", id, "update");
   redirect("/admin/media?saved=1");
 }
 
 export async function deleteMediaAction(formData: FormData) {
   const user = await actor();
   const id = formStr(formData, "id");
-  if (mediaInUse(id)) redirect("/admin/media?error=inuse");
-  const asset = deleteMedia(id);
-  if (asset?.path.startsWith("/uploads/")) {
-    const dest = path.join(process.cwd(), "public", asset.path.replace(/^\//, ""));
-    if (fs.existsSync(dest)) fs.unlinkSync(dest);
-  }
-  logAudit(user.id, "media", id, "delete");
+  if (await mediaInUse(id)) redirect("/admin/media?error=inuse");
+  const asset = await deleteMedia(id);
+  if (asset?.path) await removeStoredFile(asset.path);
+  await logAudit(user.id, "media", id, "delete");
   redirect("/admin/media?saved=1");
 }
 
@@ -350,10 +342,10 @@ export async function saveServiceAction(formData: FormData) {
     featured: formBool(formData, "featured"),
     sortOrder: Number(formStr(formData, "sortOrder") || 0)
   });
-  saveService({ ...parsed, flags: parsed.flags, imageId: parsed.imageId ?? null });
+  await saveService({ ...parsed, flags: parsed.flags, imageId: parsed.imageId ?? null });
   const priceRaw = formStr(formData, "price");
   if (priceRaw !== "") {
-    savePricing({
+    await savePricing({
       id: formStr(formData, "pricingId") || `price-${parsed.id}`,
       serviceId: parsed.id,
       price: Number(priceRaw || 0),
@@ -364,15 +356,15 @@ export async function saveServiceAction(formData: FormData) {
       sortOrder: parsed.sortOrder
     });
   }
-  logAudit(user.id, "consultations", parsed.id, "save");
+  await logAudit(user.id, "consultations", parsed.id, "save");
   redirect("/admin/consultations?saved=1");
 }
 
 export async function deleteServiceAction(formData: FormData) {
   const user = await actor();
   const id = formStr(formData, "id");
-  deleteService(id);
-  logAudit(user.id, "consultations", id, "delete");
+  await deleteService(id);
+  await logAudit(user.id, "consultations", id, "delete");
   redirect("/admin/consultations");
 }
 
@@ -388,16 +380,16 @@ export async function savePricingAction(formData: FormData) {
     active: formBool(formData, "active"),
     sortOrder: Number(formStr(formData, "sortOrder") || 0)
   });
-  savePricing({ ...parsed, promoPrice: parsed.promoPrice ?? null });
-  logAudit(user.id, "pricing", parsed.id, "save");
+  await savePricing({ ...parsed, promoPrice: parsed.promoPrice ?? null });
+  await logAudit(user.id, "pricing", parsed.id, "save");
   redirect("/admin/consultations?saved=1");
 }
 
 export async function deletePricingAction(formData: FormData) {
   const user = await actor();
   const id = formStr(formData, "id");
-  deletePricing(id);
-  logAudit(user.id, "pricing", id, "delete");
+  await deletePricing(id);
+  await logAudit(user.id, "pricing", id, "delete");
   redirect("/admin/consultations");
 }
 
@@ -422,16 +414,16 @@ export async function saveEventAction(formData: FormData) {
     status: formStr(formData, "status") || "draft",
     sortOrder: Number(formStr(formData, "sortOrder") || 0)
   });
-  saveEvent(parsed);
-  logAudit(user.id, "events", parsed.id, "save");
+  await saveEvent(parsed);
+  await logAudit(user.id, "events", parsed.id, "save");
   redirect(`/admin/events/${parsed.id}?saved=1`);
 }
 
 export async function deleteEventAction(formData: FormData) {
   const user = await actor();
   const id = formStr(formData, "id");
-  deleteEvent(id);
-  logAudit(user.id, "events", id, "delete");
+  await deleteEvent(id);
+  await logAudit(user.id, "events", id, "delete");
   redirect("/admin/events");
 }
 
@@ -447,16 +439,16 @@ export async function saveNavAction(formData: FormData) {
     sortOrder: Number(formStr(formData, "sortOrder") || 0),
     location: formStr(formData, "location")
   });
-  saveNavigation({ ...parsed, parentId: parsed.parentId ?? null });
-  logAudit(user.id, "navigation", parsed.id, "save");
+  await saveNavigation({ ...parsed, parentId: parsed.parentId ?? null });
+  await logAudit(user.id, "navigation", parsed.id, "save");
   redirect("/admin/navigation?saved=1");
 }
 
 export async function deleteNavAction(formData: FormData) {
   const user = await actor();
   const id = formStr(formData, "id");
-  deleteNavigation(id);
-  logAudit(user.id, "navigation", id, "delete");
+  await deleteNavigation(id);
+  await logAudit(user.id, "navigation", id, "delete");
   redirect("/admin/navigation");
 }
 
@@ -531,8 +523,8 @@ export async function saveSettingsAction(formData: FormData) {
       bookCtaLabel: sanitizeText(formStr(formData, "bookCtaLabel"), 80) || "Book Consultation"
     }
   };
-  saveSettings(settings);
-  logAudit(user.id, "settings", "site", "update");
+  await saveSettings(settings);
+  await logAudit(user.id, "settings", "site", "update");
   redirect("/admin/settings?saved=1");
 }
 
@@ -545,15 +537,15 @@ export async function saveHomeSectionAction(formData: FormData) {
     enabled: formBool(formData, "enabled"),
     sortOrder: Number(formStr(formData, "sortOrder") || 0)
   };
-  saveHomeSection(row);
-  logAudit(user.id, "homepage", row.id, "save");
+  await saveHomeSection(row);
+  await logAudit(user.id, "homepage", row.id, "save");
   redirect("/admin/homepage?saved=1");
 }
 
 export async function saveHomepageAllAction(formData: FormData) {
   const user = await actor();
 
-  saveHomeSection({
+  await saveHomeSection({
     id: "home-hero",
     blockType: "hero",
     enabled: formBool(formData, "heroEnabled"),
@@ -575,7 +567,7 @@ export async function saveHomepageAllAction(formData: FormData) {
   const items = values
     .map((value, i) => ({ value, label: labels[i] || value }))
     .filter((item) => item.value);
-  saveHomeSection({
+  await saveHomeSection({
     id: "home-stats",
     blockType: "stats",
     enabled: true,
@@ -585,8 +577,8 @@ export async function saveHomepageAllAction(formData: FormData) {
 
   const servicesId = formStr(formData, "servicesId");
   if (servicesId) {
-    const existing = listHomeSections().find((s) => s.id === servicesId);
-    saveHomeSection({
+    const existing = (await listHomeSections()).find((s) => s.id === servicesId);
+    await saveHomeSection({
       id: servicesId,
       blockType: "services",
       enabled: formBool(formData, "servicesEnabled"),
@@ -595,7 +587,7 @@ export async function saveHomepageAllAction(formData: FormData) {
     });
   }
 
-  saveHomeSection({
+  await saveHomeSection({
     id: "home-closing",
     blockType: "closing",
     enabled: formBool(formData, "closingEnabled"),
@@ -612,21 +604,22 @@ export async function saveHomepageAllAction(formData: FormData) {
   const faqQuestions = allText(formData, "faqQuestion", 200);
   const faqAnswers = formData.getAll("faqAnswer").map((v) => sanitizeHtml(String(v || "")));
   const faqSorts = formData.getAll("faqSortOrder").map((v) => Number(String(v) || 0));
-  faqIds.forEach((id, i) => {
-    if (!id) return;
-    saveFaq({
+  for (let i = 0; i < faqIds.length; i++) {
+    const id = faqIds[i];
+    if (!id) continue;
+    await saveFaq({
       id,
       question: faqQuestions[i] || "",
       answer: faqAnswers[i] || "",
       showOnHome: formBool(formData, `faqShow_${id}`),
       sortOrder: faqSorts[i] || i + 1
     });
-  });
+  }
 
   const newFaqQ = sanitizeText(formStr(formData, "newFaqQuestion"), 200);
   const newFaqA = sanitizeHtml(formStr(formData, "newFaqAnswer"));
   if (newFaqQ && newFaqA) {
-    saveFaq({
+    await saveFaq({
       id: newId(),
       question: newFaqQ,
       answer: newFaqA,
@@ -641,10 +634,11 @@ export async function saveHomepageAllAction(formData: FormData) {
   const reviewTexts = allText(formData, "reviewText", 600);
   const reviewInitials = allText(formData, "reviewInitial", 2);
   const reviewSorts = formData.getAll("reviewSortOrder").map((v) => Number(String(v) || 0));
-  reviewIds.forEach((id, i) => {
-    if (!id) return;
+  for (let i = 0; i < reviewIds.length; i++) {
+    const id = reviewIds[i];
+    if (!id) continue;
     const name = reviewNames[i] || "";
-    saveTestimonial({
+    await saveTestimonial({
       id,
       name,
       role: reviewRoles[i] || "",
@@ -653,9 +647,9 @@ export async function saveHomepageAllAction(formData: FormData) {
       featured: formBool(formData, `reviewFeatured_${id}`),
       sortOrder: reviewSorts[i] || i + 1
     });
-  });
+  }
 
-  logAudit(user.id, "homepage", "all", "save");
+  await logAudit(user.id, "homepage", "all", "save");
   redirect("/admin/homepage?saved=1");
 }
 
@@ -676,20 +670,20 @@ export async function saveStatsHomeAction(formData: FormData) {
             const [value, ...rest] = line.split("|");
             return { value: value.trim(), label: rest.join("|").trim() || value.trim() };
           });
-  saveHomeSection({
+  await saveHomeSection({
     id: "home-stats",
     blockType: "stats",
     enabled: true,
     sortOrder: 2,
     payload: { items }
   });
-  logAudit(user.id, "homepage", "home-stats", "save");
+  await logAudit(user.id, "homepage", "home-stats", "save");
   redirect("/admin/homepage?saved=1");
 }
 
 export async function saveClosingHomeAction(formData: FormData) {
   const user = await actor();
-  saveHomeSection({
+  await saveHomeSection({
     id: "home-closing",
     blockType: "closing",
     enabled: formBool(formData, "enabled"),
@@ -701,27 +695,27 @@ export async function saveClosingHomeAction(formData: FormData) {
       ctaHref: sanitizeText(formStr(formData, "ctaHref"), 200) || "/book"
     }
   });
-  logAudit(user.id, "homepage", "home-closing", "save");
+  await logAudit(user.id, "homepage", "home-closing", "save");
   redirect("/admin/homepage?saved=1");
 }
 
 export async function saveFaqAction(formData: FormData) {
   const user = await actor();
-  const row = saveFaq({
+  const row = await saveFaq({
     id: formStr(formData, "id") || newId(),
     question: sanitizeText(formStr(formData, "question"), 200),
     answer: sanitizeHtml(formStr(formData, "answer")),
     showOnHome: formBool(formData, "showOnHome"),
     sortOrder: Number(formStr(formData, "sortOrder") || 0)
   });
-  logAudit(user.id, "faqs", row.id, "save");
+  await logAudit(user.id, "faqs", row.id, "save");
   redirect("/admin/homepage?saved=1");
 }
 
 export async function saveTestimonialAction(formData: FormData) {
   const user = await actor();
   const name = sanitizeText(formStr(formData, "name"), 80);
-  const row = saveTestimonial({
+  const row = await saveTestimonial({
     id: formStr(formData, "id") || newId(),
     name,
     role: sanitizeText(formStr(formData, "role"), 80),
@@ -730,7 +724,7 @@ export async function saveTestimonialAction(formData: FormData) {
     featured: formBool(formData, "featured"),
     sortOrder: Number(formStr(formData, "sortOrder") || 0)
   });
-  logAudit(user.id, "testimonials", row.id, "save");
+  await logAudit(user.id, "testimonials", row.id, "save");
   redirect("/admin/homepage?saved=1");
 }
 
@@ -741,7 +735,7 @@ export async function createUserAction(formData: FormData) {
     password: formStr(formData, "password"),
     role: formStr(formData, "role")
   });
-  mutateStore((store) => {
+  await mutateStore((store) => {
     if (store.adminUsers.some((u) => u.email === parsed.email)) throw new Error("Email already exists");
     store.adminUsers.push({
       id: newId(),
@@ -752,7 +746,7 @@ export async function createUserAction(formData: FormData) {
       lastLoginAt: null
     });
   });
-  logAudit(user.id, "users", parsed.email, "create");
+  await logAudit(user.id, "users", parsed.email, "create");
   redirect("/admin/users?saved=1");
 }
 
@@ -760,11 +754,11 @@ export async function deleteUserAction(formData: FormData) {
   const user = await actor("owner");
   const id = formStr(formData, "id");
   if (id === user.id) redirect("/admin/users?error=self");
-  mutateStore((store) => {
+  await mutateStore((store) => {
     store.adminUsers = store.adminUsers.filter((u) => u.id !== id);
     store.sessions = store.sessions.filter((s) => s.userId !== id);
   });
-  logAudit(user.id, "users", id, "delete");
+  await logAudit(user.id, "users", id, "delete");
   redirect("/admin/users");
 }
 
@@ -772,16 +766,16 @@ export async function updateSignupStatusAction(formData: FormData) {
   const user = await actor();
   const id = formStr(formData, "id");
   const status = formStr(formData, "status") as "new" | "contacted" | "archived";
-  updateSignupStatus(id, status);
-  logAudit(user.id, "enquiries", id, status);
+  await updateSignupStatus(id, status);
+  await logAudit(user.id, "enquiries", id, status);
   redirect("/admin/enquiries?saved=1");
 }
 
 export async function deleteSignupAction(formData: FormData) {
   const user = await actor();
   const id = formStr(formData, "id");
-  deleteSignup(id);
-  logAudit(user.id, "enquiries", id, "delete");
+  await deleteSignup(id);
+  await logAudit(user.id, "enquiries", id, "delete");
   redirect("/admin/enquiries");
 }
 
@@ -818,7 +812,7 @@ function paragraphs(text: string) {
 
 export async function saveAboutCopyAction(formData: FormData) {
   const user = await actor();
-  const current = getPageCopy();
+  const current = await getPageCopy();
   let sections = current.about.sections;
   if (formStr(formData, "aboutSectionsMode") === "cards") {
     const headings = allText(formData, "sectionHeading", 120);
@@ -876,15 +870,15 @@ export async function saveAboutCopyAction(formData: FormData) {
       ctaHref: sanitizeText(formStr(formData, "ctaHref"), 200)
     }
   };
-  savePageCopy(next);
-  logAudit(user.id, "pageCopy", "about", "save");
+  await savePageCopy(next);
+  await logAudit(user.id, "pageCopy", "about", "save");
   redirect("/admin/copy?tab=about&saved=1");
 }
 
 export async function saveDestaraCopyAction(formData: FormData) {
   const user = await actor();
-  const current = getPageCopy();
-  savePageCopy({
+  const current = await getPageCopy();
+  await savePageCopy({
     ...current,
     destara: {
       ...current.destara,
@@ -915,14 +909,14 @@ export async function saveDestaraCopyAction(formData: FormData) {
           : pairs(formData, "facts")
     }
   });
-  logAudit(user.id, "pageCopy", "destara", "save");
+  await logAudit(user.id, "pageCopy", "destara", "save");
   redirect("/admin/copy?tab=destara&saved=1");
 }
 
 export async function saveFriggaCopyAction(formData: FormData) {
   const user = await actor();
-  const current = getPageCopy();
-  savePageCopy({
+  const current = await getPageCopy();
+  await savePageCopy({
     ...current,
     frigga: {
       ...current.frigga,
@@ -992,13 +986,13 @@ export async function saveFriggaCopyAction(formData: FormData) {
       marketplaces: lines(formData, "marketplaces").map((s) => sanitizeText(s, 80))
     }
   });
-  logAudit(user.id, "pageCopy", "frigga", "save");
+  await logAudit(user.id, "pageCopy", "frigga", "save");
   redirect("/admin/copy?tab=frigga&saved=1");
 }
 
 export async function saveProjectsCopyAction(formData: FormData) {
   const user = await actor();
-  const current = getPageCopy();
+  const current = await getPageCopy();
   let items = current.projects.items;
   if (formStr(formData, "projectsMode") === "cards") {
     items = zipText(formData, [
@@ -1026,7 +1020,7 @@ export async function saveProjectsCopyAction(formData: FormData) {
       /* keep */
     }
   }
-  savePageCopy({
+  await savePageCopy({
     ...current,
     projects: {
       seoTitle: sanitizeText(formStr(formData, "seoTitle"), 120),
@@ -1037,13 +1031,13 @@ export async function saveProjectsCopyAction(formData: FormData) {
       items
     }
   });
-  logAudit(user.id, "pageCopy", "projects", "save");
+  await logAudit(user.id, "pageCopy", "projects", "save");
   redirect("/admin/copy?tab=projects&saved=1");
 }
 
 export async function saveForecastCopyAction(formData: FormData) {
   const user = await actor();
-  const current = getPageCopy();
+  const current = await getPageCopy();
   let years = current.forecast.years;
   let zodiacs = current.forecast.zodiacs;
   let stars = current.forecast.stars;
@@ -1122,7 +1116,7 @@ export async function saveForecastCopyAction(formData: FormData) {
       /* keep */
     }
   }
-  savePageCopy({
+  await savePageCopy({
     ...current,
     forecast: {
       seoTitle: sanitizeText(formStr(formData, "seoTitle"), 120),
@@ -1134,14 +1128,14 @@ export async function saveForecastCopyAction(formData: FormData) {
       stars
     }
   });
-  logAudit(user.id, "pageCopy", "forecast", "save");
+  await logAudit(user.id, "pageCopy", "forecast", "save");
   redirect("/admin/copy?tab=forecast&saved=1");
 }
 
 export async function saveHomeExtrasAction(formData: FormData) {
   const user = await actor();
-  const current = getPageCopy();
-  savePageCopy({
+  const current = await getPageCopy();
+  await savePageCopy({
     ...current,
     home: {
       ...current.home,
@@ -1219,15 +1213,15 @@ export async function saveHomeExtrasAction(formData: FormData) {
             })
     }
   });
-  logAudit(user.id, "pageCopy", "home", "save");
+  await logAudit(user.id, "pageCopy", "home", "save");
   const next = formStr(formData, "next") || "/admin/copy?tab=home";
   redirect(`${next}${next.includes("?") ? "&" : "?"}saved=1`.replace("?&", "?"));
 }
 
 export async function saveBookCopyAction(formData: FormData) {
   const user = await actor();
-  const current = getPageCopy();
-  savePageCopy({
+  const current = await getPageCopy();
+  await savePageCopy({
     ...current,
     book: {
       ...current.book,
@@ -1248,13 +1242,13 @@ export async function saveBookCopyAction(formData: FormData) {
       whatsappLabel: sanitizeText(formStr(formData, "whatsappLabel") || current.book.whatsappLabel, 80)
     }
   });
-  logAudit(user.id, "pageCopy", "book", "save");
+  await logAudit(user.id, "pageCopy", "book", "save");
   redirect("/admin/consultations?saved=1");
 }
 
 export async function saveEventsPageCopyAction(formData: FormData) {
   const user = await actor();
-  const current = getPageCopy();
+  const current = await getPageCopy();
   let speakingLines = current.eventsPage.speakingLines;
   let videos = current.eventsPage.videos;
   if (formStr(formData, "eventsListsMode") === "cards") {
@@ -1275,7 +1269,7 @@ export async function saveEventsPageCopyAction(formData: FormData) {
     speakingLines = lines(formData, "speakingLines").map((s) => sanitizeText(s, 200));
     videos = lines(formData, "videos").map((s) => sanitizeText(s, 240));
   }
-  savePageCopy({
+  await savePageCopy({
     ...current,
     eventsPage: {
       ...current.eventsPage,
@@ -1290,13 +1284,13 @@ export async function saveEventsPageCopyAction(formData: FormData) {
       videos
     }
   });
-  logAudit(user.id, "pageCopy", "eventsPage", "save");
+  await logAudit(user.id, "pageCopy", "eventsPage", "save");
   redirect("/admin/events?saved=1");
 }
 
 export async function saveMediaPageCopyAction(formData: FormData) {
   const user = await actor();
-  const current = getPageCopy();
+  const current = await getPageCopy();
   let videos = current.mediaPage.videos;
   if (formStr(formData, "mediaListsMode") === "cards") {
     videos = zipText(formData, [
@@ -1314,7 +1308,7 @@ export async function saveMediaPageCopyAction(formData: FormData) {
   } else {
     videos = lines(formData, "videos").map((s) => sanitizeText(s, 280));
   }
-  savePageCopy({
+  await savePageCopy({
     ...current,
     mediaPage: {
       ...current.mediaPage,
@@ -1329,7 +1323,7 @@ export async function saveMediaPageCopyAction(formData: FormData) {
       videos
     }
   });
-  logAudit(user.id, "pageCopy", "mediaPage", "save");
+  await logAudit(user.id, "pageCopy", "mediaPage", "save");
   redirect("/admin/articles?saved=1");
 }
 
@@ -1349,7 +1343,7 @@ export async function saveCopyPatchesAction(formData: FormData) {
     redirect(`${returnTo}${returnTo.includes("?") ? "&" : "?"}error=bad-patches`);
   }
   if (!patches.length) redirect(returnTo);
-  setCopyPaths(patches);
-  logAudit(user.id, "pageCopy", "patches", "save");
+  await setCopyPaths(patches);
+  await logAudit(user.id, "pageCopy", "patches", "save");
   redirect(`${returnTo}${returnTo.includes("?") ? "&" : "?"}saved=1`);
 }

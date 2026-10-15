@@ -11,7 +11,11 @@ export default async function MediaPage({
 }) {
   await requireUser();
   const q = await searchParams;
-  const items = listMedia(q.q);
+  const items = await listMedia(q.q);
+  const usedIds = new Set<string>();
+  for (const item of items) {
+    if (await mediaInUse(item.id)) usedIds.add(item.id);
+  }
   return (
     <div>
       <h1 className="admin-h1">Photos</h1>
@@ -39,7 +43,7 @@ export default async function MediaPage({
       </form>
       <div className="media-grid">
         {items.map((m) => {
-          const used = mediaInUse(m.id);
+          const used = usedIds.has(m.id);
           return (
             <div key={m.id} className="admin-card media-card">
               {/* eslint-disable-next-line @next/next/no-img-element */}

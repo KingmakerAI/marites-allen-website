@@ -82,8 +82,8 @@ export default async function CopyEditor({
   await requireUser();
   const q = await searchParams;
   const page = PAGES.find((p) => p.id === q.tab) || PAGES[0];
-  const copy = getPageCopy();
-  const photos = listMedia().map((m) => ({ path: m.path, altText: m.altText, filename: m.filename }));
+  const copy = await getPageCopy();
+  const photos = (await listMedia()).map((m) => ({ path: m.path, altText: m.altText, filename: m.filename }));
   const saveLabel = page.id === "home" ? "Save homepage extras" : `Save ${page.label}`;
 
   return (

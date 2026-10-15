@@ -14,8 +14,8 @@ export default async function EventsList({
 }) {
   await requireUser();
   const q = await searchParams;
-  const rows = listEvents();
-  const copy = getPageCopy().eventsPage;
+  const rows = await listEvents();
+  const copy = (await getPageCopy()).eventsPage;
   const talks = parseTalkLines(copy.speakingLines);
   const videos = parseVideoLines(copy.videos);
   return (

@@ -46,7 +46,7 @@ export default async function EnquiriesPage({
   const q = await searchParams;
   const sort = (SORTS.some((s) => s[0] === q.sort) ? q.sort : "createdAt") as (typeof SORTS)[number][0];
   const dir = q.dir === "asc" ? "asc" : "desc";
-  const rows = listSignups({
+  const rows = await listSignups({
     kind: "booking-waitlist",
     status: q.status as SignupStatus | undefined,
     q: q.q,

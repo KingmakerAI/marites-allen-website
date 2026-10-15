@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useMemo, useState, type CSSProperties } from "react";
 import { submitSignupAction } from "@/app/signup/actions";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
@@ -17,7 +17,88 @@ export type PressItem = {
   quote: string;
   cta: string;
   url: string;
+  category: string;
+  categorySlug: string;
+  slug: string;
 };
+
+function chipStyle(active: boolean): CSSProperties {
+  return {
+    fontSize: 13,
+    fontWeight: 700,
+    color: active ? "#143d31" : "#1a4d3e",
+    background: active ? "#e6c680" : "#fffdf8",
+    border: active ? "1.5px solid #e6c680" : "1.5px solid rgba(20,61,49,0.15)",
+    borderRadius: 99,
+    padding: "7px 15px"
+  };
+}
+
+function PressCard({ item }: { item: PressItem }) {
+  const external = /^https?:/i.test(item.url);
+  const style = {
+    display: "flex",
+    flexWrap: "wrap" as const,
+    gap: 14,
+    alignItems: "baseline" as const,
+    background: "#fffdf8",
+    border: "1px solid rgba(20,61,49,0.1)",
+    borderRadius: 14,
+    padding: "16px 20px",
+    boxShadow: "0 8px 22px -18px rgba(20,60,45,0.3)"
+  };
+  const body = (
+    <>
+      <span style={{ fontSize: 12, fontWeight: 700, color: "#a3946f", minWidth: 56 }}>{item.month}</span>
+      <span style={{ flex: "1 1 340px", minWidth: 220 }}>
+        {item.category ? (
+          <span
+            style={{
+              display: "inline-block",
+              marginBottom: 6,
+              fontSize: 10,
+              fontWeight: 700,
+              letterSpacing: 0.8,
+              textTransform: "uppercase",
+              color: "#143d31",
+              background: "rgba(230,198,128,0.45)",
+              borderRadius: 99,
+              padding: "3px 8px"
+            }}
+          >
+            {item.category}
+          </span>
+        ) : null}
+        <span
+          className="font-display"
+          style={{
+            display: "block",
+            fontWeight: 600,
+            fontSize: 16.5,
+            color: "#143d31",
+            lineHeight: 1.35
+          }}
+        >
+          {item.quote}
+        </span>
+        <span style={{ display: "block", fontSize: 13, color: "#6b7268", marginTop: 4 }}>{item.outlet}</span>
+      </span>
+      <span style={{ fontSize: 12.5, fontWeight: 700, color: "#c69a3e", whiteSpace: "nowrap" }}>{item.cta} →</span>
+    </>
+  );
+  if (external) {
+    return (
+      <a href={item.url} target="_blank" rel="noopener noreferrer" style={style}>
+        {body}
+      </a>
+    );
+  }
+  return (
+    <Link href={item.url} style={style}>
+      {body}
+    </Link>
+  );
+}
 
 const FALLBACK_VIDEOS: CopyVideo[] = [
   {
@@ -72,7 +153,8 @@ export default function MediaPage({
   pressKitBody,
   videosHeading,
   videos,
-  contact
+  contact,
+  activeCategory = ""
 }: {
   press: PressItem[];
   title?: string;
@@ -82,6 +164,7 @@ export default function MediaPage({
   videosHeading?: string;
   videos?: CopyVideo[];
   contact?: { email: string; phone: string; phoneSecondary: string };
+  activeCategory?: string;
 }) {
   const [pressName, setPressName] = useState("");
   const [pressOutlet, setPressOutlet] = useState("");
@@ -98,14 +181,30 @@ export default function MediaPage({
   const email = contact?.email || "sales@frigga.co.uk";
   const phones = [contact?.phone, contact?.phoneSecondary].filter(Boolean).join(" · ");
 
+  const selectedCategory = activeCategory.trim().toLowerCase();
+  const folders = useMemo(() => {
+    const map = new Map<string, { slug: string; name: string; count: number }>();
+    press.forEach((item) => {
+      if (!item.categorySlug) return;
+      const current = map.get(item.categorySlug);
+      if (current) current.count += 1;
+      else map.set(item.categorySlug, { slug: item.categorySlug, name: item.category, count: 1 });
+    });
+    return [...map.values()].sort((a, b) => a.name.localeCompare(b.name));
+  }, [press]);
+  const visiblePress = useMemo(
+    () => (selectedCategory ? press.filter((item) => item.categorySlug === selectedCategory) : press),
+    [press, selectedCategory]
+  );
+
   const groupedPress = useMemo(() => {
     const years: number[] = [];
-    press.forEach((p) => {
+    visiblePress.forEach((p) => {
       if (!years.includes(p.year)) years.push(p.year);
     });
     years.sort((a, b) => b - a);
     return years.map((y) => {
-      const items = press.filter((p) => p.year === y).sort((a, b) => b.m - a.m);
+      const items = visiblePress.filter((p) => p.year === y).sort((a, b) => b.m - a.m);
       return {
         year: String(y),
         id: `y${y}`,
@@ -113,7 +212,7 @@ export default function MediaPage({
         label: `${items.length} ${items.length === 1 ? "feature" : "features"}`
       };
     });
-  }, [press]);
+  }, [visiblePress]);
 
   return (
     <div className="page-shell page-enter">
@@ -399,10 +498,39 @@ export default function MediaPage({
         >
           Article directory
         </h2>
-        <p style={{ fontSize: 14.5, color: "#6b7268", margin: "0 0 18px" }}>
-          Jump to a year:
-        </p>
+        {folders.length > 0 && (
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 8, margin: "0 0 18px" }}>
+            <Link href="/media" style={chipStyle(!selectedCategory)}>
+              All <span style={{ color: selectedCategory ? "#a3946f" : "#143d31", fontWeight: 400 }}>({press.length})</span>
+            </Link>
+            {folders.map((folder) => {
+              const active = selectedCategory === folder.slug;
+              return (
+                <Link key={folder.slug} href={`/media?category=${folder.slug}`} style={chipStyle(active)}>
+                  {folder.name}{" "}
+                  <span style={{ color: active ? "#143d31" : "#a3946f", fontWeight: 400 }}>({folder.count})</span>
+                </Link>
+              );
+            })}
+          </div>
+        )}
+        {groupedPress.length > 0 && (
+          <p style={{ fontSize: 14.5, color: "#6b7268", margin: "0 0 18px" }}>Jump to a year:</p>
+        )}
 
+        {groupedPress.length === 0 && (
+          <p style={{ fontSize: 15, color: "#5f6b60", margin: "8px 0 0" }}>
+            {press.length === 0 ? (
+              "Stories will show up here once they are published."
+            ) : (
+              <>
+                No stories in this folder. <Link href="/media">See all stories</Link>
+              </>
+            )}
+          </p>
+        )}
+
+        {groupedPress.length > 0 && (
         <div
           style={{
             position: "sticky",
@@ -435,6 +563,7 @@ export default function MediaPage({
             ))}
           </div>
         </div>
+        )}
 
         {groupedPress.map((g) => (
           <div key={g.id} id={g.id} style={{ paddingTop: 24, scrollMarginTop: 150 }}>
@@ -450,43 +579,7 @@ export default function MediaPage({
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
               {g.items.map((p) => (
-                <a
-                  key={`${p.outlet}-${p.month}-${p.quote.slice(0, 24)}`}
-                  href={p.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{
-                    display: "flex",
-                    flexWrap: "wrap",
-                    gap: 14,
-                    alignItems: "baseline",
-                    background: "#fffdf8",
-                    border: "1px solid rgba(20,61,49,0.1)",
-                    borderRadius: 14,
-                    padding: "16px 20px",
-                    boxShadow: "0 8px 22px -18px rgba(20,60,45,0.3)"
-                  }}
-                >
-                  <span style={{ fontSize: 12, fontWeight: 700, color: "#a3946f", minWidth: 56 }}>{p.month}</span>
-                  <span style={{ flex: "1 1 340px", minWidth: 220 }}>
-                    <span
-                      className="font-display"
-                      style={{
-                        display: "block",
-                        fontWeight: 600,
-                        fontSize: 16.5,
-                        color: "#143d31",
-                        lineHeight: 1.35
-                      }}
-                    >
-                      {p.quote}
-                    </span>
-                    <span style={{ display: "block", fontSize: 13, color: "#6b7268", marginTop: 4 }}>{p.outlet}</span>
-                  </span>
-                  <span style={{ fontSize: 12.5, fontWeight: 700, color: "#c69a3e", whiteSpace: "nowrap" }}>
-                    {p.cta} →
-                  </span>
-                </a>
+                <PressCard key={p.slug} item={p} />
               ))}
             </div>
           </div>

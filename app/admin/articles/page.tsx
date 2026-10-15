@@ -14,13 +14,13 @@ export default async function ArticlesList({
 }) {
   await requireUser();
   const q = await searchParams;
-  const articles = listArticles({
+  const articles = await listArticles({
     q: q.q,
     status: q.status as "draft" | "published" | "archived" | undefined,
     categoryId: q.categoryId || undefined
   });
-  const cats = listCategories();
-  const media = getPageCopy().mediaPage;
+  const cats = await listCategories();
+  const media = (await getPageCopy()).mediaPage;
   const videos = parseVideoLines(media.videos);
   return (
     <div>
@@ -37,6 +37,7 @@ export default async function ArticlesList({
         </select>
         <select name="categoryId" defaultValue={q.categoryId || ""}>
           <option value="">All folders</option>
+          <option value="none">No folder</option>
           {cats.map((cat) => (
             <option key={cat.id} value={cat.id}>
               {cat.name}
@@ -55,16 +56,23 @@ export default async function ArticlesList({
           <tr>
             <th>Title</th>
             <th>Newspaper / show</th>
+            <th>Folder</th>
             <th>Date</th>
             <th>Who can see it</th>
             <th></th>
           </tr>
         </thead>
         <tbody>
+          {articles.length === 0 && (
+            <tr>
+              <td colSpan={6}>No stories match this filter.</td>
+            </tr>
+          )}
           {articles.map((a) => (
             <tr key={a.id}>
               <td>{a.title}</td>
               <td>{a.outlet}</td>
+              <td>{cats.find((cat) => cat.id === a.categoryId)?.name || "—"}</td>
               <td>
                 {a.year}-{String(a.month).padStart(2, "0")}
               </td>
@@ -76,6 +84,11 @@ export default async function ArticlesList({
                   <Link className="btn secondary" href={`/admin/articles/${a.id}`}>
                     Edit
                   </Link>
+                  {a.status === "published" && (
+                    <Link className="btn secondary" href={`/articles/${a.slug}`} target="_blank">
+                      See
+                    </Link>
+                  )}
                   <form action={deleteArticleAction}>
                     <input type="hidden" name="id" value={a.id} />
                     <ConfirmSubmit label="Delete" message="Delete this story? You cannot undo it." />

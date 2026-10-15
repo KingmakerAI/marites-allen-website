@@ -10,6 +10,7 @@ const CHOICES: Array<{ type: PageBlock["type"]; label: string; hint: string }> =
   { type: "image", label: "Picture", hint: "A photo" },
   { type: "cta", label: "Button", hint: "A clickable button" },
   { type: "faq", label: "Questions", hint: "A list of questions and answers" },
+  { type: "articleGrid", label: "Latest stories", hint: "Newest stories from News & press" },
   { type: "spacer", label: "Empty space", hint: "A little gap" }
 ];
 
@@ -19,6 +20,7 @@ function emptyBlock(type: PageBlock["type"]): PageBlock {
   if (type === "image") return { type: "image", src: "", alt: "" };
   if (type === "cta") return { type: "cta", label: "Learn more", href: "/book" };
   if (type === "faq") return { type: "faq", items: [{ q: "", a: "" }] };
+  if (type === "articleGrid") return { type: "articleGrid", limit: 6 };
   if (type === "spacer") return { type: "spacer" };
   return { type: "richText", html: "" };
 }
@@ -190,6 +192,25 @@ export function PageBlocksEditor({ initial }: { initial: PageBlock[] }) {
             </div>
           )}
 
+          {block.type === "articleGrid" && (
+            <label>
+              How many stories
+              <input
+                type="number"
+                min={1}
+                max={24}
+                value={block.limit || 6}
+                onChange={(e) =>
+                  update(
+                    blocks.map((b, i) =>
+                      i === index && b.type === "articleGrid" ? { ...b, limit: Math.min(24, Math.max(1, Number(e.target.value) || 6)) } : b
+                    )
+                  )
+                }
+              />
+              <span className="field-hint">Shows the newest stories from News & press.</span>
+            </label>
+          )}
           {block.type === "spacer" && <p className="field-hint">This just adds a little empty space.</p>}
           {!CHOICES.some((choice) => choice.type === block.type) && (
             <p className="field-hint">This special piece stays as it is. You can still move or remove it.</p>

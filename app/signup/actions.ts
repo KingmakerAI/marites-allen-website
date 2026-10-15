@@ -11,7 +11,7 @@ import { signupInputSchema } from "@/lib/cms/validation";
 export type SignupResult = { ok: true } | { ok: false; error: string };
 
 export async function submitSignupAction(raw: unknown): Promise<SignupResult> {
-  ensureSeeded();
+  await ensureSeeded();
   const parsed = signupInputSchema.safeParse(raw);
   if (!parsed.success) return { ok: false, error: "Please check your details and try again." };
   if (parsed.data.honeypot) return { ok: true };
@@ -22,7 +22,7 @@ export async function submitSignupAction(raw: unknown): Promise<SignupResult> {
     return { ok: false, error: "Too many attempts. Please try again later." };
   }
 
-  const saved = saveSignup({
+  const saved = await saveSignup({
     kind: parsed.data.kind,
     email: parsed.data.email,
     name: parsed.data.name,

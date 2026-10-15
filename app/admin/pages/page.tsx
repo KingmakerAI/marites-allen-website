@@ -27,14 +27,14 @@ export default async function PagesList({
   const query = (q.q || "").trim().toLowerCase();
   const kind = q.kind === "site" || q.kind === "custom" ? q.kind : "all";
   const status = q.status || "";
-  const pages = combineAdminPages(listPages()).filter((page) => {
+  const pages = combineAdminPages(await listPages()).filter((page) => {
     if (kind !== "all" && page.kind !== kind) return false;
     if (status === "published" && page.status !== "published") return false;
     if (status === "hidden" && page.status === "published") return false;
     if (!query) return true;
     return `${page.title} ${page.href} ${page.blurb || ""}`.toLowerCase().includes(query);
   });
-  const counts = combineAdminPages(listPages());
+  const counts = combineAdminPages(await listPages());
   const allCount = counts.length;
   const siteCount = counts.filter((page) => page.kind === "site").length;
   const customCount = counts.filter((page) => page.kind === "custom").length;

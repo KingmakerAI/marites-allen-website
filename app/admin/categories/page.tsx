@@ -12,8 +12,8 @@ export default async function CategoriesPage({
 }) {
   await requireUser();
   const q = await searchParams;
-  const cats = listCategories();
-  const articles = listArticles();
+  const cats = await listCategories();
+  const articles = await listArticles();
   const counts = Object.fromEntries(cats.map((cat) => [cat.id, articles.filter((a) => a.categoryId === cat.id).length]));
   const uncategorized = articles.filter((a) => !a.categoryId).length;
 
@@ -36,7 +36,7 @@ export default async function CategoriesPage({
           <strong>{articles.length - uncategorized}</strong>
           <span>Stories in a folder</span>
         </div>
-        <Link href="/admin/articles" className="stat-card">
+        <Link href="/admin/articles?categoryId=none" className="stat-card">
           <strong>{uncategorized}</strong>
           <span>Uncategorized</span>
         </Link>

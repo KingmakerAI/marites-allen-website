@@ -12,12 +12,12 @@ function csvCell(value: string) {
 export async function GET(request: Request) {
   const user = await getSessionUser();
   if (!user) return NextResponse.redirect(new URL("/adminportal", request.url));
-  ensureSeeded();
+  await ensureSeeded();
 
   const { searchParams } = new URL(request.url);
   const sort = (searchParams.get("sort") || "createdAt") as "createdAt" | "name" | "email" | "status" | "interest";
   const dir = searchParams.get("dir") === "asc" ? "asc" : "desc";
-  const rows = listSignups({
+  const rows = await listSignups({
     kind: "booking-waitlist",
     status: (searchParams.get("status") || undefined) as SignupStatus | undefined,
     q: searchParams.get("q") || undefined,

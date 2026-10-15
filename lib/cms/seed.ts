@@ -165,8 +165,8 @@ const COMING_SOON_LABELS = new Set([
   "Book today"
 ]);
 
-function ensureLiveDefaults() {
-  mutateStoreIfChanged((store) => {
+async function ensureLiveDefaults() {
+  await mutateStoreIfChanged((store) => {
     let changed = false;
     if (!store.homeSections) {
       store.homeSections = [];
@@ -314,10 +314,10 @@ function ensureLiveDefaults() {
   });
 }
 
-export function ensureSeeded() {
-  const existing = readStore();
+export async function ensureSeeded() {
+  const existing = await readStore();
   if (!(existing.adminUsers.length && existing.articles.length && existing.settings)) {
-    mutateStore((store) => {
+    await mutateStore((store) => {
       if (!store.adminUsers.length) {
         store.adminUsers.push({
           id: newId(),
@@ -465,8 +465,6 @@ export function ensureSeeded() {
       if (!store.settings) store.settings = DEFAULT_SETTINGS;
     });
   }
-  ensureLiveDefaults();
-  ensureOwnerAccounts();
+  await ensureLiveDefaults();
+  await ensureOwnerAccounts();
 }
-
-ensureSeeded();

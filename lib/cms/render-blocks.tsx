@@ -1,6 +1,8 @@
 import type { PageBlock } from "./types";
 
-export function PageBlocks({ blocks }: { blocks: PageBlock[] }) {
+type GridArticle = { slug: string; title: string; outlet?: string; year?: number };
+
+export function PageBlocks({ blocks, articles = [] }: { blocks: PageBlock[]; articles?: GridArticle[] }) {
   return (
     <div className="cms-blocks">
       {blocks.map((block, i) => {
@@ -67,6 +69,41 @@ export function PageBlocks({ blocks }: { blocks: PageBlock[] }) {
           );
         }
         if (block.type === "spacer") return <div key={i} style={{ height: 24 }} />;
+        if (block.type === "articleGrid") {
+          const items = articles.slice(0, block.limit || 6);
+          if (!items.length) {
+            return (
+              <p key={i} style={{ color: "#6b7268", margin: "16px 0" }}>
+                Latest stories will appear here.
+              </p>
+            );
+          }
+          return (
+            <div key={i} style={{ display: "grid", gap: 12, margin: "16px 0 24px" }}>
+              {items.map((item) => (
+                <a
+                  key={item.slug}
+                  href={`/articles/${item.slug}`}
+                  style={{
+                    display: "block",
+                    background: "#fffdf8",
+                    border: "1px solid rgba(20,61,49,0.1)",
+                    borderRadius: 14,
+                    padding: "14px 16px",
+                    color: "#143d31"
+                  }}
+                >
+                  <strong className="font-display" style={{ display: "block", fontSize: 18, lineHeight: 1.35 }}>
+                    {item.title}
+                  </strong>
+                  <span style={{ display: "block", marginTop: 4, fontSize: 13, color: "#6b7268" }}>
+                    {[item.outlet, item.year].filter(Boolean).join(" · ")}
+                  </span>
+                </a>
+              ))}
+            </div>
+          );
+        }
         return null;
       })}
     </div>

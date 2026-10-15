@@ -17,7 +17,7 @@ export default async function EditPage({
   await requireUser();
   const { id } = await params;
   const q = await searchParams;
-  const page = getPage(id);
+  const page = await getPage(id);
   if (!page) notFound();
   const blocked = isReservedPageSlug(page.slug);
   const liveHref = `/${page.slug === "home" ? "" : page.slug}`;

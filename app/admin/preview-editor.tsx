@@ -2,6 +2,7 @@
 
 import { useLayoutEffect, useRef, useState } from "react";
 import { PageBlocks } from "@/lib/cms/render-blocks";
+import { formatArticleBody } from "@/lib/cms/sanitize";
 import type { PageBlock } from "@/lib/cms/types";
 
 type PreviewKind = "article" | "page" | "event" | "consultation";
@@ -16,13 +17,6 @@ function readForm(form: HTMLFormElement) {
     data[box.name] = box.checked ? "on" : "";
   });
   return data;
-}
-
-function safeHtml(html: string) {
-  return html
-    .replace(/<script[\s\S]*?>[\s\S]*?<\/script>/gi, "")
-    .replace(/<style[\s\S]*?>[\s\S]*?<\/style>/gi, "")
-    .replace(/\son\w+\s*=/gi, " data-dropped=");
 }
 
 function parseBlocks(raw: string): PageBlock[] | null {
@@ -44,14 +38,19 @@ function StatusPill({ status }: { status?: string }) {
 
 function ArticlePreview({ values }: { values: Record<string, string> }) {
   const month = values.month ? String(values.month).padStart(2, "0") : "";
+  const body = values.body ? formatArticleBody(values.body) : "";
   return (
     <article className="preview-article">
+      {values.featuredImageUrl ? (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img src={values.featuredImageUrl} alt="" />
+      ) : null}
       <p className="preview-kicker">
         {values.outlet || "Outlet"} {values.year ? `· ${values.year}${month ? `-${month}` : ""}` : ""}
       </p>
       <h1>{values.title || "Article title"}</h1>
       {values.excerpt ? <p className="preview-excerpt">{values.excerpt}</p> : null}
-        {values.body ? <div className="preview-body" dangerouslySetInnerHTML={{ __html: safeHtml(values.body) }} /> : <p className="preview-empty">The story will show up here as you type.</p>}
+        {body ? <div className="preview-body" dangerouslySetInnerHTML={{ __html: body }} /> : <p className="preview-empty">The story will show up here as you type.</p>}
       {values.externalUrl ? (
         <p>
           <a href={values.externalUrl} target="_blank" rel="noreferrer">

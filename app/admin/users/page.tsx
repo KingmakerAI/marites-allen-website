@@ -11,7 +11,7 @@ export default async function UsersPage({
 }) {
   const me = await requireUser("owner");
   const q = await searchParams;
-  const users = listUsers();
+  const users = await listUsers();
   return (
     <div>
       <h1 className="admin-h1">Team</h1>

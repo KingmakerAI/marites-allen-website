@@ -22,7 +22,7 @@ const FAIL_MESSAGE =
 export async function submitConsultationEnquiryAction(raw: unknown): Promise<ConsultationEnquiryResult> {
   try {
     try {
-      ensureSeeded();
+      await ensureSeeded();
     } catch (err) {
       console.error("[consultation-enquiry] ensureSeeded failed", err);
     }
@@ -93,7 +93,7 @@ export async function submitConsultationEnquiryAction(raw: unknown): Promise<Con
 
     let saved = false;
     try {
-      saveSignup({
+      await saveSignup({
         kind: "booking-waitlist",
         email,
         name: fullName,

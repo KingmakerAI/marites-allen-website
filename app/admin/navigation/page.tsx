@@ -11,7 +11,7 @@ export default async function NavigationPage({
 }) {
   await requireUser();
   const q = await searchParams;
-  const items = listNavigation();
+  const items = await listNavigation();
   return (
     <div>
       <h1 className="admin-h1">Menus</h1>

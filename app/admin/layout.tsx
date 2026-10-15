@@ -6,7 +6,7 @@ import "./admin.css";
 export const dynamic = "force-dynamic";
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
-  ensureSeeded();
+  await ensureSeeded();
   const user = await getSessionUser();
   if (!user) return <div className="admin-login-wrap">{children}</div>;
   return <AdminShell user={user}>{children}</AdminShell>;

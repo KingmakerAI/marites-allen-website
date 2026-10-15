@@ -15,7 +15,7 @@ export default async function EditArticle({
   await requireUser();
   const { id } = await params;
   const q = await searchParams;
-  const article = getArticle(id);
+  const article = await getArticle(id);
   if (!article) notFound();
   const liveHref = article.status === "published" ? `/articles/${article.slug}` : undefined;
   return (

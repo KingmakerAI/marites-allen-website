@@ -51,18 +51,18 @@ export function rateLimitReset(key: string, limit = 5, windowMs = 15 * 60 * 1000
   return true;
 }
 
-export function authenticate(email: string, password: string): AdminUser | null {
-  const store = readStore();
+export async function authenticate(email: string, password: string): Promise<AdminUser | null> {
+  const store = await readStore();
   const user = store.adminUsers.find((u) => u.email.toLowerCase() === email.toLowerCase());
   if (!user || !verifyPassword(password, user.passwordHash)) return null;
   return publicUser(user);
 }
 
-export function createSession(userId: string, remember = false) {
+export async function createSession(userId: string, remember = false) {
   const days = remember ? SESSION_DAYS_REMEMBER : SESSION_DAYS;
   const token = newToken();
   const expiresAt = new Date(Date.now() + days * 86400000).toISOString();
-  mutateStore((store) => {
+  await mutateStore((store) => {
     store.sessions = store.sessions.filter((s) => s.userId !== userId && s.expiresAt > nowIso());
     store.sessions.push({ id: token, userId, expiresAt });
     const user = store.adminUsers.find((u) => u.id === userId);
@@ -71,8 +71,8 @@ export function createSession(userId: string, remember = false) {
   return { token, expiresAt };
 }
 
-export function destroySession(token: string) {
-  mutateStore((store) => {
+export async function destroySession(token: string) {
+  await mutateStore((store) => {
     store.sessions = store.sessions.filter((s) => s.id !== token);
   });
 }
@@ -81,7 +81,7 @@ export async function getSessionUser(): Promise<AdminUser | null> {
   const jar = await cookies();
   const token = jar.get(SESSION_COOKIE)?.value;
   if (!token) return null;
-  const store = readStore();
+  const store = await readStore();
   const session = store.sessions.find((s) => s.id === token && s.expiresAt > nowIso());
   if (!session) return null;
   const user = store.adminUsers.find((u) => u.id === session.userId);
@@ -105,8 +105,8 @@ export function cookieOptions(expiresAt: string) {
   };
 }
 
-export function logAudit(userId: string, entity: string, entityId: string, action: string) {
-  mutateStore((store) => {
+export async function logAudit(userId: string, entity: string, entityId: string, action: string) {
+  await mutateStore((store) => {
     store.auditLog.unshift({
       id: newId(),
       userId,
@@ -124,9 +124,9 @@ function ownerBootstrapPassword() {
 }
 
 /** Creates the two owner logins, and sets their password once. Later password changes are kept. */
-export function ensureOwnerAccounts() {
+export async function ensureOwnerAccounts() {
   const password = ownerBootstrapPassword();
-  mutateStoreIfChanged((store) => {
+  await mutateStoreIfChanged((store) => {
     let changed = false;
     store.bootstrap = store.bootstrap || {};
     const stampPasswords = store.bootstrap.owners !== OWNER_BOOTSTRAP;
@@ -162,10 +162,10 @@ export function ensureOwnerAccounts() {
   });
 }
 
-export function changePasswordWithCurrent(email: string, current: string, nextPassword: string): AdminUser | null {
-  const user = authenticate(email, current);
+export async function changePasswordWithCurrent(email: string, current: string, nextPassword: string): Promise<AdminUser | null> {
+  const user = await authenticate(email, current);
   if (!user) return null;
-  mutateStore((store) => {
+  await mutateStore((store) => {
     const row = store.adminUsers.find((u) => u.id === user.id);
     if (!row) return;
     row.passwordHash = hashPassword(nextPassword);
@@ -224,7 +224,7 @@ export async function requestPasswordReset(email: string) {
   const normalized = email.trim().toLowerCase();
   const code = newResetCode();
   const expiresAt = new Date(Date.now() + RESET_MINUTES * 60 * 1000).toISOString();
-  const found = mutateStore((store) => {
+  const found = await mutateStore((store) => {
     const row = store.adminUsers.find((u) => u.email === normalized);
     if (!row) return false;
     row.passwordReset = { tokenHash: hashToken(code), expiresAt };
@@ -236,10 +236,10 @@ export async function requestPasswordReset(email: string) {
   }
 }
 
-export function completePasswordReset(email: string, code: string, nextPassword: string): AdminUser | null {
+export async function completePasswordReset(email: string, code: string, nextPassword: string): Promise<AdminUser | null> {
   const normalized = email.trim().toLowerCase();
   const tokenHash = hashToken(code);
-  const user = mutateStore((store) => {
+  const user = await mutateStore((store) => {
     const row = store.adminUsers.find((u) => u.email === normalized);
     if (!row?.passwordReset) return null;
     if (row.passwordReset.expiresAt < nowIso()) {
@@ -255,8 +255,8 @@ export function completePasswordReset(email: string, code: string, nextPassword:
   return user;
 }
 
-export function setUserPassword(userId: string, nextPassword: string) {
-  return mutateStore((store) => {
+export async function setUserPassword(userId: string, nextPassword: string) {
+  return await mutateStore((store) => {
     const row = store.adminUsers.find((u) => u.id === userId);
     if (!row) return false;
     row.passwordHash = hashPassword(nextPassword);

@@ -1,12 +1,18 @@
 import { requireUser } from "@/lib/cms/auth";
-import { listCategories } from "@/lib/cms/repo";
+import { listCategories, listMedia } from "@/lib/cms/repo";
 import { saveArticleAction } from "../../actions";
 import { PreviewEditor } from "../../preview-editor";
 import { EasyMore, ShopHead, StatusSelect } from "../../ui";
 import type { Article } from "@/lib/cms/types";
+import { PhotoField } from "../photo-field";
 
-export function ArticleForm({ article }: { article?: Article | null }) {
-  const cats = listCategories();
+export async function ArticleForm({ article }: { article?: Article | null }) {
+  const cats = await listCategories();
+  const photos = (await listMedia()).map((item) => ({
+    id: item.id,
+    path: item.path,
+    label: item.altText || item.filename
+  }));
   return (
     <form action={saveArticleAction} className="admin-form shop-card">
       {article && <input type="hidden" name="id" value={article.id} />}
@@ -22,8 +28,9 @@ export function ArticleForm({ article }: { article?: Article | null }) {
       <label>
         The story
         <textarea name="body" rows={8} defaultValue={article?.body} placeholder="Type the story here" />
-        <span className="field-hint">You can paste normal writing. If you already have web code, that works too.</span>
+        <span className="field-hint">You can paste normal writing. Blank lines start a new paragraph. If you already have web code, that works too.</span>
       </label>
+      <PhotoField photos={photos} value={article?.featuredImageId} />
       <div className="fields-2">
         <label>
           Newspaper or show

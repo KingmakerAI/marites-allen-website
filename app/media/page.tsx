@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { JsonLd } from "@/components/json-ld";
 import { getCachedArticles, getCachedPageCopy, getCachedSettings } from "@/lib/cms/content";
 import { parseVideoLines } from "@/lib/cms/copy-lines";
-import { monthName } from "@/lib/cms/repo";
+import { listCategories, monthName } from "@/lib/cms/repo";
 import { breadcrumbJsonLd, pageMetadata } from "@/lib/seo";
 import MediaClient from "./media-client";
 
@@ -16,22 +16,34 @@ export async function generateMetadata(): Promise<Metadata> {
   });
 }
 
-export default async function MediaPage() {
+export default async function MediaPage({
+  searchParams
+}: {
+  searchParams: Promise<{ category?: string }>;
+}) {
+  const query = await searchParams;
   const [articles, pageCopy, settings] = await Promise.all([
     getCachedArticles(),
     getCachedPageCopy(),
     getCachedSettings()
   ]);
+  const folders = new Map((await listCategories()).map((cat) => [cat.id, cat]));
   const copy = pageCopy.mediaPage;
-  const press = articles.map((a) => ({
-    year: a.year,
-    m: a.month,
-    month: monthName(a.month),
-    outlet: a.outlet,
-    quote: a.excerpt || a.title,
-    cta: a.ctaLabel,
-    url: a.externalUrl || `/articles/${a.slug}`
-  }));
+  const press = articles.map((a) => {
+    const folder = a.categoryId ? folders.get(a.categoryId) : undefined;
+    return {
+      year: a.year,
+      m: a.month,
+      month: monthName(a.month),
+      outlet: a.outlet,
+      quote: a.excerpt || a.title,
+      cta: a.ctaLabel,
+      url: a.externalUrl || `/articles/${a.slug}`,
+      category: folder?.name || "",
+      categorySlug: folder?.slug || "",
+      slug: a.slug
+    };
+  });
   return (
     <>
       <JsonLd
@@ -49,6 +61,7 @@ export default async function MediaPage() {
         videosHeading={copy.videosHeading}
         videos={parseVideoLines(copy.videos)}
         contact={settings.contact}
+        activeCategory={(query.category || "").trim().toLowerCase()}
       />
     </>
   );

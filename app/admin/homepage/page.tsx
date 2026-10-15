@@ -20,13 +20,13 @@ export default async function HomepageEditor({
 }) {
   await requireUser();
   const q = await searchParams;
-  const sections = listHomeSections();
+  const sections = await listHomeSections();
   const hero = sections.find((s) => s.id === "home-hero" || s.blockType === "hero");
   const stats = sections.find((s) => s.id === "home-stats" || s.blockType === "stats");
   const services = sections.find((s) => s.id === "home-services" || s.blockType === "services");
   const closing = sections.find((s) => s.id === "home-closing" || s.blockType === "closing");
-  const faqs = listFaqs();
-  const testimonials = listTestimonials();
+  const faqs = await listFaqs();
+  const testimonials = await listTestimonials();
   const heroPayload = (hero?.payload || {}) as Record<string, string>;
   const existingStats = (stats?.payload.items as Array<{ value: string; label: string }>) || [];
   const statItems = existingStats

@@ -49,23 +49,31 @@ function monthName(m: number) {
   return ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"][m - 1] || "";
 }
 
-export function listPages() {
-  return readStore().pages.sort((a, b) => b.updatedAt.localeCompare(a.updatedAt));
+function uniqueSlug(base: string, taken: (slug: string) => boolean) {
+  const root = (base || "item").slice(0, 70);
+  if (!taken(root)) return root;
+  let n = 2;
+  while (taken(`${root}-${n}`)) n += 1;
+  return `${root}-${n}`;
 }
 
-export function getPage(id: string) {
-  return readStore().pages.find((p) => p.id === id) || null;
+export async function listPages() {
+  return (await readStore()).pages.sort((a, b) => b.updatedAt.localeCompare(a.updatedAt));
 }
 
-export function getPageBySlug(slug: string, publishedOnly = false) {
+export async function getPage(id: string) {
+  return (await readStore()).pages.find((p) => p.id === id) || null;
+}
+
+export async function getPageBySlug(slug: string, publishedOnly = false) {
   return (
-    readStore().pages.find(
+    (await readStore()).pages.find(
       (p) => p.slug === slug && (!publishedOnly || p.status === "published")
     ) || null
   );
 }
 
-export function savePage(input: Partial<CmsPage> & { title: string; slug: string; blocks: PageBlock[] }) {
+export async function savePage(input: Partial<CmsPage> & { title: string; slug: string; blocks: PageBlock[] }) {
   const id = input.id || newId();
   const page: CmsPage = {
     id,
@@ -81,7 +89,7 @@ export function savePage(input: Partial<CmsPage> & { title: string; slug: string
     publishedAt: input.status === "published" ? input.publishedAt || nowIso() : null,
     updatedAt: nowIso()
   };
-  mutateStore((store) => {
+  await mutateStore((store) => {
     const idx = store.pages.findIndex((p) => p.id === id);
     if (idx >= 0) store.pages[idx] = page;
     else store.pages.unshift(page);
@@ -90,17 +98,17 @@ export function savePage(input: Partial<CmsPage> & { title: string; slug: string
   return page;
 }
 
-export function deletePage(id: string) {
-  mutateStore((store) => {
+export async function deletePage(id: string) {
+  await mutateStore((store) => {
     store.pages = store.pages.filter((p) => p.id !== id);
   });
   bust(CMS_TAGS.pages);
 }
 
-export function duplicatePage(id: string) {
-  const page = getPage(id);
+export async function duplicatePage(id: string) {
+  const page = await getPage(id);
   if (!page) return null;
-  return savePage({
+  return await savePage({
     ...page,
     id: undefined,
     title: `${page.title} (copy)`,
@@ -110,66 +118,76 @@ export function duplicatePage(id: string) {
   });
 }
 
-export function listArticles(filter?: { status?: ContentStatus; q?: string; categoryId?: string }) {
-  return readStore()
+export async function listArticles(filter?: { status?: ContentStatus; q?: string; categoryId?: string }) {
+  return (await readStore())
     .articles.filter((a) => {
       if (filter?.status && a.status !== filter.status) return false;
-      if (filter?.categoryId && a.categoryId !== filter.categoryId) return false;
+      if (filter?.categoryId === "none") {
+        if (a.categoryId) return false;
+      } else if (filter?.categoryId && a.categoryId !== filter.categoryId) return false;
       if (filter?.q) {
         const q = filter.q.toLowerCase();
-        return `${a.title} ${a.outlet} ${a.excerpt}`.toLowerCase().includes(q);
+        return `${a.title} ${a.outlet} ${a.excerpt} ${a.tags.join(" ")}`.toLowerCase().includes(q);
       }
       return true;
     })
     .sort((a, b) => b.year - a.year || b.month - a.month);
 }
 
-export function getArticle(id: string) {
-  return readStore().articles.find((a) => a.id === id) || null;
+export async function getArticle(id: string) {
+  return (await readStore()).articles.find((a) => a.id === id) || null;
 }
 
-export function getArticleBySlug(slug: string) {
-  return readStore().articles.find((a) => a.slug === slug && a.status === "published") || null;
+export async function getArticleBySlug(slug: string) {
+  return (await readStore()).articles.find((a) => a.slug === slug && a.status === "published") || null;
 }
 
-export function publishedArticles() {
-  return listArticles({ status: "published" });
+export async function publishedArticles() {
+  return await listArticles({ status: "published" });
 }
 
-export function saveArticle(input: Partial<Article> & { title: string; slug: string; year: number; month: number }) {
+export async function saveArticle(input: Partial<Article> & { title: string; slug: string; year: number; month: number }) {
   const id = input.id || newId();
-  const article: Article = {
-    id,
-    slug: slugify(input.slug),
-    title: sanitizeText(input.title, 200),
-    excerpt: sanitizeText(input.excerpt || "", 400),
-    body: sanitizeHtml(input.body || ""),
-    featuredImageId: input.featuredImageId ?? null,
-    author: sanitizeText(input.author || "Marites Allen", 80),
-    categoryId: input.categoryId ?? null,
-    tags: (input.tags || []).map((t) => sanitizeText(t, 40)).filter(Boolean),
-    outlet: sanitizeText(input.outlet || "", 120),
-    externalUrl: sanitizeText(input.externalUrl || "", 500),
-    ctaLabel: sanitizeText(input.ctaLabel || "Read article", 40),
-    year: input.year,
-    month: input.month,
-    status: (input.status || "draft") as ContentStatus,
-    publishedAt: input.status === "published" ? input.publishedAt || nowIso() : null,
-    seoTitle: sanitizeText(input.seoTitle || input.title, 70),
-    seoDescription: sanitizeText(input.seoDescription || input.excerpt || "", 180),
-    updatedAt: nowIso()
-  };
-  mutateStore((store) => {
+  const article = await mutateStore((store) => {
+    const existing = store.articles.find((a) => a.id === id);
+    const status = (input.status || "draft") as ContentStatus;
+    const categoryId =
+      input.categoryId && store.categories.some((c) => c.id === input.categoryId) ? input.categoryId : null;
+    const row: Article = {
+      id,
+      slug: uniqueSlug(slugify(input.slug), (slug) => store.articles.some((a) => a.slug === slug && a.id !== id)),
+      title: sanitizeText(input.title, 200),
+      excerpt: sanitizeText(input.excerpt || "", 400),
+      body: sanitizeHtml(input.body || ""),
+      featuredImageId: input.featuredImageId ?? null,
+      author: sanitizeText(input.author || "Marites Allen", 80),
+      categoryId,
+      tags: (input.tags || []).map((t) => sanitizeText(t, 40)).filter(Boolean),
+      outlet: sanitizeText(input.outlet || "", 120),
+      externalUrl: sanitizeText(input.externalUrl || "", 500),
+      ctaLabel: sanitizeText(input.ctaLabel || "Read article", 40),
+      year: input.year,
+      month: input.month,
+      status,
+      publishedAt:
+        status === "published"
+          ? existing?.publishedAt || input.publishedAt || nowIso()
+          : existing?.publishedAt || null,
+      seoTitle: sanitizeText(input.seoTitle || input.title, 70),
+      seoDescription: sanitizeText(input.seoDescription || input.excerpt || "", 180),
+      updatedAt: nowIso()
+    };
     const idx = store.articles.findIndex((a) => a.id === id);
-    if (idx >= 0) store.articles[idx] = article;
-    else store.articles.unshift(article);
+    if (idx >= 0) store.articles[idx] = row;
+    else store.articles.unshift(row);
+    return row;
   });
   bust(CMS_TAGS.articles);
   return article;
 }
 
-export function deleteArticle(id: string) {
-  mutateStore((store) => {
+export async function deleteArticle(id: string) {
+  await mutateStore((store) => {
     store.articles = store.articles.filter((a) => a.id !== id);
   });
   bust(CMS_TAGS.articles);
@@ -179,55 +197,56 @@ export function articleMonthLabel(article: Article) {
   return monthName(article.month);
 }
 
-export function listCategories() {
-  return readStore().categories.sort((a, b) => a.name.localeCompare(b.name));
+export async function listCategories() {
+  return (await readStore()).categories.sort((a, b) => a.name.localeCompare(b.name));
 }
 
-export function saveCategory(input: Partial<ArticleCategory> & { name: string; slug: string }) {
+export async function saveCategory(input: Partial<ArticleCategory> & { name: string; slug: string }) {
   const id = input.id || newId();
-  const row: ArticleCategory = {
-    id,
-    name: sanitizeText(input.name, 80),
-    slug: slugify(input.slug),
-    description: sanitizeText(input.description || "", 300)
-  };
-  mutateStore((store) => {
+  const row = await mutateStore((store) => {
+    const next: ArticleCategory = {
+      id,
+      name: sanitizeText(input.name, 80),
+      slug: uniqueSlug(slugify(input.slug), (slug) => store.categories.some((c) => c.slug === slug && c.id !== id)),
+      description: sanitizeText(input.description || "", 300)
+    };
     const idx = store.categories.findIndex((c) => c.id === id);
-    if (idx >= 0) store.categories[idx] = row;
-    else store.categories.push(row);
+    if (idx >= 0) store.categories[idx] = next;
+    else store.categories.push(next);
+    return next;
   });
   bust(CMS_TAGS.articles);
   return row;
 }
 
-export function deleteCategory(id: string) {
-  mutateStore((store) => {
+export async function deleteCategory(id: string) {
+  await mutateStore((store) => {
     store.categories = store.categories.filter((c) => c.id !== id);
     store.articles = store.articles.map((a) => (a.categoryId === id ? { ...a, categoryId: null } : a));
   });
   bust(CMS_TAGS.articles);
 }
 
-export function listMedia(q?: string) {
-  return readStore()
+export async function listMedia(q?: string) {
+  return (await readStore())
     .media.filter((m) => !q || `${m.filename} ${m.altText}`.toLowerCase().includes(q.toLowerCase()))
     .sort((a, b) => b.createdAt.localeCompare(a.createdAt));
 }
 
-export function getMedia(id: string) {
-  return readStore().media.find((m) => m.id === id) || null;
+export async function getMedia(id: string) {
+  return (await readStore()).media.find((m) => m.id === id) || null;
 }
 
-export function saveMedia(asset: MediaAsset) {
-  mutateStore((store) => {
+export async function saveMedia(asset: MediaAsset) {
+  await mutateStore((store) => {
     store.media.unshift(asset);
   });
   bust(CMS_TAGS.media);
   return asset;
 }
 
-export function mediaInUse(id: string) {
-  const store = readStore();
+export async function mediaInUse(id: string) {
+  const store = (await readStore());
   return (
     store.articles.some((a) => a.featuredImageId === id) ||
     store.pages.some((p) => p.ogImageId === id || JSON.stringify(p.blocks).includes(id)) ||
@@ -235,22 +254,22 @@ export function mediaInUse(id: string) {
   );
 }
 
-export function deleteMedia(id: string) {
-  if (mediaInUse(id)) throw new Error("This image is still used by content.");
-  const asset = getMedia(id);
-  mutateStore((store) => {
+export async function deleteMedia(id: string) {
+  if (await mediaInUse(id)) throw new Error("This image is still used by content.");
+  const asset = await getMedia(id);
+  await mutateStore((store) => {
     store.media = store.media.filter((m) => m.id !== id);
   });
   bust(CMS_TAGS.media);
   return asset;
 }
 
-export function listServices() {
-  return readStore().services.sort((a, b) => a.sortOrder - b.sortOrder);
+export async function listServices() {
+  return (await readStore()).services.sort((a, b) => a.sortOrder - b.sortOrder);
 }
 
-export function saveService(input: ConsultationService) {
-  mutateStore((store) => {
+export async function saveService(input: ConsultationService) {
+  await mutateStore((store) => {
     const idx = store.services.findIndex((s) => s.id === input.id);
     if (idx >= 0) store.services[idx] = input;
     else store.services.push(input);
@@ -259,20 +278,20 @@ export function saveService(input: ConsultationService) {
   return input;
 }
 
-export function deleteService(id: string) {
-  mutateStore((store) => {
+export async function deleteService(id: string) {
+  await mutateStore((store) => {
     store.services = store.services.filter((s) => s.id !== id);
     store.pricing = store.pricing.filter((p) => p.serviceId !== id);
   });
   bust(CMS_TAGS.services);
 }
 
-export function listPricing() {
-  return readStore().pricing.sort((a, b) => a.sortOrder - b.sortOrder);
+export async function listPricing() {
+  return (await readStore()).pricing.sort((a, b) => a.sortOrder - b.sortOrder);
 }
 
-export function savePricing(row: PricingRow) {
-  mutateStore((store) => {
+export async function savePricing(row: PricingRow) {
+  await mutateStore((store) => {
     const idx = store.pricing.findIndex((p) => p.id === row.id);
     if (idx >= 0) store.pricing[idx] = row;
     else store.pricing.push(row);
@@ -281,21 +300,21 @@ export function savePricing(row: PricingRow) {
   return row;
 }
 
-export function deletePricing(id: string) {
-  mutateStore((store) => {
+export async function deletePricing(id: string) {
+  await mutateStore((store) => {
     store.pricing = store.pricing.filter((p) => p.id !== id);
   });
   bust(CMS_TAGS.services);
 }
 
-export function listEvents(publishedOnly = false) {
-  return readStore()
+export async function listEvents(publishedOnly = false) {
+  return (await readStore())
     .events.filter((e) => !publishedOnly || e.status === "published")
     .sort((a, b) => a.sortOrder - b.sortOrder);
 }
 
-export function saveEvent(row: CmsEvent) {
-  mutateStore((store) => {
+export async function saveEvent(row: CmsEvent) {
+  await mutateStore((store) => {
     const idx = store.events.findIndex((e) => e.id === row.id);
     if (idx >= 0) store.events[idx] = row;
     else store.events.push(row);
@@ -304,19 +323,19 @@ export function saveEvent(row: CmsEvent) {
   return row;
 }
 
-export function deleteEvent(id: string) {
-  mutateStore((store) => {
+export async function deleteEvent(id: string) {
+  await mutateStore((store) => {
     store.events = store.events.filter((e) => e.id !== id);
   });
   bust(CMS_TAGS.events);
 }
 
-export function listTestimonials() {
-  return readStore().testimonials.sort((a, b) => a.sortOrder - b.sortOrder);
+export async function listTestimonials() {
+  return (await readStore()).testimonials.sort((a, b) => a.sortOrder - b.sortOrder);
 }
 
-export function saveTestimonial(row: Testimonial) {
-  mutateStore((store) => {
+export async function saveTestimonial(row: Testimonial) {
+  await mutateStore((store) => {
     const idx = store.testimonials.findIndex((t) => t.id === row.id);
     if (idx >= 0) store.testimonials[idx] = row;
     else store.testimonials.push(row);
@@ -325,12 +344,12 @@ export function saveTestimonial(row: Testimonial) {
   return row;
 }
 
-export function listFaqs() {
-  return readStore().faqs.sort((a, b) => a.sortOrder - b.sortOrder);
+export async function listFaqs() {
+  return (await readStore()).faqs.sort((a, b) => a.sortOrder - b.sortOrder);
 }
 
-export function saveFaq(row: FaqItem) {
-  mutateStore((store) => {
+export async function saveFaq(row: FaqItem) {
+  await mutateStore((store) => {
     const idx = store.faqs.findIndex((f) => f.id === row.id);
     if (idx >= 0) store.faqs[idx] = row;
     else store.faqs.push(row);
@@ -339,14 +358,14 @@ export function saveFaq(row: FaqItem) {
   return row;
 }
 
-export function listNavigation(location?: "header" | "footer") {
-  return readStore()
+export async function listNavigation(location?: "header" | "footer") {
+  return (await readStore())
     .navigation.filter((n) => !location || n.location === location)
     .sort((a, b) => a.sortOrder - b.sortOrder);
 }
 
-export function saveNavigation(row: NavigationItem) {
-  mutateStore((store) => {
+export async function saveNavigation(row: NavigationItem) {
+  await mutateStore((store) => {
     const idx = store.navigation.findIndex((n) => n.id === row.id);
     if (idx >= 0) store.navigation[idx] = row;
     else store.navigation.push(row);
@@ -355,19 +374,19 @@ export function saveNavigation(row: NavigationItem) {
   return row;
 }
 
-export function deleteNavigation(id: string) {
-  mutateStore((store) => {
+export async function deleteNavigation(id: string) {
+  await mutateStore((store) => {
     store.navigation = store.navigation.filter((n) => n.id !== id && n.parentId !== id);
   });
   bust(CMS_TAGS.nav);
 }
 
-export function getSettings(): SiteSettings | null {
-  return readStore().settings;
+export async function getSettings(): Promise<SiteSettings | null> {
+  return (await readStore()).settings;
 }
 
-export function saveSettings(settings: SiteSettings) {
-  mutateStore((store) => {
+export async function saveSettings(settings: SiteSettings) {
+  await mutateStore((store) => {
     store.settings = settings;
   });
   bust(CMS_TAGS.settings);
@@ -375,12 +394,12 @@ export function saveSettings(settings: SiteSettings) {
   return settings;
 }
 
-export function listHomeSections() {
-  return readStore().homeSections.sort((a, b) => a.sortOrder - b.sortOrder);
+export async function listHomeSections() {
+  return (await readStore()).homeSections.sort((a, b) => a.sortOrder - b.sortOrder);
 }
 
-export function saveHomeSection(row: HomeSection) {
-  mutateStore((store) => {
+export async function saveHomeSection(row: HomeSection) {
+  await mutateStore((store) => {
     const idx = store.homeSections.findIndex((h) => h.id === row.id);
     if (idx >= 0) store.homeSections[idx] = row;
     else store.homeSections.push(row);
@@ -389,8 +408,8 @@ export function saveHomeSection(row: HomeSection) {
   return row;
 }
 
-export function dashboardStats() {
-  const store = readStore();
+export async function dashboardStats() {
+  const store = (await readStore());
   const signups = store.signups || [];
   const byKind = (kind: SignupKind) => signups.filter((s) => s.kind === kind);
   const bookings = byKind("booking-waitlist");
@@ -413,8 +432,8 @@ export function dashboardStats() {
   };
 }
 
-export function listUsers() {
-  return readStore().adminUsers.map((user) => ({
+export async function listUsers() {
+  return (await readStore()).adminUsers.map((user) => ({
     id: user.id,
     email: user.email,
     role: user.role,
@@ -423,7 +442,7 @@ export function listUsers() {
   }));
 }
 
-export function listSignups(filter?: {
+export async function listSignups(filter?: {
   kind?: SignupKind;
   status?: SignupStatus;
   q?: string;
@@ -432,7 +451,7 @@ export function listSignups(filter?: {
 }) {
   const sortKey = filter?.sort || "createdAt";
   const mul = filter?.dir === "asc" ? 1 : -1;
-  return (readStore().signups || [])
+  return ((await readStore()).signups || [])
     .filter((row) => {
       if (filter?.kind && row.kind !== filter.kind) return false;
       if (filter?.status && row.status !== filter.status) return false;
@@ -460,10 +479,10 @@ export function listSignups(filter?: {
     });
 }
 
-export function saveSignup(input: Omit<Signup, "id" | "createdAt" | "status"> & { status?: SignupStatus }) {
+export async function saveSignup(input: Omit<Signup, "id" | "createdAt" | "status"> & { status?: SignupStatus }) {
   const email = sanitizeText(input.email, 160).toLowerCase();
   const kind = input.kind;
-  return mutateStore((store) => {
+  return await mutateStore((store) => {
     if (!store.signups) store.signups = [];
     const existing = store.signups.find((row) => row.kind === kind && row.email === email);
     if (existing) {
@@ -497,21 +516,21 @@ export function saveSignup(input: Omit<Signup, "id" | "createdAt" | "status"> & 
   });
 }
 
-export function updateSignupStatus(id: string, status: SignupStatus) {
-  mutateStore((store) => {
+export async function updateSignupStatus(id: string, status: SignupStatus) {
+  await mutateStore((store) => {
     const row = store.signups.find((s) => s.id === id);
     if (row) row.status = status;
   });
 }
 
-export function deleteSignup(id: string) {
-  mutateStore((store) => {
+export async function deleteSignup(id: string) {
+  await mutateStore((store) => {
     store.signups = store.signups.filter((s) => s.id !== id);
   });
 }
 
-export function getPageCopy() {
-  return mergePageCopy(readStore().pageCopy);
+export async function getPageCopy() {
+  return mergePageCopy((await readStore()).pageCopy);
 }
 
 export type AdminSearchHit = {
@@ -521,10 +540,10 @@ export type AdminSearchHit = {
   href: string;
 };
 
-export function searchAdmin(query: string, limit = 12): AdminSearchHit[] {
+export async function searchAdmin(query: string, limit = 12): Promise<AdminSearchHit[]> {
   const q = query.trim().toLowerCase();
   if (!q) return [];
-  const store = readStore();
+  const store = (await readStore());
   const hits: AdminSearchHit[] = [];
   const match = (...parts: Array<string | null | undefined>) =>
     parts.some((part) => part && part.toLowerCase().includes(q));
@@ -573,8 +592,8 @@ export function searchAdmin(query: string, limit = 12): AdminSearchHit[] {
   return hits.slice(0, limit);
 }
 
-export function savePageCopy(copy: PageCopy) {
-  mutateStore((store) => {
+export async function savePageCopy(copy: PageCopy) {
+  await mutateStore((store) => {
     store.pageCopy = copy;
   });
   bust(CMS_TAGS.pageCopy);
@@ -644,8 +663,8 @@ function setStringAtPath(root: unknown, segments: string[], value: string) {
 }
 
 /** Apply one or more text patches to PageCopy by dotted path (e.g. about.title). */
-export function setCopyPaths(patches: Array<{ path: string; value: string }>) {
-  const copy = structuredClone(getPageCopy());
+export async function setCopyPaths(patches: Array<{ path: string; value: string }>) {
+  const copy = structuredClone(await getPageCopy());
   for (const patch of patches) {
     const segments = pathSegments(patch.path);
     if (!segments.length || !COPY_ROOTS.has(segments[0])) {
@@ -657,13 +676,13 @@ export function setCopyPaths(patches: Array<{ path: string; value: string }>) {
     }
     setStringAtPath(copy, segments, sanitizeText(patch.value, 8000));
   }
-  return savePageCopy(copy);
+  return await savePageCopy(copy);
 }
 
-export function getCopyPathValue(path: string) {
+export async function getCopyPathValue(path: string) {
   const segments = pathSegments(path);
   if (!segments.length || !COPY_ROOTS.has(segments[0])) return null;
-  const value = getAtPath(getPageCopy(), segments);
+  const value = getAtPath(await getPageCopy(), segments);
   return typeof value === "string" ? value : null;
 }
 

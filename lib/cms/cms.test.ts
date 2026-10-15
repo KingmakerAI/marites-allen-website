@@ -3,7 +3,7 @@ import os from "os";
 import path from "path";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { hashPassword, slugify, verifyPassword } from "./crypto";
-import { sanitizeHtml } from "./sanitize";
+import { formatArticleBody, sanitizeHtml } from "./sanitize";
 
 describe("crypto", () => {
   it("hashes and verifies passwords", () => {
@@ -25,6 +25,12 @@ describe("sanitize", () => {
     expect(html).not.toContain("javascript:");
     expect(html).toContain("<p>Hi</p>");
   });
+
+  it("turns plain writing into paragraphs", () => {
+    const html = formatArticleBody("First paragraph.\n\nSecond line\nstays with it.");
+    expect(html).toBe("<p>First paragraph.</p><p>Second line<br />stays with it.</p>");
+    expect(formatArticleBody("<p>Already HTML</p>")).toBe("<p>Already HTML</p>");
+  });
 });
 
 describe("cms repository", () => {
@@ -44,7 +50,7 @@ describe("cms repository", () => {
 
   it("saves and lists articles, and blocks media delete when referenced", async () => {
     const { saveArticle, listArticles, saveMedia, mediaInUse, deleteMedia } = await import("./repo");
-    const article = saveArticle({
+    const article = await saveArticle({
       title: "Test press",
       slug: "test-press",
       excerpt: "Quote",
@@ -53,9 +59,9 @@ describe("cms repository", () => {
       status: "published",
       outlet: "Test Outlet"
     });
-    expect(listArticles({ status: "published" }).some((a) => a.id === article.id)).toBe(true);
+    expect((await listArticles({ status: "published" })).some((a) => a.id === article.id)).toBe(true);
 
-    saveMedia({
+    await saveMedia({
       id: "img1",
       filename: "a.webp",
       path: "/uploads/a.webp",
@@ -66,17 +72,43 @@ describe("cms repository", () => {
       altText: "alt",
       createdAt: new Date().toISOString()
     });
-    saveArticle({
+    await saveArticle({
       ...article,
       featuredImageId: "img1"
     });
-    expect(mediaInUse("img1")).toBe(true);
-    expect(() => deleteMedia("img1")).toThrow(/still used/i);
+    expect(await mediaInUse("img1")).toBe(true);
+    await expect(deleteMedia("img1")).rejects.toThrow(/still used/i);
+  });
+
+  it("keeps story links unique and keeps the original publish date", async () => {
+    const { saveArticle, getArticleBySlug, listArticles } = await import("./repo");
+    const first = await saveArticle({ title: "Same", slug: "same-story", year: 2026, month: 1, status: "published" });
+    const second = await saveArticle({ title: "Same again", slug: "same-story", year: 2026, month: 2, status: "published" });
+    expect(second.slug).toBe("same-story-2");
+    expect((await getArticleBySlug("same-story"))?.id).toBe(first.id);
+    const again = await saveArticle({ ...first, title: "Renamed" });
+    expect(again.slug).toBe("same-story");
+    expect(again.publishedAt).toBe(first.publishedAt);
+    expect((await listArticles({ q: "renamed" })).some((row) => row.id === first.id)).toBe(true);
+  });
+
+  it("lists stories with no folder and keeps folder links unique", async () => {
+    const { saveArticle, saveCategory, listArticles } = await import("./repo");
+    const press = await saveCategory({ name: "Press", slug: "press" });
+    const again = await saveCategory({ name: "Press", slug: "press" });
+    expect(press.slug).toBe("press");
+    expect(again.slug).toBe("press-2");
+    await saveArticle({ title: "Loose", slug: "loose", year: 2026, month: 1, status: "draft" });
+    await saveArticle({ title: "Filed", slug: "filed", year: 2026, month: 1, status: "draft", categoryId: press.id });
+    await saveArticle({ title: "Bogus", slug: "bogus", year: 2026, month: 1, status: "draft", categoryId: "missing" });
+    expect((await listArticles({ categoryId: "none" })).map((row) => row.slug).sort()).toEqual(["bogus", "loose"]);
+    const kept = await saveCategory({ ...press, name: "Press desk" });
+    expect(kept.slug).toBe("press");
   });
 
   it("stores email sign-ups and updates the same email for a kind", async () => {
     const { saveSignup, listSignups } = await import("./repo");
-    saveSignup({
+    await saveSignup({
       kind: "newsletter",
       email: "guest@example.com",
       name: "Guest",
@@ -86,7 +118,7 @@ describe("cms repository", () => {
       source: "footer",
       fields: {}
     });
-    saveSignup({
+    await saveSignup({
       kind: "newsletter",
       email: "guest@example.com",
       name: "Guest Two",
@@ -96,14 +128,14 @@ describe("cms repository", () => {
       source: "footer",
       fields: {}
     });
-    const rows = listSignups({ kind: "newsletter" });
+    const rows = await listSignups({ kind: "newsletter" });
     expect(rows).toHaveLength(1);
     expect(rows[0].name).toBe("Guest Two");
   });
 
   it("sorts booking enquiries by name", async () => {
     const { saveSignup, listSignups } = await import("./repo");
-    saveSignup({
+    await saveSignup({
       kind: "booking-waitlist",
       email: "b@example.com",
       name: "Bea",
@@ -113,7 +145,7 @@ describe("cms repository", () => {
       source: "book",
       fields: { service: "Business Strategy" }
     });
-    saveSignup({
+    await saveSignup({
       kind: "booking-waitlist",
       email: "a@example.com",
       name: "Ada",
@@ -123,24 +155,24 @@ describe("cms repository", () => {
       source: "book",
       fields: { service: "Home / Office Feng Shui" }
     });
-    const rows = listSignups({ kind: "booking-waitlist", sort: "name", dir: "asc" });
+    const rows = await listSignups({ kind: "booking-waitlist", sort: "name", dir: "asc" });
     expect(rows.map((r) => r.name)).toEqual(["Ada", "Bea"]);
   });
 
   it("saves designed-page copy and merges defaults", async () => {
     const { getPageCopy, savePageCopy } = await import("./repo");
-    const copy = getPageCopy();
+    const copy = await getPageCopy();
     expect(copy.about.title).toBeTruthy();
     expect(copy.forecast.zodiacs).toHaveLength(12);
     expect(copy.book.title).toBeTruthy();
     expect(copy.eventsPage.speakingLines.length).toBeGreaterThan(0);
     expect(copy.mediaPage.videos.length).toBeGreaterThan(0);
     expect(copy.home.pressNames.length).toBeGreaterThan(0);
-    savePageCopy({
+    await savePageCopy({
       ...copy,
       about: { ...copy.about, title: "Edited About" }
     });
-    expect(getPageCopy().about.title).toBe("Edited About");
+    expect((await getPageCopy()).about.title).toBe("Edited About");
   });
 
   it("lists designed site pages next to extra pages", async () => {
@@ -167,12 +199,12 @@ describe("cms repository", () => {
 
   it("patches page copy by dotted path", async () => {
     const { ensureSeeded } = await import("./seed");
-    ensureSeeded();
+    await ensureSeeded();
     const { setCopyPaths, getPageCopy } = await import("./repo");
-    setCopyPaths([{ path: "about.title", value: "Live Edit Title" }]);
-    expect(getPageCopy().about.title).toBe("Live Edit Title");
-    setCopyPaths([{ path: "about.recognition.0", value: "Updated award" }]);
-    expect(getPageCopy().about.recognition[0]).toBe("Updated award");
+    await setCopyPaths([{ path: "about.title", value: "Live Edit Title" }]);
+    expect((await getPageCopy()).about.title).toBe("Live Edit Title");
+    await setCopyPaths([{ path: "about.recognition.0", value: "Updated award" }]);
+    expect((await getPageCopy()).about.recognition[0]).toBe("Updated award");
   });
 
   it("counts unique visitors and page opens", async () => {
@@ -214,21 +246,21 @@ describe("cms repository", () => {
   it("creates owner logins and lets them change or reset a password", async () => {
     process.env.OWNER_BOOTSTRAP_PASSWORD = "IamLUCKY168!";
     const { ensureSeeded } = await import("./seed");
-    ensureSeeded();
+    await ensureSeeded();
     const { authenticate, changePasswordWithCurrent, requestPasswordReset, completePasswordReset } = await import("./auth");
-    expect(authenticate("maritesallen@gmail.com", "IamLUCKY168!")?.role).toBe("owner");
-    expect(authenticate("cap10kirck@gmail.com", "IamLUCKY168!")?.role).toBe("owner");
-    const changed = changePasswordWithCurrent("maritesallen@gmail.com", "IamLUCKY168!", "NewLucky168!");
+    expect((await authenticate("maritesallen@gmail.com", "IamLUCKY168!"))?.role).toBe("owner");
+    expect((await authenticate("cap10kirck@gmail.com", "IamLUCKY168!"))?.role).toBe("owner");
+    const changed = await changePasswordWithCurrent("maritesallen@gmail.com", "IamLUCKY168!", "NewLucky168!");
     expect(changed?.email).toBe("maritesallen@gmail.com");
-    expect(authenticate("maritesallen@gmail.com", "IamLUCKY168!")).toBeNull();
-    expect(authenticate("maritesallen@gmail.com", "NewLucky168!")).toBeTruthy();
+    expect(await authenticate("maritesallen@gmail.com", "IamLUCKY168!")).toBeNull();
+    expect(await authenticate("maritesallen@gmail.com", "NewLucky168!")).toBeTruthy();
 
     await requestPasswordReset("cap10kirck@gmail.com");
     const note = fs.readFileSync(path.join(dir, "last-password-reset.txt"), "utf8");
     const code = note.match(/Code: ([A-Z0-9]+)/)?.[1];
     expect(code).toBeTruthy();
-    const reset = completePasswordReset("cap10kirck@gmail.com", code!, "ResetLucky168!");
+    const reset = await completePasswordReset("cap10kirck@gmail.com", code!, "ResetLucky168!");
     expect(reset?.email).toBe("cap10kirck@gmail.com");
-    expect(authenticate("cap10kirck@gmail.com", "ResetLucky168!")).toBeTruthy();
+    expect(await authenticate("cap10kirck@gmail.com", "ResetLucky168!")).toBeTruthy();
   });
 });

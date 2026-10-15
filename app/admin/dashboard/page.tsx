@@ -10,6 +10,7 @@ import {
 } from "@/lib/cms/analytics";
 import { dashboardStats, listArticles, listSignups } from "@/lib/cms/repo";
 import { ensureSeeded } from "@/lib/cms/seed";
+import { persistenceMode } from "@/lib/cms/store";
 import type { SignupKind } from "@/lib/cms/types";
 
 function greeting() {
@@ -101,17 +102,17 @@ export default async function DashboardPage({
   searchParams: Promise<{ range?: string }>;
 }) {
   await requireUser();
-  ensureSeeded();
+  await ensureSeeded();
   const q = await searchParams;
   const range = parseAnalyticsRange(q.range);
-  const stats = dashboardStats();
+  const stats = await dashboardStats();
   const visits = analyticsSummary(range);
   const messages = bucketTimestamps(
-    listSignups().map((row) => row.createdAt),
+    (await listSignups()).map((row) => row.createdAt),
     range
   );
-  const enquiries = listSignups().slice(0, 8);
-  const drafts = listArticles({ status: "draft" }).slice(0, 6);
+  const enquiries = (await listSignups()).slice(0, 8);
+  const drafts = (await listArticles({ status: "draft" })).slice(0, 6);
   const today = new Intl.DateTimeFormat("en-PH", {
     weekday: "long",
     month: "long",
@@ -145,6 +146,12 @@ export default async function DashboardPage({
           See the website
         </Link>
       </div>
+
+      {persistenceMode() === "ephemeral" && (
+        <div className="flash error">
+          Stories and photos saved here can disappear when the server restarts. Connect Vercel Blob (BLOB_READ_WRITE_TOKEN) so new articles stay on the website.
+        </div>
+      )}
 
       <nav className="dash-ranges" aria-label="Time range">
         {ANALYTICS_RANGES.map((row) => (

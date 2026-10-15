@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { JsonLd } from "@/components/json-ld";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
-import { getCachedPageBySlug, getCachedPublishedPages } from "@/lib/cms/content";
+import { getCachedArticles, getCachedPageBySlug, getCachedPublishedPages } from "@/lib/cms/content";
 import { PageBlocks } from "@/lib/cms/render-blocks";
 import { isReservedPageSlug } from "@/lib/cms/reserved-slugs";
 import { breadcrumbJsonLd, pageMetadata } from "@/lib/seo";
@@ -36,6 +36,7 @@ export default async function ExtraPage({ params }: { params: Promise<Params> })
   if (isReservedPageSlug(slug)) notFound();
   const page = await getCachedPageBySlug(slug);
   if (!page) notFound();
+  const articles = page.blocks.some((block) => block.type === "articleGrid") ? await getCachedArticles() : [];
 
   return (
     <div className="page-shell page-enter">
@@ -67,7 +68,7 @@ export default async function ExtraPage({ params }: { params: Promise<Params> })
             {page.title}
           </h1>
         )}
-        <PageBlocks blocks={page.blocks} />
+        <PageBlocks blocks={page.blocks} articles={articles} />
       </article>
       <SiteFooter />
     </div>

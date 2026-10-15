@@ -15,7 +15,7 @@ export default async function EditEvent({
   await requireUser();
   const { id } = await params;
   const q = await searchParams;
-  const event = listEvents().find((e) => e.id === id);
+  const event = (await listEvents()).find((e) => e.id === id);
   if (!event) notFound();
   return (
     <div className="shop-page">

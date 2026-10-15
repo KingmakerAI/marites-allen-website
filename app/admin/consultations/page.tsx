@@ -106,9 +106,9 @@ export default async function ConsultationsPage({
 }) {
   await requireUser();
   const q = await searchParams;
-  const services = listServices();
-  const pricing = listPricing();
-  const book = getPageCopy().book;
+  const services = await listServices();
+  const pricing = await listPricing();
+  const book = (await getPageCopy()).book;
 
   return (
     <div>

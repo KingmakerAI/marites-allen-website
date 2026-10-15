@@ -11,9 +11,9 @@ export default async function SettingsPage({
   searchParams: Promise<{ saved?: string }>;
 }) {
   await requireUser();
-  ensureSeeded();
+  await ensureSeeded();
   const q = await searchParams;
-  const s = getSettings();
+  const s = await getSettings();
   if (!s) return <p>Settings not seeded.</p>;
   return (
     <div className="shop-page">

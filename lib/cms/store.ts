@@ -69,8 +69,34 @@ const EMPTY: StoreData = {
   bootstrap: {}
 };
 
+const CMS_BLOB_PATH = "cms/ma-cms.json";
+
 function emptyStore(): StoreData {
   return structuredClone(EMPTY);
+}
+
+function normalize(parsed: Partial<StoreData>): StoreData {
+  return {
+    ...emptyStore(),
+    ...parsed,
+    signups: parsed.signups || [],
+    pageCopy: parsed.pageCopy || null,
+    bootstrap: parsed.bootstrap || {}
+  };
+}
+
+/** Blob on Vercel (or when CMS_STORE=blob). A local disk everywhere else, including tests. */
+export function useBlobStore() {
+  if (!process.env.BLOB_READ_WRITE_TOKEN) return false;
+  return Boolean(process.env.VERCEL) || process.env.CMS_STORE === "blob";
+}
+
+export type PersistenceMode = "blob" | "file" | "ephemeral";
+
+export function persistenceMode(): PersistenceMode {
+  if (useBlobStore()) return "blob";
+  if (process.env.VERCEL) return "ephemeral";
+  return "file";
 }
 
 export function getStorePath() {
@@ -83,20 +109,19 @@ export function getStorePath() {
   return path.join(/* turbopackIgnore: true */ root, "data", "cms.json");
 }
 
-export function readStore(): StoreData {
+function readFileStore(): StoreData {
   const storePath = getStorePath();
   try {
     if (!fs.existsSync(storePath)) return emptyStore();
     // Strip UTF-8 BOM (common on OneDrive / Windows editors) so JSON.parse succeeds.
     const raw = fs.readFileSync(storePath, "utf8").replace(/^\uFEFF/, "");
-    const parsed = JSON.parse(raw) as Partial<StoreData>;
-    return { ...emptyStore(), ...parsed, signups: parsed.signups || [], pageCopy: parsed.pageCopy || null, bootstrap: parsed.bootstrap || {} };
+    return normalize(JSON.parse(raw) as Partial<StoreData>);
   } catch {
     return emptyStore();
   }
 }
 
-export function writeStore(data: StoreData) {
+function writeFileStore(data: StoreData) {
   const storePath = getStorePath();
   fs.mkdirSync(path.dirname(storePath), { recursive: true });
   const payload = JSON.stringify(data, null, 2);
@@ -119,16 +144,97 @@ export function writeStore(data: StoreData) {
   }
 }
 
-export function mutateStore<T>(fn: (store: StoreData) => T): T {
-  const store = readStore();
+function isMissingBlob(err: unknown) {
+  if (!err || typeof err !== "object") return false;
+  const status = "status" in err ? Number((err as { status?: number }).status) : 0;
+  const name = "name" in err ? String((err as { name?: string }).name) : "";
+  const message = err instanceof Error ? err.message : "";
+  return status === 404 || name === "BlobNotFoundError" || /not found|does not exist|blob_not_found/i.test(message);
+}
+
+async function readBlobStore(): Promise<StoreData> {
+  const { get } = await import("@vercel/blob");
+  try {
+    const result = await get(CMS_BLOB_PATH, { access: "private", useCache: false });
+    if (!result || result.statusCode !== 200) return emptyStore();
+    const raw = (await new Response(result.stream).text()).replace(/^\uFEFF/, "");
+    return normalize(JSON.parse(raw) as Partial<StoreData>);
+  } catch (err) {
+    if (isMissingBlob(err)) return emptyStore();
+    throw err;
+  }
+}
+
+async function writeBlobStore(data: StoreData) {
+  const { put } = await import("@vercel/blob");
+  await put(CMS_BLOB_PATH, JSON.stringify(data), {
+    access: "private",
+    allowOverwrite: true,
+    addRandomSuffix: false,
+    contentType: "application/json"
+  });
+}
+
+// Collapse repeated reads during one page render. Writes refresh it.
+let blobMemo: { at: number; data: StoreData } | null = null;
+const BLOB_MEMO_MS = 1500;
+
+export async function readStore(): Promise<StoreData> {
+  if (!useBlobStore()) return readFileStore();
+  if (blobMemo && Date.now() - blobMemo.at < BLOB_MEMO_MS) return structuredClone(blobMemo.data);
+  const data = await readBlobStore();
+  blobMemo = { at: Date.now(), data };
+  return structuredClone(data);
+}
+
+export async function writeStore(data: StoreData) {
+  if (!useBlobStore()) {
+    writeFileStore(data);
+    return;
+  }
+  await writeBlobStore(data);
+  blobMemo = { at: Date.now(), data: structuredClone(data) };
+}
+
+export async function mutateStore<T>(fn: (store: StoreData) => T): Promise<T> {
+  const store = await readStore();
   const result = fn(store);
-  writeStore(store);
+  await writeStore(store);
   return result;
 }
 
-export function mutateStoreIfChanged(fn: (store: StoreData) => boolean) {
-  const store = readStore();
+export async function mutateStoreIfChanged(fn: (store: StoreData) => boolean) {
+  const store = await readStore();
   if (!fn(store)) return false;
-  writeStore(store);
+  await writeStore(store);
   return true;
+}
+
+export async function storeUploadedFile(filename: string, body: Buffer, contentType: string) {
+  if (!useBlobStore()) {
+    const rel = `/uploads/${filename}`;
+    const dest = path.join(process.cwd(), "public", "uploads", filename);
+    fs.mkdirSync(path.dirname(dest), { recursive: true });
+    fs.writeFileSync(dest, body);
+    return rel;
+  }
+  const { put } = await import("@vercel/blob");
+  const blob = await put(`uploads/${filename}`, body, {
+    access: "public",
+    addRandomSuffix: false,
+    allowOverwrite: true,
+    contentType
+  });
+  return blob.url;
+}
+
+export async function removeStoredFile(filePath: string) {
+  if (/^https?:/i.test(filePath)) {
+    const { del } = await import("@vercel/blob");
+    await del(filePath);
+    return;
+  }
+  if (!filePath.startsWith("/uploads/")) return;
+  const dest = path.join(process.cwd(), "public", filePath.replace(/^\//, ""));
+  if (fs.existsSync(dest)) fs.unlinkSync(dest);
 }
