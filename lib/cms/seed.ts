@@ -325,7 +325,7 @@ async function ensureLiveDefaults() {
     }
     const stripWwwFrigga = (url: string) =>
       url.replace(/^https?:\/\/www\.(frigga(?:\.com\.ph|\.co\.uk|-usa\.com))/i, "https://$1");
-    const rewriteFriggaUrls = (copy: typeof store.pageCopy) => {
+    const rewriteFriggaUrls = (copy: typeof store.pageCopy | typeof store.pageCopyDraft) => {
       if (!copy) return false;
       let touched = false;
       const home = copy.home;
