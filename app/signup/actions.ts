@@ -18,7 +18,7 @@ export async function submitSignupAction(raw: unknown): Promise<SignupResult> {
 
   const hdrs = await headers();
   const ip = hdrs.get("x-forwarded-for")?.split(",")[0]?.trim() || hdrs.get("x-real-ip") || "local";
-  if (!rateLimitLogin(`signup:${fingerprint(ip)}`, 20, 15 * 60 * 1000)) {
+  if (!(await rateLimitLogin(`signup:${fingerprint(ip)}`, 20, 15 * 60 * 1000))) {
     return { ok: false, error: "Too many attempts. Please try again later." };
   }
 

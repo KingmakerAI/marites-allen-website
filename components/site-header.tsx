@@ -14,7 +14,7 @@ type Props = {
 const FALLBACK_NAV = [
   { id: "about", label: "About", href: "/about", external: false },
   { id: "destara", label: "Destara AI", href: "/destara", external: false },
-  { id: "frigga", label: "Frigga", href: "https://www.frigga.com.ph", external: true },
+  { id: "frigga", label: "Frigga", href: "https://frigga.com.ph", external: true },
   { id: "projects", label: "Projects", href: "/projects", external: false },
   { id: "events", label: "Events", href: "/events", external: false },
   { id: "media", label: "Media", href: "/media", external: false }

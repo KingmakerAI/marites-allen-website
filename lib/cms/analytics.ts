@@ -144,7 +144,12 @@ export function shouldSkipPath(pathname: string) {
   );
 }
 
+export function analyticsIsRecorded() {
+  return !process.env.VERCEL;
+}
+
 export function recordVisit(input: { visitorId: string; isNewVisitor: boolean; path: string }) {
+  if (!analyticsIsRecorded()) return emptyData();
   const now = new Date();
   const day = manilaDay(now);
   const hour = manilaHour(now);

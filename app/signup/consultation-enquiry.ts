@@ -47,7 +47,7 @@ export async function submitConsultationEnquiryAction(raw: unknown): Promise<Con
 
     const hdrs = await headers();
     const ip = hdrs.get("x-forwarded-for")?.split(",")[0]?.trim() || hdrs.get("x-real-ip") || "local";
-    if (!rateLimitLogin(`enquiry:${fingerprint(ip)}`, 12, 15 * 60 * 1000)) {
+    if (!(await rateLimitLogin(`enquiry:${fingerprint(ip)}`, 12, 15 * 60 * 1000))) {
       return { ok: false, error: "Too many attempts. Please try again later." };
     }
 
@@ -88,8 +88,7 @@ export async function submitConsultationEnquiryAction(raw: unknown): Promise<Con
       })
     };
 
-    // Always leave a structured log trail (visible in Vercel function logs).
-    console.info("[consultation-enquiry] received", JSON.stringify(notifyPayload));
+    console.info("[consultation-enquiry] received");
 
     let saved = false;
     try {
@@ -122,38 +121,29 @@ export async function submitConsultationEnquiryAction(raw: unknown): Promise<Con
         }
       });
       saved = true;
-    } catch (err) {
-      console.error("[consultation-enquiry] saveSignup failed", err);
+    } catch {
+      console.error("[consultation-enquiry] save failed");
     }
 
-    const [teamOk, customerOk] = await Promise.all([
-      notifyTeamConsultationEnquiry(notifyPayload),
-      notifyCustomerConsultationEnquiry(notifyPayload)
-    ]);
-
-    const emailsSent = Boolean(teamOk || customerOk);
-    const resendConfigured = Boolean(
-      (process.env.RESEND_API_KEY || "").trim() &&
-        (process.env.BOOKING_FROM_EMAIL || process.env.RESET_FROM_EMAIL || "").trim()
-    );
-
-    if (saved || emailsSent) {
-      return { ok: true, firstName, emailsSent };
-    }
-
-    if (!resendConfigured) {
-      console.error("[consultation-enquiry] no persistence and Resend is not configured");
+    if (!saved) {
       return {
         ok: false,
-        error:
-          "Enquiry email is not configured yet. Please contact us on WhatsApp or Messenger, or try again shortly."
+        error: "We could not store your enquiry. Please use WhatsApp or email, then try again."
       };
     }
 
-    console.error("[consultation-enquiry] save and Resend both failed");
-    return { ok: false, error: FAIL_MESSAGE };
-  } catch (err) {
-    console.error("[consultation-enquiry] submit failed", err);
+    const emails = Promise.all([
+      notifyTeamConsultationEnquiry(notifyPayload),
+      notifyCustomerConsultationEnquiry(notifyPayload)
+    ]);
+    const timed = await Promise.race([
+      emails.then(([teamOk, customerOk]) => Boolean(teamOk || customerOk)),
+      new Promise<boolean>((resolve) => setTimeout(() => resolve(false), 5000))
+    ]);
+
+    return { ok: true, firstName, emailsSent: timed };
+  } catch {
+    console.error("[consultation-enquiry] submit failed");
     return { ok: false, error: FAIL_MESSAGE };
   }
 }

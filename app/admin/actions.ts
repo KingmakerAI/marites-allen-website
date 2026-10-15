@@ -84,7 +84,7 @@ export async function loginAction(formData: FormData) {
 
   const hdrs = await headers();
   const ip = hdrs.get("x-forwarded-for")?.split(",")[0]?.trim() || hdrs.get("x-real-ip") || "local";
-  if (!rateLimitLogin(fingerprint(ip))) redirect("/adminportal?error=rate");
+  if (!(await rateLimitLogin(fingerprint(ip)))) redirect("/adminportal?error=rate");
 
   const user = await authenticate(parsed.data.email, parsed.data.password);
   if (!user) redirect("/adminportal?error=invalid");
@@ -139,7 +139,7 @@ export async function changePasswordAction(formData: FormData) {
   const confirm = formStr(formData, "confirmPassword");
   const hdrs = await headers();
   const ip = hdrs.get("x-forwarded-for")?.split(",")[0]?.trim() || hdrs.get("x-real-ip") || "local";
-  if (!rateLimitLogin(fingerprint(ip + ":change"))) redirect("/adminportal?view=change&error=rate");
+  if (!(await rateLimitLogin(fingerprint(ip + ":change")))) redirect("/adminportal?view=change&error=rate");
   if (nextPassword.length < 10) redirect("/adminportal?view=change&error=weak");
   if (nextPassword !== confirm) redirect("/adminportal?view=change&error=mismatch");
   const user = await changePasswordWithCurrent(email, current, nextPassword);
@@ -152,8 +152,9 @@ export async function requestResetAction(formData: FormData) {
   const email = formStr(formData, "email").toLowerCase();
   const hdrs = await headers();
   const ip = hdrs.get("x-forwarded-for")?.split(",")[0]?.trim() || hdrs.get("x-real-ip") || "local";
-  if (!rateLimitReset(fingerprint(ip + ":reset"))) redirect("/adminportal?view=forgot&error=rate");
-  await requestPasswordReset(email);
+  if (!(await rateLimitReset(fingerprint(ip + ":reset")))) redirect("/adminportal?view=forgot&error=rate");
+  const result = await requestPasswordReset(email);
+  if (result.status === "unconfigured") redirect("/adminportal?view=forgot&error=mail");
   redirect(`/adminportal?view=reset&email=${encodeURIComponent(email)}&sent=1`);
 }
 
@@ -164,7 +165,7 @@ export async function completeResetAction(formData: FormData) {
   const confirm = formStr(formData, "confirmPassword");
   const hdrs = await headers();
   const ip = hdrs.get("x-forwarded-for")?.split(",")[0]?.trim() || hdrs.get("x-real-ip") || "local";
-  if (!rateLimitReset(fingerprint(ip + ":complete"))) redirect("/adminportal?view=reset&error=rate");
+  if (!(await rateLimitReset(fingerprint(ip + ":complete")))) redirect("/adminportal?view=reset&error=rate");
   if (nextPassword.length < 10) redirect(`/adminportal?view=reset&email=${encodeURIComponent(email)}&error=weak`);
   if (nextPassword !== confirm) redirect(`/adminportal?view=reset&email=${encodeURIComponent(email)}&error=mismatch`);
   const user = await completePasswordReset(email, code, nextPassword);
@@ -290,23 +291,36 @@ export async function deleteCategoryAction(formData: FormData) {
   redirect("/admin/categories");
 }
 
-const ALLOWED_MIME = new Set(["image/jpeg", "image/png", "image/webp", "image/gif"]);
+function sniffImage(buf: Buffer): { mime: string; ext: string } | null {
+  if (buf.length >= 3 && buf[0] === 0xff && buf[1] === 0xd8 && buf[2] === 0xff) return { mime: "image/jpeg", ext: ".jpg" };
+  if (buf.length >= 8 && buf.subarray(0, 8).equals(Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]))) {
+    return { mime: "image/png", ext: ".png" };
+  }
+  if (buf.length >= 6 && (buf.subarray(0, 6).toString("ascii") === "GIF87a" || buf.subarray(0, 6).toString("ascii") === "GIF89a")) {
+    return { mime: "image/gif", ext: ".gif" };
+  }
+  if (buf.length >= 12 && buf.subarray(0, 4).toString("ascii") === "RIFF" && buf.subarray(8, 12).toString("ascii") === "WEBP") {
+    return { mime: "image/webp", ext: ".webp" };
+  }
+  return null;
+}
 
 export async function uploadMediaAction(formData: FormData) {
   const user = await actor();
   const file = formData.get("file");
   if (!(file instanceof File) || file.size === 0) throw new Error("No file uploaded");
-  if (file.size > 8 * 1024 * 1024) throw new Error("File too large (8MB max)");
-  if (!ALLOWED_MIME.has(file.type)) throw new Error("File type not allowed");
-  const ext = file.type === "image/jpeg" ? ".jpg" : file.type === "image/png" ? ".png" : file.type === "image/gif" ? ".gif" : ".webp";
+  if (file.size > 4 * 1024 * 1024) throw new Error("File too large (4MB max)");
+  const bytes = Buffer.from(await file.arrayBuffer());
+  const sniffed = sniffImage(bytes);
+  if (!sniffed) throw new Error("File type not allowed");
   const id = newId();
-  const filename = `${id}${ext}`;
-  const storedPath = await storeUploadedFile(filename, Buffer.from(await file.arrayBuffer()), file.type);
+  const filename = `${id}${sniffed.ext}`;
+  const storedPath = await storeUploadedFile(filename, bytes, sniffed.mime);
   await saveMedia({
     id,
     filename: sanitizeText(file.name, 120) || filename,
     path: storedPath,
-    mimeType: file.type,
+    mimeType: sniffed.mime,
     size: file.size,
     width: null,
     height: null,

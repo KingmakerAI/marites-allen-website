@@ -32,37 +32,37 @@ const fallbackSettings = (): SiteSettings => ({
 export const getCachedSettings = unstable_cache(
   async () => withSeed(async () => (await getSettings()) || fallbackSettings()),
   ["cms-settings"],
-  { tags: [CMS_TAGS.settings] }
+  { revalidate: 300, tags: [CMS_TAGS.settings] }
 );
 
 export const getCachedNav = unstable_cache(
   async () => withSeed(async () => (await listNavigation()).filter((n) => n.enabled)),
   ["cms-nav"],
-  { tags: [CMS_TAGS.nav] }
+  { revalidate: 300, tags: [CMS_TAGS.nav] }
 );
 
 export const getCachedArticles = unstable_cache(
   async () => withSeed(() => publishedArticles()),
   ["cms-articles"],
-  { tags: [CMS_TAGS.articles] }
+  { revalidate: 300, tags: [CMS_TAGS.articles] }
 );
 
 export const getCachedEvents = unstable_cache(
   async () => withSeed(() => listEvents(true)),
   ["cms-events"],
-  { tags: [CMS_TAGS.events] }
+  { revalidate: 300, tags: [CMS_TAGS.events] }
 );
 
 export const getCachedServices = unstable_cache(
   async () => withSeed(async () => (await listServices()).filter((s) => s.active)),
   ["cms-services"],
-  { tags: [CMS_TAGS.services] }
+  { revalidate: 300, tags: [CMS_TAGS.services] }
 );
 
 export const getCachedPricing = unstable_cache(
   async () => withSeed(async () => (await listPricing()).filter((p) => p.active)),
   ["cms-pricing"],
-  { tags: [CMS_TAGS.services] }
+  { revalidate: 300, tags: [CMS_TAGS.services] }
 );
 
 export const getCachedTestimonials = unstable_cache(
@@ -72,7 +72,7 @@ export const getCachedTestimonials = unstable_cache(
       return rows.length ? rows : TESTIMONIALS.map((t, i) => ({ ...t, id: `t-${i}`, featured: true, sortOrder: i }));
     }),
   ["cms-testimonials"],
-  { tags: [CMS_TAGS.home] }
+  { revalidate: 300, tags: [CMS_TAGS.home] }
 );
 
 export const getCachedFaqs = unstable_cache(
@@ -84,19 +84,19 @@ export const getCachedFaqs = unstable_cache(
         : FAQ_DATA.map((f, i) => ({ id: `faq-${i}`, question: f.q, answer: f.a, showOnHome: true, sortOrder: i }));
     }),
   ["cms-faqs"],
-  { tags: [CMS_TAGS.home] }
+  { revalidate: 300, tags: [CMS_TAGS.home] }
 );
 
 export const getCachedHome = unstable_cache(
   async () => withSeed(async () => (await listHomeSections()).filter((s) => s.enabled)),
   ["cms-home"],
-  { tags: [CMS_TAGS.home] }
+  { revalidate: 300, tags: [CMS_TAGS.home] }
 );
 
 export const getCachedPageCopy = unstable_cache(
   async () => withSeed(() => getPageCopy()),
   ["cms-page-copy"],
-  { tags: [CMS_TAGS.pageCopy] }
+  { revalidate: 300, tags: [CMS_TAGS.pageCopy] }
 );
 
 export const getCachedPublishedPages = unstable_cache(
@@ -105,12 +105,12 @@ export const getCachedPublishedPages = unstable_cache(
       (await listPages()).filter((p) => p.status === "published" && !isReservedPageSlug(p.slug))
     ),
   ["cms-pages"],
-  { tags: [CMS_TAGS.pages] }
+  { revalidate: 300, tags: [CMS_TAGS.pages] }
 );
 
 export const getCachedPageBySlug = (slug: string) =>
   unstable_cache(
     async () => withSeed(() => getPageBySlug(slug, true)),
     ["cms-page", slug],
-    { tags: [CMS_TAGS.pages] }
+    { revalidate: 300, tags: [CMS_TAGS.pages] }
   )();

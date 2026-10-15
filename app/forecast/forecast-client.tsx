@@ -2,58 +2,36 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
-import { useMemo, useState } from "react";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { cms } from "@/lib/cms/cms-attr";
 import type { ForecastCopy } from "@/lib/cms/page-copy-types";
 
-const LO_SHU = ["9", "5", "7", "8", "", "3", "4", "6", "2"];
-
-const COMPASS = [
-  { label: "SOUTH", top: "4.5%", left: "50%", rot: "0deg" },
-  { label: "SOUTHWEST", top: "15%", left: "84%", rot: "45deg" },
-  { label: "WEST", top: "50%", left: "95.5%", rot: "90deg" },
-  { label: "NORTHWEST", top: "85%", left: "84%", rot: "135deg" },
-  { label: "NORTH", top: "95.5%", left: "50%", rot: "180deg" },
-  { label: "NORTHEAST", top: "85%", left: "16%", rot: "225deg" },
-  { label: "EAST", top: "50%", left: "4.5%", rot: "270deg" },
-  { label: "SOUTHEAST", top: "15%", left: "16%", rot: "315deg" }
+const SHOPS = [
+  { region: "Philippines & Asia:", label: "frigga.com.ph", url: "https://frigga.com.ph" },
+  { region: "UK & Europe:", label: "frigga.co.uk", url: "https://frigga.co.uk" },
+  { region: "USA & Canada:", label: "frigga-usa.com", url: "https://frigga-usa.com" }
 ];
 
-const SHOPS = [
-  { region: "🇵🇭 Philippines & Asia:", label: "www.frigga.com.ph", url: "https://www.frigga.com.ph" },
-  { region: "🇪🇺 UK & Europe:", label: "www.frigga.co.uk", url: "https://www.frigga.co.uk" },
-  { region: "🇺🇸 USA & Canada:", label: "www.frigga-usa.com", url: "https://www.frigga-usa.com" }
+const BOOKS = [
+  { name: "Marites Allen Feng Shui Almanac 2027", price: "PHP 1,299", ships: "Ships from 31 Oct 2026" },
+  { name: "Marites Allen Feng Shui Planner 2027", price: "PHP 1,299", ships: "Ships from 31 Oct 2026" },
+  { name: "Marites Allen 2027 Horoscope Guides, Rat to Boar", price: "PHP 899 each", ships: "Ships from 15 Nov 2026" }
 ];
 
 function isKnownYear(y: string | null, years: ForecastCopy["years"]): y is string {
   return !!y && years.some((row) => row.year === y);
 }
 
-export function ForecastClient({ copy }: { copy: ForecastCopy }) {
+export function ForecastClient({ copy, initialYear }: { copy: ForecastCopy; initialYear: string }) {
   const years = copy.years;
   const zodiacs = copy.zodiacs;
-  const starDefs = copy.stars;
-  const searchParams = useSearchParams();
-  const urlYear = searchParams.get("year");
-  const yearFromUrl = isKnownYear(urlYear, years) ? urlYear : copy.defaultYear;
-  const [year, setYear] = useState(yearFromUrl);
-  const [urlSeen, setUrlSeen] = useState(yearFromUrl);
-  if (urlSeen !== yearFromUrl) {
-    setUrlSeen(yearFromUrl);
-    setYear(yearFromUrl);
-  }
-  const [activeSign, setActiveSign] = useState<string | null>(null);
-  const [openStar, setOpenStar] = useState(0);
+  const year = isKnownYear(initialYear, years) ? initialYear : copy.defaultYear;
   const meta = years.find((row) => row.year === year) || years[0];
   const yearIndex = Math.max(
     0,
     years.findIndex((row) => row.year === meta?.year)
   );
-  const active = useMemo(() => zodiacs.find((z) => z.id === activeSign) || null, [activeSign, zodiacs]);
-  const activeZodiacIndex = active ? zodiacs.findIndex((z) => z.id === active.id) : -1;
   if (!meta) return null;
 
   return (
@@ -81,10 +59,6 @@ export function ForecastClient({ copy }: { copy: ForecastCopy }) {
               <Link
                 key={row.year}
                 href={`/forecast?year=${row.year}`}
-                onClick={() => {
-                  setYear(row.year);
-                  setActiveSign(null);
-                }}
                 style={{
                   fontSize: 13,
                   fontWeight: 700,
@@ -340,16 +314,17 @@ export function ForecastClient({ copy }: { copy: ForecastCopy }) {
 
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(160px,1fr))", gap: "clamp(12px,1.8vw,20px)" }}>
             {zodiacs.map((z, zi) => (
-              <button
+              <a
                 key={z.id}
-                type="button"
-                onClick={() => setActiveSign(z.id)}
+                href="https://frigga.com.ph"
+                target="_blank"
+                rel="noopener noreferrer"
                 style={{
                   cursor: "pointer",
                   background: "#c1272d",
                   padding: 4,
                   boxShadow: "0 12px 28px -18px rgba(140,20,24,0.65)",
-                  border: 0
+                  textDecoration: "none"
                 }}
               >
                 <div
@@ -394,11 +369,11 @@ export function ForecastClient({ copy }: { copy: ForecastCopy }) {
                   >
                     {z.sign.toUpperCase()}
                   </div>
-                  <div style={{ fontFamily: "Lato, system-ui, sans-serif", fontSize: "clamp(13px,1.3vw,16px)", color: "#c1272d" }}>
-                    {year}
+                  <div style={{ fontFamily: "Lato, system-ui, sans-serif", fontSize: "clamp(13px,1.3vw,16px)", color: "#c1272d" }} {...cms(`forecast.zodiacs.${zi}.years`)}>
+                    {z.years}
                   </div>
                 </div>
-              </button>
+              </a>
             ))}
           </div>
         </div>
@@ -427,13 +402,20 @@ export function ForecastClient({ copy }: { copy: ForecastCopy }) {
                 margin: "0 0 14px"
               }}
             >
-              Why Wait? Perfect for Gifting or Elevating Your Luck in {year}!
+              {year === "2027" ? "Marites Allen 2027 Books" : `Shop the ${year} guides`}
             </h2>
             <div style={{ width: 56, height: 3, background: "#1a4d8f", marginBottom: 18 }} />
-            <p style={{ fontSize: 15.5, lineHeight: 1.7, color: "#4a4a46", margin: "0 0 20px" }}>
-              Grab your essential Feng Shui tools while stocks last and prepare for a prosperous year ahead.
-            </p>
-            <div style={{ fontSize: 15, fontWeight: 700, color: "#2c2c2c", marginBottom: 10 }}>Shop Conveniently at</div>
+            {year === "2027" && (
+              <div style={{ display: "flex", flexDirection: "column", gap: 14, marginBottom: 20 }}>
+                {BOOKS.map((book) => (
+                  <div key={book.name}>
+                    <div style={{ fontSize: 16, fontWeight: 700, color: "#2c2c2c" }}>{book.name}</div>
+                    <div style={{ fontSize: 14, color: "#4a4a46" }}>{book.price} · {book.ships}</div>
+                  </div>
+                ))}
+              </div>
+            )}
+            <div style={{ fontSize: 15, fontWeight: 700, color: "#2c2c2c", marginBottom: 10 }}>Shop</div>
             <div style={{ display: "flex", flexDirection: "column", gap: 9, marginBottom: 20, paddingLeft: 6 }}>
               {SHOPS.map((s) => (
                 <div key={s.url} style={{ fontSize: 15, color: "#4a4a46" }}>
@@ -447,7 +429,7 @@ export function ForecastClient({ copy }: { copy: ForecastCopy }) {
           </div>
           <div style={{ flex: "1 1 380px", minWidth: 290, textAlign: "center" }}>
             <a
-              href="https://www.frigga.com.ph"
+              href="https://frigga.com.ph"
               target="_blank"
               rel="noopener noreferrer"
               style={{
@@ -466,295 +448,18 @@ export function ForecastClient({ copy }: { copy: ForecastCopy }) {
         </div>
       </section>
 
-      <section id="flyingstar" style={{ background: "linear-gradient(150deg,#eef6e4,#e2f0d6)" }}>
-        <div style={{ maxWidth: 1240, margin: "0 auto", padding: "clamp(28px,3.6vw,44px) clamp(18px,4vw,40px)" }}>
-          <h2
-            style={{
-              fontFamily: "Lato, system-ui, sans-serif",
-              fontWeight: 900,
-              fontSize: "clamp(22px,2.8vw,30px)",
-              color: "#2c2c2c",
-              textAlign: "center",
-              margin: "0 0 clamp(26px,3.5vw,38px)"
-            }}
-          >
-            Flying Star for {year}
+      <section id="flying-stars" style={{ background: "#f6f1e7" }}>
+        <div style={{ maxWidth: 820, margin: "0 auto", padding: "clamp(28px,3.6vw,44px) clamp(18px,4vw,40px)" }}>
+          <h2 style={{ fontFamily: "Lato, system-ui, sans-serif", fontWeight: 900, fontSize: "clamp(22px,2.8vw,30px)", color: "#143d31", margin: "0 0 14px" }}>
+            Flying Stars for {year}
           </h2>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: "clamp(20px,3vw,36px)", alignItems: "flex-start" }}>
-            <div style={{ flex: "1 1 380px", minWidth: 280 }}>
-              <div style={{ background: "#fff", padding: "clamp(14px,2vw,22px)" }}>
-                <div style={{ position: "relative", width: "100%", aspectRatio: "1/1" }}>
-                  <div
-                    style={{
-                      position: "absolute",
-                      inset: 0,
-                      display: "grid",
-                      gridTemplateColumns: "repeat(3,1fr)",
-                      gridTemplateRows: "repeat(3,1fr)",
-                      border: "2px solid #e8b0b0"
-                    }}
-                  >
-                    {LO_SHU.map((n, i) => (
-                      <div
-                        key={i}
-                        style={{
-                          border: "1px solid #f2d4d4",
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center"
-                        }}
-                      >
-                        <span
-                          style={{
-                            fontFamily: "Lato, system-ui, sans-serif",
-                            fontWeight: 900,
-                            fontSize: "clamp(26px,4.4vw,52px)",
-                            color: "#e01f26",
-                            lineHeight: 1
-                          }}
-                        >
-                          {n}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                  <div
-                    style={{
-                      position: "absolute",
-                      inset: 0,
-                      borderRadius: "50%",
-                      border: "clamp(26px,3.4vw,42px) solid #e01f26",
-                      pointerEvents: "none"
-                    }}
-                  />
-                  {COMPASS.map((c) => (
-                    <span
-                      key={c.label}
-                      style={{
-                        position: "absolute",
-                        top: c.top,
-                        left: c.left,
-                        transform: `translate(-50%,-50%) rotate(${c.rot})`,
-                        fontFamily: "Lato, system-ui, sans-serif",
-                        fontWeight: 900,
-                        fontSize: "clamp(9px,1.05vw,13px)",
-                        letterSpacing: "0.5px",
-                        color: "#fff",
-                        whiteSpace: "nowrap"
-                      }}
-                    >
-                      {c.label}
-                    </span>
-                  ))}
-                  <div
-                    style={{
-                      position: "absolute",
-                      top: "50%",
-                      left: "50%",
-                      transform: "translate(-50%,-50%)",
-                      width: "26%",
-                      height: "26%",
-                      borderRadius: "50%",
-                      background: "#e01f26",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center"
-                    }}
-                  >
-                    <span
-                      style={{
-                        fontFamily: "Lato, system-ui, sans-serif",
-                        fontWeight: 900,
-                        fontSize: "clamp(30px,4.8vw,58px)",
-                        color: "#fff",
-                        lineHeight: 1
-                      }}
-                    >
-                      1
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div style={{ flex: "1 1 380px", minWidth: 280, display: "flex", flexDirection: "column", gap: 6 }}>
-              {starDefs.map((s, i) => {
-                const open = openStar === i;
-                return (
-                  <button
-                    key={s.title}
-                    type="button"
-                    onClick={() => setOpenStar(open ? -1 : i)}
-                    style={{
-                      background: open ? "#fff" : "#f2f2f2",
-                      border: "1px solid rgba(0,0,0,0.06)",
-                      padding: "14px 18px",
-                      cursor: "pointer",
-                      textAlign: "left"
-                    }}
-                  >
-                    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 14 }}>
-                      <span style={{ fontSize: 15, fontWeight: 700, color: "#2c2c2c" }} {...cms(`forecast.stars.${i}.title`)}>
-                        {s.title}
-                      </span>
-                      <span
-                        style={{
-                          flexShrink: 0,
-                          width: 18,
-                          height: 18,
-                          borderRadius: "50%",
-                          background: "#1a5fb4",
-                          color: "#fff",
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          fontSize: 13,
-                          fontWeight: 700,
-                          lineHeight: 1
-                        }}
-                      >
-                        {open ? "−" : "+"}
-                      </span>
-                    </div>
-                    {open && (
-                      <p
-                        style={{ fontSize: 14, lineHeight: 1.6, color: "#4a4a46", margin: "10px 0 0" }}
-                        {...cms(`forecast.stars.${i}.text`)}
-                      >
-                        {s.text}
-                      </p>
-                    )}
-                  </button>
-                );
-              })}
-            </div>
-          </div>
+          <p style={{ fontSize: 16.5, lineHeight: 1.7, color: "#3a3a36", margin: 0 }}>
+            {year === "2027"
+              ? "The stars shift on 4 February 2027, the Start of Spring, not at the Lunar New Year. Some sectors of your home and office bring support this year, and some need care. The full Flying Star chart, with what to place and where, is in the Marites Allen 2027 Feng Shui Almanac and the Marites Allen 2027 Horoscope Guides."
+              : "The full Flying Star chart, with what to place and where, is in the Marites Allen almanac and Horoscope Guides for this year."}
+          </p>
         </div>
       </section>
-
-      {active && (
-        <div
-          onClick={() => setActiveSign(null)}
-          style={{
-            position: "fixed",
-            inset: 0,
-            zIndex: 220,
-            background: "rgba(60,8,10,0.8)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            padding: 20
-          }}
-        >
-          <div
-            onClick={(e) => e.stopPropagation()}
-            style={{
-              position: "relative",
-              background: "#fff",
-              borderRadius: 16,
-              maxWidth: 520,
-              width: "100%",
-              maxHeight: "88vh",
-              overflowY: "auto",
-              boxShadow: "0 40px 90px -20px rgba(0,0,0,0.55)"
-            }}
-          >
-            <button
-              type="button"
-              onClick={() => setActiveSign(null)}
-              aria-label="Close"
-              style={{
-                position: "absolute",
-                top: 12,
-                right: 12,
-                width: 32,
-                height: 32,
-                borderRadius: "50%",
-                background: "rgba(0,0,0,0.1)",
-                color: "#8d1418",
-                border: 0,
-                cursor: "pointer",
-                zIndex: 2
-              }}
-            >
-              ×
-            </button>
-            <div style={{ background: "linear-gradient(150deg,#c62328,#8d1418)", padding: "26px 28px", color: "#fff" }}>
-              <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: 2, textTransform: "uppercase", color: "#ffd79a" }}>
-                Feng Shui Forecast {year}
-              </div>
-              <div
-                style={{
-                  fontFamily: "Lato, system-ui, sans-serif",
-                  fontWeight: 900,
-                  fontSize: 32,
-                  lineHeight: 1.05,
-                  marginTop: 6
-                }}
-                {...cms(`forecast.zodiacs.${activeZodiacIndex}.sign`)}
-              >
-                {active.sign.toUpperCase()}
-              </div>
-              <div
-                style={{ fontSize: 13, color: "#ffdcc8", marginTop: 4 }}
-                {...cms(`forecast.zodiacs.${activeZodiacIndex}.years`)}
-              >
-                {active.years}
-              </div>
-            </div>
-            <div style={{ padding: "24px 28px 28px" }}>
-              <p
-                style={{ fontSize: 16, lineHeight: 1.7, color: "#3a3a36", margin: "0 0 18px" }}
-                {...cms(`forecast.zodiacs.${activeZodiacIndex}.text`)}
-              >
-                {active.text}
-              </p>
-              <div
-                style={{
-                  background: "#fdf3f3",
-                  borderLeft: "3px solid #c1272d",
-                  padding: "14px 16px",
-                  marginBottom: 20
-                }}
-              >
-                <div
-                  style={{
-                    fontSize: 11,
-                    fontWeight: 700,
-                    letterSpacing: "1.5px",
-                    textTransform: "uppercase",
-                    color: "#a81a20",
-                    marginBottom: 4
-                  }}
-                >
-                  Focus for the year
-                </div>
-                <div
-                  style={{ fontSize: 14.5, color: "#4a4a46", lineHeight: 1.55 }}
-                  {...cms(`forecast.zodiacs.${activeZodiacIndex}.focus`)}
-                >
-                  {active.focus}
-                </div>
-              </div>
-              <Link
-                href="/book"
-                style={{
-                  display: "block",
-                  textAlign: "center",
-                  background: "#c1272d",
-                  color: "#fff",
-                  fontSize: 15,
-                  fontWeight: 700,
-                  padding: 14,
-                  borderRadius: 99
-                }}
-              >
-                Book Consultation →
-              </Link>
-            </div>
-          </div>
-        </div>
-      )}
 
       <section style={{ background: "#f6f1e7" }}>
         <div

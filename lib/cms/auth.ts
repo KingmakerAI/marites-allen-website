@@ -1,11 +1,9 @@
 import "server-only";
-import fs from "fs";
-import path from "path";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { hashPassword, hashToken, newId, newResetCode, newToken, nowIso, verifyPassword } from "./crypto";
 import { readSessionCookie, SESSION_COOKIE, SESSION_MAX_AGE, signSessionCookie } from "./session-cookie";
-import { getStorePath, mutateStore, mutateStoreIfChanged, persistenceMode, readStore, type PersistenceMode, type StoreData } from "./store";
+import { mutateStore, mutateStoreIfChanged, persistenceMode, readStore, type PersistenceMode, type StoreData } from "./store";
 import type { AdminRole, AdminUser } from "./types";
 
 export { SESSION_COOKIE };
@@ -27,11 +25,11 @@ function publicUser(row: AdminUser & { passwordHash?: string }): AdminUser {
   };
 }
 
-export function rateLimitLogin(key: string, limit = 8, windowMs = 15 * 60 * 1000) {
+function memoryLimit(map: Map<string, { count: number; resetAt: number }>, key: string, limit: number, windowMs: number) {
   const now = Date.now();
-  const current = loginAttempts.get(key);
+  const current = map.get(key);
   if (!current || current.resetAt < now) {
-    loginAttempts.set(key, { count: 1, resetAt: now + windowMs });
+    map.set(key, { count: 1, resetAt: now + windowMs });
     return true;
   }
   if (current.count >= limit) return false;
@@ -39,16 +37,31 @@ export function rateLimitLogin(key: string, limit = 8, windowMs = 15 * 60 * 1000
   return true;
 }
 
-export function rateLimitReset(key: string, limit = 5, windowMs = 15 * 60 * 1000) {
+async function sharedLimit(key: string, limit: number, windowMs: number) {
   const now = Date.now();
-  const current = resetAttempts.get(key);
-  if (!current || current.resetAt < now) {
-    resetAttempts.set(key, { count: 1, resetAt: now + windowMs });
-    return true;
-  }
-  if (current.count >= limit) return false;
-  current.count += 1;
-  return true;
+  return mutateStore((store) => {
+    store.bootstrap = store.bootstrap || {};
+    const attempts = (store.bootstrap.attempts || []).filter((row) => row.resetAt > now);
+    let row = attempts.find((item) => item.key === key);
+    if (!row) {
+      row = { key, count: 0, resetAt: now + windowMs };
+      attempts.push(row);
+    }
+    const allowed = row.count < limit;
+    if (allowed) row.count += 1;
+    store.bootstrap.attempts = attempts.slice(-300);
+    return allowed;
+  });
+}
+
+export async function rateLimitLogin(key: string, limit = 8, windowMs = 15 * 60 * 1000) {
+  if (persistenceMode() === "ephemeral") return memoryLimit(loginAttempts, key, limit, windowMs);
+  return sharedLimit(`login:${key}`, limit, windowMs);
+}
+
+export async function rateLimitReset(key: string, limit = 5, windowMs = 15 * 60 * 1000) {
+  if (persistenceMode() === "ephemeral") return memoryLimit(resetAttempts, key, limit, windowMs);
+  return sharedLimit(`reset:${key}`, limit, windowMs);
 }
 
 export async function authenticate(email: string, password: string): Promise<AdminUser | null> {
@@ -150,7 +163,7 @@ export async function logAudit(userId: string, entity: string, entityId: string,
 }
 
 function ownerBootstrapPassword() {
-  return process.env.OWNER_BOOTSTRAP_PASSWORD || "IamLUCKY168!";
+  return process.env.OWNER_BOOTSTRAP_PASSWORD?.trim() || "";
 }
 
 /** Creates the two owner logins, and sets their password once. Later password changes are kept. */
@@ -159,10 +172,11 @@ export async function ensureOwnerAccounts() {
   await mutateStoreIfChanged((store) => {
     let changed = false;
     store.bootstrap = store.bootstrap || {};
-    const stampPasswords = store.bootstrap.owners !== OWNER_BOOTSTRAP;
+    const stampPasswords = Boolean(password) && store.bootstrap.owners !== OWNER_BOOTSTRAP;
     for (const email of OWNER_EMAILS) {
       const row = store.adminUsers.find((u) => u.email === email);
       if (!row) {
+        if (!password) continue;
         store.adminUsers.push({
           id: newId(),
           email,
@@ -205,25 +219,8 @@ export async function changePasswordWithCurrent(email: string, current: string, 
   return user;
 }
 
-function writeLocalResetNote(email: string, code: string, expiresAt: string) {
-  try {
-    const file = path.join(path.dirname(getStorePath()), "last-password-reset.txt");
-    fs.writeFileSync(
-      file,
-      [
-        "Private reset code for the website editor.",
-        "Delete this file after you sign in.",
-        "",
-        `Email: ${email}`,
-        `Code: ${code}`,
-        `Expires: ${expiresAt}`,
-        ""
-      ].join("\n"),
-      "utf8"
-    );
-  } catch {
-    /* local file is a convenience, not required */
-  }
+function resetEmailConfigured() {
+  return Boolean(process.env.RESEND_API_KEY?.trim() && process.env.RESET_FROM_EMAIL?.trim());
 }
 
 async function emailResetCode(email: string, code: string) {
@@ -250,7 +247,8 @@ async function emailResetCode(email: string, code: string) {
   }
 }
 
-export async function requestPasswordReset(email: string) {
+export async function requestPasswordReset(email: string): Promise<{ status: "sent" | "unconfigured"; testCode?: string }> {
+  if (!resetEmailConfigured() && !process.env.CMS_JSON_PATH) return { status: "unconfigured" };
   const normalized = email.trim().toLowerCase();
   const code = newResetCode();
   const expiresAt = new Date(Date.now() + RESET_MINUTES * 60 * 1000).toISOString();
@@ -260,10 +258,8 @@ export async function requestPasswordReset(email: string) {
     row.passwordReset = { tokenHash: hashToken(code), expiresAt };
     return true;
   });
-  if (found) {
-    writeLocalResetNote(normalized, code, expiresAt);
-    await emailResetCode(normalized, code);
-  }
+  if (found && resetEmailConfigured()) await emailResetCode(normalized, code);
+  return { status: "sent", testCode: process.env.CMS_JSON_PATH && found ? code : undefined };
 }
 
 export async function completePasswordReset(email: string, code: string, nextPassword: string): Promise<AdminUser | null> {

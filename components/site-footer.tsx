@@ -76,7 +76,7 @@ export function SiteFooter({ variant = "full" }: Props) {
           <Link href="/book" style={{ fontSize: 12, color: "#143d31", fontWeight: 700 }}>
             Book a Consultation →
           </Link>
-          <div style={{ fontSize: 12, color: "#6b6862" }}>© 2026 Marites Allen.</div>
+          <div style={{ fontSize: 12, color: "#6b6862" }}>© 2026 to 2027 Marites Allen.</div>
         </div>
       </footer>
     );
@@ -135,6 +135,9 @@ export function SiteFooter({ variant = "full" }: Props) {
             <a href={`mailto:${email}`} className="site-footer-link" style={linkStyle}>
               {email}
             </a>
+            <a href={`tel:${phone.replace(/[^\d+]/g, "")}`} className="site-footer-link" style={linkStyle}>
+              {phone}
+            </a>
             <a
               href={`https://wa.me/${whatsapp}`}
               target="_blank"
@@ -142,9 +145,11 @@ export function SiteFooter({ variant = "full" }: Props) {
               className="site-footer-link"
               style={linkStyle}
             >
-              WhatsApp · {phone}
+              WhatsApp
             </a>
-            <span style={{ color: "#c7ddd2" }}>{phoneSecondary}</span>
+            <a href={`tel:${phoneSecondary.replace(/[^\d+]/g, "")}`} className="site-footer-link" style={linkStyle}>
+              {phoneSecondary}
+            </a>
             <a
               href="https://destara.app"
               target="_blank"
@@ -193,7 +198,7 @@ export function SiteFooter({ variant = "full" }: Props) {
               </a>
             ))}
             <a
-              href="https://www.frigga.com.ph"
+              href="https://frigga.com.ph"
               target="_blank"
               rel="noopener noreferrer"
               className="site-footer-link"
@@ -207,7 +212,7 @@ export function SiteFooter({ variant = "full" }: Props) {
 
       <div style={{ borderTop: "1px solid rgba(255,255,255,0.08)" }}>
         <div className="site-footer-bottom">
-          <span>© 2026 Marites Allen.</span>
+          <span>© 2026 to 2027 Marites Allen.</span>
           <span style={{ color: "#5f7a6e" }}>·</span>
           <Link href="/privacy" className="site-footer-link" style={{ color: "#c7ddd2" }}>
             Privacy Policy
