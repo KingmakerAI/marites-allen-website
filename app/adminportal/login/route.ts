@@ -9,6 +9,7 @@ import {
   SESSION_COOKIE
 } from "@/lib/cms/auth";
 import { fingerprint } from "@/lib/cms/crypto";
+import { ensureSeeded } from "@/lib/cms/seed";
 import { safeAdminNext, SESSION_MAX_AGE, SessionSecretError } from "@/lib/cms/session-cookie";
 import { loginSchema } from "@/lib/cms/validation";
 
@@ -31,6 +32,9 @@ export async function POST(request: Request) {
 
   const parsed = loginSchema.safeParse({ email, password });
   if (!parsed.success) return fail("invalid");
+
+  // Apply owner password stamps / seed before checking credentials (needed on Vercel).
+  await ensureSeeded();
 
   const hdrs = await headers();
   const ip = hdrs.get("x-forwarded-for")?.split(",")[0]?.trim() || hdrs.get("x-real-ip") || "local";

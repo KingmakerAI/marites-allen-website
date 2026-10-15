@@ -78,6 +78,10 @@ export async function rateLimitReset(key: string, limit = 5, windowMs = 15 * 60 
 }
 
 export async function authenticate(email: string, password: string): Promise<AdminUser | null> {
+  if (persistenceMode() === "ephemeral") {
+    const { ensureSeeded } = await import("./seed");
+    await ensureSeeded();
+  }
   const store = await readStore();
   const user = store.adminUsers.find((u) => u.email.toLowerCase() === email.toLowerCase());
   if (!user || !verifyPassword(password, user.passwordHash)) return null;
