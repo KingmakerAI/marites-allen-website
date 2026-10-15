@@ -8,7 +8,6 @@ import { pageMetadata } from "@/lib/seo";
 import {
   changePasswordAction,
   completeResetAction,
-  loginAction,
   requestResetAction
 } from "@/app/admin/actions";
 import { PasswordField } from "./password-field";
@@ -86,13 +85,26 @@ export default async function AdminPortalPage({
           ) : null}
 
           {view === "signin" && (
-            <form action={loginAction} className="admin-login-form">
+            <form
+              method="post"
+              action="/adminportal/login"
+              autoComplete="on"
+              className="admin-login-form"
+            >
               <input type="hidden" name="next" value={next} />
-              <label>
+              <label htmlFor="admin-email">
                 Email
-                <input type="email" name="email" required autoComplete="username" defaultValue={email} />
+                <input
+                  id="admin-email"
+                  type="email"
+                  name="email"
+                  required
+                  autoComplete="username"
+                  defaultValue={email}
+                />
               </label>
               <PasswordField
+                id="admin-password"
                 name="password"
                 label="Password"
                 autoComplete="current-password"
@@ -100,8 +112,8 @@ export default async function AdminPortalPage({
                 forgotHref="/adminportal?view=forgot"
               />
               <label className="admin-login-remember">
-                <input type="checkbox" name="remember" defaultChecked={Boolean(rememberedEmail)} />
-                Remember me on this computer
+                <input type="checkbox" name="remember" value="on" defaultChecked={Boolean(rememberedEmail)} />
+                Remember email on this computer
               </label>
               <button className="btn" type="submit">
                 Sign in

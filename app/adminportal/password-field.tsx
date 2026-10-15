@@ -5,6 +5,7 @@ import { Eye, EyeOff } from "lucide-react";
 import { useId, useState } from "react";
 
 type PasswordFieldProps = {
+  id?: string;
   name: string;
   label: string;
   autoComplete?: string;
@@ -16,6 +17,7 @@ type PasswordFieldProps = {
 };
 
 export function PasswordField({
+  id: idProp,
   name,
   label,
   autoComplete = "current-password",
@@ -26,7 +28,8 @@ export function PasswordField({
   forgotHref
 }: PasswordFieldProps) {
   const [visible, setVisible] = useState(false);
-  const id = useId();
+  const generatedId = useId();
+  const id = idProp || generatedId;
 
   return (
     <div className="admin-password-field">
@@ -47,10 +50,12 @@ export function PasswordField({
           autoComplete={autoComplete}
           minLength={minLength}
           defaultValue={defaultValue}
+          spellCheck={false}
         />
         <button
           type="button"
           className="admin-password-toggle"
+          tabIndex={-1}
           onClick={() => setVisible((v) => !v)}
           aria-label={visible ? "Hide password" : "Show password"}
           aria-pressed={visible}
