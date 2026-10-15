@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState, useTransition } from "react";
-import { saveCopyPatchesAction } from "../actions";
+import { publishPageCopyAction, saveCopyPatchesAction } from "../actions";
 
 function friendlyLabel(path: string) {
   const last = path.split(".").pop() || path;
@@ -28,11 +28,13 @@ function highlight(el: HTMLElement | null, on: boolean) {
 export function LiveEditor({
   pagePath,
   pageTitle,
-  returnTo
+  returnTo,
+  hasDraft = false
 }: {
   pagePath: string;
   pageTitle: string;
   returnTo: string;
+  hasDraft?: boolean;
 }) {
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const [ready, setReady] = useState(false);
@@ -177,7 +179,8 @@ export function LiveEditor({
       <aside className="live-panel">
         <div className="live-panel-head">
           <strong>Edit {pageTitle}</strong>
-          <p>Click any gold-outlined text on the page to change it. Press Save when you are happy.</p>
+          <p>Click any gold-outlined text on the page to change it. Save keeps a draft. Publish puts it on the live website.</p>
+          {hasDraft ? <p className="live-draft-note">There is an unpublished draft waiting.</p> : null}
         </div>
 
         {activePath ? (
@@ -208,11 +211,17 @@ export function LiveEditor({
 
         <div className="live-bar">
           <button className="btn" type="button" disabled={!dirty || pending} onClick={save}>
-            {pending ? "Saving…" : dirty ? `Save changes (${patchList.length})` : "No changes yet"}
+            {pending ? "Saving…" : dirty ? `Save draft (${patchList.length})` : "No changes yet"}
           </button>
           <button className="btn secondary" type="button" disabled={!dirty || pending} onClick={discard}>
             Discard
           </button>
+          <form action={publishPageCopyAction}>
+            <input type="hidden" name="returnTo" value={returnTo} />
+            <button className="btn secondary" type="submit" disabled={pending || dirty || !hasDraft}>
+              Publish to live site
+            </button>
+          </form>
         </div>
       </aside>
     </div>

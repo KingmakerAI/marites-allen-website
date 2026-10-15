@@ -281,6 +281,10 @@ export default async function HomepageEditor({
                     <input type="checkbox" name={`reviewFeatured_${t.id}`} defaultChecked={t.featured} />
                     Featured
                   </label>
+                  <label className="shop-check">
+                    <input type="checkbox" name={`reviewConsent_${t.id}`} defaultChecked={t.consentOnFile} />
+                    Consent on file (required to show a named person on the public site)
+                  </label>
                 </div>
               ))}
             </div>

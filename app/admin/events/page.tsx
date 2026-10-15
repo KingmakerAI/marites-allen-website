@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { requireUser } from "@/lib/cms/auth";
-import { getPageCopy, listEvents } from "@/lib/cms/repo";
+import { getEditablePageCopy, listEvents } from "@/lib/cms/repo";
 import { parseTalkLines, parseVideoLines } from "@/lib/cms/copy-lines";
 import { deleteEventAction, saveEventsPageCopyAction } from "../actions";
 import { ConfirmSubmit } from "../admin-shell";
@@ -15,7 +15,7 @@ export default async function EventsList({
   await requireUser();
   const q = await searchParams;
   const rows = await listEvents();
-  const copy = (await getPageCopy()).eventsPage;
+  const copy = (await getEditablePageCopy()).eventsPage;
   const talks = parseTalkLines(copy.speakingLines);
   const videos = parseVideoLines(copy.videos);
   return (

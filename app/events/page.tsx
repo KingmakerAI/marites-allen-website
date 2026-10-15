@@ -15,31 +15,42 @@ export async function generateMetadata(): Promise<Metadata> {
   });
 }
 
+function eventEnded(endsAt: string, startsAt: string) {
+  const end = new Date(endsAt || startsAt).getTime();
+  const fallback = Number.isFinite(end) ? end : new Date(startsAt).getTime() + 3 * 60 * 60 * 1000;
+  return Date.now() >= fallback;
+}
+
 export default async function EventsPage() {
   const [events, pageCopy] = await Promise.all([getCachedEvents(), getCachedPageCopy()]);
   const copy = pageCopy.eventsPage;
-  const featuredEvents = events.map((event) => ({
-    id: event.id,
-    title: event.title,
-    eyebrow: event.eyebrow,
-    summary: event.summary,
-    whenLabel: event.whenLabel,
-    whereLabel: event.whereLabel,
-    startsAt: event.startsAt,
-    endsAt: event.endsAt,
-    image: event.imageUrl,
-    imageWidth: 1600,
-    imageHeight: 900,
-    ctaHref: event.ctaHref,
-    ctaLabel: event.ctaLabel,
-    liveHref: event.liveUrl || undefined,
-    liveLabel: event.liveUrl ? "Watch live" : undefined,
-    tagline: event.tagline
-  }));
+  const featuredEvents = events.map((event) => {
+    const ended = eventEnded(event.endsAt, event.startsAt);
+    return {
+      id: event.id,
+      title: event.title,
+      eyebrow: event.eyebrow,
+      summary: event.summary,
+      whenLabel: event.whenLabel,
+      whereLabel: event.whereLabel,
+      startsAt: event.startsAt,
+      endsAt: event.endsAt,
+      image: event.imageUrl,
+      imageWidth: 1600,
+      imageHeight: 900,
+      ctaHref: event.ctaHref,
+      ctaLabel: event.ctaLabel,
+      liveHref: ended ? undefined : event.liveUrl || undefined,
+      liveLabel: event.liveUrl ? "Watch live" : undefined,
+      tagline: event.tagline,
+      ended
+    };
+  });
 
+  const upcoming = events.filter((event) => !eventEnded(event.endsAt, event.startsAt));
   const eventsJsonLd = {
     "@context": "https://schema.org",
-    "@graph": events.map((event) => ({
+    "@graph": upcoming.map((event) => ({
       "@type": "Event",
       name: event.title,
       description: event.summary,
@@ -60,7 +71,7 @@ export default async function EventsPage() {
 
   return (
     <>
-      <JsonLd data={eventsJsonLd} />
+      {upcoming.length > 0 ? <JsonLd data={eventsJsonLd} /> : null}
       <JsonLd
         data={breadcrumbJsonLd([
           { name: "Home", path: "/" },

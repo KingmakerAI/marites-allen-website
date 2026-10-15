@@ -175,6 +175,16 @@ async function ensureLiveDefaults() {
       Object.assign(store, repaired);
       changed = true;
     }
+    for (const row of store.testimonials) {
+      if (typeof row.consentOnFile !== "boolean") {
+        row.consentOnFile = false;
+        changed = true;
+      }
+    }
+    if (store.pageCopy && !store.pageCopyDraft) {
+      store.pageCopyDraft = structuredClone(store.pageCopy);
+      changed = true;
+    }
     if (!store.homeSections) {
       store.homeSections = [];
       changed = true;
@@ -446,6 +456,7 @@ async function seedBody() {
           text: t.text,
           initial: t.initial,
           featured: true,
+          consentOnFile: false,
           sortOrder: i + 1
         }));
       }

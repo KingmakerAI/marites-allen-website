@@ -1,4 +1,4 @@
-import { requireUser } from "@/lib/cms/auth";
+import { isProtectedOwnerEmail, requireUser } from "@/lib/cms/auth";
 import { listUsers } from "@/lib/cms/repo";
 import { createUserAction, deleteUserAction, setUserPasswordAction } from "../actions";
 import { ConfirmSubmit } from "../admin-shell";
@@ -23,7 +23,11 @@ export default async function UsersPage({
             ? "Password must be at least 10 characters."
             : q.error === "invalid"
               ? "Could not update that password."
-              : q.error
+              : q.error === "protected"
+                ? "That owner account is protected. They can change their own password on the sign-in page."
+                : q.error === "self"
+                  ? "You cannot remove your own login."
+                  : q.error
         }
       />
       <form action={createUserAction} className="admin-form" style={{ marginBottom: 24 }}>
@@ -52,33 +56,56 @@ export default async function UsersPage({
           <tr>
             <th>Email</th>
             <th>Role</th>
+            <th>Created</th>
             <th>Last signed in</th>
             <th></th>
           </tr>
         </thead>
         <tbody>
-          {users.map((u) => (
-            <tr key={u.id}>
-              <td>{u.email}</td>
-              <td>{u.role}</td>
-              <td>{u.lastLoginAt ? new Date(u.lastLoginAt).toLocaleString() : "—"}</td>
-              <td>
-                {u.id !== me.id && (
-                  <form action={deleteUserAction}>
-                    <input type="hidden" name="id" value={u.id} />
-                    <ConfirmSubmit label="Remove" message="Remove this person? They will not be able to sign in." />
-                  </form>
-                )}
-                <form action={setUserPasswordAction} className="admin-inline-pass">
-                  <input type="hidden" name="id" value={u.id} />
-                  <input type="password" name="password" minLength={10} required placeholder="New password" aria-label={`New password for ${u.email}`} />
-                  <button className="btn secondary" type="submit">
-                    Set password
-                  </button>
-                </form>
-              </td>
-            </tr>
-          ))}
+          {users.map((u) => {
+            const protectedOwner = isProtectedOwnerEmail(u.email);
+            return (
+              <tr key={u.id}>
+                <td>
+                  {u.email}
+                  {protectedOwner ? <span className="badge" style={{ marginLeft: 8 }}>Protected</span> : null}
+                </td>
+                <td>{u.role}</td>
+                <td>{u.createdAt ? new Date(u.createdAt).toLocaleDateString() : "—"}</td>
+                <td>{u.lastLoginAt ? new Date(u.lastLoginAt).toLocaleString() : "—"}</td>
+                <td>
+                  {protectedOwner ? (
+                    <p style={{ fontSize: 12, margin: 0, color: "#5f6b60" }}>
+                      Password and removal are locked. Use Forgot password on the sign-in page.
+                    </p>
+                  ) : (
+                    <>
+                      {u.id !== me.id && (
+                        <form action={deleteUserAction}>
+                          <input type="hidden" name="id" value={u.id} />
+                          <ConfirmSubmit label="Remove" message="Remove this person? They will not be able to sign in." />
+                        </form>
+                      )}
+                      <form action={setUserPasswordAction} className="admin-inline-pass">
+                        <input type="hidden" name="id" value={u.id} />
+                        <input
+                          type="password"
+                          name="password"
+                          minLength={10}
+                          required
+                          placeholder="New password"
+                          aria-label={`New password for ${u.email}`}
+                        />
+                        <button className="btn secondary" type="submit">
+                          Set password
+                        </button>
+                      </form>
+                    </>
+                  )}
+                </td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
     </div>

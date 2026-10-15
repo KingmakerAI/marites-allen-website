@@ -2,7 +2,7 @@ import { unstable_cache } from "next/cache";
 import { CMS_TAGS, getPageCopy, getPageBySlug, listEvents, listFaqs, listHomeSections, listNavigation, listPages, listPricing, listServices, listTestimonials, publishedArticles, getSettings } from "./repo";
 import { ensureSeeded } from "./seed";
 import type { SiteSettings } from "./types";
-import { FAQ_DATA, FRIGGA_SOCIAL_LINKS, SOCIAL_LINKS, TESTIMONIALS } from "../site-data";
+import { FAQ_DATA, FRIGGA_SOCIAL_LINKS, SOCIAL_LINKS } from "../site-data";
 import { isReservedPageSlug } from "./reserved-slugs";
 
 async function withSeed<T>(fn: () => T | Promise<T>) {
@@ -68,8 +68,7 @@ export const getCachedPricing = unstable_cache(
 export const getCachedTestimonials = unstable_cache(
   async () =>
     withSeed(async () => {
-      const rows = (await listTestimonials()).filter((t) => t.featured);
-      return rows.length ? rows : TESTIMONIALS.map((t, i) => ({ ...t, id: `t-${i}`, featured: true, sortOrder: i }));
+      return (await listTestimonials()).filter((t) => t.featured && t.consentOnFile);
     }),
   ["cms-testimonials"],
   { revalidate: 300, tags: [CMS_TAGS.home] }

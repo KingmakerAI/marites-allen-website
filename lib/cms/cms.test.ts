@@ -253,10 +253,14 @@ describe("cms repository", () => {
   it("patches page copy by dotted path", async () => {
     const { ensureSeeded } = await import("./seed");
     await ensureSeeded();
-    const { setCopyPaths, getPageCopy } = await import("./repo");
+    const { setCopyPaths, getEditablePageCopy, getPageCopy, publishPageCopy } = await import("./repo");
     await setCopyPaths([{ path: "about.title", value: "Live Edit Title" }]);
-    expect((await getPageCopy()).about.title).toBe("Live Edit Title");
+    expect((await getEditablePageCopy()).about.title).toBe("Live Edit Title");
+    expect((await getPageCopy()).about.title).not.toBe("Live Edit Title");
     await setCopyPaths([{ path: "about.recognition.0", value: "Updated award" }]);
+    expect((await getEditablePageCopy()).about.recognition[0]).toBe("Updated award");
+    await publishPageCopy();
+    expect((await getPageCopy()).about.title).toBe("Live Edit Title");
     expect((await getPageCopy()).about.recognition[0]).toBe("Updated award");
   });
 

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { requireUser } from "@/lib/cms/auth";
 import { parseVideoLines } from "@/lib/cms/copy-lines";
-import { getPageCopy, listArticles, listCategories } from "@/lib/cms/repo";
+import { getEditablePageCopy, listArticles, listCategories } from "@/lib/cms/repo";
 import { deleteArticleAction, saveMediaPageCopyAction } from "../actions";
 import { ConfirmSubmit } from "../admin-shell";
 import { RepeatCards } from "../copy-fields";
@@ -20,7 +20,7 @@ export default async function ArticlesList({
     categoryId: q.categoryId || undefined
   });
   const cats = await listCategories();
-  const media = (await getPageCopy()).mediaPage;
+  const media = (await getEditablePageCopy()).mediaPage;
   const videos = parseVideoLines(media.videos);
   return (
     <div>
