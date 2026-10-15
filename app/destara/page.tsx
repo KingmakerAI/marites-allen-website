@@ -190,6 +190,11 @@ export default async function DestaraPage() {
             <p style={bodyText} {...cms("destara.availability")}>
               {destara.availability}
             </p>
+            <p style={{ ...bodyText, marginTop: 12 }}>
+              <a href="https://play.google.com/store/apps/details?id=app.destara.guide" target="_blank" rel="noopener noreferrer">
+                Get Destara on Google Play
+              </a>
+            </p>
           </section>
 
           <section>

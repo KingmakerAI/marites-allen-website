@@ -132,7 +132,8 @@ export const DEFAULT_PAGE_COPY: PageCopy = {
     ],
     caption: "Destara home screen with your daily forecast",
     availabilityHeading: "Availability",
-    availability: "Use Destara on the web at destara.app. It is also available on iOS and Android.",
+    availability:
+      "Use Destara on the web at destara.app and on Android on Google Play. iOS: coming soon.",
     complementHeading: "How it complements consultations",
     complement:
       "Destara supports Marites Allen's practice; it does not replace it. Use the app for everyday guidance, then book a one-on-one session for deeper work such as home audits or major business decisions.",
@@ -140,7 +141,7 @@ export const DEFAULT_PAGE_COPY: PageCopy = {
     ctaLabel: "Open Destara.app →",
     facts: [
       { label: "Developer", value: "Marites Allen" },
-      { label: "Platforms", value: "Web, iOS, Android" },
+      { label: "Platforms", value: "Web and Android. iOS coming soon." },
       { label: "Launch", value: "2026" },
       { label: "Languages", value: "50+" }
     ]
@@ -152,14 +153,14 @@ export const DEFAULT_PAGE_COPY: PageCopy = {
     kicker: "The brand",
     title: "Frigga Charmed Life",
     body: "Marites Allen's own line of Feng Shui charms, amulets, planners and almanacs, designed so the guidance from a consultation can travel with you every day. Each piece is created around authentic Feng Shui principles rather than decoration alone.",
-    shopUrl: "https://www.frigga.com.ph",
+    shopUrl: "https://frigga.com.ph",
     shopLabel: "Shop Frigga →",
     browseLabel: "Browse collections",
     regionsHeading: "Shop by region",
     shops: [
-      { flag: "🇵🇭", label: "frigga.com.ph", url: "https://www.frigga.com.ph" },
-      { flag: "🇬🇧", label: "frigga.co.uk", url: "https://www.frigga.co.uk" },
-      { flag: "🇺🇸", label: "frigga-usa.com", url: "https://www.frigga-usa.com" }
+      { flag: "🇵🇭", label: "frigga.com.ph", url: "https://frigga.com.ph" },
+      { flag: "🇬🇧", label: "frigga.co.uk", url: "https://frigga.co.uk" },
+      { flag: "🇺🇸", label: "frigga-usa.com", url: "https://frigga-usa.com" }
     ],
     collectionsLabel: "Collections",
     collectionsHeading: "Charms for every intention",

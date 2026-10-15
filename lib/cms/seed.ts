@@ -290,6 +290,17 @@ async function ensureLiveDefaults() {
         }
       }
     }
+    const destara = store.pageCopy?.destara;
+    if (destara?.availability && /available on iOS/i.test(destara.availability)) {
+      destara.availability =
+        "Use Destara on the web at destara.app and on Android on Google Play. iOS: coming soon.";
+      changed = true;
+    }
+    const platforms = destara?.facts?.find((fact) => fact.label === "Platforms");
+    if (platforms && /iOS, Android/i.test(platforms.value)) {
+      platforms.value = "Web and Android. iOS coming soon.";
+      changed = true;
+    }
     if (store.settings?.contact?.email && /frigga/i.test(store.settings.contact.email)) {
       store.settings.contact.email = "hello@maritesallen.com";
       changed = true;

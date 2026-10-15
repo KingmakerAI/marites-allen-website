@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { FAQ_DATA, SOCIAL_LINKS } from "@/lib/site-data";
 
-export const SITE_URL = "https://maritesallen.com";
+export const SITE_URL = "https://www.maritesallen.com";
 export const SITE_NAME = "Marites Allen";
 export const SITE_TAGLINE = "The Feng Shui Queen";
 export const DEFAULT_OG_IMAGE = "/opengraph-image";
