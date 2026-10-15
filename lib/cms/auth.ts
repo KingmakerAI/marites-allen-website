@@ -93,15 +93,34 @@ export async function createSession(userId: string, remember = false) {
   const exp = Date.now() + SESSION_MS;
   const expiresAt = new Date(exp).toISOString();
   let email = "";
-  await mutateStore((store) => {
-    store.sessions = store.sessions.filter((s) => s.userId !== userId && s.expiresAt > nowIso());
-    store.sessions.push({ id, userId, expiresAt });
-    const user = store.adminUsers.find((u) => u.id === userId);
-    if (user) {
-      user.lastLoginAt = nowIso();
-      email = user.email;
+  const mode = persistenceMode();
+  const write = async () => {
+    await mutateStore((store) => {
+      store.sessions = store.sessions.filter((s) => s.userId !== userId && s.expiresAt > nowIso());
+      store.sessions.push({ id, userId, expiresAt });
+      const user = store.adminUsers.find((u) => u.id === userId);
+      if (user) {
+        user.lastLoginAt = nowIso();
+        email = user.email;
+      }
+    });
+  };
+  if (mode === "ephemeral") {
+    const { allowEphemeralWrites, endEphemeralWrites } = await import("./store");
+    allowEphemeralWrites();
+    try {
+      await write();
+    } finally {
+      endEphemeralWrites();
     }
-  });
+  } else {
+    await write();
+  }
+  // On ephemeral /tmp, fall back to email from the in-memory read if write was skipped.
+  if (!email) {
+    const store = await readStore();
+    email = store.adminUsers.find((u) => u.id === userId)?.email || "";
+  }
   const token = await signSessionCookie({ id, email, exp });
   return { token, expiresAt, remember };
 }
@@ -109,9 +128,23 @@ export async function createSession(userId: string, remember = false) {
 export async function destroySession(token: string) {
   const id = (await readSessionCookie(token, { allowExpired: true }))?.id;
   if (!id) return;
-  await mutateStore((store) => {
-    store.sessions = store.sessions.filter((s) => s.id !== id);
-  });
+  const mode = persistenceMode();
+  const clear = async () => {
+    await mutateStore((store) => {
+      store.sessions = store.sessions.filter((s) => s.id !== id);
+    });
+  };
+  if (mode === "ephemeral") {
+    const { allowEphemeralWrites, endEphemeralWrites } = await import("./store");
+    allowEphemeralWrites();
+    try {
+      await clear();
+    } finally {
+      endEphemeralWrites();
+    }
+  } else {
+    await clear();
+  }
 }
 
 /** A signed cookie is enough on Vercel, where each visit can open a fresh content file. */
