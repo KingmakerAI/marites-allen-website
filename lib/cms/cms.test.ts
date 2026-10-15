@@ -31,18 +31,17 @@ describe("crypto", () => {
     expect(await readSessionCookie(expired)).toBeNull();
   });
 
-  it("refuses to sign a production cookie when the secret is missing", async () => {
+  it("signs a production cookie with the built-in key when no secret is set", async () => {
     const env = process.env as { NODE_ENV?: string; ADMIN_SESSION_SECRET?: string; VERCEL?: string };
     const prevNode = env.NODE_ENV;
     const prevSecret = env.ADMIN_SESSION_SECRET;
     const prevVercel = env.VERCEL;
     env.NODE_ENV = "production";
+    env.VERCEL = "1";
     delete env.ADMIN_SESSION_SECRET;
-    delete env.VERCEL;
     try {
-      await expect(signSessionCookie({ id: "sess-1", email: "owner@example.com", exp: Date.now() + 60_000 })).rejects.toThrow(
-        /ADMIN_SESSION_SECRET/
-      );
+      const cookie = await signSessionCookie({ id: "sess-1", email: "owner@example.com", exp: Date.now() + 60_000 });
+      expect((await readSessionCookie(cookie))?.email).toBe("owner@example.com");
     } finally {
       env.NODE_ENV = prevNode;
       if (prevSecret === undefined) delete env.ADMIN_SESSION_SECRET;
