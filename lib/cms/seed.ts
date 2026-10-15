@@ -431,6 +431,114 @@ async function ensureLiveDefaults() {
       store.bootstrap.forecast2027 = FORECAST_2027_STAMP;
       changed = true;
     }
+
+    // I4 / C0 — four Oct 2026 press stories as Draft until the owner publishes.
+    const PRESS_DRAFTS_2026_10 = [
+      {
+        id: "article-manila-times-2026-10-fire-sheep",
+        slug: "manila-times-2026-10-fire-sheep",
+        title:
+          "Marites Allen reveals fearless 2027 Fire Sheep forecast, pioneering Destiny Is in Your Stars platform",
+        excerpt:
+          "Marites Allen reveals fearless 2027 Fire Sheep forecast, pioneering Destiny Is in Your Stars platform",
+        outlet: "Manila Times",
+        externalUrl:
+          "https://www.manilatimes.net/2026/10/14/entertainment-lifestyle/marites-allen-reveals-fearless-2027-fire-sheep-forecast-pioneering-destiny-is-in-your-stars-platform/2445260"
+      },
+      {
+        id: "article-newswav-2026-10-fire-sheep",
+        slug: "newswav-2026-10-fire-sheep",
+        title: "Marites Allen reveals fearless 2027 Fire Sheep forecast (Newswav)",
+        excerpt: "Marites Allen reveals fearless 2027 Fire Sheep forecast, pioneering Destiny Is in Your Stars platform",
+        outlet: "Newswav",
+        externalUrl:
+          "https://newswav.com/article/marites-allen-reveals-fearless-2027-fire-sheep-forecast-pioneering-destiny-A2610_4x6zZf"
+      },
+      {
+        id: "article-kumagcow-2026-10-fire-sheep",
+        slug: "kumagcow-2026-10-fire-sheep",
+        title: "Marites Allen shows essentials for the Year of the Fire Sheep 2027",
+        excerpt: "Marites Allen shows essentials for the Year of the Fire Sheep 2027",
+        outlet: "Kumagcow",
+        externalUrl: "https://www.kumagcow.com/2026/10/marites-allen-shows-essentials-for-year.html"
+      },
+      {
+        id: "article-rezirb-2026-10-fire-sheep",
+        slug: "rezirb-2026-10-fire-sheep",
+        title: "A glimpse into the Year of the Fire Sheep 2027 from Feng Shui expert Marites Allen",
+        excerpt: "A glimpse into the Year of the Fire Sheep 2027 from Feng Shui expert Marites Allen",
+        outlet: "ReZirb",
+        externalUrl:
+          "https://www.rezirb.com/2026/10/a-glimpse-into-the-year-of-the-fire-sheep-2027-from-feng-shui-expert-marites-allen/"
+      }
+    ] as const;
+    if (!store.articles) store.articles = [];
+    for (const draft of PRESS_DRAFTS_2026_10) {
+      if (store.articles.some((a) => a.id === draft.id || a.slug === draft.slug)) continue;
+      store.articles.push({
+        id: draft.id,
+        slug: draft.slug,
+        title: draft.title,
+        excerpt: draft.excerpt,
+        body: `<p>${draft.excerpt}</p>`,
+        featuredImageId: null,
+        author: "Marites Allen",
+        categoryId: "cat-press",
+        tags: ["2027", "Fire Sheep"],
+        outlet: draft.outlet,
+        externalUrl: draft.externalUrl,
+        ctaLabel: "Read",
+        year: 2026,
+        month: 10,
+        status: "draft",
+        publishedAt: null,
+        seoTitle: `${draft.outlet} — Marites Allen`,
+        seoDescription: draft.excerpt,
+        updatedAt: nowIso()
+      });
+      changed = true;
+    }
+
+    // C7 — register 2027 book covers in the Photos library (web versions under public/).
+    const BOOK_COVERS_2027 = [
+      {
+        id: "media-cover-almanac-2027",
+        filename: "almanac.webp",
+        path: "/images/books/2027/almanac.webp",
+        altText: "Marites Allen 2027 Feng Shui Almanac cover"
+      },
+      {
+        id: "media-cover-planner-2027",
+        filename: "planner.webp",
+        path: "/images/books/2027/planner.webp",
+        altText: "Marites Allen 2027 Feng Shui Planner cover"
+      },
+      ...(["rat", "ox", "tiger", "rabbit", "dragon", "snake", "horse", "sheep", "monkey", "rooster", "dog", "boar"] as const).map(
+        (sign) => ({
+          id: `media-cover-${sign}-2027`,
+          filename: `${sign}.webp`,
+          path: `/images/books/2027/${sign}.webp`,
+          altText: `Marites Allen 2027 Horoscope Guide cover, ${sign.charAt(0).toUpperCase()}${sign.slice(1)}`
+        })
+      )
+    ];
+    if (!store.media) store.media = [];
+    for (const cover of BOOK_COVERS_2027) {
+      if (store.media.some((m) => m.id === cover.id || m.path === cover.path)) continue;
+      store.media.push({
+        id: cover.id,
+        filename: cover.filename,
+        path: cover.path,
+        mimeType: "image/webp",
+        size: 0,
+        width: 1200,
+        height: null,
+        altText: cover.altText,
+        createdAt: nowIso()
+      });
+      changed = true;
+    }
+
     return changed;
   });
 }

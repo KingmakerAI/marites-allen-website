@@ -147,6 +147,7 @@ const FALLBACK_VIDEOS: CopyVideo[] = [
 
 export default function MediaPage({
   press,
+  latest = null,
   title,
   intro,
   pressKitTitle,
@@ -157,6 +158,7 @@ export default function MediaPage({
   activeCategory = ""
 }: {
   press: PressItem[];
+  latest?: PressItem | null;
   title?: string;
   intro?: string;
   pressKitTitle?: string;
@@ -492,6 +494,24 @@ export default function MediaPage({
         >
           {intro || "Press coverage, interviews, and features with Marites Allen — newest first."}
         </p>
+        {latest && !selectedCategory ? (
+          <div style={{ marginBottom: 28 }}>
+            <p
+              style={{
+                fontSize: 11,
+                fontWeight: 700,
+                letterSpacing: 1.2,
+                textTransform: "uppercase",
+                color: "#c69a3e",
+                margin: "0 0 10px"
+              }}
+            >
+              Latest
+            </p>
+            <PressCard item={latest} />
+          </div>
+        ) : null}
+
         <h2
           className="font-display"
           style={{ fontWeight: 700, fontSize: "clamp(18px,2.2vw,24px)", color: "#143d31", margin: "0 0 6px" }}

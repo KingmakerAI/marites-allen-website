@@ -6,11 +6,28 @@ import { listCategories, monthName } from "@/lib/cms/repo";
 import { breadcrumbJsonLd, pageMetadata } from "@/lib/seo";
 import MediaClient from "./media-client";
 
+function mediaSeoDescription(outlets: string[], fallback: string) {
+  const unique = [...new Set(outlets.map((o) => o.trim()).filter(Boolean))];
+  if (!unique.length) return fallback;
+  if (unique.length === 1) {
+    return `Press coverage featuring Marites Allen — ${unique[0]}.`;
+  }
+  if (unique.length === 2) {
+    return `Press coverage featuring Marites Allen — ${unique[0]} and ${unique[1]}.`;
+  }
+  const head = unique.slice(0, 4);
+  const rest = unique.length > 4 ? ", and more" : "";
+  return `Press coverage featuring Marites Allen — ${head.slice(0, -1).join(", ")}, and ${head[head.length - 1]}${rest}.`;
+}
+
 export async function generateMetadata(): Promise<Metadata> {
-  const copy = await getCachedPageCopy();
+  const [copy, articles] = await Promise.all([getCachedPageCopy(), getCachedArticles()]);
   return pageMetadata({
     title: copy.mediaPage.seoTitle,
-    description: copy.mediaPage.seoDescription,
+    description: mediaSeoDescription(
+      articles.map((a) => a.outlet),
+      copy.mediaPage.seoDescription
+    ),
     path: "/media",
     keywords: ["Marites Allen press", "Feng Shui Queen interview", "media kit", "TV guesting Feng Shui"]
   });
@@ -44,6 +61,9 @@ export default async function MediaPage({
       slug: a.slug
     };
   });
+  const latest =
+    [...press].sort((a, b) => b.year - a.year || b.m - a.m || a.outlet.localeCompare(b.outlet))[0] ||
+    null;
   return (
     <>
       <JsonLd
@@ -54,6 +74,7 @@ export default async function MediaPage({
       />
       <MediaClient
         press={press}
+        latest={latest}
         title={copy.title}
         intro={copy.intro}
         pressKitTitle={copy.pressKitTitle}

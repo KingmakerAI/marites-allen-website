@@ -16,6 +16,12 @@ export default async function UsersPage({
     <div>
       <h1 className="admin-h1">Team</h1>
       <p className="admin-sub">People who can edit the website. Editors can change pages. Owners can also add or remove people.</p>
+      {users.some((u) => u.role === "owner" && !isProtectedOwnerEmail(u.email)) ? (
+        <div className="flash error" role="status" style={{ marginBottom: 16 }}>
+          An owner account that is not in the protected list is present. Review last sign-in before keeping or removing it.
+          Protected accounts (admin@maritesallen.com, cap10kirck@gmail.com) stay unchanged.
+        </div>
+      ) : null}
       <Flash
         saved={q.saved}
         error={

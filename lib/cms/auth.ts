@@ -67,7 +67,7 @@ async function sharedLimit(key: string, limit: number, windowMs: number) {
   });
 }
 
-export async function rateLimitLogin(key: string, limit = 8, windowMs = 15 * 60 * 1000) {
+export async function rateLimitLogin(key: string, limit = 5, windowMs = 15 * 60 * 1000) {
   if (persistenceMode() === "ephemeral") return memoryLimit(loginAttempts, key, limit, windowMs);
   return sharedLimit(`login:${key}`, limit, windowMs);
 }
