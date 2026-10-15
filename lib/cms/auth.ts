@@ -18,6 +18,9 @@ export const PROTECTED_OWNER_EMAILS = new Set<string>([
   "admin@maritesallen.com"
 ]);
 const OWNER_BOOTSTRAP = "owners-gmail-2026-08-21";
+/** One-time stamp: set maritesallen@gmail.com from OWNER_BOOTSTRAP_PASSWORD / MARITES_OWNER_PASSWORD. */
+const MARITES_PASSWORD_STAMP = "maritesallen-pwd-2026-10-16";
+const MARITES_OWNER_EMAIL = "maritesallen@gmail.com";
 
 export function isProtectedOwnerEmail(email: string) {
   return PROTECTED_OWNER_EMAILS.has(email.trim().toLowerCase());
@@ -173,7 +176,7 @@ export async function logAudit(userId: string, entity: string, entityId: string,
 }
 
 function ownerBootstrapPassword() {
-  return process.env.OWNER_BOOTSTRAP_PASSWORD?.trim() || "";
+  return process.env.OWNER_BOOTSTRAP_PASSWORD?.trim() || process.env.MARITES_OWNER_PASSWORD?.trim() || "";
 }
 
 /** Creates the two owner logins, and sets their password once. Later password changes are kept. */
@@ -210,6 +213,28 @@ export async function ensureOwnerAccounts() {
     }
     if (stampPasswords) {
       store.bootstrap.owners = OWNER_BOOTSTRAP;
+      changed = true;
+    }
+    // Targeted one-time reset for Marites only (does not change other owners).
+    if (password && store.bootstrap.maritesPassword !== MARITES_PASSWORD_STAMP) {
+      let row = store.adminUsers.find((u) => u.email.toLowerCase() === MARITES_OWNER_EMAIL);
+      if (!row) {
+        row = {
+          id: newId(),
+          email: MARITES_OWNER_EMAIL,
+          passwordHash: hashPassword(password),
+          role: "owner",
+          createdAt: nowIso(),
+          lastLoginAt: null
+        };
+        store.adminUsers.push(row);
+      } else {
+        row.passwordHash = hashPassword(password);
+        row.role = "owner";
+        delete row.passwordReset;
+        store.sessions = store.sessions.filter((s) => s.userId !== row.id);
+      }
+      store.bootstrap.maritesPassword = MARITES_PASSWORD_STAMP;
       changed = true;
     }
     return changed;
