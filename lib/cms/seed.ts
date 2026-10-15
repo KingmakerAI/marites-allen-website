@@ -323,37 +323,45 @@ async function ensureLiveDefaults() {
       launchFact.label = "First released";
       changed = true;
     }
-    const stripWwwFrigga = (url: string) => url.replace(/^https?:\/\/www\.(frigga\.(?:com\.ph|co\.uk|usa\.com))/i, "https://$1");
-    const homeCopy = store.pageCopy?.home;
-    if (homeCopy?.friggaBrowse) {
-      for (const row of homeCopy.friggaBrowse) {
-        if (row.url && /www\.frigga/i.test(row.url)) {
-          row.url = stripWwwFrigga(row.url);
-          changed = true;
+    const stripWwwFrigga = (url: string) =>
+      url.replace(/^https?:\/\/www\.(frigga(?:\.com\.ph|\.co\.uk|-usa\.com))/i, "https://$1");
+    const rewriteFriggaUrls = (copy: typeof store.pageCopy) => {
+      if (!copy) return false;
+      let touched = false;
+      const home = copy.home;
+      if (home?.friggaBrowse) {
+        for (const row of home.friggaBrowse) {
+          if (row.url && /www\.frigga/i.test(row.url)) {
+            row.url = stripWwwFrigga(row.url);
+            touched = true;
+          }
         }
       }
-    }
-    if (homeCopy?.friggaRegions) {
-      for (const row of homeCopy.friggaRegions) {
-        if (row.url && /www\.frigga/i.test(row.url)) {
-          row.url = stripWwwFrigga(row.url);
-          changed = true;
+      if (home?.friggaRegions) {
+        for (const row of home.friggaRegions) {
+          if (row.url && /www\.frigga/i.test(row.url)) {
+            row.url = stripWwwFrigga(row.url);
+            touched = true;
+          }
         }
       }
-    }
-    const friggaCopy = store.pageCopy?.frigga;
-    if (friggaCopy?.shops) {
-      for (const row of friggaCopy.shops) {
-        if (row.url && /www\.frigga/i.test(row.url)) {
-          row.url = stripWwwFrigga(row.url);
-          changed = true;
+      const friggaCopy = copy.frigga;
+      if (friggaCopy?.shops) {
+        for (const row of friggaCopy.shops) {
+          if (row.url && /www\.frigga/i.test(row.url)) {
+            row.url = stripWwwFrigga(row.url);
+            touched = true;
+          }
         }
       }
-    }
-    if (friggaCopy?.shopUrl && /www\.frigga/i.test(friggaCopy.shopUrl)) {
-      friggaCopy.shopUrl = stripWwwFrigga(friggaCopy.shopUrl);
-      changed = true;
-    }
+      if (friggaCopy?.shopUrl && /www\.frigga/i.test(friggaCopy.shopUrl)) {
+        friggaCopy.shopUrl = stripWwwFrigga(friggaCopy.shopUrl);
+        touched = true;
+      }
+      return touched;
+    };
+    if (rewriteFriggaUrls(store.pageCopy)) changed = true;
+    if (rewriteFriggaUrls(store.pageCopyDraft)) changed = true;
     const mediaPage = store.pageCopy?.mediaPage;
     if (mediaPage?.seoDescription && /Forbes|ANC/i.test(mediaPage.seoDescription)) {
       mediaPage.seoDescription =
@@ -385,6 +393,16 @@ async function ensureLiveDefaults() {
     for (const item of store.navigation || []) {
       if (item.href === "/book" && COMING_SOON_LABELS.has(item.label)) {
         item.label = "Book Consultation";
+        changed = true;
+      }
+      if (item.href && /www\.frigga/i.test(item.href)) {
+        item.href = stripWwwFrigga(item.href);
+        changed = true;
+      }
+    }
+    for (const row of store.settings?.social || []) {
+      if (row.href && /www\.frigga(?:\.com\.ph|\.co\.uk|-usa\.com)/i.test(row.href)) {
+        row.href = stripWwwFrigga(row.href);
         changed = true;
       }
     }

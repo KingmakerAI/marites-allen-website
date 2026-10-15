@@ -31,12 +31,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "monthly" as const,
       priority: 0.6
     })),
-    ...events.map((event) => ({
-      url: `${SITE_URL}/events#${event.slug}`,
-      lastModified,
-      changeFrequency: "weekly" as const,
-      priority: 0.7
-    })),
+    ...events
+      .filter((event) => {
+        const end = new Date(event.endsAt || event.startsAt).getTime();
+        const fallback = Number.isFinite(end) ? end : new Date(event.startsAt).getTime() + 3 * 60 * 60 * 1000;
+        return Date.now() < fallback;
+      })
+      .map((event) => ({
+        url: `${SITE_URL}/events#${event.slug}`,
+        lastModified,
+        changeFrequency: "weekly" as const,
+        priority: 0.7
+      })),
     ...extraPages.map((page) => ({
       url: `${SITE_URL}/${page.slug}`,
       lastModified: page.updatedAt ? new Date(page.updatedAt) : lastModified,
