@@ -217,22 +217,22 @@ export async function ensureOwnerAccounts() {
     }
     // Targeted one-time reset for Marites only (does not change other owners).
     if (password && store.bootstrap.maritesPassword !== MARITES_PASSWORD_STAMP) {
-      let row = store.adminUsers.find((u) => u.email.toLowerCase() === MARITES_OWNER_EMAIL);
-      if (!row) {
-        row = {
+      const existing = store.adminUsers.find((u) => u.email.toLowerCase() === MARITES_OWNER_EMAIL);
+      if (!existing) {
+        store.adminUsers.push({
           id: newId(),
           email: MARITES_OWNER_EMAIL,
           passwordHash: hashPassword(password),
           role: "owner",
           createdAt: nowIso(),
           lastLoginAt: null
-        };
-        store.adminUsers.push(row);
+        });
       } else {
-        row.passwordHash = hashPassword(password);
-        row.role = "owner";
-        delete row.passwordReset;
-        store.sessions = store.sessions.filter((s) => s.userId !== row.id);
+        const userId = existing.id;
+        existing.passwordHash = hashPassword(password);
+        existing.role = "owner";
+        delete existing.passwordReset;
+        store.sessions = store.sessions.filter((s) => s.userId !== userId);
       }
       store.bootstrap.maritesPassword = MARITES_PASSWORD_STAMP;
       changed = true;
