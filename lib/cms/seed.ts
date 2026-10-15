@@ -388,27 +388,31 @@ async function seedBody() {
       }
 
       if (!store.articles.length) {
-        store.articles = PRESS.map((item) => ({
-          id: newId(),
-          slug: slugify(`${item.outlet}-${item.year}-${item.month}`),
-          title: item.excerpt,
-          excerpt: item.excerpt,
-          body: `<p>${item.excerpt}</p>`,
-          featuredImageId: null,
-          author: "Marites Allen",
-          categoryId: item.ctaLabel === "Watch" ? "cat-tv" : "cat-press",
-          tags: [],
-          outlet: item.outlet,
-          externalUrl: item.externalUrl,
-          ctaLabel: item.ctaLabel,
-          year: item.year,
-          month: item.month,
-          status: "published" as const,
-          publishedAt: `${item.year}-${String(item.month).padStart(2, "0")}-01T00:00:00.000Z`,
-          seoTitle: item.outlet,
-          seoDescription: item.excerpt,
-          updatedAt: nowIso()
-        }));
+        store.articles = PRESS.map((item) => {
+          const slug = slugify(`${item.outlet}-${item.year}-${item.month}`);
+          return {
+            // Stable ids so Edit links still work when each server seeds its own scratch copy.
+            id: `article-${slug}`,
+            slug,
+            title: item.excerpt,
+            excerpt: item.excerpt,
+            body: `<p>${item.excerpt}</p>`,
+            featuredImageId: null,
+            author: "Marites Allen",
+            categoryId: item.ctaLabel === "Watch" ? "cat-tv" : "cat-press",
+            tags: [],
+            outlet: item.outlet,
+            externalUrl: item.externalUrl,
+            ctaLabel: item.ctaLabel,
+            year: item.year,
+            month: item.month,
+            status: "published" as const,
+            publishedAt: `${item.year}-${String(item.month).padStart(2, "0")}-01T00:00:00.000Z`,
+            seoTitle: item.outlet,
+            seoDescription: item.excerpt,
+            updatedAt: nowIso()
+          };
+        });
       }
 
       if (!store.pages.length) store.pages = DEFAULT_PAGES;

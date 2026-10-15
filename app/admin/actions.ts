@@ -1,7 +1,7 @@
 "use server";
 
 import { cookies, headers } from "next/headers";
-import { redirect } from "next/navigation";
+import { redirect, unstable_rethrow } from "next/navigation";
 import { authenticate, cookieOptions, createSession, destroySession, getSessionUser, isProtectedOwnerEmail, logAudit, rateLimitLogin, rateLimitReset, SESSION_COOKIE, REMEMBER_EMAIL_COOKIE, changePasswordWithCurrent, requestPasswordReset, completePasswordReset, setUserPassword } from "@/lib/cms/auth";
 import { safeAdminNext, SESSION_MAX_AGE, SessionSecretError } from "@/lib/cms/session-cookie";
 import { fingerprint, hashPassword, newId, nowIso, slugify } from "@/lib/cms/crypto";
@@ -19,6 +19,7 @@ import {
   deleteSignup,
   duplicatePage,
   mediaInUse,
+  getArticle,
   saveArticle,
   saveCategory,
   saveEvent,
@@ -258,17 +259,55 @@ export async function saveArticleAction(formData: FormData) {
     seoTitle: formStr(formData, "seoTitle"),
     seoDescription: formStr(formData, "seoDescription")
   });
-  const article = await saveArticle(parsed);
-  await logAudit(user.id, "articles", article.id, parsed.id ? "update" : "create");
-  redirect(`/admin/articles/${article.id}?saved=1`);
+  try {
+    const article = await saveArticle(parsed);
+    await logAudit(user.id, "articles", article.id, parsed.id ? "update" : "create");
+    redirect(`/admin/articles/${article.id}?saved=1`);
+  } catch (err) {
+    unstable_rethrow(err);
+    const message = err instanceof Error ? err.message : "";
+    if (/BLOB_READ_WRITE_TOKEN|not stored/i.test(message)) {
+      redirect("/admin/articles?error=storage");
+    }
+    throw err;
+  }
+}
+
+export async function setArticleStatusAction(formData: FormData) {
+  const user = await actor();
+  const id = formStr(formData, "id");
+  const status = (formStr(formData, "status") || "draft") as "draft" | "published" | "archived";
+  const existing = await getArticle(id);
+  if (!existing) redirect("/admin/articles?error=missing");
+  try {
+    await saveArticle({ ...existing, status });
+    await logAudit(user.id, "articles", id, status === "published" ? "publish" : "status");
+    redirect("/admin/articles?saved=1");
+  } catch (err) {
+    unstable_rethrow(err);
+    const message = err instanceof Error ? err.message : "";
+    if (/BLOB_READ_WRITE_TOKEN|not stored/i.test(message)) {
+      redirect("/admin/articles?error=storage");
+    }
+    throw err;
+  }
 }
 
 export async function deleteArticleAction(formData: FormData) {
   const user = await actor();
   const id = formStr(formData, "id");
-  await deleteArticle(id);
-  await logAudit(user.id, "articles", id, "delete");
-  redirect("/admin/articles");
+  try {
+    await deleteArticle(id);
+    await logAudit(user.id, "articles", id, "delete");
+    redirect("/admin/articles");
+  } catch (err) {
+    unstable_rethrow(err);
+    const message = err instanceof Error ? err.message : "";
+    if (/BLOB_READ_WRITE_TOKEN|not stored/i.test(message)) {
+      redirect("/admin/articles?error=storage");
+    }
+    throw err;
+  }
 }
 
 export async function saveCategoryAction(formData: FormData) {

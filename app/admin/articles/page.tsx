@@ -2,7 +2,8 @@ import Link from "next/link";
 import { requireUser } from "@/lib/cms/auth";
 import { parseVideoLines } from "@/lib/cms/copy-lines";
 import { getEditablePageCopy, listArticles, listCategories } from "@/lib/cms/repo";
-import { deleteArticleAction, saveMediaPageCopyAction } from "../actions";
+import { persistenceMode } from "@/lib/cms/store";
+import { deleteArticleAction, saveMediaPageCopyAction, setArticleStatusAction } from "../actions";
 import { ConfirmSubmit } from "../admin-shell";
 import { RepeatCards } from "../copy-fields";
 import { Flash, statusLabel } from "../ui";
@@ -10,7 +11,7 @@ import { Flash, statusLabel } from "../ui";
 export default async function ArticlesList({
   searchParams
 }: {
-  searchParams: Promise<{ q?: string; status?: string; categoryId?: string; saved?: string }>;
+  searchParams: Promise<{ q?: string; status?: string; categoryId?: string; saved?: string; error?: string }>;
 }) {
   await requireUser();
   const q = await searchParams;
@@ -22,11 +23,27 @@ export default async function ArticlesList({
   const cats = await listCategories();
   const media = (await getEditablePageCopy()).mediaPage;
   const videos = parseVideoLines(media.videos);
+  const ephemeral = persistenceMode() === "ephemeral";
   return (
     <div>
       <h1 className="admin-h1">News & press</h1>
-      <p className="admin-sub">Stories, interviews, and write-ups. “Not ready” stays private until you show it.</p>
-      <Flash saved={q.saved} />
+      <p className="admin-sub">Stories, interviews, and write-ups. “Not ready” stays private until you publish it.</p>
+      {ephemeral ? (
+        <div className="flash error" role="alert">
+          Stories are not stored for good yet. Connect Vercel Blob (<code>BLOB_READ_WRITE_TOKEN</code>) or Edit and Publish
+          can break after the next server restart.
+        </div>
+      ) : null}
+      <Flash
+        saved={q.saved}
+        error={
+          q.error === "storage"
+            ? "Could not save. Connect Vercel Blob (BLOB_READ_WRITE_TOKEN) first."
+            : q.error === "missing"
+              ? "That story was not found on this server. Open the list again, or connect Blob so one story library is shared."
+              : q.error
+        }
+      />
       <form className="admin-actions" style={{ marginBottom: 16 }}>
         <input name="q" placeholder="Search" defaultValue={q.q} />
         <select name="status" defaultValue={q.status || ""}>
@@ -84,10 +101,27 @@ export default async function ArticlesList({
                   <Link className="btn secondary" href={`/admin/articles/${a.id}`}>
                     Edit
                   </Link>
-                  {a.status === "published" && (
-                    <Link className="btn secondary" href={`/articles/${a.slug}`} target="_blank">
-                      See
-                    </Link>
+                  {a.status !== "published" ? (
+                    <form action={setArticleStatusAction}>
+                      <input type="hidden" name="id" value={a.id} />
+                      <input type="hidden" name="status" value="published" />
+                      <button className="btn" type="submit">
+                        Publish
+                      </button>
+                    </form>
+                  ) : (
+                    <>
+                      <Link className="btn secondary" href={`/articles/${a.slug}`} target="_blank">
+                        See
+                      </Link>
+                      <form action={setArticleStatusAction}>
+                        <input type="hidden" name="id" value={a.id} />
+                        <input type="hidden" name="status" value="draft" />
+                        <button className="btn secondary" type="submit">
+                          Unpublish
+                        </button>
+                      </form>
+                    </>
                   )}
                   <form action={deleteArticleAction}>
                     <input type="hidden" name="id" value={a.id} />
@@ -157,7 +191,7 @@ export default async function ArticlesList({
           </label>
         </details>
         <button className="btn" type="submit">
-          Save media page
+          Save media page draft
         </button>
       </form>
     </div>
