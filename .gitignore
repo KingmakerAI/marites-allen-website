@@ -51,3 +51,6 @@ data/last-password-reset.txt
 public/uploads/*
 !public/uploads/.gitkeep
 !data/.gitkeep
+
+.vercel
+.env*
