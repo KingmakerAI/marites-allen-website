@@ -10,7 +10,6 @@ import {
   FRIGGA_REGIONS,
   HOME_SERVICES,
   SPEAKING_CLIENTS,
-  TESTIMONIALS
 } from "@/lib/site-data";
 import type { HomeExtrasCopy } from "@/lib/cms/page-copy-types";
 import { cms } from "@/lib/cms/cms-attr";
@@ -41,7 +40,8 @@ export default function HomeBelowFold({
   const serviceSource = services?.length ? services : HOME_SERVICES;
   const selectedService =
     serviceSource.find((s) => s.id === (selectedServiceId || serviceSource[0]?.id)) || serviceSource[0];
-  const quoteSource = testimonials?.length ? testimonials : TESTIMONIALS;
+  // Never fall back to hardcoded celebrity names. Empty means hide the block until consent is on file.
+  const quoteSource = testimonials?.length ? testimonials : [];
   const aboutKicker = extras?.aboutKicker || "Meet Marites Allen";
   const aboutHeading = extras?.aboutHeading || "The name the world trusts for Feng Shui";
   const aboutBody =
@@ -73,7 +73,7 @@ export default function HomeBelowFold({
     extras?.friggaBody ||
     "Marites Allen's own line of charms, amulets, planners and almanacs, so the guidance from your consultation travels with you every day.";
   const friggaCta = extras?.friggaCta || "Shop Frigga";
-  const friggaShopUrl = friggaRegions[0]?.url || "https://www.frigga.com.ph";
+  const friggaShopUrl = friggaRegions[0]?.url || "https://frigga.com.ph";
 
   const faqs = useMemo(
     () =>
@@ -632,6 +632,7 @@ export default function HomeBelowFold({
       </section>
       ) : null}
 
+      {quoteSource.length > 0 ? (
       <section id="reviews" style={{ background: "#efe8d8" }}>
         <div style={{ maxWidth: 1180, margin: "0 auto", padding: "clamp(34px,4.5vw,54px) clamp(18px,4vw,40px)" }}>
           <div style={{ textAlign: "center", maxWidth: 560, margin: "0 auto 26px" }}>
@@ -683,8 +684,7 @@ export default function HomeBelowFold({
           </div>
         </div>
       </section>
-
-
+      ) : null}
 
       <section id="faq" style={{ maxWidth: 820, margin: "0 auto", padding: "clamp(34px,4.5vw,56px) clamp(18px,4vw,40px)" }}>
         <div style={{ textAlign: "center", marginBottom: 40 }}>

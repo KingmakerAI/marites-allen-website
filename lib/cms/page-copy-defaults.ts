@@ -142,7 +142,7 @@ export const DEFAULT_PAGE_COPY: PageCopy = {
     facts: [
       { label: "Developer", value: "Marites Allen" },
       { label: "Platforms", value: "Web and Android. iOS coming soon." },
-      { label: "Launch", value: "2026" },
+      { label: "First released", value: "2026" },
       { label: "Languages", value: "50+" }
     ]
   },
@@ -565,17 +565,17 @@ export const DEFAULT_PAGE_COPY: PageCopy = {
     friggaBody: "Wearable Feng Shui charms for love, health, wealth and career.",
     friggaCta: "Shop Frigga",
     friggaBrowse: [
-      { label: "Love", url: "https://www.frigga.com.ph" },
-      { label: "Health", url: "https://www.frigga.com.ph" },
-      { label: "Wealth", url: "https://www.frigga.com.ph" },
-      { label: "Career", url: "https://www.frigga.com.ph" },
-      { label: "Shop your sign", url: "https://www.frigga.com.ph" },
-      { label: "Books & planners", url: "https://www.frigga.com.ph" }
+      { label: "Love", url: "https://frigga.com.ph" },
+      { label: "Health", url: "https://frigga.com.ph" },
+      { label: "Wealth", url: "https://frigga.com.ph" },
+      { label: "Career", url: "https://frigga.com.ph" },
+      { label: "Shop your sign", url: "https://frigga.com.ph" },
+      { label: "Books & planners", url: "https://frigga.com.ph" }
     ],
     friggaRegions: [
-      { region: "Philippines & Asia", domain: "frigga.com.ph", url: "https://www.frigga.com.ph" },
-      { region: "US & Canada", domain: "frigga-usa.com", url: "https://www.frigga-usa.com" },
-      { region: "Europe & UK", domain: "frigga.co.uk", url: "https://www.frigga.co.uk" }
+      { region: "Philippines & Asia", domain: "frigga.com.ph", url: "https://frigga.com.ph" },
+      { region: "US & Canada", domain: "frigga-usa.com", url: "https://frigga-usa.com" },
+      { region: "Europe & UK", domain: "frigga.co.uk", url: "https://frigga.co.uk" }
     ]
   },
   book: {
@@ -627,7 +627,7 @@ export const DEFAULT_PAGE_COPY: PageCopy = {
   mediaPage: {
     seoTitle: "Media & Press",
     seoDescription:
-      "Press coverage, TV interviews, and media features featuring Marites Allen — Forbes, Tatler, ANC, ABS-CBN, Manila Bulletin, and more.",
+      "Press coverage, TV interviews, and media features featuring Marites Allen — Manila Bulletin, Philippine Star, GMA, ABS-CBN, and more.",
     kicker: "Press coverage",
     title: "Media & Press",
     intro: "Press coverage, interviews, and features with Marites Allen — newest first.",

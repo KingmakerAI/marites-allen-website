@@ -166,9 +166,9 @@ export const FAQ_DATA = [
 ];
 
 export const FRIGGA_REGIONS = [
-  { region: "Philippines & Asia", domain: "frigga.com.ph", url: "https://www.frigga.com.ph" },
-  { region: "US & Canada", domain: "frigga-usa.com", url: "https://www.frigga-usa.com" },
-  { region: "Europe & UK", domain: "frigga.co.uk", url: "https://www.frigga.co.uk" }
+  { region: "Philippines & Asia", domain: "frigga.com.ph", url: "https://frigga.com.ph" },
+  { region: "US & Canada", domain: "frigga-usa.com", url: "https://frigga-usa.com" },
+  { region: "Europe & UK", domain: "frigga.co.uk", url: "https://frigga.co.uk" }
 ];
 
 /** Official Marites Allen profiles (sourced from facebook.com/MaritesAllen168 + maritesallen.com). */
@@ -242,18 +242,18 @@ export const FRIGGA_SOCIAL_LINKS = [
 export const OFFICIAL_WEBSITES = [
   { label: "Marites Allen", href: "https://maritesallen.com" },
   { label: "Destara AI", href: "https://destara.app" },
-  { label: "Frigga PH", href: "https://www.frigga.com.ph" },
-  { label: "Frigga UK", href: "https://www.frigga.co.uk" },
-  { label: "Frigga USA", href: "https://www.frigga-usa.com" }
+  { label: "Frigga PH", href: "https://frigga.com.ph" },
+  { label: "Frigga UK", href: "https://frigga.co.uk" },
+  { label: "Frigga USA", href: "https://frigga-usa.com" }
 ] as const;
 
 export const FRIGGA_BROWSE = [
-  { label: "Love", url: "https://www.frigga.com.ph" },
-  { label: "Health", url: "https://www.frigga.com.ph" },
-  { label: "Wealth", url: "https://www.frigga.com.ph" },
-  { label: "Career", url: "https://www.frigga.com.ph" },
-  { label: "Shop your sign", url: "https://www.frigga.com.ph" },
-  { label: "Books & planners", url: "https://www.frigga.com.ph" }
+  { label: "Love", url: "https://frigga.com.ph" },
+  { label: "Health", url: "https://frigga.com.ph" },
+  { label: "Wealth", url: "https://frigga.com.ph" },
+  { label: "Career", url: "https://frigga.com.ph" },
+  { label: "Shop your sign", url: "https://frigga.com.ph" },
+  { label: "Books & planners", url: "https://frigga.com.ph" }
 ];
 
 export const CHART_PERKS = [

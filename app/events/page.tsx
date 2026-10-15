@@ -24,30 +24,27 @@ function eventEnded(endsAt: string, startsAt: string) {
 export default async function EventsPage() {
   const [events, pageCopy] = await Promise.all([getCachedEvents(), getCachedPageCopy()]);
   const copy = pageCopy.eventsPage;
-  const featuredEvents = events.map((event) => {
-    const ended = eventEnded(event.endsAt, event.startsAt);
-    return {
-      id: event.id,
-      title: event.title,
-      eyebrow: event.eyebrow,
-      summary: event.summary,
-      whenLabel: event.whenLabel,
-      whereLabel: event.whereLabel,
-      startsAt: event.startsAt,
-      endsAt: event.endsAt,
-      image: event.imageUrl,
-      imageWidth: 1600,
-      imageHeight: 900,
-      ctaHref: event.ctaHref,
-      ctaLabel: event.ctaLabel,
-      liveHref: ended ? undefined : event.liveUrl || undefined,
-      liveLabel: event.liveUrl ? "Watch live" : undefined,
-      tagline: event.tagline,
-      ended
-    };
-  });
-
   const upcoming = events.filter((event) => !eventEnded(event.endsAt, event.startsAt));
+  // Past events stay in the CMS but are not listed on the public page.
+  const featuredEvents = upcoming.map((event) => ({
+    id: event.id,
+    title: event.title,
+    eyebrow: event.eyebrow,
+    summary: event.summary,
+    whenLabel: event.whenLabel,
+    whereLabel: event.whereLabel,
+    startsAt: event.startsAt,
+    endsAt: event.endsAt,
+    image: event.imageUrl,
+    imageWidth: 1600,
+    imageHeight: 900,
+    ctaHref: event.ctaHref,
+    ctaLabel: event.ctaLabel,
+    liveHref: event.liveUrl || undefined,
+    liveLabel: event.liveUrl ? "Watch live" : undefined,
+    tagline: event.tagline,
+    ended: false
+  }));
   const eventsJsonLd = {
     "@context": "https://schema.org",
     "@graph": upcoming.map((event) => ({

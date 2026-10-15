@@ -73,6 +73,9 @@ export function SiteFooter({ variant = "full" }: Props) {
           <Link href="/privacy" style={{ fontSize: 12, color: "#5f6b60", fontWeight: 600 }}>
             Privacy Policy
           </Link>
+          <Link href="/terms" style={{ fontSize: 12, color: "#5f6b60", fontWeight: 600 }}>
+            Terms
+          </Link>
           <Link href="/book" style={{ fontSize: 12, color: "#143d31", fontWeight: 700 }}>
             Book a Consultation →
           </Link>
@@ -216,6 +219,10 @@ export function SiteFooter({ variant = "full" }: Props) {
           <span style={{ color: "#5f7a6e" }}>·</span>
           <Link href="/privacy" className="site-footer-link" style={{ color: "#c7ddd2" }}>
             Privacy Policy
+          </Link>
+          <span style={{ color: "#5f7a6e" }}>·</span>
+          <Link href="/terms" className="site-footer-link" style={{ color: "#c7ddd2" }}>
+            Terms
           </Link>
           <span style={{ color: "#5f7a6e" }}>·</span>
           <Link href="/book" style={{ color: "#e6c680", fontWeight: 700 }}>

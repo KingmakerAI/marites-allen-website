@@ -102,9 +102,9 @@ export function pageMetadata({
 export const PERSON_SAME_AS = [
   ...SOCIAL_LINKS.map((s) => s.href),
   "https://destara.app",
-  "https://www.frigga.com.ph",
-  "https://www.frigga.co.uk",
-  "https://www.frigga-usa.com"
+  "https://frigga.com.ph",
+  "https://frigga.co.uk",
+  "https://frigga-usa.com"
 ];
 
 export function personJsonLd() {
@@ -133,7 +133,7 @@ export function personJsonLd() {
     worksFor: {
       "@type": "Organization",
       name: "Frigga Charmed Life",
-      url: "https://www.frigga.com.ph"
+      url: "https://frigga.com.ph"
     }
   };
 }
@@ -219,11 +219,12 @@ export const PUBLIC_ROUTES = [
   { path: "/", changeFrequency: "weekly" as const, priority: 1 },
   { path: "/about", changeFrequency: "monthly" as const, priority: 0.9 },
   { path: "/book", changeFrequency: "weekly" as const, priority: 0.95 },
-  { path: "/booking-experience", changeFrequency: "monthly" as const, priority: 0.6 },
   { path: "/destara", changeFrequency: "weekly" as const, priority: 0.9 },
   { path: "/events", changeFrequency: "weekly" as const, priority: 0.85 },
   { path: "/forecast", changeFrequency: "weekly" as const, priority: 0.9 },
   { path: "/frigga", changeFrequency: "weekly" as const, priority: 0.85 },
   { path: "/media", changeFrequency: "weekly" as const, priority: 0.8 },
-  { path: "/projects", changeFrequency: "monthly" as const, priority: 0.7 }
+  { path: "/privacy", changeFrequency: "yearly" as const, priority: 0.3 },
+  { path: "/projects", changeFrequency: "monthly" as const, priority: 0.7 },
+  { path: "/terms", changeFrequency: "yearly" as const, priority: 0.3 }
 ];

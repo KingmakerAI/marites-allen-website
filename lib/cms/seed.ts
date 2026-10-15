@@ -318,6 +318,62 @@ async function ensureLiveDefaults() {
       platforms.value = "Web and Android. iOS coming soon.";
       changed = true;
     }
+    const launchFact = destara?.facts?.find((fact) => fact.label === "Launch");
+    if (launchFact) {
+      launchFact.label = "First released";
+      changed = true;
+    }
+    const stripWwwFrigga = (url: string) => url.replace(/^https?:\/\/www\.(frigga\.(?:com\.ph|co\.uk|usa\.com))/i, "https://$1");
+    const homeCopy = store.pageCopy?.home;
+    if (homeCopy?.friggaBrowse) {
+      for (const row of homeCopy.friggaBrowse) {
+        if (row.url && /www\.frigga/i.test(row.url)) {
+          row.url = stripWwwFrigga(row.url);
+          changed = true;
+        }
+      }
+    }
+    if (homeCopy?.friggaRegions) {
+      for (const row of homeCopy.friggaRegions) {
+        if (row.url && /www\.frigga/i.test(row.url)) {
+          row.url = stripWwwFrigga(row.url);
+          changed = true;
+        }
+      }
+    }
+    const friggaCopy = store.pageCopy?.frigga;
+    if (friggaCopy?.shops) {
+      for (const row of friggaCopy.shops) {
+        if (row.url && /www\.frigga/i.test(row.url)) {
+          row.url = stripWwwFrigga(row.url);
+          changed = true;
+        }
+      }
+    }
+    if (friggaCopy?.shopUrl && /www\.frigga/i.test(friggaCopy.shopUrl)) {
+      friggaCopy.shopUrl = stripWwwFrigga(friggaCopy.shopUrl);
+      changed = true;
+    }
+    const mediaPage = store.pageCopy?.mediaPage;
+    if (mediaPage?.seoDescription && /Forbes|ANC/i.test(mediaPage.seoDescription)) {
+      mediaPage.seoDescription =
+        "Press coverage, TV interviews, and media features featuring Marites Allen — Manila Bulletin, Philippine Star, GMA, ABS-CBN, and more.";
+      changed = true;
+    }
+    if (store.pageCopyDraft) {
+      const draftDestara = store.pageCopyDraft.destara;
+      const draftLaunch = draftDestara?.facts?.find((fact) => fact.label === "Launch");
+      if (draftLaunch) {
+        draftLaunch.label = "First released";
+        changed = true;
+      }
+      const draftMedia = store.pageCopyDraft.mediaPage;
+      if (draftMedia?.seoDescription && /Forbes|ANC/i.test(draftMedia.seoDescription)) {
+        draftMedia.seoDescription =
+          "Press coverage, TV interviews, and media features featuring Marites Allen — Manila Bulletin, Philippine Star, GMA, ABS-CBN, and more.";
+        changed = true;
+      }
+    }
     if (store.settings?.contact?.email && /frigga/i.test(store.settings.contact.email)) {
       store.settings.contact.email = "hello@maritesallen.com";
       changed = true;
@@ -479,7 +535,7 @@ async function seedBody() {
         const header = [
           ["About", "/about", false],
           ["Destara AI", "/destara", false],
-          ["Frigga", "https://www.frigga.com.ph", true],
+          ["Frigga", "https://frigga.com.ph", true],
           ["Projects", "/projects", false],
           ["Events", "/events", false],
           ["Media", "/media", false],
