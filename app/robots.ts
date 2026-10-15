@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
-import { SITE_URL } from "@/lib/seo";
+
+const SITE_ORIGIN = "https://www.maritesallen.com";
 
 export default function robots(): MetadataRoute.Robots {
   return {
@@ -10,7 +11,7 @@ export default function robots(): MetadataRoute.Robots {
         disallow: ["/admin", "/admin/", "/adminportal", "/adminportal/", "/api/"]
       }
     ],
-    sitemap: `${SITE_URL}/sitemap.xml`,
-    host: SITE_URL
+    sitemap: `${SITE_ORIGIN}/sitemap.xml`,
+    host: SITE_ORIGIN
   };
 }

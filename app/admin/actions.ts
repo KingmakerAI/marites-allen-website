@@ -3,6 +3,7 @@
 import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { authenticate, cookieOptions, createSession, destroySession, getSessionUser, logAudit, rateLimitLogin, rateLimitReset, SESSION_COOKIE, REMEMBER_EMAIL_COOKIE, changePasswordWithCurrent, requestPasswordReset, completePasswordReset, setUserPassword } from "@/lib/cms/auth";
+import { safeAdminNext, SESSION_MAX_AGE, SessionSecretError } from "@/lib/cms/session-cookie";
 import { fingerprint, hashPassword, newId, nowIso, slugify } from "@/lib/cms/crypto";
 import { mutateStore, removeStoredFile, storeUploadedFile } from "@/lib/cms/store";
 import { sanitizeHtml, sanitizeText } from "@/lib/cms/sanitize";
@@ -78,7 +79,7 @@ export async function loginAction(formData: FormData) {
     email: formStr(formData, "email"),
     password: formStr(formData, "password")
   });
-  const next = formStr(formData, "next") || "/admin/dashboard";
+  const next = safeAdminNext(formStr(formData, "next"));
   if (!parsed.success) redirect("/adminportal?error=invalid");
 
   const hdrs = await headers();
@@ -89,28 +90,46 @@ export async function loginAction(formData: FormData) {
   if (!user) redirect("/adminportal?error=invalid");
 
   const remember = formBool(formData, "remember");
-  const session = await createSession(user.id, remember);
+  let session: Awaited<ReturnType<typeof createSession>>;
+  try {
+    session = await createSession(user.id, remember);
+  } catch (err) {
+    if (err instanceof SessionSecretError) redirect("/adminportal?error=secret");
+    throw err;
+  }
   const jar = await cookies();
-  jar.set(SESSION_COOKIE, session.token, cookieOptions(session.expiresAt));
+  jar.set(SESSION_COOKIE, session.token, cookieOptions(remember));
   if (remember) {
     jar.set(REMEMBER_EMAIL_COOKIE, user.email, {
       httpOnly: true,
       sameSite: "lax",
       secure: process.env.NODE_ENV === "production",
       path: "/",
-      expires: new Date(session.expiresAt)
+      maxAge: SESSION_MAX_AGE
     });
   } else {
-    jar.delete(REMEMBER_EMAIL_COOKIE);
+    jar.set(REMEMBER_EMAIL_COOKIE, "", {
+      httpOnly: true,
+      sameSite: "lax",
+      secure: process.env.NODE_ENV === "production",
+      path: "/",
+      maxAge: 0
+    });
   }
-  redirect(next.startsWith("/admin") ? next : "/admin/dashboard");
+  redirect(next);
 }
 
 async function signInUser(userId: string, next = "/admin/dashboard", remember = false) {
-  const session = await createSession(userId, remember);
+  let session: Awaited<ReturnType<typeof createSession>>;
+  try {
+    session = await createSession(userId, remember);
+  } catch (err) {
+    if (err instanceof SessionSecretError) redirect("/adminportal?error=secret");
+    throw err;
+  }
   const jar = await cookies();
-  jar.set(SESSION_COOKIE, session.token, cookieOptions(session.expiresAt));
-  redirect(next.startsWith("/admin") ? next : "/admin/dashboard");
+  jar.set(SESSION_COOKIE, session.token, cookieOptions(remember));
+  redirect(safeAdminNext(next));
 }
 
 export async function changePasswordAction(formData: FormData) {
@@ -168,7 +187,7 @@ export async function logoutAction() {
   const jar = await cookies();
   const token = jar.get(SESSION_COOKIE)?.value;
   if (token) await destroySession(token);
-  jar.delete(SESSION_COOKIE);
+  jar.set(SESSION_COOKIE, "", { ...cookieOptions(), maxAge: 0 });
   redirect("/adminportal");
 }
 

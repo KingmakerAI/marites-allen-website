@@ -4,13 +4,13 @@ import path from "path";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { hashPassword, hashToken, newId, newResetCode, newToken, nowIso, verifyPassword } from "./crypto";
-import { getStorePath, mutateStore, mutateStoreIfChanged, readStore } from "./store";
+import { readSessionCookie, SESSION_COOKIE, SESSION_MAX_AGE, signSessionCookie } from "./session-cookie";
+import { getStorePath, mutateStore, mutateStoreIfChanged, persistenceMode, readStore, type PersistenceMode, type StoreData } from "./store";
 import type { AdminRole, AdminUser } from "./types";
 
-export const SESSION_COOKIE = "ma_admin_session";
+export { SESSION_COOKIE };
 export const REMEMBER_EMAIL_COOKIE = "ma_admin_email";
-const SESSION_DAYS = 7;
-const SESSION_DAYS_REMEMBER = 90;
+const SESSION_MS = SESSION_MAX_AGE * 1000;
 const RESET_MINUTES = 20;
 const OWNER_EMAILS = ["maritesallen@gmail.com", "cap10kirck@gmail.com"] as const;
 const OWNER_BOOTSTRAP = "owners-gmail-2026-08-21";
@@ -59,33 +59,63 @@ export async function authenticate(email: string, password: string): Promise<Adm
 }
 
 export async function createSession(userId: string, remember = false) {
-  const days = remember ? SESSION_DAYS_REMEMBER : SESSION_DAYS;
-  const token = newToken();
-  const expiresAt = new Date(Date.now() + days * 86400000).toISOString();
+  const id = newToken();
+  const exp = Date.now() + SESSION_MS;
+  const expiresAt = new Date(exp).toISOString();
+  let email = "";
   await mutateStore((store) => {
     store.sessions = store.sessions.filter((s) => s.userId !== userId && s.expiresAt > nowIso());
-    store.sessions.push({ id: token, userId, expiresAt });
+    store.sessions.push({ id, userId, expiresAt });
     const user = store.adminUsers.find((u) => u.id === userId);
-    if (user) user.lastLoginAt = nowIso();
+    if (user) {
+      user.lastLoginAt = nowIso();
+      email = user.email;
+    }
   });
-  return { token, expiresAt };
+  const token = await signSessionCookie({ id, email, exp });
+  return { token, expiresAt, remember };
 }
 
 export async function destroySession(token: string) {
+  const id = (await readSessionCookie(token, { allowExpired: true }))?.id;
+  if (!id) return;
   await mutateStore((store) => {
-    store.sessions = store.sessions.filter((s) => s.id !== token);
+    store.sessions = store.sessions.filter((s) => s.id !== id);
   });
+}
+
+/** A signed cookie is enough on Vercel, where each visit can open a fresh content file. */
+export async function resolveSessionUser(
+  store: StoreData,
+  cookieValue: string | undefined,
+  mode: PersistenceMode
+): Promise<AdminUser | null> {
+  if (!cookieValue) return null;
+  const claims = await readSessionCookie(cookieValue);
+  if (!claims) return null;
+  const session = store.sessions.find((s) => s.id === claims.id);
+  if (session) {
+    if (session.expiresAt <= nowIso()) return null;
+    const user = store.adminUsers.find((u) => u.id === session.userId);
+    return user ? publicUser(user) : null;
+  }
+  if (mode !== "ephemeral") return null;
+  const user = store.adminUsers.find((u) => u.email.toLowerCase() === claims.email.toLowerCase());
+  return user ? publicUser(user) : null;
 }
 
 export async function getSessionUser(): Promise<AdminUser | null> {
   const jar = await cookies();
   const token = jar.get(SESSION_COOKIE)?.value;
   if (!token) return null;
-  const store = await readStore();
-  const session = store.sessions.find((s) => s.id === token && s.expiresAt > nowIso());
-  if (!session) return null;
-  const user = store.adminUsers.find((u) => u.id === session.userId);
-  return user ? publicUser(user) : null;
+  const mode = persistenceMode();
+  let store = await readStore();
+  const user = await resolveSessionUser(store, token, mode);
+  if (user || mode !== "ephemeral") return user;
+  const { ensureSeeded } = await import("./seed");
+  await ensureSeeded();
+  store = await readStore();
+  return resolveSessionUser(store, token, mode);
 }
 
 export async function requireUser(minRole?: AdminRole) {
@@ -95,13 +125,13 @@ export async function requireUser(minRole?: AdminRole) {
   return user;
 }
 
-export function cookieOptions(expiresAt: string) {
+export function cookieOptions(remember = false) {
   return {
     httpOnly: true as const,
     sameSite: "lax" as const,
     secure: process.env.NODE_ENV === "production",
     path: "/",
-    expires: new Date(expiresAt)
+    ...(remember ? { maxAge: SESSION_MAX_AGE } : {})
   };
 }
 

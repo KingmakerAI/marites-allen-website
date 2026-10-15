@@ -1,9 +1,8 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
+import { readSessionCookie, safeAdminNext, SESSION_COOKIE } from "@/lib/cms/session-cookie";
 
-const SESSION_COOKIE = "ma_admin_session";
-
-export function proxy(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   if (pathname === "/adminportal" || pathname.startsWith("/adminportal/")) {
@@ -19,10 +18,11 @@ export function proxy(request: NextRequest) {
   }
 
   const token = request.cookies.get(SESSION_COOKIE)?.value;
-  if (!token) {
+  const claims = token ? await readSessionCookie(token) : null;
+  if (!claims) {
     const url = request.nextUrl.clone();
     url.pathname = "/adminportal";
-    url.searchParams.set("next", pathname);
+    url.searchParams.set("next", safeAdminNext(pathname));
     return NextResponse.redirect(url);
   }
   return NextResponse.next();

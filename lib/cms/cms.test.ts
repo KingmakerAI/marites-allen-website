@@ -3,7 +3,9 @@ import os from "os";
 import path from "path";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { hashPassword, slugify, verifyPassword } from "./crypto";
+import { readSessionCookie, safeAdminNext, signSessionCookie } from "./session-cookie";
 import { formatArticleBody, sanitizeHtml } from "./sanitize";
+import type { StoreData } from "./store";
 
 describe("crypto", () => {
   it("hashes and verifies passwords", () => {
@@ -15,6 +17,46 @@ describe("crypto", () => {
 
   it("slugifies titles", () => {
     expect(slugify("Hello, Feng Shui!")).toBe("hello-feng-shui");
+  });
+
+  it("signs a session cookie and rejects tampered or expired cookies", async () => {
+    const cookie = await signSessionCookie({ id: "sess-1", email: "owner@example.com", exp: Date.now() + 60_000 });
+    expect((await readSessionCookie(cookie))?.email).toBe("owner@example.com");
+
+    const [body, signature] = cookie.split(".");
+    const tampered = `${body}.${signature.slice(0, -1)}${signature.endsWith("a") ? "b" : "a"}`;
+    expect(await readSessionCookie(tampered)).toBeNull();
+
+    const expired = await signSessionCookie({ id: "sess-1", email: "owner@example.com", exp: Date.now() - 1000 });
+    expect(await readSessionCookie(expired)).toBeNull();
+  });
+
+  it("refuses to sign a production cookie when the secret is missing", async () => {
+    const env = process.env as { NODE_ENV?: string; ADMIN_SESSION_SECRET?: string; VERCEL?: string };
+    const prevNode = env.NODE_ENV;
+    const prevSecret = env.ADMIN_SESSION_SECRET;
+    const prevVercel = env.VERCEL;
+    env.NODE_ENV = "production";
+    delete env.ADMIN_SESSION_SECRET;
+    delete env.VERCEL;
+    try {
+      await expect(signSessionCookie({ id: "sess-1", email: "owner@example.com", exp: Date.now() + 60_000 })).rejects.toThrow(
+        /ADMIN_SESSION_SECRET/
+      );
+    } finally {
+      env.NODE_ENV = prevNode;
+      if (prevSecret === undefined) delete env.ADMIN_SESSION_SECRET;
+      else env.ADMIN_SESSION_SECRET = prevSecret;
+      if (prevVercel === undefined) delete env.VERCEL;
+      else env.VERCEL = prevVercel;
+    }
+  });
+
+  it("keeps the return path inside the admin", () => {
+    expect(safeAdminNext("/admin/articles")).toBe("/admin/articles");
+    expect(safeAdminNext("https://evil.example/admin")).toBe("/admin/dashboard");
+    expect(safeAdminNext("//evil.example")).toBe("/admin/dashboard");
+    expect(safeAdminNext("/media")).toBe("/admin/dashboard");
   });
 });
 
@@ -241,6 +283,31 @@ describe("cms repository", () => {
     expect(week.at(-1)?.views).toBeGreaterThanOrEqual(2);
     expect(hours.every((point) => point.label)).toBe(true);
     expect(year.at(-1)?.key).toMatch(/^\d{4}-\d{2}$/);
+  });
+
+  it("accepts a signed session without a row only when the store is ephemeral", async () => {
+    const { resolveSessionUser } = await import("./auth");
+    const cookie = await signSessionCookie({
+      id: "missing-row",
+      email: "maritesallen@gmail.com",
+      exp: Date.now() + 60_000
+    });
+    const store = {
+      sessions: [],
+      adminUsers: [
+        {
+          id: "different-id",
+          email: "maritesallen@gmail.com",
+          role: "owner",
+          createdAt: "2026-01-01T00:00:00.000Z",
+          lastLoginAt: null,
+          passwordHash: "x"
+        }
+      ]
+    } as unknown as StoreData;
+    expect((await resolveSessionUser(store, cookie, "ephemeral"))?.email).toBe("maritesallen@gmail.com");
+    expect(await resolveSessionUser(store, cookie, "file")).toBeNull();
+    expect(await resolveSessionUser(store, cookie, "blob")).toBeNull();
   });
 
   it("creates owner logins and lets them change or reset a password", async () => {

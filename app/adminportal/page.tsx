@@ -3,6 +3,7 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { BrandLogo } from "@/components/brand-logo";
 import { getSessionUser, REMEMBER_EMAIL_COOKIE } from "@/lib/cms/auth";
+import { safeAdminNext } from "@/lib/cms/session-cookie";
 import { pageMetadata } from "@/lib/seo";
 import {
   changePasswordAction,
@@ -29,6 +30,7 @@ function errorText(error?: string) {
   if (error === "mismatch") return "The new passwords do not match.";
   if (error === "weak") return "The new password must be at least 10 characters.";
   if (error === "reset") return "That reset code is not right, or it has expired. Ask for a new one.";
+  if (error === "secret") return "Sign-in is not ready yet. ADMIN_SESSION_SECRET must be set on the server.";
   return "";
 }
 
@@ -43,7 +45,7 @@ export default async function AdminPortalPage({
   const rememberedEmail = (await cookies()).get(REMEMBER_EMAIL_COOKIE)?.value || "";
   const view: View =
     q.view === "change" || q.view === "forgot" || q.view === "reset" ? q.view : "signin";
-  const next = q.next || "/admin/dashboard";
+  const next = safeAdminNext(q.next);
   const email = q.email || rememberedEmail;
   const err = errorText(q.error);
 
