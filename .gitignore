@@ -48,6 +48,9 @@ data/cms.json.tmp
 data/analytics.json
 data/analytics.json.tmp
 data/last-password-reset.txt
+# Full story dumps stay local; checksum/report may be committed for the preservation gate.
+data/baselines/articles-baseline-*.json
+data/baselines/title-serialization-*.txt
 public/uploads/*
 !public/uploads/.gitkeep
 !data/.gitkeep
