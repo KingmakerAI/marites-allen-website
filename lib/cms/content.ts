@@ -44,7 +44,8 @@ export const getCachedNav = unstable_cache(
 export const getCachedArticles = unstable_cache(
   async () => withSeed(() => publishedArticles()),
   ["cms-articles"],
-  { revalidate: 300, tags: [CMS_TAGS.articles] }
+  // Longer TTL: each miss downloads the full private CMS blob (Hobby transfer quota).
+  { revalidate: 3600, tags: [CMS_TAGS.articles] }
 );
 
 export const getCachedEvents = unstable_cache(
@@ -95,7 +96,7 @@ export const getCachedHome = unstable_cache(
 export const getCachedPageCopy = unstable_cache(
   async () => withSeed(() => getPageCopy()),
   ["cms-page-copy"],
-  { revalidate: 300, tags: [CMS_TAGS.pageCopy] }
+  { revalidate: 3600, tags: [CMS_TAGS.pageCopy] }
 );
 
 export const getCachedPublishedPages = unstable_cache(

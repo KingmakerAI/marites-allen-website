@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { useMemo, useState, type CSSProperties } from "react";
 import { submitSignupAction } from "@/app/signup/actions";
 import { SiteFooter } from "@/components/site-footer";
@@ -154,8 +155,7 @@ export default function MediaPage({
   pressKitBody,
   videosHeading,
   videos,
-  contact,
-  activeCategory = ""
+  contact
 }: {
   press: PressItem[];
   latest?: PressItem | null;
@@ -166,8 +166,8 @@ export default function MediaPage({
   videosHeading?: string;
   videos?: CopyVideo[];
   contact?: { email: string; phone: string; phoneSecondary: string };
-  activeCategory?: string;
 }) {
+  const searchParams = useSearchParams();
   const [pressName, setPressName] = useState("");
   const [pressOutlet, setPressOutlet] = useState("");
   const [pressEmail, setPressEmail] = useState("");
@@ -180,10 +180,10 @@ export default function MediaPage({
 
   const pressReady = !!(pressName && emailOk(pressEmail));
   const clips = videos?.length ? videos : FALLBACK_VIDEOS;
-  const email = contact?.email || "sales@frigga.co.uk";
+  const email = contact?.email || "hello@maritesallen.com";
   const phones = [contact?.phone, contact?.phoneSecondary].filter(Boolean).join(" · ");
 
-  const selectedCategory = activeCategory.trim().toLowerCase();
+  const selectedCategory = (searchParams.get("category") || "").trim().toLowerCase();
   const folders = useMemo(() => {
     const map = new Map<string, { slug: string; name: string; count: number }>();
     press.forEach((item) => {

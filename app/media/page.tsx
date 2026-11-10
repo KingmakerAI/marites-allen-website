@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { JsonLd } from "@/components/json-ld";
 import { getCachedArticles, getCachedPageCopy, getCachedSettings } from "@/lib/cms/content";
 import { parseVideoLines } from "@/lib/cms/copy-lines";
@@ -33,12 +34,9 @@ export async function generateMetadata(): Promise<Metadata> {
   });
 }
 
-export default async function MediaPage({
-  searchParams
-}: {
-  searchParams: Promise<{ category?: string }>;
-}) {
-  const query = await searchParams;
+export const revalidate = 3600;
+
+export default async function MediaPage() {
   const [articles, pageCopy, settings] = await Promise.all([
     getCachedArticles(),
     getCachedPageCopy(),
@@ -72,18 +70,19 @@ export default async function MediaPage({
           { name: "Media", path: "/media" }
         ])}
       />
-      <MediaClient
-        press={press}
-        latest={latest}
-        title={copy.title}
-        intro={copy.intro}
-        pressKitTitle={copy.pressKitTitle}
-        pressKitBody={copy.pressKitBody}
-        videosHeading={copy.videosHeading}
-        videos={parseVideoLines(copy.videos)}
-        contact={settings.contact}
-        activeCategory={(query.category || "").trim().toLowerCase()}
-      />
+      <Suspense fallback={null}>
+        <MediaClient
+          press={press}
+          latest={latest}
+          title={copy.title}
+          intro={copy.intro}
+          pressKitTitle={copy.pressKitTitle}
+          pressKitBody={copy.pressKitBody}
+          videosHeading={copy.videosHeading}
+          videos={parseVideoLines(copy.videos)}
+          contact={settings.contact}
+        />
+      </Suspense>
     </>
   );
 }

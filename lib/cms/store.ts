@@ -21,6 +21,7 @@ import type {
   Testimonial
 } from "./types";
 import type { PageCopy } from "./page-copy-types";
+import fallbackJson from "./cms-fallback.json";
 
 export type StoredAdminUser = AdminUser & {
   passwordHash: string;
@@ -84,14 +85,40 @@ function emptyStore(): StoreData {
 }
 
 function normalize(parsed: Partial<StoreData>): StoreData {
+  const { _meta: _ignored, ...rest } = parsed as Partial<StoreData> & { _meta?: unknown };
   return {
     ...emptyStore(),
-    ...parsed,
-    signups: parsed.signups || [],
-    pageCopy: parsed.pageCopy || null,
-    pageCopyDraft: parsed.pageCopyDraft || null,
-    bootstrap: parsed.bootstrap || {}
+    ...rest,
+    signups: rest.signups || [],
+    pageCopy: rest.pageCopy || null,
+    pageCopyDraft: rest.pageCopyDraft || null,
+    bootstrap: rest.bootstrap || {}
   };
+}
+
+/** Committed snapshot for when private Blob downloads are paused/over quota. */
+function readFallbackStore(): StoreData {
+  return normalize(fallbackJson as Partial<StoreData>);
+}
+
+function isBlobForbidden(err: unknown) {
+  if (!err || typeof err !== "object") return false;
+  const status = "status" in err ? Number((err as { status?: number }).status) : 0;
+  const name = "name" in err ? String((err as { name?: string }).name) : "";
+  const message = err instanceof Error ? err.message : String(err);
+  return (
+    status === 403 ||
+    name === "BlobAccessError" ||
+    name === "BlobStoreSuspendedError" ||
+    /403|forbidden|paused|suspended|over quota|usage limit/i.test(message)
+  );
+}
+
+let blobPaused = false;
+
+/** True after a 403/paused response; public pages should serve the committed fallback. */
+export function isBlobStorePaused() {
+  return blobPaused;
 }
 
 /** Blob on Vercel (or when CMS_STORE=blob). A local disk everywhere else, including tests. */
@@ -184,9 +211,14 @@ async function readBlobStore(): Promise<StoreData> {
     const result = await get(CMS_BLOB_PATH, { access: "private", useCache: false });
     if (!result || result.statusCode !== 200) return emptyStore();
     const raw = (await new Response(result.stream).text()).replace(/^\uFEFF/, "");
+    blobPaused = false;
     return normalize(JSON.parse(raw) as Partial<StoreData>);
   } catch (err) {
     if (isMissingBlob(err)) return emptyStore();
+    if (isBlobForbidden(err)) {
+      blobPaused = true;
+      return readFallbackStore();
+    }
     throw err;
   }
 }
@@ -226,8 +258,24 @@ export async function writeStore(data: StoreData) {
     }
     return;
   }
-  await writeBlobStore(data);
-  blobMemo = { at: Date.now(), data: structuredClone(data) };
+  try {
+    await writeBlobStore(data);
+    blobPaused = false;
+    blobMemo = { at: Date.now(), data: structuredClone(data) };
+  } catch (err) {
+    if (isBlobForbidden(err)) {
+      blobPaused = true;
+      // Seed/bootstrap may keep an in-memory copy for this isolate; never claim durable success.
+      if (ephemeralWrites > 0) {
+        blobMemo = { at: Date.now(), data: structuredClone(data) };
+        return;
+      }
+      throw new Error(
+        "Vercel Blob is paused or over quota. This save was not stored. Check Blob usage in the Vercel dashboard or upgrade the plan."
+      );
+    }
+    throw err;
+  }
 }
 
 export async function mutateStore<T>(fn: (store: StoreData) => T): Promise<T> {

@@ -266,7 +266,7 @@ export async function saveArticleAction(formData: FormData) {
   } catch (err) {
     unstable_rethrow(err);
     const message = err instanceof Error ? err.message : "";
-    if (/BLOB_READ_WRITE_TOKEN|not stored/i.test(message)) {
+    if (/BLOB_READ_WRITE_TOKEN|not stored|paused|over quota/i.test(message)) {
       redirect("/admin/articles?error=storage");
     }
     throw err;
@@ -286,7 +286,7 @@ export async function setArticleStatusAction(formData: FormData) {
   } catch (err) {
     unstable_rethrow(err);
     const message = err instanceof Error ? err.message : "";
-    if (/BLOB_READ_WRITE_TOKEN|not stored/i.test(message)) {
+    if (/BLOB_READ_WRITE_TOKEN|not stored|paused|over quota/i.test(message)) {
       redirect("/admin/articles?error=storage");
     }
     throw err;
@@ -303,7 +303,7 @@ export async function deleteArticleAction(formData: FormData) {
   } catch (err) {
     unstable_rethrow(err);
     const message = err instanceof Error ? err.message : "";
-    if (/BLOB_READ_WRITE_TOKEN|not stored/i.test(message)) {
+    if (/BLOB_READ_WRITE_TOKEN|not stored|paused|over quota/i.test(message)) {
       redirect("/admin/articles?error=storage");
     }
     throw err;
