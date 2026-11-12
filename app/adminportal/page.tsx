@@ -31,6 +31,8 @@ function errorText(error?: string) {
   if (error === "weak") return "The new password must be at least 10 characters.";
   if (error === "reset") return "That reset code is not right, or it has expired. Ask for a new one.";
   if (error === "secret") return "Sign-in is not ready yet. ADMIN_SESSION_SECRET must be set on the server.";
+  if (error === "storage")
+    return "Sign-in can't be saved right now. The Vercel Blob store for BLOB_READ_WRITE_TOKEN is missing, paused, or over quota.";
   if (error === "mail") return "Password reset email is not set up yet. Ask the site owner to set the email key.";
   return "";
 }

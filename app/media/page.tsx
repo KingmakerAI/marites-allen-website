@@ -3,7 +3,7 @@ import { Suspense } from "react";
 import { JsonLd } from "@/components/json-ld";
 import { getCachedArticles, getCachedPageCopy, getCachedSettings } from "@/lib/cms/content";
 import { parseVideoLines } from "@/lib/cms/copy-lines";
-import { listCategories, monthName } from "@/lib/cms/repo";
+import { listCategories, listMedia, monthName } from "@/lib/cms/repo";
 import { breadcrumbJsonLd, pageMetadata } from "@/lib/seo";
 import MediaClient from "./media-client";
 
@@ -42,26 +42,31 @@ export default async function MediaPage() {
     getCachedPageCopy(),
     getCachedSettings()
   ]);
-  const folders = new Map((await listCategories()).map((cat) => [cat.id, cat]));
+  const [folders, photos] = await Promise.all([
+    listCategories().then((rows) => new Map(rows.map((cat) => [cat.id, cat]))),
+    listMedia().then((rows) => new Map(rows.map((photo) => [photo.id, photo])))
+  ]);
   const copy = pageCopy.mediaPage;
   const press = articles.map((a) => {
     const folder = a.categoryId ? folders.get(a.categoryId) : undefined;
+    const photo = a.featuredImageId ? photos.get(a.featuredImageId) : undefined;
     return {
       year: a.year,
       m: a.month,
+      day: a.day || 0,
       month: monthName(a.month),
       outlet: a.outlet,
       quote: a.excerpt || a.title,
       cta: a.ctaLabel,
       url: a.externalUrl || `/articles/${a.slug}`,
+      image: photo?.path || "",
       category: folder?.name || "",
       categorySlug: folder?.slug || "",
       slug: a.slug
     };
   });
   const latest =
-    [...press].sort((a, b) => b.year - a.year || b.m - a.m || a.outlet.localeCompare(b.outlet))[0] ||
-    null;
+    [...press].sort((a, b) => b.year - a.year || b.m - a.m || (b.day || 0) - (a.day || 0))[0] || null;
   return (
     <>
       <JsonLd

@@ -11,6 +11,7 @@ import {
 import { fingerprint } from "@/lib/cms/crypto";
 import { ensureSeeded } from "@/lib/cms/seed";
 import { safeAdminNext, SESSION_MAX_AGE, SessionSecretError } from "@/lib/cms/session-cookie";
+import { isCmsStoreError } from "@/lib/cms/store";
 import { loginSchema } from "@/lib/cms/validation";
 
 export const runtime = "nodejs";
@@ -34,13 +35,26 @@ export async function POST(request: Request) {
   if (!parsed.success) return fail("invalid");
 
   // Apply owner password stamps / seed before checking credentials (needed on Vercel).
-  await ensureSeeded();
+  // A Blob outage must not turn the form into an HTTP 500.
+  try {
+    await ensureSeeded();
+  } catch (err) {
+    if (!isCmsStoreError(err)) throw err;
+    console.error("[admin-login] seed skipped", err);
+  }
 
   const hdrs = await headers();
   const ip = hdrs.get("x-forwarded-for")?.split(",")[0]?.trim() || hdrs.get("x-real-ip") || "local";
   if (!(await rateLimitLogin(fingerprint(ip)))) return fail("rate");
 
-  const user = await authenticate(parsed.data.email, parsed.data.password);
+  let user: Awaited<ReturnType<typeof authenticate>>;
+  try {
+    user = await authenticate(parsed.data.email, parsed.data.password);
+  } catch (err) {
+    if (!isCmsStoreError(err)) throw err;
+    console.error("[admin-login] could not read accounts", err);
+    return fail("storage");
+  }
   if (!user) return fail("invalid");
 
   let session: Awaited<ReturnType<typeof createSession>>;
@@ -48,6 +62,10 @@ export async function POST(request: Request) {
     session = await createSession(user.id, remember);
   } catch (err) {
     if (err instanceof SessionSecretError) return fail("secret");
+    if (isCmsStoreError(err)) {
+      console.error("[admin-login] could not store session", err);
+      return fail("storage");
+    }
     throw err;
   }
 

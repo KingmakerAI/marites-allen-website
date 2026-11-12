@@ -13,11 +13,13 @@ import { emailOk } from "@/lib/site-data";
 export type PressItem = {
   year: number;
   m: number;
+  day?: number;
   month: string;
   outlet: string;
   quote: string;
   cta: string;
   url: string;
+  image?: string;
   category: string;
   categorySlug: string;
   slug: string;
@@ -41,7 +43,7 @@ function PressCard({ item }: { item: PressItem }) {
     display: "flex",
     flexWrap: "wrap" as const,
     gap: 14,
-    alignItems: "baseline" as const,
+    alignItems: item.image ? ("center" as const) : ("baseline" as const),
     background: "#fffdf8",
     border: "1px solid rgba(20,61,49,0.1)",
     borderRadius: 14,
@@ -50,6 +52,14 @@ function PressCard({ item }: { item: PressItem }) {
   };
   const body = (
     <>
+      {item.image ? (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          src={item.image}
+          alt=""
+          style={{ width: 112, height: 76, objectFit: "cover", borderRadius: 10, flex: "0 0 auto" }}
+        />
+      ) : null}
       <span style={{ fontSize: 12, fontWeight: 700, color: "#a3946f", minWidth: 56 }}>{item.month}</span>
       <span style={{ flex: "1 1 340px", minWidth: 220 }}>
         {item.category ? (
@@ -206,7 +216,7 @@ export default function MediaPage({
     });
     years.sort((a, b) => b - a);
     return years.map((y) => {
-      const items = visiblePress.filter((p) => p.year === y).sort((a, b) => b.m - a.m);
+      const items = visiblePress.filter((p) => p.year === y).sort((a, b) => b.m - a.m || (b.day || 0) - (a.day || 0));
       return {
         year: String(y),
         id: `y${y}`,

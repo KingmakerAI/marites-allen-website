@@ -16,7 +16,11 @@ import { mergePageCopy } from "./page-copy-defaults";
 import { repairDeep } from "./repair-text";
 import { allowEphemeralWrites, endEphemeralWrites, mutateStore, mutateStoreIfChanged, readStore } from "./store";
 import { ensureOwnerAccounts } from "./auth";
-import type { Article, CmsEvent, CmsPage, SiteSettings } from "./types";
+import pressAdditions from "./press-additions.json";
+import type { Article, CmsEvent, CmsPage, MediaAsset, SiteSettings } from "./types";
+
+const ADDED_ARTICLES = pressAdditions.articles as Article[];
+const ADDED_MEDIA = pressAdditions.media as MediaAsset[];
 
 const PRESS: Array<Pick<Article, "outlet" | "excerpt" | "ctaLabel" | "externalUrl" | "year" | "month">> = [
   { year: 2026, month: 2, outlet: "Manila Times", excerpt: "Destara AI: a long-planned Destiny App bridging ancient wisdom and modern technology.", ctaLabel: "Read article", externalUrl: "https://www.manilatimes.net" },
@@ -523,6 +527,22 @@ async function ensureLiveDefaults() {
       )
     ];
     if (!store.media) store.media = [];
+    // Missing 2026 Fire Sheep coverage. Insert only; never rewrite a story already stored.
+    for (const asset of ADDED_MEDIA) {
+      if (store.media.some((m) => m.id === asset.id || m.path === asset.path)) continue;
+      store.media.push(asset);
+      changed = true;
+    }
+    if (!store.articles) store.articles = [];
+    const knownUrls = new Set(store.articles.map((article) => article.externalUrl));
+    const knownIds = new Set(store.articles.map((article) => article.id));
+    const missingPress = ADDED_ARTICLES.filter(
+      (article) => !knownIds.has(article.id) && !knownUrls.has(article.externalUrl)
+    );
+    if (missingPress.length) {
+      store.articles = [...missingPress, ...store.articles];
+      changed = true;
+    }
     for (const cover of BOOK_COVERS_2027) {
       if (store.media.some((m) => m.id === cover.id || m.path === cover.path)) continue;
       store.media.push({
