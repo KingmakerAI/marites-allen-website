@@ -5,7 +5,7 @@ import { redirect, unstable_rethrow } from "next/navigation";
 import { authenticate, cookieOptions, createSession, destroySession, getSessionUser, isProtectedOwnerEmail, logAudit, rateLimitLogin, rateLimitReset, SESSION_COOKIE, REMEMBER_EMAIL_COOKIE, changePasswordWithCurrent, requestPasswordReset, completePasswordReset, setUserPassword } from "@/lib/cms/auth";
 import { safeAdminNext, SESSION_MAX_AGE, SessionSecretError } from "@/lib/cms/session-cookie";
 import { fingerprint, hashPassword, newId, nowIso, slugify } from "@/lib/cms/crypto";
-import { mutateStore, removeStoredFile, storeUploadedFile } from "@/lib/cms/store";
+import { isCmsStoreError, mutateStore, removeStoredFile, storeUploadedFile } from "@/lib/cms/store";
 import { sanitizeHtml, sanitizeText } from "@/lib/cms/sanitize";
 import {
   deleteArticle,
@@ -88,7 +88,13 @@ export async function loginAction(formData: FormData) {
   const ip = hdrs.get("x-forwarded-for")?.split(",")[0]?.trim() || hdrs.get("x-real-ip") || "local";
   if (!(await rateLimitLogin(fingerprint(ip)))) redirect("/adminportal?error=rate");
 
-  const user = await authenticate(parsed.data.email, parsed.data.password);
+  let user: Awaited<ReturnType<typeof authenticate>>;
+  try {
+    user = await authenticate(parsed.data.email, parsed.data.password);
+  } catch (err) {
+    if (isCmsStoreError(err)) redirect("/adminportal?error=storage");
+    throw err;
+  }
   if (!user) redirect("/adminportal?error=invalid");
 
   const remember = formBool(formData, "remember");
@@ -97,6 +103,7 @@ export async function loginAction(formData: FormData) {
     session = await createSession(user.id, remember);
   } catch (err) {
     if (err instanceof SessionSecretError) redirect("/adminportal?error=secret");
+    if (isCmsStoreError(err)) redirect("/adminportal?error=storage");
     throw err;
   }
   const jar = await cookies();
@@ -127,6 +134,7 @@ async function signInUser(userId: string, next = "/admin/dashboard", remember = 
     session = await createSession(userId, remember);
   } catch (err) {
     if (err instanceof SessionSecretError) redirect("/adminportal?error=secret");
+    if (isCmsStoreError(err)) redirect("/adminportal?error=storage");
     throw err;
   }
   const jar = await cookies();

@@ -60,6 +60,8 @@ export type Article = {
   ctaLabel: string;
   year: number;
   month: number;
+  /** Calendar day, when known. Older stories omit it and keep their existing order. */
+  day?: number;
   status: ContentStatus;
   publishedAt: string | null;
   seoTitle: string;

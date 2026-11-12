@@ -114,6 +114,13 @@ function isBlobForbidden(err: unknown) {
   );
 }
 
+/** Blob read/write failures, including the paused-store error thrown by writeStore. */
+export function isCmsStoreError(err: unknown) {
+  if (isBlobForbidden(err)) return true;
+  const message = err instanceof Error ? err.message : typeof err === "string" ? err : "";
+  return /BLOB_READ_WRITE_TOKEN|not stored|paused|over quota|Vercel Blob/i.test(message);
+}
+
 let blobPaused = false;
 
 /** True after a 403/paused response; public pages should serve the committed fallback. */

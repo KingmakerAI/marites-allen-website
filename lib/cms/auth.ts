@@ -3,7 +3,15 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { hashPassword, hashToken, newId, newResetCode, newToken, nowIso, verifyPassword } from "./crypto";
 import { readSessionCookie, SESSION_COOKIE, SESSION_MAX_AGE, signSessionCookie } from "./session-cookie";
-import { mutateStore, mutateStoreIfChanged, persistenceMode, readStore, type PersistenceMode, type StoreData } from "./store";
+import {
+  isCmsStoreError,
+  mutateStore,
+  mutateStoreIfChanged,
+  persistenceMode,
+  readStore,
+  type PersistenceMode,
+  type StoreData
+} from "./store";
 import type { AdminRole, AdminUser } from "./types";
 
 export { SESSION_COOKIE };
@@ -67,14 +75,30 @@ async function sharedLimit(key: string, limit: number, windowMs: number) {
   });
 }
 
+async function durableOrMemory(
+  map: Map<string, { count: number; resetAt: number }>,
+  prefix: string,
+  key: string,
+  limit: number,
+  windowMs: number
+) {
+  if (persistenceMode() === "ephemeral") return memoryLimit(map, key, limit, windowMs);
+  try {
+    return await sharedLimit(`${prefix}:${key}`, limit, windowMs);
+  } catch (err) {
+    // A paused Blob store must not turn a wrong password into HTTP 500.
+    // The in-memory limiter is the same guard already used when Blob is not configured.
+    if (!isCmsStoreError(err)) throw err;
+    return memoryLimit(map, key, limit, windowMs);
+  }
+}
+
 export async function rateLimitLogin(key: string, limit = 5, windowMs = 15 * 60 * 1000) {
-  if (persistenceMode() === "ephemeral") return memoryLimit(loginAttempts, key, limit, windowMs);
-  return sharedLimit(`login:${key}`, limit, windowMs);
+  return durableOrMemory(loginAttempts, "login", key, limit, windowMs);
 }
 
 export async function rateLimitReset(key: string, limit = 5, windowMs = 15 * 60 * 1000) {
-  if (persistenceMode() === "ephemeral") return memoryLimit(resetAttempts, key, limit, windowMs);
-  return sharedLimit(`reset:${key}`, limit, windowMs);
+  return durableOrMemory(resetAttempts, "reset", key, limit, windowMs);
 }
 
 export async function authenticate(email: string, password: string): Promise<AdminUser | null> {
