@@ -185,7 +185,8 @@ export default async function FriggaPage() {
           }}
         >
           <span
-            style={{ fontSize: 11, fontWeight: 700, letterSpacing: 2, textTransform: "uppercase", color: "#a3946f" }}
+            className="eyebrow"
+            style={{ fontSize: 11 }}
             {...cms("frigga.regionsHeading")}
           >
             {frigga.regionsHeading}
@@ -208,7 +209,8 @@ export default async function FriggaPage() {
       <section id="collections" style={{ maxWidth: 1240, margin: "0 auto", padding: "clamp(30px,4vw,46px) clamp(18px,4vw,40px)" }}>
         <div style={{ textAlign: "center", maxWidth: 620, margin: "0 auto clamp(28px,4vw,40px)" }}>
           <div
-            style={{ fontSize: 12, fontWeight: 700, letterSpacing: 3, textTransform: "uppercase", color: "#c69a3e" }}
+            className="eyebrow"
+            style={{ fontSize: 12 }}
             {...cms("frigga.collectionsLabel")}
           >
             {frigga.collectionsLabel}

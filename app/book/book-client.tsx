@@ -158,7 +158,7 @@ function BookPageInner() {
 
       <div style={{ maxWidth: 1180, margin: "0 auto", padding: "clamp(16px,2.5vw,28px) clamp(18px,4vw,40px)" }}>
         <div style={{ textAlign: "center", maxWidth: 680, margin: "0 auto 16px" }}>
-          <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: 3, textTransform: "uppercase", color: "#c69a3e" }}>
+          <div className="eyebrow" style={{ fontSize: 11 }}>
             Consultations
           </div>
           <h1 className="font-display" style={{ fontWeight: 700, fontSize: "clamp(20px,2.6vw,28px)", color: "#143d31", margin: "6px 0" }}>

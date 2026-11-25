@@ -74,9 +74,9 @@ export default async function ArticlePage({ params }: Props) {
             ← Media
           </Link>
         </p>
-        <p style={{ color: "#c69a3e", fontWeight: 700, letterSpacing: 1.5, textTransform: "uppercase", fontSize: 12, margin: "0 0 10px" }}>
+        <p className="eyebrow" style={{ fontSize: 12, margin: "0 0 10px" }}>
           {category ? (
-            <Link href={`/media?category=${category.slug}`} style={{ color: "#c69a3e" }}>
+            <Link href={`/media?category=${category.slug}`} style={{ color: "var(--gold-ink)" }}>
               {category.name}
             </Link>
           ) : null}

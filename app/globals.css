@@ -6,11 +6,27 @@
   --forest-deep: #0f3126;
   --gold: #c69a3e;
   --gold-light: #e6c680;
+  /* Antique gold for text on cream. Bright gold stays on rules, icons, borders and fills. */
+  --gold-ink: #7d5c1c;
+  --tracking-eyebrow: 0.18em;
   --cream: #f6f1e7;
   --cream-soft: #fffdf8;
   --cream-warm: #efe8d8;
   --ink: #2a2a28;
   --muted: #5f6b60;
+}
+
+@theme inline {
+  --color-gold: var(--gold);
+  --color-gold-light: var(--gold-light);
+  --color-gold-ink: var(--gold-ink);
+  --color-cream: var(--cream);
+  --color-cream-soft: var(--cream-soft);
+  --color-cream-warm: var(--cream-warm);
+  --color-ink: var(--ink);
+  --color-forest: var(--forest);
+  --color-forest-mid: var(--forest-mid);
+  --color-muted: var(--muted);
 }
 
 * {
@@ -43,6 +59,10 @@ a:hover {
   color: var(--gold);
 }
 
+.page-shell a:hover {
+  color: var(--gold-ink);
+}
+
 img,
 svg,
 iframe {
@@ -64,6 +84,13 @@ select:focus {
 
 .font-display {
   font-family: var(--font-playfair), Georgia, serif;
+}
+
+.eyebrow {
+  color: var(--gold-ink);
+  font-weight: 700;
+  letter-spacing: var(--tracking-eyebrow);
+  text-transform: uppercase;
 }
 
 .page-shell {
@@ -123,7 +150,7 @@ select:focus {
 }
 
 .navlink:hover {
-  color: var(--gold);
+  color: var(--gold-ink);
 }
 
 .navlink::after {
@@ -144,7 +171,7 @@ select:focus {
 }
 
 .navlink.active {
-  color: var(--gold);
+  color: var(--gold-ink);
 }
 
 .navmenu {
@@ -347,9 +374,40 @@ select:focus {
   }
 }
 
+/* Comfortable footer hit area. Desktop stays compact; phones get a full row. */
+.site-footer-link {
+  display: inline-block;
+  min-height: 24px;
+  padding-block: 3px;
+  line-height: 1.35;
+}
+
+.site-footer-links {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.site-footer:not(.site-footer-minimal) .site-footer-link:hover {
+  color: var(--gold-light) !important;
+}
+
+.site-footer-minimal .site-footer-link:hover {
+  color: var(--gold-ink) !important;
+}
+
 @media (max-width: 640px) {
   .om3d {
     transform: none !important;
+  }
+
+  .site-footer-link {
+    min-height: 44px;
+    padding-block: 13px;
+  }
+
+  .site-footer-links {
+    gap: 0;
   }
 }
 
@@ -434,9 +492,9 @@ body.vip-popup-open {
   margin: 14px 0 0;
   font-size: 11px;
   font-weight: 700;
-  letter-spacing: 1.6px;
+  letter-spacing: var(--tracking-eyebrow);
   text-transform: uppercase;
-  color: #c69a3e;
+  color: var(--gold-ink);
 }
 
 .vip-popup__title {

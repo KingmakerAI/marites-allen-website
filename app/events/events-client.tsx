@@ -521,7 +521,7 @@ export default function EventsPage({
         >
           {!sent ? (
             <div>
-              <div style={{ fontSize: 12, fontWeight: 700, letterSpacing: 2, textTransform: "uppercase", color: "#c69a3e" }}>
+              <div className="eyebrow" style={{ fontSize: 12 }}>
                 Book Marites to speak
               </div>
               <h2

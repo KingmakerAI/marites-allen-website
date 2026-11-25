@@ -123,7 +123,7 @@ export function SiteHeader({ compact = false, bookAsLabel = false }: Props) {
               fontSize: 9,
               letterSpacing: 2.5,
               textTransform: "uppercase",
-              color: "#c69a3e",
+              color: "var(--gold-ink)",
               marginTop: 5
             }}
           >
