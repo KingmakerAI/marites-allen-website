@@ -48,10 +48,11 @@ function ForecastDrop() {
       <span className="navmenu">
         <span>
           {forecastYears.map((y) => (
-            <Link key={y.year} href={`/forecast?year=${y.year}`}>
+            <Link key={y.year} href={y.href || `/annual-forecast/${y.year}`}>
               {y.label}
             </Link>
           ))}
+          <Link href="/annual-forecast">All years</Link>
         </span>
       </span>
     </span>
@@ -211,10 +212,13 @@ export function SiteHeader({ compact = false, bookAsLabel = false }: Props) {
         )}
         <div className="grpLabel">Annual Forecast</div>
         {forecastYears.map((y) => (
-          <Link key={y.year} href={`/forecast?year=${y.year}`} className="sub">
+          <Link key={y.year} href={y.href || `/annual-forecast/${y.year}`} className="sub">
             {y.label}
           </Link>
         ))}
+        <Link href="/annual-forecast" className="sub">
+          All years
+        </Link>
         <Link href={bookHref} className="cta" title={bookLabel}>
           {bookLabel}
         </Link>

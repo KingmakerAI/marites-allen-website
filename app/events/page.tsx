@@ -3,6 +3,7 @@ import { JsonLd } from "@/components/json-ld";
 import { getCachedEvents, getCachedPageCopy } from "@/lib/cms/content";
 import { parseTalkLines, parseVideoLines } from "@/lib/cms/copy-lines";
 import { FIRE_SHEEP_VIP_EVENT, FIRE_SHEEP_VIP_MEDIA } from "@/lib/events/fire-sheep-vip";
+import { eventsIntro, forecastYear, formatArchiveDate, pressConferences } from "@/lib/forecast-archive";
 import { breadcrumbJsonLd, pageMetadata, SITE_URL } from "@/lib/seo";
 import EventsClient from "./events-client";
 
@@ -86,7 +87,18 @@ export default async function EventsPage() {
         featuredEvents={featuredEvents}
         kicker={copy.kicker}
         title={copy.title}
-        intro={copy.intro}
+        intro={eventsIntro(copy.intro)}
+        archiveEvents={pressConferences().map((item) => {
+          const match = forecastYear(2027)?.events.find((event) => event.date === item.date);
+          return {
+            id: item.date,
+            title: item.date === "2026-11-27" ? "27 November 2026 Press conference" : item.title,
+            whenLabel: formatArchiveDate(item.date),
+            whereLabel: item.venue || undefined,
+            href: match?.source || undefined,
+            placeholder: item.status === "placeholder"
+          };
+        })}
         speakingHeading={copy.speakingHeading}
         speaking={parseTalkLines(copy.speakingLines)}
         videosHeading={copy.videosHeading}

@@ -4,6 +4,7 @@ import { JsonLd } from "@/components/json-ld";
 import { getCachedArticles, getCachedPageCopy, getCachedSettings } from "@/lib/cms/content";
 import { parseVideoLines } from "@/lib/cms/copy-lines";
 import { listCategories, monthName } from "@/lib/cms/repo";
+import { undatedMedia } from "@/lib/ma-videos";
 import { breadcrumbJsonLd, pageMetadata } from "@/lib/seo";
 import MediaClient from "./media-client";
 
@@ -39,10 +40,11 @@ export const revalidate = 3600;
 export default async function MediaPage({
   searchParams
 }: {
-  searchParams: Promise<{ category?: string }>;
+  searchParams: Promise<{ category?: string; year?: string }>;
 }) {
   const query = await searchParams;
   const category = (query.category || "").trim().toLowerCase();
+  const year = (query.year || "").trim();
   const [articles, pageCopy, settings] = await Promise.all([
     getCachedArticles(),
     getCachedPageCopy(),
@@ -62,7 +64,8 @@ export default async function MediaPage({
       url: a.externalUrl || `/articles/${a.slug}`,
       category: folder?.name || "",
       categorySlug: folder?.slug || "",
-      slug: a.slug
+      slug: a.slug,
+      placeholder: a.tags.includes("placeholder")
     };
   });
   const latest =
@@ -88,6 +91,8 @@ export default async function MediaPage({
           videos={parseVideoLines(copy.videos)}
           contact={settings.contact}
           category={category}
+          year={year}
+          undated={undatedMedia()}
         />
       </Suspense>
     </>

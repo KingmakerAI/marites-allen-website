@@ -9,6 +9,8 @@ import { SiteHeader } from "@/components/site-header";
 import { cms } from "@/lib/cms/cms-attr";
 import type { CopyVideo } from "@/lib/cms/copy-lines";
 import { emailOk } from "@/lib/site-data";
+import { UndatedMediaList } from "@/components/year-videos";
+import type { YearVideo } from "@/lib/ma-videos";
 
 export type PressItem = {
   year: number;
@@ -21,6 +23,7 @@ export type PressItem = {
   category: string;
   categorySlug: string;
   slug: string;
+  placeholder?: boolean;
 };
 
 function chipStyle(active: boolean): CSSProperties {
@@ -36,6 +39,18 @@ function chipStyle(active: boolean): CSSProperties {
 }
 
 function PressCard({ item }: { item: PressItem }) {
+  if (item.placeholder || !item.url) {
+    return (
+      <article className="paper-card">
+        <p className="eyebrow" style={{ fontSize: 11, margin: 0 }}>
+          {item.month} {item.year}
+        </p>
+        <h3 className="font-display">{item.quote}</h3>
+        <p style={{ margin: "0 0 10px", fontSize: 14 }}>{item.outlet}</p>
+        <p style={{ margin: 0, fontSize: 14, fontWeight: 700 }}>The information will be up soon.</p>
+      </article>
+    );
+  }
   const external = /^https?:/i.test(item.url);
   const style = {
     display: "flex",
@@ -156,9 +171,12 @@ export default function MediaPage({
   videosHeading,
   videos,
   contact,
-  category = ""
+  category = "",
+  year = "",
+  undated = []
 }: {
   press: PressItem[];
+  undated?: YearVideo[];
   latest?: PressItem | null;
   title?: string;
   intro?: string;
@@ -168,6 +186,7 @@ export default function MediaPage({
   videos?: CopyVideo[];
   contact?: { email: string; phone: string };
   category?: string;
+  year?: string;
 }) {
   const [pressName, setPressName] = useState("");
   const [pressOutlet, setPressOutlet] = useState("");
@@ -195,6 +214,7 @@ export default function MediaPage({
   const phone = contact?.phone || "+63 920 950 9390";
 
   const selectedCategory = category.trim().toLowerCase();
+  const selectedYear = /^\d{4}$/.test(year) ? Number(year) : null;
   const folders = useMemo(() => {
     const map = new Map<string, { slug: string; name: string; count: number }>();
     press.forEach((item) => {
@@ -211,21 +231,25 @@ export default function MediaPage({
   );
 
   const groupedPress = useMemo(() => {
+    const present = new Set(visiblePress.map((item) => item.year));
     const years: number[] = [];
-    visiblePress.forEach((p) => {
-      if (!years.includes(p.year)) years.push(p.year);
-    });
+    for (let y = 2027; y >= 2004; y -= 1) years.push(y);
+    for (const y of present) {
+      if (y > 2027 || y < 2004) years.push(y);
+    }
     years.sort((a, b) => b - a);
-    return years.map((y) => {
+    const unique = [...new Set(years)];
+    const shown = selectedYear ? unique.filter((y) => y === selectedYear) : unique;
+    return shown.map((y) => {
       const items = visiblePress.filter((p) => p.year === y).sort((a, b) => b.m - a.m);
       return {
         year: String(y),
         id: `y${y}`,
         items,
-        label: `${items.length} ${items.length === 1 ? "feature" : "features"}`
+        label: items.length ? `${items.length} ${items.length === 1 ? "feature" : "features"}` : "The information will be up soon."
       };
     });
-  }, [visiblePress]);
+  }, [visiblePress, selectedYear]);
 
   return (
     <div className="page-shell page-enter">
@@ -576,7 +600,7 @@ export default function MediaPage({
         >
           {intro || "Press coverage, interviews, and features with Marites Allen — newest first."}
         </p>
-        {latest && !selectedCategory ? (
+        {latest && !selectedCategory && !selectedYear ? (
           <div style={{ marginBottom: 28 }}>
             <p
               className="eyebrow"
@@ -613,9 +637,7 @@ export default function MediaPage({
             })}
           </div>
         )}
-        {groupedPress.length > 0 && (
-          <p style={{ fontSize: 14.5, color: "#6b7268", margin: "0 0 18px" }}>Jump to a year:</p>
-        )}
+        <p style={{ fontSize: 14.5, color: "#6b7268", margin: "0 0 18px" }}>Jump to a year:</p>
 
         {groupedPress.length === 0 && (
           <p style={{ fontSize: 15, color: "#5f6b60", margin: "8px 0 0" }}>
@@ -629,7 +651,6 @@ export default function MediaPage({
           </p>
         )}
 
-        {groupedPress.length > 0 && (
         <div
           style={{
             position: "sticky",
@@ -643,26 +664,32 @@ export default function MediaPage({
           }}
         >
           <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
-            {groupedPress.map((y) => (
-              <a
-                key={y.id}
-                href={`#${y.id}`}
-                style={{
-                  fontSize: 13,
-                  fontWeight: 700,
-                  color: "#1a4d3e",
-                  background: "#fffdf8",
-                  border: "1.5px solid rgba(20,61,49,0.15)",
-                  borderRadius: 99,
-                  padding: "7px 15px"
-                }}
-              >
-                {y.year} <span style={{ color: "var(--gold-ink)", fontWeight: 400 }}>({y.items.length})</span>
-              </a>
-            ))}
+            {Array.from({ length: 2027 - 2004 + 1 }, (_, index) => 2027 - index).map((y) => {
+              const active = selectedYear === y;
+              const count = press.filter((item) => item.year === y && (!selectedCategory || item.categorySlug === selectedCategory)).length;
+              const params = new URLSearchParams();
+              if (selectedCategory) params.set("category", selectedCategory);
+              params.set("year", String(y));
+              return (
+                <Link
+                  key={y}
+                  href={`/media?${params.toString()}`}
+                  style={{
+                    fontSize: 13,
+                    fontWeight: 700,
+                    color: active ? "#143d31" : "#1a4d3e",
+                    background: active ? "#e6c680" : "#fffdf8",
+                    border: active ? "1.5px solid #e6c680" : "1.5px solid rgba(20,61,49,0.15)",
+                    borderRadius: 99,
+                    padding: "7px 15px"
+                  }}
+                >
+                  {y} <span style={{ color: active ? "#143d31" : "var(--gold-ink)", fontWeight: 400 }}>({count})</span>
+                </Link>
+              );
+            })}
           </div>
         </div>
-        )}
 
         {groupedPress.map((g) => (
           <div key={g.id} id={g.id} style={{ paddingTop: 24, scrollMarginTop: 150 }}>
@@ -677,12 +704,21 @@ export default function MediaPage({
               <span style={{ fontSize: 12, color: "#8a8a80", whiteSpace: "nowrap" }}>{g.label}</span>
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-              {g.items.map((p) => (
-                <PressCard key={p.slug} item={p} />
-              ))}
+              {g.items.length ? (
+                g.items.map((p) => <PressCard key={p.slug} item={p} />)
+              ) : (
+                <article className="paper-card">
+                  <p className="eyebrow" style={{ fontSize: 11, margin: 0 }}>
+                    {g.year}
+                  </p>
+                  <h3 className="font-display">{g.year}</h3>
+                  <p style={{ margin: 0, fontSize: 14, fontWeight: 700 }}>The information will be up soon.</p>
+                </article>
+              )}
             </div>
           </div>
         ))}
+        {selectedCategory || selectedYear ? null : <UndatedMediaList items={undated} />}
       </section>
 
       <section style={{ background: "#12362a", color: "#fff" }}>
