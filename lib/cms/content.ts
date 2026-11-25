@@ -16,7 +16,7 @@ const fallbackSettings = (): SiteSettings => ({
     email: "sales@frigga.co.uk",
     emailSecondary: "connect@frigga.co.uk",
     phone: "+63 920 950 9390",
-    phoneSecondary: "+63 939 351 6424",
+    phoneSecondary: "",
     whatsapp: "639209509390"
   },
   social: SOCIAL_LINKS.map((s) => ({ id: s.id, label: s.label, handle: s.handle, href: s.href })),

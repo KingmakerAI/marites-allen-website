@@ -596,7 +596,7 @@ export async function saveSettingsAction(formData: FormData) {
       email: sanitizeText(formStr(formData, "email"), 120),
       emailSecondary: sanitizeText(formStr(formData, "emailSecondary"), 120),
       phone: sanitizeText(formStr(formData, "phone"), 40),
-      phoneSecondary: sanitizeText(formStr(formData, "phoneSecondary"), 40),
+      phoneSecondary: "",
       whatsapp: sanitizeText(formStr(formData, "whatsapp"), 40)
     },
     social: (() => {

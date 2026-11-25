@@ -46,7 +46,7 @@ const fallback = {
       email: "hello@maritesallen.com",
       emailSecondary: "hello@maritesallen.com",
       phone: "+63 920 950 9390",
-      phoneSecondary: "+63 939 351 6424",
+      phoneSecondary: "",
       whatsapp: "639209509390"
     },
     social: [],

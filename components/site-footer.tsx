@@ -51,7 +51,6 @@ export function SiteFooter({ variant = "full" }: Props) {
   const email =
     contact?.email && !/frigga/i.test(contact.email) ? contact.email : "hello@maritesallen.com";
   const phone = contact?.phone || "+63 920 950 9390";
-  const phoneSecondary = contact?.phoneSecondary || "+63 939 351 6424";
   const whatsapp = contact?.whatsapp || "639209509390";
 
   if (variant === "minimal") {
@@ -150,9 +149,6 @@ export function SiteFooter({ variant = "full" }: Props) {
               style={linkStyle}
             >
               WhatsApp
-            </a>
-            <a href={`tel:${phoneSecondary.replace(/[^\d+]/g, "")}`} className="site-footer-link" style={linkStyle}>
-              {phoneSecondary}
             </a>
             <a
               href="https://destara.app"

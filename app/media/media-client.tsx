@@ -166,7 +166,7 @@ export default function MediaPage({
   pressKitBody?: string;
   videosHeading?: string;
   videos?: CopyVideo[];
-  contact?: { email: string; phone: string; phoneSecondary: string };
+  contact?: { email: string; phone: string };
   category?: string;
 }) {
   const [pressName, setPressName] = useState("");
@@ -192,7 +192,7 @@ export default function MediaPage({
   const pressReady = !!(pressName && emailOk(pressEmail));
   const clips = videos?.length ? videos : FALLBACK_VIDEOS;
   const email = contact?.email || "hello@maritesallen.com";
-  const phones = [contact?.phone, contact?.phoneSecondary].filter(Boolean).join(" · ");
+  const phone = contact?.phone || "+63 920 950 9390";
 
   const selectedCategory = category.trim().toLowerCase();
   const folders = useMemo(() => {
@@ -816,7 +816,7 @@ export default function MediaPage({
               <div style={{ marginBottom: 4 }}>
                 ✉ <a href={`mailto:${email}`}>{email}</a>
               </div>
-              <div>☎ {phones || "+63 920 950 9390 · +63 939 351 6424"}</div>
+              <div>☎ {phone}</div>
             </div>
           </div>
           <Link
