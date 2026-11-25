@@ -13,6 +13,7 @@ import { emailOk } from "@/lib/site-data";
 
 export type FeaturedEvent = {
   id: string;
+  slug: string;
   title: string;
   eyebrow: string;
   summary: string;
@@ -23,6 +24,8 @@ export type FeaturedEvent = {
   image: string;
   imageWidth: number;
   imageHeight: number;
+  imageAlt?: string;
+  imageFit?: "cover" | "contain";
   ctaHref: string;
   ctaLabel: string;
   liveHref?: string;
@@ -198,6 +201,7 @@ export default function EventsPage({
               return (
                 <article
                   key={event.id}
+                  id={event.slug}
                   style={{
                     background: "rgba(255,255,255,0.04)",
                     border: "1px solid rgba(230,198,128,0.22)",
@@ -208,14 +212,28 @@ export default function EventsPage({
                   }}
                   className="eventFeatureCard"
                 >
-                  <div style={{ position: "relative", minHeight: 260, background: "#04120d" }}>
+                  <div
+                    style={{
+                      position: "relative",
+                      minHeight: event.imageFit === "contain" ? undefined : 260,
+                      background: event.imageFit === "contain" ? "#f6efe4" : "#04120d",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center"
+                    }}
+                  >
                     <Image
                       src={event.image}
-                      alt={event.title}
+                      alt={event.imageAlt || event.title}
                       width={event.imageWidth}
                       height={event.imageHeight}
                       sizes="(max-width: 900px) 100vw, 55vw"
-                      style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+                      style={{
+                        width: "100%",
+                        height: event.imageFit === "contain" ? "auto" : "100%",
+                        objectFit: event.imageFit || "cover",
+                        display: "block"
+                      }}
                       priority={event.id === featuredEvents[0]?.id}
                     />
                   </div>

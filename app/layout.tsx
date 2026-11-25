@@ -3,6 +3,7 @@ import { Lato, Playfair_Display } from "next/font/google";
 import { CmsProvider } from "@/components/cms-provider";
 import { JsonLd } from "@/components/json-ld";
 import { CookieNotice } from "@/components/cookie-notice";
+import { FireSheepVipPopup } from "@/components/fire-sheep-vip-popup";
 import { VisitBeacon } from "@/components/visit-beacon";
 import { getCachedNav, getCachedPageCopy, getCachedSettings } from "@/lib/cms/content";
 import {
@@ -129,6 +130,7 @@ export default async function RootLayout({
           </a>
           <VisitBeacon />
           <CookieNotice />
+          <FireSheepVipPopup />
           <main id="main">{children}</main>
         </CmsProvider>
       </body>

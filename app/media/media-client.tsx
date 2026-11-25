@@ -186,8 +186,6 @@ export default function MediaPage({
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    // Portal target is document.body, which does not exist during server render.
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMounted(true);
   }, []);
 

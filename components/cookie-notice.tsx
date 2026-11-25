@@ -20,8 +20,6 @@ export function CookieNotice() {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    // Consent lives in localStorage, which is only available after hydration.
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     setVisible(getCookieConsent() === null);
   }, []);
 

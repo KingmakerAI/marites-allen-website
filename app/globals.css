@@ -365,6 +365,124 @@ select:focus {
   }
 }
 
+html.vip-popup-open,
+body.vip-popup-open {
+  overflow: hidden;
+}
+
+.vip-popup {
+  position: fixed;
+  inset: 0;
+  z-index: 240;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px;
+  background: rgba(6, 20, 15, 0.72);
+}
+
+.vip-popup__dialog {
+  width: min(440px, 100%);
+  max-height: calc(100dvh - 24px);
+  overflow: auto;
+  background: #fffdf8;
+  color: #143d31;
+  border-radius: 18px;
+  border: 1px solid rgba(198, 154, 62, 0.45);
+  box-shadow: 0 40px 90px -24px rgba(0, 0, 0, 0.55);
+  padding: 10px 14px 18px;
+}
+
+.vip-popup__bar {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.vip-popup__close {
+  width: 44px;
+  height: 44px;
+  border: 0;
+  border-radius: 50%;
+  background: #143d31;
+  color: #fff;
+  font-size: 28px;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.vip-popup__picture {
+  display: block;
+  margin-top: 4px;
+  background: #f6efe4;
+  border-radius: 12px;
+}
+
+.vip-popup__picture img {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: min(46vh, 520px);
+  margin: 0 auto;
+  object-fit: contain;
+}
+
+.vip-popup__kicker {
+  margin: 14px 0 0;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.6px;
+  text-transform: uppercase;
+  color: #c69a3e;
+}
+
+.vip-popup__title {
+  margin: 6px 0 0;
+  font-size: clamp(20px, 2.4vw, 26px);
+  line-height: 1.2;
+  font-weight: 700;
+  color: #143d31;
+}
+
+.vip-popup__host,
+.vip-popup__line {
+  margin: 8px 0 0;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #3d5348;
+}
+
+.vip-popup__details {
+  margin: 10px 0 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 4px;
+  font-size: 14.5px;
+  line-height: 1.45;
+  color: #143d31;
+}
+
+.vip-popup__cta {
+  display: inline-block;
+  margin-top: 14px;
+  background: linear-gradient(160deg, #e6c680, #c69a3e);
+  color: #143d31;
+  font-weight: 700;
+  font-size: 14px;
+  padding: 12px 18px;
+  border-radius: 10px;
+}
+
+.vip-popup__close:focus-visible,
+.vip-popup__cta:focus-visible {
+  outline: 3px solid #e6c680;
+  outline-offset: 2px;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .page-enter,
   .omDrawer.open,
