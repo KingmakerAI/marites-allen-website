@@ -4,9 +4,11 @@ import { JsonLd } from "@/components/json-ld";
 import { getCachedArticles, getCachedPageCopy, getCachedSettings } from "@/lib/cms/content";
 import { parseVideoLines } from "@/lib/cms/copy-lines";
 import { listCategories, monthName } from "@/lib/cms/repo";
-import { undatedMedia } from "@/lib/ma-videos";
+import { normalizeStoryTitle, normalizeStoryUrl } from "@/lib/forecast-archive";
+import { mediaPageVideos, undatedMedia } from "@/lib/ma-videos";
+import { pickLatestStory } from "@/lib/media-latest";
 import { breadcrumbJsonLd, pageMetadata } from "@/lib/seo";
-import MediaClient from "./media-client";
+import MediaClient, { type PressItem } from "./media-client";
 
 function mediaSeoDescription(outlets: string[], fallback: string) {
   const unique = [...new Set(outlets.map((o) => o.trim()).filter(Boolean))];
@@ -52,12 +54,12 @@ export default async function MediaPage({
   ]);
   const folders = new Map((await listCategories()).map((cat) => [cat.id, cat]));
   const copy = pageCopy.mediaPage;
-  const press = articles.map((a) => {
+  const press: PressItem[] = articles.map((a) => {
     const folder = a.categoryId ? folders.get(a.categoryId) : undefined;
     return {
       year: a.year,
       m: a.month,
-      month: monthName(a.month),
+      month: a.month ? monthName(a.month) : String(a.year),
       outlet: a.outlet,
       quote: a.title || a.excerpt,
       cta: a.ctaLabel,
@@ -65,12 +67,38 @@ export default async function MediaPage({
       category: folder?.name || "",
       categorySlug: folder?.slug || "",
       slug: a.slug,
-      placeholder: a.tags.includes("placeholder")
+      placeholder: a.tags.includes("placeholder"),
+      day: 0,
+      kind: "story" as const
     };
   });
-  const latest =
-    [...press].sort((a, b) => b.year - a.year || b.m - a.m || a.outlet.localeCompare(b.outlet))[0] ||
-    null;
+  const seenTitles = new Set(press.map((item) => normalizeStoryTitle(item.quote)));
+  const seenUrls = new Set(press.map((item) => normalizeStoryUrl(item.url)).filter(Boolean));
+  for (const video of mediaPageVideos()) {
+    const titleKey = normalizeStoryTitle(video.title);
+    const urlKey = normalizeStoryUrl(video.url);
+    if (seenTitles.has(titleKey) || (urlKey && seenUrls.has(urlKey))) continue;
+    seenTitles.add(titleKey);
+    if (urlKey) seenUrls.add(urlKey);
+    const slug = video.youtubeId ? `video-${video.youtubeId}` : `video-${urlKey.replace(/[^a-z0-9]+/g, "-").slice(-70)}`;
+    press.push({
+      year: video.year,
+      m: video.month,
+      day: video.day,
+      month: video.month ? monthName(video.month) : String(video.year),
+      outlet: video.outlet,
+      quote: video.title,
+      cta: "Watch",
+      url: video.url,
+      category: "Video",
+      categorySlug: "video",
+      slug,
+      placeholder: false,
+      kind: "video" as const,
+      youtubeId: video.youtubeId
+    });
+  }
+  const latest = pickLatestStory(press);
   return (
     <>
       <JsonLd

@@ -3081,23 +3081,6 @@
      ]
     },
     {
-     "title": "Marites Allen's World of Feng Sh...",
-     "outlet": "Manila Standard Today",
-     "date": "2009-12-29",
-     "url": null,
-     "type": "article",
-     "status": "placeholder",
-     "onSiteAlready": false,
-     "linkCheck": "no URL",
-     "sources": [
-      "goddess-doc"
-     ],
-     "docRefs": [
-      84
-     ],
-     "note": "Doc marks link pending; The information will be up soon; Title truncated/partial in doc; Lunar New Year season appearance; topic per doc only"
-    },
-    {
      "title": "election feng shui readings",
      "outlet": "Philippine Daily Inquirer",
      "date": "2009-12-13",
@@ -3120,19 +3103,19 @@
    "year": 2009,
    "animal": "Earth Ox",
    "title": "2009 Year of the Earth Ox",
-   "summary": "A Jan 2009 report carried Allen's optimistic outlook for the Earth Ox year, including sector-by-sector business prospects (NTUC Phl repost).",
+   "summary": "The Manila Times (Johanna M. Sampan, 26 January 2009) reported Marites Allen's Earth Ox outlook, including sector-by-sector business prospects.",
    "events": [],
    "features": [
     {
      "title": "Feng Shui experts optimism in 2009 - National Trade Union Center of the Philippines",
-     "outlet": "NTUC Phl (repost)",
+     "outlet": "The Manila Times",
      "date": "2009-01-26",
      "url": "https://ntucphl.org/2009/01/feng-shui-experts-optimism-in-2009/",
      "type": "online",
      "status": "live",
      "onSiteAlready": false,
      "linkCheck": "200",
-     "note": null,
+     "note": "Previously credited to the NTUC Phl repost. The report is Johanna M. Sampan, The Manila Times, 26 January 2009.",
      "sources": [
       "web"
      ]
@@ -3188,21 +3171,24 @@
    "year": 2007,
    "animal": "Fire Pig",
    "title": "2007 Year of the Fire Pig",
-   "summary": "The information will be up soon.",
+   "summary": "The Philippine Star, Manila Standard Today and Manila Bulletin covered Marites Allen at the 2007 Philippine Feng Shui Extravaganza.",
    "events": [],
    "features": [
     {
-     "title": "2007 Year of the Fire Pig forecast coverage",
-     "outlet": null,
-     "date": "2007",
-     "url": null,
+     "title": "Marites Allen's World of Feng Shui",
+     "outlet": "Manila Bulletin",
+     "date": "2007-01",
+     "url": "http://edwinsallan.blogspot.com/2009/12/world-of-feng-shui.html",
      "type": "article",
-     "status": "placeholder",
+     "status": "live",
      "onSiteAlready": false,
-     "linkCheck": "n/a",
-     "note": "No coverage found online yet. The information will be up soon",
+     "linkCheck": "stand-in",
+     "note": "January 2007 Manila Bulletin feature by Edwin P. Sallan. The original page is not online; the link is his 29 December 2009 republication.",
      "sources": [
-      "web"
+      "items"
+     ],
+     "docRefs": [
+      86
      ]
     }
    ]
@@ -3211,7 +3197,7 @@
    "year": 2006,
    "animal": "Fire Dog",
    "title": "2006 Year of the Fire Dog",
-   "summary": "The information will be up soon.",
+   "summary": "Manila Bulletin (15 January 2006) reported Lillian Too's first Philippine Feng Shui Extravaganza, organised by World of Feng Shui Philippines under its president and CEO Marites Allen.",
    "events": [],
    "features": [
     {
@@ -3237,7 +3223,7 @@
    "year": 2005,
    "animal": "Wood Rooster",
    "title": "2005 Year of the Wood Rooster",
-   "summary": "The information will be up soon.",
+   "summary": "INQUIRER.net reported in 2008 that the first World of Feng Shui boutique opened at The Podium, Ortigas, in November 2004.",
    "events": [
     {
      "title": "First annual Feng Shui convention",
@@ -4212,21 +4198,21 @@
    "note": null
   },
   {
-   "title": "feature by Edwin P. Sallan",
+   "title": "Marites Allen's World of Feng Shui",
    "outlet": "Manila Bulletin",
-   "date": "2007",
-   "url": null,
+   "date": "2007-01",
+   "url": "http://edwinsallan.blogspot.com/2009/12/world-of-feng-shui.html",
    "type": "article",
-   "status": "placeholder",
+   "status": "live",
    "onSiteAlready": false,
-   "linkCheck": "no URL",
+   "linkCheck": "stand-in",
    "sources": [
     "goddess-doc"
    ],
    "docRefs": [
     86
    ],
-   "note": "Doc marks link pending; The information will be up soon; Doc date: 2007 (approximate); Title truncated/partial in doc"
+   "note": "January 2007 Manila Bulletin feature by Edwin P. Sallan. The original page is not online; the link is his 29 December 2009 republication."
   },
   {
    "title": "Feng Shui expert Marites Allen said renewable energy, tourism, cybersecurity and blockchain are key sectors",
@@ -4786,23 +4772,6 @@
    ],
    "docRefs": [
     202
-   ],
-   "note": "link check returned 400 to an automated request (bot-blocked or temporarily down); verify in a browser"
-  },
-  {
-   "title": "Facebook Page - Marites Allen, the real Feng Shui Queen",
-   "outlet": "Facebook",
-   "date": "2004",
-   "url": "https://www.facebook.com/MaritesAllen168/",
-   "type": "book",
-   "status": "live",
-   "onSiteAlready": false,
-   "linkCheck": "400",
-   "sources": [
-    "goddess-doc"
-   ],
-   "docRefs": [
-    203
    ],
    "note": "link check returned 400 to an automated request (bot-blocked or temporarily down); verify in a browser"
   },
