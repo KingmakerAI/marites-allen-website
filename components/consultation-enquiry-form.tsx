@@ -196,14 +196,15 @@ export function ConsultationEnquiryForm({
           Your consultation enquiry has been received.
         </p>
         <p style={{ fontSize: 14.5, lineHeight: 1.65, color: "#c7ddd2", margin: "0 0 12px" }}>
-          Our team has been notified and will review your request. We&apos;ll contact you by email or WhatsApp
-          regarding availability and the next steps.
-        </p>
-        <p style={{ fontSize: 14, lineHeight: 1.6, color: emailsSent ? "#e6c680" : "#c7ddd2", margin: "0 0 22px" }}>
           {emailsSent
-            ? "Please check your inbox for a confirmation email."
-            : "Your enquiry is saved. If you do not receive a confirmation email shortly, please contact us on WhatsApp."}
+            ? "Our team has been notified and will review your request. We'll contact you by email or WhatsApp regarding availability and the next steps."
+            : "Your enquiry is saved. Email was not sent, so please contact us on WhatsApp if you would like a reply sooner."}
         </p>
+        {emailsSent ? (
+          <p style={{ fontSize: 14, lineHeight: 1.6, color: "#e6c680", margin: "0 0 22px" }}>
+            Please check your inbox for a confirmation email.
+          </p>
+        ) : null}
         <Link
           href="/"
           style={{

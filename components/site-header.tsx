@@ -22,9 +22,29 @@ const FALLBACK_NAV = [
 
 function ForecastDrop() {
   const { forecastYears } = useCms();
+  const [open, setOpen] = useState(false);
   return (
-    <span className="navlink navdrop">
-      Annual Forecast ▾
+    <span
+      className={`navlink navdrop${open ? " open" : ""}`}
+      onMouseEnter={() => setOpen(true)}
+      onMouseLeave={() => setOpen(false)}
+      onFocus={() => setOpen(true)}
+      onBlur={(event) => {
+        if (!event.currentTarget.contains(event.relatedTarget as Node | null)) setOpen(false);
+      }}
+      onKeyDown={(event) => {
+        if (event.key === "Escape") setOpen(false);
+      }}
+    >
+      <button
+        type="button"
+        className="navforecast"
+        aria-expanded={open}
+        aria-haspopup="menu"
+        onClick={() => setOpen(true)}
+      >
+        Annual Forecast ▾
+      </button>
       <span className="navmenu">
         <span>
           {forecastYears.map((y) => (
@@ -167,7 +187,7 @@ export function SiteHeader({ compact = false, bookAsLabel = false }: Props) {
         <button
           type="button"
           className={`omBurger${open ? " open" : ""}`}
-          aria-label="Menu"
+          aria-label={open ? "Close menu" : "Menu"}
           aria-expanded={open}
           onClick={() => setOpen((v) => !v)}
         >

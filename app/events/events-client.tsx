@@ -116,7 +116,7 @@ export default function EventsPage({
             >
               <iframe
                 src={`https://www.youtube.com/embed/${activeVideoId}?autoplay=1&rel=0`}
-                title="Video"
+                title={clips.find((clip) => clip.yt === activeVideoId)?.title || "Video"}
                 style={{ width: "100%", height: "100%", border: 0 }}
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
@@ -625,28 +625,37 @@ export default function EventsPage({
                   }}
                 />
               </div>
-              {error && <div style={{ color: "#8b2e2e", fontSize: 13, marginBottom: 10 }}>{error}</div>}
+              {error && (
+                <div role="alert" style={{ color: "#8b2e2e", fontSize: 13, marginBottom: 10 }}>
+                  {error}
+                </div>
+              )}
               <button
                 type="button"
                 onClick={async () => {
                   if (!ready || pending) return;
                   setError("");
                   setPending(true);
-                  const result = await submitSignupAction({
-                    kind: "speaking",
-                    source: "events",
-                    email,
-                    name,
-                    organization: org,
-                    notes,
-                    fields: { eventDate }
-                  });
-                  setPending(false);
-                  if (!result.ok) {
-                    setError(result.error);
-                    return;
+                  try {
+                    const result = await submitSignupAction({
+                      kind: "speaking",
+                      source: "events",
+                      email,
+                      name,
+                      organization: org,
+                      notes,
+                      fields: { eventDate }
+                    });
+                    if (!result.ok) {
+                      setError(result.error);
+                      return;
+                    }
+                    setSent(true);
+                  } catch {
+                    setError("Something went wrong. Please try again.");
+                  } finally {
+                    setPending(false);
                   }
-                  setSent(true);
                 }}
                 style={{
                   width: "100%",
@@ -663,7 +672,7 @@ export default function EventsPage({
                   border: 0
                 }}
               >
-                {pending ? "Sending…" : "Send speaking enquiry"}
+                {pending ? "Please wait…" : "Send speaking enquiry"}
               </button>
             </div>
           ) : (
@@ -686,10 +695,11 @@ export default function EventsPage({
                 ✓
               </div>
               <h3 className="font-display" style={{ fontWeight: 700, fontSize: 22, color: "#143d31", margin: "0 0 6px" }}>
-                Enquiry sent
+                Enquiry received
               </h3>
-              <p style={{ fontSize: 14, color: "#6b7268" }}>
-                Thank you. Our team will reach out to <strong style={{ color: "#143d31" }}>{email}</strong> shortly.
+              <p style={{ fontSize: 14, color: "#6b7268", lineHeight: 1.55 }}>
+                Thank you. Your speaking enquiry is saved. Email was not sent. The team reviews website messages and can
+                contact you at <strong style={{ color: "#143d31" }}>{email}</strong>.
               </p>
             </div>
           )}

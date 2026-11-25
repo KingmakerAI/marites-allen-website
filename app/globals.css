@@ -73,6 +73,18 @@ select:focus {
   min-height: 100vh;
 }
 
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 .skip-link {
   position: absolute;
   left: 12px;
@@ -145,8 +157,19 @@ select:focus {
   z-index: 60;
 }
 
-.navdrop:hover .navmenu {
+.navdrop:hover .navmenu,
+.navdrop.open .navmenu {
   display: block;
+}
+
+.navforecast {
+  background: transparent;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
 }
 
 .navmenu > span {
@@ -200,8 +223,19 @@ select:focus {
   }
 }
 
+@keyframes omFadeOnly {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
 .page-enter {
-  animation: omFadeIn 0.44s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+  /* Opacity only. A transform on this wrapper makes position:fixed dialogs
+     centre on the whole page instead of the screen. */
+  animation: omFadeOnly 0.44s cubic-bezier(0.22, 0.61, 0.36, 1) both;
 }
 
 .omBurger {

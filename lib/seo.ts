@@ -129,7 +129,10 @@ export function personJsonLd() {
       "Business Feng Shui",
       "Home Feng Shui"
     ],
-    nationality: "Filipino",
+    nationality: {
+      "@type": "Country",
+      name: "Philippines"
+    },
     worksFor: {
       "@type": "Organization",
       name: "Frigga Charmed Life",
