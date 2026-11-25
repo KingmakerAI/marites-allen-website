@@ -4,6 +4,7 @@ import { newId, nowIso, slugify } from "./crypto";
 import { sanitizeHtml, sanitizeText } from "./sanitize";
 import { mergePageCopy } from "./page-copy-defaults";
 import type { PageCopy } from "./page-copy-types";
+import { mergeCodeEvents } from "@/lib/events/fire-sheep-vip";
 import { mutateStore, readStore } from "./store";
 import type {
   Article,
@@ -309,9 +310,9 @@ export async function deletePricing(id: string) {
 }
 
 export async function listEvents(publishedOnly = false) {
-  return (await readStore())
-    .events.filter((e) => !publishedOnly || e.status === "published")
-    .sort((a, b) => a.sortOrder - b.sortOrder);
+  const stored = (await readStore()).events.filter((event) => !publishedOnly || event.status === "published");
+  // Read-time only. A Blob row with the same id or slug is left untouched.
+  return mergeCodeEvents(stored).sort((a, b) => a.sortOrder - b.sortOrder);
 }
 
 export async function saveEvent(row: CmsEvent) {

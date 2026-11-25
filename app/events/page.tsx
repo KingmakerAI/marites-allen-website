@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { JsonLd } from "@/components/json-ld";
 import { getCachedEvents, getCachedPageCopy } from "@/lib/cms/content";
 import { parseTalkLines, parseVideoLines } from "@/lib/cms/copy-lines";
+import { FIRE_SHEEP_VIP_EVENT, FIRE_SHEEP_VIP_MEDIA } from "@/lib/events/fire-sheep-vip";
 import { breadcrumbJsonLd, pageMetadata, SITE_URL } from "@/lib/seo";
 import EventsClient from "./events-client";
 
@@ -26,25 +27,31 @@ export default async function EventsPage() {
   const copy = pageCopy.eventsPage;
   const upcoming = events.filter((event) => !eventEnded(event.endsAt, event.startsAt));
   // Past events stay in the CMS but are not listed on the public page.
-  const featuredEvents = upcoming.map((event) => ({
-    id: event.id,
-    title: event.title,
-    eyebrow: event.eyebrow,
-    summary: event.summary,
-    whenLabel: event.whenLabel,
-    whereLabel: event.whereLabel,
-    startsAt: event.startsAt,
-    endsAt: event.endsAt,
-    image: event.imageUrl,
-    imageWidth: 1600,
-    imageHeight: 900,
-    ctaHref: event.ctaHref,
-    ctaLabel: event.ctaLabel,
-    liveHref: event.liveUrl || undefined,
-    liveLabel: event.liveUrl ? "Watch live" : undefined,
-    tagline: event.tagline,
-    ended: false
-  }));
+  const featuredEvents = upcoming.map((event) => {
+    const portrait = event.id === FIRE_SHEEP_VIP_EVENT.id;
+    return {
+      id: event.id,
+      slug: event.slug,
+      title: event.title,
+      eyebrow: event.eyebrow,
+      summary: event.summary,
+      whenLabel: event.whenLabel,
+      whereLabel: event.whereLabel,
+      startsAt: event.startsAt,
+      endsAt: event.endsAt,
+      image: event.imageUrl,
+      imageWidth: portrait ? FIRE_SHEEP_VIP_MEDIA.width : 1600,
+      imageHeight: portrait ? FIRE_SHEEP_VIP_MEDIA.height : 900,
+      imageAlt: portrait ? FIRE_SHEEP_VIP_MEDIA.alt : event.title,
+      imageFit: portrait ? ("contain" as const) : ("cover" as const),
+      ctaHref: event.ctaHref,
+      ctaLabel: event.ctaLabel,
+      liveHref: event.liveUrl || undefined,
+      liveLabel: event.liveUrl ? "Watch live" : undefined,
+      tagline: event.tagline,
+      ended: false
+    };
+  });
   const eventsJsonLd = {
     "@context": "https://schema.org",
     "@graph": upcoming.map((event) => ({
@@ -62,7 +69,7 @@ export default async function EventsPage() {
         : { "@type": "Place", name: event.venue || event.whereLabel },
       organizer: { "@type": "Person", name: "Marites Allen", url: SITE_URL },
       image: event.imageUrl ? [`${SITE_URL}${event.imageUrl}`] : undefined,
-      url: `${SITE_URL}/events`
+      url: `${SITE_URL}/events#${event.slug}`
     }))
   };
 
