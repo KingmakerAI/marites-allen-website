@@ -4,6 +4,7 @@ import { readSessionCookie, safeAdminNext, SESSION_COOKIE } from "@/lib/cms/sess
 
 const CASE_FOLD_ROOTS = new Set([
   "about",
+  "annual-forecast",
   "articles",
   "book",
   "booking-experience",

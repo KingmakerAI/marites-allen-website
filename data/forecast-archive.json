@@ -1,0 +1,5029 @@
+{
+ "generatedAt": "2026-11-25 (Asia/Manila)",
+ "notes": "Built from web research, the site's CMS fallback (lib/cms/cms-fallback.json), and the Goddess research docs docC/docD (register of 229 records; union merged, items marked sources:['goddess-doc']).",
+ "years": [
+  {
+   "year": 2027,
+   "animal": "Fire Sheep",
+   "title": "2027 Year of the Fire Sheep",
+   "summary": "Marites Allen presented 2027 as the year to make 2026's movement meaningful: clear direction, steady long-term planning, stronger relationships and careful financial decisions (Lipsticks x Lenses; Manila Standard). Her Flying Star chart puts the No. 8 Wealth Star in the Southeast, No. 1 Victory Star in the Northwest and No. 6 Mentor Star in the Southwest; Boar, Horse, Dog, Dragon and Snake have the strongest prospects (Philstar; Where is Ed Uy?).",
+   "events": [
+    {
+     "title": "Year of the Fire Sheep 2027 Annual Press Conference",
+     "date": "2026-10-12",
+     "venue": "SPACES, Penthouse, World Plaza Tower, Bonifacio Global City, Taguig",
+     "source": "https://www.manilatimes.net/2026/10/14/entertainment-lifestyle/marites-allen-reveals-fearless-2027-fire-sheep-forecast-pioneering-destiny-is-in-your-stars-platform/2445260",
+     "status": "live"
+    },
+    {
+     "title": "Press conference, 27 November 2026",
+     "date": "2026-11-27",
+     "venue": null,
+     "source": null,
+     "status": "placeholder",
+     "note": "The information will be up soon. No public details found online; the Goddess's research docs could not be read by this run."
+    },
+    {
+     "title": "Chinese New Year Countdown 2027",
+     "date": "2027-02-05",
+     "venue": "Manila House Private Members' Club, Bonifacio Global City",
+     "source": "https://www.ericayub.com/2026/10/what-year-of-fire-sheep-2027-could.html",
+     "status": "live",
+     "note": "Reservations 0920 950 9390 per Erica Yub article"
+    }
+   ],
+   "features": [
+    {
+     "title": "What the Year of the Fire Sheep 2027 Could Bring: Marites Allen Reveals Feng Shui Forecasts, Lucky Directions and DESTARA",
+     "outlet": "Erica Yub",
+     "date": "2026-10",
+     "url": "https://www.ericayub.com/2026/10/what-year-of-fire-sheep-2027-could.html",
+     "type": "article",
+     "status": "live",
+     "onSiteAlready": true,
+     "linkCheck": "200",
+     "note": null,
+     "sources": [
+      "site-cms"
+     ]
+    },
+    {
+     "title": "2027 Feng Shui Outlook: What the Year of the Fire Sheep Means for Your Career, Love and Finances",
+     "outlet": "Raincheckblog",
+     "date": "2026-10",
+     "url": "https://www.raindeocampo.com/2026/10/15/2027-feng-shui-outlook-what-the-year-of-the-fire-sheep-means-for-your-career-love-and-finances/",
+     "type": "article",
+     "status": "live",
+     "onSiteAlready": true,
+     "linkCheck": "200",
+     "note": null,
+     "sources": [
+      "site-cms"
+     ]
+    },
+    {
+     "title": "Marites Allen shares Feng Shui forecast for 2027: What the 12 animal signs can expect",
+     "outlet": "GMA Network",
+     "date": "2026-10",
+     "url": "https://www.gmanetwork.com/lifestyle/news/28224/marites-allen-shares-feng-shui-forecast-for-2027-what-the-12-animal-signs-can-expect/photo",
+     "type": "article",
+     "status": "live",
+     "onSiteAlready": true,
+     "linkCheck": "200",
+     "note": "page metadata date reads 30 Nov 2026 (future/odd); kept site month Oct 2026",
+     "sources": [
+      "site-cms"
+     ]
+    },
+    {
+     "title": "Marites Allen shows essentials for the Year of the Fire Sheep 2027",
+     "outlet": "Kumagcow",
+     "date": "2026-10",
+     "url": "https://www.kumagcow.com/2026/10/marites-allen-shows-essentials-for-year.html",
+     "type": "article",
+     "status": "live",
+     "onSiteAlready": true,
+     "linkCheck": "200",
+     "note": null,
+     "sources": [
+      "site-cms"
+     ]
+    },
+    {
+     "title": "2027 Year Of The Fire Sheep: Which Chinese Zodiac Signs Could Attract Wealth, Love And Success",
+     "outlet": "Earthlingorgeous",
+     "date": "2026-10",
+     "url": "https://www.earthlingorgeous.com/2026/10/2027-year-of-the-fire-sheep.html",
+     "type": "online",
+     "status": "live",
+     "onSiteAlready": false,
+     "linkCheck": "200",
+     "note": null,
+     "sources": [
+      "web"
+     ]
+    },
+    {
+     "title": "2027 Year of the Fire Sheep Forecast by Feng Shui Queen Marites Allen",
+     "outlet": "YouTube (Earthlingorgeous)",
+     "date": "2026-10",
+     "url": null,
+     "type": "video",
+     "status": "placeholder",
+     "onSiteAlready": true,
+     "linkCheck": "no URL",
+     "note": "Listed on live maritesallen.com/media but link not found in repo fallback or web search; The information will be up soon",
+     "sources": [
+      "site-cms"
+     ]
+    },
+    {
+     "title": "YEAR OF THE FIRE SHEEP by MARITES ALLEN Press Conference",
+     "outlet": "Kumagcow (YouTube)",
+     "date": "2026-10",
+     "url": null,
+     "type": "video",
+     "status": "placeholder",
+     "onSiteAlready": true,
+     "linkCheck": "no URL",
+     "note": "Listed on live maritesallen.com/media but link not found in repo fallback or web search; The information will be up soon",
+     "sources": [
+      "site-cms"
+     ]
+    },
+    {
+     "title": "Hello from Romania folks! Attending our annual International Feng Shui convention",
+     "outlet": "Facebook (MaritesAllen168)",
+     "date": "2026-10",
+     "url": null,
+     "type": "video",
+     "status": "placeholder",
+     "onSiteAlready": true,
+     "linkCheck": "no URL",
+     "note": "Listed on live maritesallen.com/media but link not found in repo fallback or web search; The information will be up soon",
+     "sources": [
+      "site-cms"
+     ]
+    },
+    {
+     "title": "A glimpse into the Year of the Fire Sheep 2027 from Feng Shui expert Marites Allen",
+     "outlet": "ReZirb",
+     "date": "2026-10-13",
+     "url": "https://www.rezirb.com/2026/10/a-glimpse-into-the-year-of-the-fire-sheep-2027-from-feng-shui-expert-marites-allen/",
+     "type": "article",
+     "status": "live",
+     "onSiteAlready": true,
+     "linkCheck": "200",
+     "note": null,
+     "sources": [
+      "site-cms"
+     ]
+    },
+    {
+     "title": "Marites Allen reveals fearless 2027 Fire Sheep forecast, pioneering Destiny Is in Your Stars platform",
+     "outlet": "Manila Times",
+     "date": "2026-10-14",
+     "url": "https://www.manilatimes.net/2026/10/14/entertainment-lifestyle/marites-allen-reveals-fearless-2027-fire-sheep-forecast-pioneering-destiny-is-in-your-stars-platform/2445260",
+     "type": "article",
+     "status": "live",
+     "onSiteAlready": true,
+     "linkCheck": "200",
+     "note": null,
+     "sources": [
+      "site-cms"
+     ]
+    },
+    {
+     "title": "Marites Allen reveals fearless 2027 Fire Sheep forecast (Newswav)",
+     "outlet": "Newswav",
+     "date": "2026-10-14",
+     "url": "https://newswav.com/article/marites-allen-reveals-fearless-2027-fire-sheep-forecast-pioneering-destiny-A2610_4x6zZf",
+     "type": "article",
+     "status": "live",
+     "onSiteAlready": true,
+     "linkCheck": "200",
+     "note": null,
+     "sources": [
+      "site-cms"
+     ]
+    },
+    {
+     "title": "Is 2027 Your Lucky Year? Marites Allen Reveals What the Year of the Fire Sheep Has in Store",
+     "outlet": "Where is Ed Uy?",
+     "date": "2026-10-16",
+     "url": "https://www.whereiseduy.com/is-2027-your-lucky-year-marites-allen-reveals-what-the-year-of-the-fire-sheep-has-in-store/",
+     "type": "online",
+     "status": "live",
+     "onSiteAlready": false,
+     "linkCheck": "200",
+     "note": null,
+     "sources": [
+      "web"
+     ]
+    },
+    {
+     "title": "Love, luck or money? What celebs ask feng shui master Marites Allen",
+     "outlet": "The Philippine Star",
+     "date": "2026-10-18",
+     "url": "https://www.philstar.com/entertainment/2026/10/18/2563917/love-luck-or-money-what-celebs-ask-feng-shui-master-marites-allen",
+     "type": "article",
+     "status": "live",
+     "onSiteAlready": false,
+     "linkCheck": "200",
+     "note": null,
+     "sources": [
+      "web"
+     ]
+    },
+    {
+     "title": "BEYOND THE ZODIAC: MARITES ALLEN SHARES HER 2027 FIRE SHEEP OUTLOOK AND A NEW ERA OF FENG SHUI GUIDANCE - Lipsticks x Lenses",
+     "outlet": "Lipsticks x Lenses",
+     "date": "2026-10-21",
+     "url": "https://www.lipsticksxlenses.com/lifestyle/beyond-the-zodiac-marites-allen-shares-her-2027-fire-sheep-outlook-and-a-new-era-of-feng-shui-guidance/",
+     "type": "online",
+     "status": "live",
+     "onSiteAlready": false,
+     "linkCheck": "200",
+     "note": null,
+     "sources": [
+      "web"
+     ]
+    },
+    {
+     "title": "Fire Sheep to shake things up?",
+     "outlet": "Manila Standard",
+     "date": "2026-11",
+     "url": "https://manilastandard.net/lifestyle/314816206/fire-sheep-to-shake-things-up.html",
+     "type": "article",
+     "status": "live",
+     "onSiteAlready": false,
+     "linkCheck": "202",
+     "note": "link check returned 202 to an automated request (bot-blocked or temporarily down); verify in a browser",
+     "sources": [
+      "web"
+     ]
+    },
+    {
+     "title": "Fire Sheep year favors steady growth, says Marites Allen",
+     "outlet": "Daily Tribune",
+     "date": "2026-11-06",
+     "url": "https://tribune.net.ph/2026/11/06/fire-sheep-year-favors-steady-growth-says-marites-allen",
+     "type": "article",
+     "status": "live",
+     "onSiteAlready": false,
+     "linkCheck": "200",
+     "note": null,
+     "sources": [
+      "web"
+     ]
+    },
+    {
+     "title": "Clear direction, strong relationships mark Year of the Fire Sheep",
+     "outlet": "The Philippine Star",
+     "date": "2026-11-08",
+     "url": "https://www.philstar.com/lifestyle/arts-and-culture/2026/11/08/2568736/clear-direction-strong-relationships-mark-year-fire-sheep",
+     "type": "article",
+     "status": "live",
+     "onSiteAlready": false,
+     "linkCheck": "200",
+     "note": null,
+     "sources": [
+      "web"
+     ]
+    },
+    {
+     "title": "What's in store for the 12 signs in the Year of the Fire Sheep",
+     "outlet": "The Philippine Star",
+     "date": "2026-11-08",
+     "url": "https://www.philstar.com/lifestyle/on-the-radar/2026/11/08/2568776/whats-store-12-signs-year-fire-sheep",
+     "type": "article",
+     "status": "live",
+     "onSiteAlready": false,
+     "linkCheck": "200",
+     "note": null,
+     "sources": [
+      "web"
+     ]
+    },
+    {
+     "title": "Coverage from the 27 November 2026 press conference",
+     "outlet": null,
+     "date": "2026-11-27",
+     "url": null,
+     "type": "article",
+     "status": "placeholder",
+     "onSiteAlready": false,
+     "linkCheck": "n/a",
+     "note": "The information will be up soon",
+     "sources": [
+      "web"
+     ]
+    }
+   ]
+  },
+  {
+   "year": 2026,
+   "animal": "Fire Horse",
+   "title": "2026 Year of the Fire Horse",
+   "summary": "Allen described the Fire Horse year as 'fierce, fast and strong, very transformative', rewarding speed, discipline and the strong (ABS-CBN, 14 Jan 2026). She advised water elements and black, blue or grey tones to balance the year's fire (Tatler Asia).",
+   "events": [
+    {
+     "title": "Online Year of the Fire Horse 2026 Forecast",
+     "date": "2025-12-12/2025-12-14",
+     "venue": "Online",
+     "source": "https://www.manilatimes.net/2025/12/19/tmt-newswire/marites-allen-releases-2026-year-of-the-fire-horse-feng-shui-prognosis-urging-public-to-stay-on-course-in-a-turning-point-year/2246958",
+     "status": "live"
+    },
+    {
+     "title": "Year of the Fire Horse 2026 press event",
+     "date": "2026-01-14",
+     "venue": "Manila House, Bonifacio Global City",
+     "source": "https://www.tatlerasia.com/lifestyle/wellbeing/year-of-the-fire-horse-2026-forecast",
+     "status": "live",
+     "note": "Tatler link returns 403 to automated checks"
+    },
+    {
+     "title": "Year of the Fire Horse Welcoming Ritual and Prosperity Event",
+     "date": "2026-02",
+     "venue": "8th Floor, NEO Building, Bonifacio Global City",
+     "source": "https://www.kumagcow.com/2026/02/queen-of-feng-shui-marites-allen-set-to.html",
+     "status": "live",
+     "note": "Exact day not stated in source (article dated 10 Feb 2026)"
+    }
+   ],
+   "features": [
+    {
+     "title": "Preparing for 2026: what the Fire Horse brings.",
+     "outlet": "Marites Allen Live",
+     "date": "2025-12",
+     "url": "https://maritesallen.com/marites-allen-show/",
+     "type": "tv",
+     "status": "live",
+     "onSiteAlready": true,
+     "linkCheck": "403",
+     "note": "link check returned 403 to an automated request (bot-blocked or temporarily down); verify in a browser",
+     "sources": [
+      "goddess-doc",
+      "site-cms"
+     ],
+     "docRefs": [
+      140
+     ]
+    },
+    {
+     "title": "Marites Allen releases 2026 Year of the Fire Horse feng shui prognosis, urging public to stay on course in a turning-point year",
+     "outlet": "The Manila Times (TMT Newswire)",
+     "date": "2025-12-19",
+     "url": "https://www.manilatimes.net/2025/12/19/tmt-newswire/marites-allen-releases-2026-year-of-the-fire-horse-feng-shui-prognosis-urging-public-to-stay-on-course-in-a-turning-point-year/2246958/amp",
+     "type": "article",
+     "status": "live",
+     "onSiteAlready": true,
+     "linkCheck": "200",
+     "note": null,
+     "sources": [
+      "goddess-doc",
+      "site-cms"
+     ],
+     "docRefs": [
+      35
+     ]
+    },
+    {
+     "title": "FENG SHUI 2026: MARITES ALLEN for The Year of The Fire Horse",
+     "outlet": "YouTube",
+     "date": "2026-01-13",
+     "url": "https://www.youtube.com/watch?v=ZExQ0vwm2G0",
+     "type": "video",
+     "status": "live",
+     "onSiteAlready": true,
+     "linkCheck": "200",
+     "note": null,
+     "sources": [
+      "goddess-doc",
+      "site-cms"
+     ],
+     "docRefs": [
+      103
+     ]
+    },
+    {
+     "title": "Feng Shui Queen Marites Allen presents Year of the Fire Horse overview and launches feng shui app",
+     "outlet": "Random Republika",
+     "date": "2026-01-18",
+     "url": "https://randomrepublika.com/feng-shui-queen-marites-allen-presents-year-of-the-fire-horse-overview-launches-worlds-first-feng-shui-app/",
+     "type": "article",
+     "status": "live",
+     "onSiteAlready": true,
+     "linkCheck": "200",
+     "note": null,
+     "sources": [
+      "goddess-doc",
+      "site-cms"
+     ],
+     "docRefs": [
+      26
+     ]
+    },
+    {
+     "title": "Riding the flames of the Fire Horse with Feng Shui master Marites Allen",
+     "outlet": "Tatler Asia",
+     "date": "2026-01-15",
+     "url": "https://www.tatlerasia.com/lifestyle/wellbeing/year-of-the-fire-horse-2026-forecast",
+     "type": "article",
+     "status": "live",
+     "onSiteAlready": true,
+     "linkCheck": "403",
+     "note": "link check returned 403 to an automated request (bot-blocked or temporarily down); verify in a browser",
+     "sources": [
+      "goddess-doc",
+      "site-cms"
+     ],
+     "docRefs": [
+      31
+     ]
+    },
+    {
+     "title": "Feng Shui expert advises entertainment stars to 'pivot' in the coming year",
+     "outlet": "GMA Entertainment",
+     "date": "2026-01-17",
+     "url": "https://www.gmanetwork.com/entertainment/showbiznews/feng-shui-expert-advises-entertainment-stars-to-pivot-in-the-coming-year/129640/",
+     "type": "article",
+     "status": "live",
+     "onSiteAlready": true,
+     "linkCheck": "200",
+     "note": null,
+     "sources": [
+      "goddess-doc",
+      "site-cms"
+     ],
+     "docRefs": [
+      27
+     ]
+    },
+    {
+     "title": "Romance and opportunity in 2026: Feng shui insights from Marites Allen",
+     "outlet": "A German Expat in The Philippines (blog)",
+     "date": "2026-01",
+     "url": "https://germanexpatinthephilippines.blogspot.com/2026/01/romance-and-opportunity-in-2026-feng.html",
+     "type": "article",
+     "status": "live",
+     "onSiteAlready": true,
+     "linkCheck": "200",
+     "note": null,
+     "sources": [
+      "site-cms"
+     ]
+    },
+    {
+     "title": "Discover your luck: the Feng Shui Queen's 2026 animal sign forecast.",
+     "outlet": "Manila Bulletin",
+     "date": "2026-01-28",
+     "url": "https://mb.com.ph/2026/01/28/romance-and-opportunity-in-2026-feng-shui-insights-from-marites-allen",
+     "type": "article",
+     "status": "live",
+     "onSiteAlready": true,
+     "linkCheck": "403",
+     "note": "link check returned 403 to an automated request (bot-blocked or temporarily down); verify in a browser",
+     "sources": [
+      "goddess-doc",
+      "site-cms"
+     ],
+     "docRefs": [
+      166
+     ]
+    },
+    {
+     "title": "What the Fire Horse 2026 will change in everyone's life.",
+     "outlet": "Marites Allen Live",
+     "date": "2026-01",
+     "url": "https://maritesallen.com/marites-allen-show/",
+     "type": "tv",
+     "status": "live",
+     "onSiteAlready": true,
+     "linkCheck": "403",
+     "note": "link check returned 403 to an automated request (bot-blocked or temporarily down); verify in a browser",
+     "sources": [
+      "goddess-doc",
+      "site-cms"
+     ],
+     "docRefs": [
+      140
+     ]
+    },
+    {
+     "title": "Marites Allen: 2026 Fire Horse year rewards strength, speed",
+     "outlet": "ABS-CBN News / Lifestyle",
+     "date": "2026-01-14",
+     "url": "https://www.abs-cbn.com/lifestyle/people-culture-events/2026/1/14/marites-allen-2026-fire-horse-year-rewards-strength-speed-2215",
+     "type": "article",
+     "status": "live",
+     "onSiteAlready": true,
+     "linkCheck": "200",
+     "note": null,
+     "sources": [
+      "goddess-doc",
+      "site-cms"
+     ],
+     "docRefs": [
+      102
+     ]
+    },
+    {
+     "title": "Year of the Fire Horse 2026 Is Giving Main Character Energy: Romance, Glow-Ups & Fast Life Moves — Forecast and Tips",
+     "outlet": "Earthling Gorgeous",
+     "date": "2026-01-15",
+     "url": "https://www.earthlingorgeous.com/2026/01/year-of-the-fire-horse-2026.html",
+     "type": "article",
+     "status": "live",
+     "onSiteAlready": true,
+     "linkCheck": "200",
+     "note": null,
+     "sources": [
+      "goddess-doc",
+      "site-cms"
+     ],
+     "docRefs": [
+      30
+     ]
+    },
+    {
+     "title": "Feng Shui master: 2026 will be 'fast, fierce, transformative'",
+     "outlet": "The Manila Times",
+     "date": "2026-01-17",
+     "url": "https://www.manilatimes.net/2026/01/17/supplements/feng-shui-master-2026-will-be-fast-fierce-transformative/2266806",
+     "type": "article",
+     "status": "live",
+     "onSiteAlready": true,
+     "linkCheck": "200",
+     "note": null,
+     "sources": [
+      "goddess-doc",
+      "site-cms"
+     ],
+     "docRefs": [
+      28
+     ]
+    },
+    {
+     "title": "2026 The Year of the Fire Horse Is Coming Fast – what lies ahead?",
+     "outlet": "Where Is Ed Uy?",
+     "date": "2026-01-19",
+     "url": "https://www.whereiseduy.com/marites-allen-year-of-the-fire-horse-2026-predictions/",
+     "type": "article",
+     "status": "live",
+     "onSiteAlready": true,
+     "linkCheck": "200",
+     "note": null,
+     "sources": [
+      "goddess-doc",
+      "site-cms"
+     ],
+     "docRefs": [
+      24
+     ]
+    },
+    {
+     "title": "Feng Shui expert Marites Allen: Fire Horse 2026 brings speed, romance luck, and major life shifts",
+     "outlet": "LionhearTV",
+     "date": "2026-01-23",
+     "url": "https://www.lionheartv.net/2026/01/marites-allen-fire-horse-2026/",
+     "type": "article",
+     "status": "live",
+     "onSiteAlready": true,
+     "linkCheck": "200",
+     "note": null,
+     "sources": [
+      "goddess-doc",
+      "site-cms"
+     ],
+     "docRefs": [
+      23
+     ]
+    },
+    {
+     "title": "Annual Forecast for the Year of the Fire Horse",
+     "outlet": "BusinessMirror",
+     "date": "2026-02-17",
+     "url": "https://businessmirror.com.ph/2026/02/17/annual-forecast-for-the-year-of-the-fire-horse/",
+     "type": "article",
+     "status": "live",
+     "onSiteAlready": true,
+     "linkCheck": "403",
+     "note": "link check returned 403 to an automated request (bot-blocked or temporarily down); verify in a browser",
+     "sources": [
+      "goddess-doc",
+      "site-cms"
+     ],
+     "docRefs": [
+      20
+     ]
+    },
+    {
+     "title": "Life, politics, and luck in the Year of the Fire Horse 2026, according to Maritess Allen",
+     "outlet": "BusinessMirror",
+     "date": "2026-02-17",
+     "url": "https://businessmirror.com.ph/2026/02/17/life-politics-and-luck-in-the-year-of-the-fire-horse-2026-according-to-maritess-allen/",
+     "type": "article",
+     "status": "live",
+     "onSiteAlready": true,
+     "linkCheck": "403",
+     "note": "link check returned 403 to an automated request (bot-blocked or temporarily down); verify in a browser",
+     "sources": [
+      "goddess-doc",
+      "site-cms"
+     ],
+     "docRefs": [
+      19
+     ]
+    },
+    {
+     "title": "Chinese New Year 2026: Symbolism, fortune, and prognosis in Year of the Fire Horse",
+     "outlet": "BusinessMirror",
+     "date": "2026-02-17",
+     "url": "https://businessmirror.com.ph/2026/02/17/chinese-new-year-2026-symbolism-fortune-and-prognosis-in-the-year-of-the-fire-horse/",
+     "type": "article",
+     "status": "live",
+     "onSiteAlready": true,
+     "linkCheck": "403",
+     "note": "link check returned 403 to an automated request (bot-blocked or temporarily down); verify in a browser",
+     "sources": [
+      "goddess-doc",
+      "site-cms"
+     ],
+     "docRefs": [
+      212
+     ]
+    },
+    {
+     "title": "Queen of Feng Shui Marites Allen Set to Hold Year of the Fire Horse Event",
+     "outlet": "Kumagcow",
+     "date": "2026-02",
+     "url": "https://www.kumagcow.com/2026/02/queen-of-feng-shui-marites-allen-set-to.html",
+     "type": "article",
+     "status": "live",
+     "onSiteAlready": true,
+     "linkCheck": "200",
+     "note": null,
+     "sources": [
+      "site-cms"
+     ]
+    },
+    {
+     "title": "DESTARA APP To Be Featured at Year of the Fire Horse Event",
+     "outlet": "Kumagcow",
+     "date": "2026-02",
+     "url": "https://www.kumagcow.com/2026/02/destara-app-featured-at-year-of-fire.html",
+     "type": "article",
+     "status": "live",
+     "onSiteAlready": true,
+     "linkCheck": "200",
+     "note": null,
+     "sources": [
+      "site-cms"
+     ]
+    },
+    {
+     "title": "How to protect, enhance your home in the Year of the Fire Horse",
+     "outlet": "Philippine Daily Inquirer (Business)",
+     "date": "2026-02-14",
+     "url": "https://business.inquirer.net/574170/how-to-protect-enhance-your-home-in-the-year-of-the-fire-horse",
+     "type": "article",
+     "status": "live",
+     "onSiteAlready": true,
+     "linkCheck": "403",
+     "note": "link check returned 403 to an automated request (bot-blocked or temporarily down); verify in a browser",
+     "sources": [
+      "goddess-doc",
+      "site-cms"
+     ],
+     "docRefs": [
+      99,
+      100
+     ]
+    },
+    {
+     "title": "What's in store for Philippine pageantry in the Year of the Fire Horse",
+     "outlet": "Inquirer.net",
+     "date": "2026-02",
+     "url": "https://entertainment.inquirer.net/653514/whats-in-store-for-philippine-pageantry-in-the-year-of-the-fire-horse",
+     "type": "article",
+     "status": "live",
+     "onSiteAlready": true,
+     "linkCheck": "403",
+     "note": "link check returned 403 to an automated request (bot-blocked or temporarily down); verify in a browser",
+     "sources": [
+      "site-cms"
+     ]
+    },
+    {
+     "title": "Marites Allen's 2026 Feng Shui Forecast for All 12 Signs",
+     "outlet": "MEGA",
+     "date": "2026-02",
+     "url": "https://mega-asia.com/lifestyle/culture/2026-feng-shui-forecast/",
+     "type": "article",
+     "status": "live",
+     "onSiteAlready": true,
+     "linkCheck": "403",
+     "note": "link check returned 403 to an automated request (bot-blocked or temporarily down); verify in a browser",
+     "sources": [
+      "site-cms"
+     ]
+    },
+    {
+     "title": "On Point: Feng Shui Predictions for 2026 Fire Horse Year | Marites Allen (16 Feb)",
+     "outlet": "Bilyonaryo News Channel (BNC)",
+     "date": "2026-02-16",
+     "url": "https://bnc.bilyonaryo.com/on-point-feng-shui-predictions-for-2026-fire-horse-year-marites-allen/videos/on-point/",
+     "type": "tv",
+     "status": "live",
+     "onSiteAlready": true,
+     "linkCheck": "200",
+     "note": null,
+     "sources": [
+      "site-cms"
+     ]
+    },
+    {
+     "title": "Get set for fast-paced, bold Year of the Fire Horse",
+     "outlet": "The Manila Times",
+     "date": "2026-02-17",
+     "url": "https://www.manilatimes.net/2026/02/17/news/national/get-set-for-fast-paced-bold-year-of-the-fire-horse/2279025",
+     "type": "article",
+     "status": "live",
+     "onSiteAlready": true,
+     "linkCheck": "200",
+     "note": null,
+     "sources": [
+      "goddess-doc",
+      "site-cms"
+     ],
+     "docRefs": [
+      16
+     ]
+    },
+    {
+     "title": "Fire Horse 2026 brings strong romance and social luck for Ox, Snake, Rooster",
+     "outlet": "The Manila Times (Supplements)",
+     "date": "2026-02-17",
+     "url": "https://www.manilatimes.net/2026/02/17/supplements/fire-horse-2026-brings-strong-romance-and-social-luck-for-ox-snake-rooster/2278756",
+     "type": "article",
+     "status": "live",
+     "onSiteAlready": true,
+     "linkCheck": "200",
+     "note": null,
+     "sources": [
+      "goddess-doc",
+      "site-cms"
+     ],
+     "docRefs": [
+      18
+     ]
+    },
+    {
+     "title": "Year of the Fire Horse 2026 signals a shift toward digital guidance and nature-based renewal",
+     "outlet": "The Manila Times",
+     "date": "2026-02-17",
+     "url": "https://www.manilatimes.net/2026/02/17/supplements/year-of-the-fire-horse-2026-signals-a-shift-toward-digital-guidance-and-nature-based-renewal/2278754",
+     "type": "article",
+     "status": "live",
+     "onSiteAlready": true,
+     "linkCheck": "200",
+     "note": null,
+     "sources": [
+      "goddess-doc",
+      "site-cms"
+     ],
+     "docRefs": [
+      17
+     ]
+    },
+    {
+     "title": "YOUTH TO SHAPE PH 'REVOLUTIONARY' DESTINY - Feng Shui Queen Marites Allen says 2026",
+     "outlet": "BNC (Bilyonaryo News Channel)",
+     "date": "2026-03",
+     "url": "https://www.facebook.com/bncphl/videos/youth-to-shape-ph-revolutionary-destinyfeng-shui-queen-marites-allen-says-2026-i/1587073735864385/",
+     "type": "tv",
+     "status": "live",
+     "onSiteAlready": true,
+     "linkCheck": "200",
+     "note": null,
+     "sources": [
+      "goddess-doc",
+      "site-cms"
+     ],
+     "docRefs": [
+      93
+     ]
+    },
+    {
+     "title": "WATCH: Feng Shui readings from expert Marites Allen this Year of the Fire Horse",
+     "outlet": "ANC (YouTube)",
+     "date": "2026-03",
+     "url": "https://www.youtube.com/watch?v=LyZZ2fuWdlQ",
+     "type": "video",
+     "status": "live",
+     "onSiteAlready": true,
+     "linkCheck": "200",
+     "note": null,
+     "sources": [
+      "goddess-doc",
+      "site-cms"
+     ],
+     "docRefs": [
+      90
+     ]
+    },
+    {
+     "title": "Watch: A Feng Shui Master Reads the Fire Horse Year",
+     "outlet": "ANC / Yippy",
+     "date": "2026-06-06",
+     "url": "https://yippy.com/t/fycbbgmtau8h/",
+     "type": "tv",
+     "status": "live",
+     "onSiteAlready": true,
+     "linkCheck": "200",
+     "note": null,
+     "sources": [
+      "goddess-doc",
+      "site-cms"
+     ],
+     "docRefs": [
+      88
+     ]
+    },
+    {
+     "title": "Focus on health, stress management and long term vitality",
+     "outlet": "Malaya Business Insight",
+     "date": "2026-01-29",
+     "url": null,
+     "type": "article",
+     "status": "placeholder",
+     "onSiteAlready": false,
+     "linkCheck": "no URL",
+     "sources": [
+      "goddess-doc"
+     ],
+     "docRefs": [
+      21
+     ],
+     "note": "Doc marks link pending; The information will be up soon; Lunar New Year season appearance; topic per doc only"
+    },
+    {
+     "title": "Riding the Year of the Fire Horse",
+     "outlet": "Manila Standard",
+     "date": "2026-01-26",
+     "url": null,
+     "type": "article",
+     "status": "placeholder",
+     "onSiteAlready": false,
+     "linkCheck": "no URL",
+     "sources": [
+      "goddess-doc"
+     ],
+     "docRefs": [
+      22
+     ],
+     "note": "Doc marks link pending; The information will be up soon"
+    },
+    {
+     "title": "Feng Shui must-read from Allen",
+     "outlet": "Manila Standard Lifestyle",
+     "date": "2026-01-18",
+     "url": null,
+     "type": "article",
+     "status": "placeholder",
+     "onSiteAlready": false,
+     "linkCheck": "no URL",
+     "sources": [
+      "goddess-doc"
+     ],
+     "docRefs": [
+      25
+     ],
+     "note": "Doc marks link pending; The information will be up soon; Doc date: 2026, January 18 (date as published; year shown inconsistently in source listing); Lunar New Year season appearance; topic per doc only"
+    },
+    {
+     "title": "The Year of the Fire Horse forecast, according to Feng Shui master Marites Allen",
+     "outlet": "Tatler Philippines",
+     "date": "2026-01-15",
+     "url": null,
+     "type": "online",
+     "status": "placeholder",
+     "onSiteAlready": false,
+     "linkCheck": "no URL",
+     "sources": [
+      "goddess-doc"
+     ],
+     "docRefs": [
+      29
+     ],
+     "note": "Doc marks link pending; The information will be up soon"
+    },
+    {
+     "title": "What to Expect in the 2026 Year of the Fire Horse, according to a Feng Shui Expert",
+     "outlet": "For Urban Women",
+     "date": "2025-12-12",
+     "url": null,
+     "type": "online",
+     "status": "placeholder",
+     "onSiteAlready": false,
+     "linkCheck": "no URL",
+     "sources": [
+      "goddess-doc"
+     ],
+     "docRefs": [
+      37
+     ],
+     "note": "Doc marks link pending; The information will be up soon"
+    },
+    {
+     "title": "FREE FENG SHUI READING by MARITES ALLEN YEAR OF THE FIRE HORSE 2026",
+     "outlet": "YouTube",
+     "date": "2026",
+     "url": "https://www.youtube.com/watch?v=PMDxzl05SGM",
+     "type": "video",
+     "status": "live",
+     "onSiteAlready": false,
+     "linkCheck": "200",
+     "sources": [
+      "goddess-doc"
+     ],
+     "docRefs": [
+      89
+     ],
+     "note": "Doc date: 2026 (approximate)"
+    },
+    {
+     "title": "Feng Shui 2026 Marites Allen on break ups, showbiz power couples, and the voice of the youth",
+     "outlet": "Manila Standard",
+     "date": "2026",
+     "url": "https://www.facebook.com/ManilaStandardLifestyleEntertainment/videos/feng-shui-2026-marites-allen-on-break-ups-showbiz-power-couples-and-the-voice-of/1224109209673305/",
+     "type": "tv",
+     "status": "live",
+     "onSiteAlready": false,
+     "linkCheck": "200",
+     "sources": [
+      "goddess-doc"
+     ],
+     "docRefs": [
+      92
+     ],
+     "note": "Doc date: 2026 (approximate); Lunar New Year season appearance; topic per doc only"
+    },
+    {
+     "title": "On Point: Feng Shui Predictions for 2026 Fire Horse Year",
+     "outlet": "ANC / YouTube (host: Pinky Webb)",
+     "date": "2026-02-16",
+     "url": "https://www.youtube.com/watch?v=u9M-RXjrOk8",
+     "type": "video",
+     "status": "live",
+     "onSiteAlready": false,
+     "linkCheck": "200",
+     "sources": [
+      "goddess-doc"
+     ],
+     "docRefs": [
+      96
+     ],
+     "note": null
+    },
+    {
+     "title": "Positibong Balita",
+     "outlet": "DZRJ News (host: Carl E. Balita)",
+     "date": "2025-12-29",
+     "url": null,
+     "type": "radio",
+     "status": "placeholder",
+     "onSiteAlready": false,
+     "linkCheck": "no URL",
+     "sources": [
+      "goddess-doc"
+     ],
+     "docRefs": [
+      155
+     ],
+     "note": "Doc marks link pending; The information will be up soon; Doc date: 2025, December 29 (as listed in source; possibly 2024-12-29); Lunar New Year season appearance; topic per doc only"
+    }
+   ]
+  },
+  {
+   "year": 2025,
+   "animal": "Wood Snake",
+   "title": "2025 Year of the Wood Snake",
+   "summary": "Allen framed the Wood Snake year as one of transformation, introspection and careful long-term planning, naming Monkey, Rooster and Horse among the year's 'superstars' (Philstar; Manila Bulletin). She also warned of another wave of health challenges and urged preventive care (Manila Bulletin, 9 Oct 2024).",
+   "events": [
+    {
+     "title": "Year of the Wood Snake 2025 media conference",
+     "date": "2024-10-09",
+     "venue": "Van Gogh is Bipolar restaurant, Quezon City",
+     "source": "https://mb.com.ph/2024/10/9/feng-shui-master-marites-allen-reveals-lucky-animal-signs-for-2025-forecasts-another-wave-of-challenging-health-issue-next-year",
+     "status": "live"
+    }
+   ],
+   "features": [
+    {
+     "title": "Feng shui master Marites Allen reveals lucky animal signs for 2025, forecasts another wave of challenging health issues",
+     "outlet": "Manila Bulletin",
+     "date": "2024-10-09",
+     "url": "https://mb.com.ph/2024/10/9/feng-shui-master-marites-allen-reveals-lucky-animal-signs-for-2025-forecasts-another-wave-of-challenging-health-issue-next-year",
+     "type": "article",
+     "status": "live",
+     "onSiteAlready": true,
+     "linkCheck": "403",
+     "note": "link check returned 403 to an automated request (bot-blocked or temporarily down); verify in a browser",
+     "sources": [
+      "goddess-doc",
+      "site-cms"
+     ],
+     "docRefs": [
+      43
+     ]
+    },
+    {
+     "title": "Lucky animal signs in 2025",
+     "outlet": "Manila Bulletin",
+     "date": "2024-10-10",
+     "url": "https://mb.com.ph/2024/10/10/lucky-animal-signs-in-2025",
+     "type": "article",
+     "status": "live",
+     "onSiteAlready": false,
+     "linkCheck": "403",
+     "note": "link check returned 403 to an automated request (bot-blocked or temporarily down); verify in a browser",
+     "sources": [
+      "web"
+     ]
+    },
+    {
+     "title": "Unlock the Year of the Wood Snake: Marites Allen's 2025 Horoscope Books now available",
+     "outlet": "BusinessMirror",
+     "date": "2024-10-14",
+     "url": "https://businessmirror.com.ph/2024/10/14/unlock-the-year-of-the-wood-snake-marites-allens-2025-horoscope-books-now-available/",
+     "type": "article",
+     "status": "live",
+     "onSiteAlready": false,
+     "linkCheck": "403",
+     "note": "link check returned 403 to an automated request (bot-blocked or temporarily down); verify in a browser",
+     "sources": [
+      "web"
+     ]
+    },
+    {
+     "title": "Monkey, Horse, Rooster ‘superstars’ of the Year of the Wood Snake",
+     "outlet": "The Philippine Star",
+     "date": "2024-10-18",
+     "url": "https://www.philstar.com/lifestyle/arts-and-culture/2024/10/18/2393503/monkey-horse-rooster-superstars-year-wood-snake",
+     "type": "article",
+     "status": "live",
+     "onSiteAlready": false,
+     "linkCheck": "200",
+     "note": null,
+     "sources": [
+      "web"
+     ]
+    },
+    {
+     "title": "Celebrities in the Year of the Wood Snake, according to Marites Allen",
+     "outlet": "Philippine Daily Inquirer (Entertainment)",
+     "date": "2025-01-29",
+     "url": "https://entertainment.inquirer.net/595265/celebrities-in-the-year-of-the-wood-snake-according-to-marites-allen",
+     "type": "article",
+     "status": "live",
+     "onSiteAlready": true,
+     "linkCheck": "403",
+     "note": "link check returned 403 to an automated request (bot-blocked or temporarily down); verify in a browser",
+     "sources": [
+      "goddess-doc",
+      "site-cms"
+     ],
+     "docRefs": [
+      40
+     ]
+    },
+    {
+     "title": "Feng Shui expert Marites Allen on the Year of the Wooden Snake.",
+     "outlet": "NewsWatch Interviews",
+     "date": "2025-01",
+     "url": "https://www.youtube.com/watch?v=r27QpjNfhfk",
+     "type": "video",
+     "status": "live",
+     "onSiteAlready": true,
+     "linkCheck": "200",
+     "note": null,
+     "sources": [
+      "site-cms"
+     ]
+    },
+    {
+     "title": "Feng shui expert: Embrace transformation for Year of Wood Snake",
+     "outlet": "ABS-CBN News",
+     "date": "2025-01-25",
+     "url": "https://www.abs-cbn.com/news/nation/2025/1/25/feng-shui-expert-embrace-transformation-for-year-of-wood-snake-1134",
+     "type": "article",
+     "status": "live",
+     "onSiteAlready": true,
+     "linkCheck": "200",
+     "note": null,
+     "sources": [
+      "goddess-doc",
+      "site-cms"
+     ],
+     "docRefs": [
+      118
+     ]
+    },
+    {
+     "title": "Your guide to the Year of the Snake: Marites Allen's forecasts for each zodiac sign",
+     "outlet": "Bilyonaryo",
+     "date": "2025-01-28",
+     "url": "https://bilyonaryo.com/2025/01/28/your-guide-to-the-year-of-the-snake-marites-allens-forecasts-for-each-zodiac-sign/lifestyle/",
+     "type": "article",
+     "status": "live",
+     "onSiteAlready": true,
+     "linkCheck": "200",
+     "note": null,
+     "sources": [
+      "goddess-doc",
+      "site-cms"
+     ],
+     "docRefs": [
+      41
+     ]
+    },
+    {
+     "title": "Marites Allen’s feng shui guide to what each zodiac can expect",
+     "outlet": "The Chronicle",
+     "date": "2025-01-28",
+     "url": "https://thechronicle.com.ph/marites-allens-feng-shui-guide-to-what-each-zodiac-can-expect/",
+     "type": "online",
+     "status": "live",
+     "onSiteAlready": false,
+     "linkCheck": "200",
+     "note": null,
+     "sources": [
+      "web"
+     ]
+    },
+    {
+     "title": "Feng Shui Insights: Marites Allen on the Year of the Snake",
+     "outlet": "NewsWatch Plus",
+     "date": "2025-01-28",
+     "url": "https://www.newswatchplus.ph/2025/01/28/feng-shui-insights-marites-allen-on-the-year-of-the-snake/",
+     "type": "online",
+     "status": "live",
+     "onSiteAlready": false,
+     "linkCheck": "200",
+     "note": null,
+     "sources": [
+      "web"
+     ]
+    },
+    {
+     "title": "Expert Marites Allen celebrates Chinese New Year, says Feng Shui is for all ages",
+     "outlet": "ABS-CBN Entertainment",
+     "date": "2025-01-29",
+     "url": "https://www.abs-cbn.com/entertainment/showbiz/events/2025/1/29/expert-marites-allen-says-feng-shui-is-for-all-ages-0115",
+     "type": "article",
+     "status": "live",
+     "onSiteAlready": true,
+     "linkCheck": "200",
+     "note": null,
+     "sources": [
+      "goddess-doc",
+      "site-cms"
+     ],
+     "docRefs": [
+      110
+     ]
+    },
+    {
+     "title": "How to make the most of new lunar year",
+     "outlet": "Daily Tribune",
+     "date": "2025-01-31",
+     "url": "https://tribune.net.ph/2025/01/31/how-to-make-the-most-of-new-lunar-year",
+     "type": "article",
+     "status": "live",
+     "onSiteAlready": false,
+     "linkCheck": "500",
+     "note": "link check returned 500 to an automated request (bot-blocked or temporarily down); verify in a browser",
+     "sources": [
+      "goddess-doc",
+      "web"
+     ],
+     "docRefs": [
+      109
+     ]
+    },
+    {
+     "title": "Philippine pageantry in the Year of the Wood Snake",
+     "outlet": "Philippine Daily Inquirer (Entertainment)",
+     "date": "2025",
+     "url": "https://entertainment.inquirer.net/645930/philippine-pageantry-in-the-year-of-the-wood-snake",
+     "type": "article",
+     "status": "live",
+     "onSiteAlready": false,
+     "linkCheck": "403",
+     "sources": [
+      "goddess-doc"
+     ],
+     "docRefs": [
+      38
+     ],
+     "note": "Doc date: 2025 (approximate); link check returned 403 to an automated request (bot-blocked or temporarily down); verify in a browser"
+    },
+    {
+     "title": "Chinese New Year: Feng shui expert advises beauty queens to be like a snake",
+     "outlet": "Philippine Daily Inquirer (Entertainment)",
+     "date": "2025-01-30",
+     "url": "https://entertainment.inquirer.net/595413/chinese-new-year-feng-shui-expert-advises-beauty-queens-to-be-like-a-snake",
+     "type": "article",
+     "status": "live",
+     "onSiteAlready": false,
+     "linkCheck": "403",
+     "sources": [
+      "goddess-doc"
+     ],
+     "docRefs": [
+      39
+     ],
+     "note": "link check returned 403 to an automated request (bot-blocked or temporarily down); verify in a browser"
+    },
+    {
+     "title": "Feng Shui expert breaks down fortune for each animal sign on Year of Wooden Snake",
+     "outlet": "YouTube",
+     "date": "2025",
+     "url": "https://www.youtube.com/watch?v=U48XKgYdBwc",
+     "type": "video",
+     "status": "live",
+     "onSiteAlready": false,
+     "linkCheck": "200",
+     "sources": [
+      "goddess-doc"
+     ],
+     "docRefs": [
+      105
+     ],
+     "note": "Doc date: 2025 (approximate)"
+    },
+    {
+     "title": "Inay Ko Po! Livestream — Feng Shui sa Love Life and Relationship",
+     "outlet": "One PH (hosts: Tintin Babao, Mj Marfori)",
+     "date": "2025-02-01",
+     "url": null,
+     "type": "tv",
+     "status": "placeholder",
+     "onSiteAlready": false,
+     "linkCheck": "no URL",
+     "sources": [
+      "goddess-doc"
+     ],
+     "docRefs": [
+      108
+     ],
+     "note": "Doc marks link pending; The information will be up soon; Lunar New Year season appearance; topic per doc only"
+    },
+    {
+     "title": "PSN Hot Topic: Bwenas o Ahas? Your Guide to 2025",
+     "outlet": "Pilipino Star Ngayon Digital",
+     "date": "2025-01-29",
+     "url": null,
+     "type": "tv",
+     "status": "placeholder",
+     "onSiteAlready": false,
+     "linkCheck": "no URL",
+     "sources": [
+      "goddess-doc"
+     ],
+     "docRefs": [
+      111
+     ],
+     "note": "Doc marks link pending; The information will be up soon"
+    },
+    {
+     "title": "Gud Morning Kapatid Livestream",
+     "outlet": "GMA Network / Kapatid (Andrei Felix, Chiqui Roa-Puno, Maoui David, Angela Lagunzad-Castro, Dimples Romana)",
+     "date": "2025-01-29",
+     "url": null,
+     "type": "tv",
+     "status": "placeholder",
+     "onSiteAlready": false,
+     "linkCheck": "no URL",
+     "sources": [
+      "goddess-doc"
+     ],
+     "docRefs": [
+      112
+     ],
+     "note": "Doc marks link pending; The information will be up soon; Lunar New Year season appearance; topic per doc only"
+    },
+    {
+     "title": "Bilyonaryo News Channel — On Point",
+     "outlet": "Bilyonaryo (host: Pinky Webb)",
+     "date": "2025-01-27",
+     "url": null,
+     "type": "tv",
+     "status": "placeholder",
+     "onSiteAlready": false,
+     "linkCheck": "no URL",
+     "sources": [
+      "goddess-doc"
+     ],
+     "docRefs": [
+      114
+     ],
+     "note": "Doc marks link pending; The information will be up soon; Lunar New Year season appearance; topic per doc only"
+    },
+    {
+     "title": "NewsWatch interview — What lies ahead in Year of the Wooden Snake",
+     "outlet": "NewsWatch Plus (host: Christine Jacob-Sandejas)",
+     "date": "2025-01-27",
+     "url": null,
+     "type": "tv",
+     "status": "placeholder",
+     "onSiteAlready": false,
+     "linkCheck": "no URL",
+     "sources": [
+      "goddess-doc"
+     ],
+     "docRefs": [
+      115
+     ],
+     "note": "Doc marks link pending; The information will be up soon"
+    },
+    {
+     "title": "Pamilyang Pilipino show",
+     "outlet": "Julius and Tintin (hosts: Julius Babao, Christine Babao)",
+     "date": "2025-01-27",
+     "url": null,
+     "type": "tv",
+     "status": "placeholder",
+     "onSiteAlready": false,
+     "linkCheck": "no URL",
+     "sources": [
+      "goddess-doc"
+     ],
+     "docRefs": [
+      116
+     ],
+     "note": "Doc marks link pending; The information will be up soon; Lunar New Year season appearance; topic per doc only"
+    },
+    {
+     "title": "Inay Ko Po! — Mga Pampaswerte Ngayong Year of the Wooden Snake",
+     "outlet": "One PH (hosts: Christine Babao, Mj Marfori)",
+     "date": "2025-01-25",
+     "url": null,
+     "type": "tv",
+     "status": "placeholder",
+     "onSiteAlready": false,
+     "linkCheck": "no URL",
+     "sources": [
+      "goddess-doc"
+     ],
+     "docRefs": [
+      117
+     ],
+     "note": "Doc marks link pending; The information will be up soon"
+    },
+    {
+     "title": "Arangkada Balita Livestream",
+     "outlet": "Prime Media (hosts: Erwin Tulfo, Niña Corpuz)",
+     "date": "2025-01-17",
+     "url": null,
+     "type": "tv",
+     "status": "placeholder",
+     "onSiteAlready": false,
+     "linkCheck": "no URL",
+     "sources": [
+      "goddess-doc"
+     ],
+     "docRefs": [
+      119
+     ],
+     "note": "Doc marks link pending; The information will be up soon; Lunar New Year season appearance; topic per doc only"
+    },
+    {
+     "title": "SNEAK PREVIEW OF 2025 YEAR OF THE WOOD SNAKE",
+     "outlet": "YouTube",
+     "date": "2024",
+     "url": "https://www.youtube.com/watch?v=3w1xtEvFGTE",
+     "type": "video",
+     "status": "live",
+     "onSiteAlready": false,
+     "linkCheck": "200",
+     "sources": [
+      "goddess-doc"
+     ],
+     "docRefs": [
+      123
+     ],
+     "note": "Doc date: 2024 (approximate)"
+    },
+    {
+     "title": "Usapang Budget Natin",
+     "outlet": "Radyo Pilipinas (hosts: Richard Vargas, Erik Vocal)",
+     "date": "2025-01-24",
+     "url": null,
+     "type": "radio",
+     "status": "placeholder",
+     "onSiteAlready": false,
+     "linkCheck": "no URL",
+     "sources": [
+      "goddess-doc"
+     ],
+     "docRefs": [
+      157
+     ],
+     "note": "Doc marks link pending; The information will be up soon; Lunar New Year season appearance; topic per doc only"
+    },
+    {
+     "title": "Teleradyo Serbisyo",
+     "outlet": "DWPM Radyo 630 (host: Niña Corpuz)",
+     "date": "2025-01-16",
+     "url": null,
+     "type": "radio",
+     "status": "placeholder",
+     "onSiteAlready": false,
+     "linkCheck": "no URL",
+     "sources": [
+      "goddess-doc"
+     ],
+     "docRefs": [
+      158
+     ],
+     "note": "Doc marks link pending; The information will be up soon; Lunar New Year season appearance; topic per doc only"
+    },
+    {
+     "title": "DWIZ 882 interview",
+     "outlet": "DWIZ News (host: Lolly Acosta)",
+     "date": "2025-01-15",
+     "url": null,
+     "type": "radio",
+     "status": "placeholder",
+     "onSiteAlready": false,
+     "linkCheck": "no URL",
+     "sources": [
+      "goddess-doc"
+     ],
+     "docRefs": [
+      159
+     ],
+     "note": "Doc marks link pending; The information will be up soon; Lunar New Year season appearance; topic per doc only"
+    }
+   ]
+  },
+  {
+   "year": 2024,
+   "animal": "Wood Dragon",
+   "title": "2024 Year of the Wood Dragon",
+   "summary": "Allen called 2024 the start of the 20-year 'Period of 9' and a year of renewal and transformation, with green/jade as the lucky colour (ABS-CBN, 23 Jan 2024). Rat, Monkey and Sheep were forecast to fare well, while Dragon, Dog, Snake, Horse and Rooster were advised caution (ABS-CBN).",
+   "events": [
+    {
+     "title": "Year of the Wood Dragon 2024 media gathering",
+     "date": "2023",
+     "venue": "Manila House Private Club, Bonifacio Global City",
+     "source": "https://entertainment.inquirer.net/537377/whats-in-store-for-the-stars-this-year-of-the-wood-dragon",
+     "status": "placeholder",
+     "note": "Source says 'late last year' (late 2023); exact date not given. The information will be up soon."
+    }
+   ],
+   "features": [
+    {
+     "title": "2024: A year of abundance, jubilation",
+     "outlet": "The Manila Times",
+     "date": "2023-11-26",
+     "url": "https://www.manilatimes.net/2023/11/26/entertainment-lifestyle/2024-a-year-of-abundance-jubilation/1924200",
+     "type": "article",
+     "status": "live",
+     "onSiteAlready": false,
+     "linkCheck": "200",
+     "note": null,
+     "sources": [
+      "web"
+     ]
+    },
+    {
+     "title": "What's in store for the stars this 'Year of the Wood Dragon'",
+     "outlet": "Inquirer Entertainment",
+     "date": "2024-01",
+     "url": "https://entertainment.inquirer.net/537377/whats-in-store-for-the-stars-this-year-of-the-wood-dragon",
+     "type": "article",
+     "status": "live",
+     "onSiteAlready": false,
+     "linkCheck": "403",
+     "note": "link check returned 403 to an automated request (bot-blocked or temporarily down); verify in a browser",
+     "sources": [
+      "web"
+     ]
+    },
+    {
+     "title": "Feng shui expert Marites Allen shares forecast for the Year of the Wood Dragon 2024",
+     "outlet": "ABS-CBN Lifestyle",
+     "date": "2024-01-23",
+     "url": "https://www.abs-cbn.com/life/01/23/24/feng-shui-expert-shares-forecast-for-year-of-the-dragon",
+     "type": "article",
+     "status": "live",
+     "onSiteAlready": false,
+     "linkCheck": "200",
+     "note": null,
+     "sources": [
+      "web"
+     ]
+    },
+    {
+     "title": "Marites Allen on prosperous, joyous retailing",
+     "outlet": "The Manila Times (Supplements)",
+     "date": "2024-01-28",
+     "url": "https://www.manilatimes.net/2024/01/28/supplements/marites-allen-on-prosperous-joyous-retailing/1929994",
+     "type": "article",
+     "status": "live",
+     "onSiteAlready": true,
+     "linkCheck": "200",
+     "note": null,
+     "sources": [
+      "goddess-doc",
+      "site-cms"
+     ],
+     "docRefs": [
+      128
+     ]
+    },
+    {
+     "title": "The science of luck: Feng Shui master Marites Allen shares what we can look forward to this Chinese New Year",
+     "outlet": "Lifestyle.INQ",
+     "date": "2024-02",
+     "url": "https://lifestyle.inquirer.net/485696/the-science-of-luck-feng-shui-master-maritess-allen-shares-what-we-can-look-forward-to-this-chinese-new-year/",
+     "type": "article",
+     "status": "live",
+     "onSiteAlready": true,
+     "linkCheck": "403",
+     "note": "link check returned 403 to an automated request (bot-blocked or temporarily down); verify in a browser",
+     "sources": [
+      "goddess-doc",
+      "site-cms"
+     ],
+     "docRefs": [
+      1
+     ]
+    },
+    {
+     "title": "Marites Allen unlocks the first key to realty prosperity",
+     "outlet": "The Manila Times (Supplements)",
+     "date": "2024-02-02",
+     "url": "https://www.manilatimes.net/2024/02/02/supplements/marites-allen-unlocks-the-first-key-to-realty-prosperity/1930670",
+     "type": "article",
+     "status": "live",
+     "onSiteAlready": true,
+     "linkCheck": "200",
+     "note": null,
+     "sources": [
+      "goddess-doc",
+      "site-cms"
+     ],
+     "docRefs": [
+      44
+     ]
+    },
+    {
+     "title": "How 'Year of the Wood Dragon' was for Kathryn Bernardo, Maris Racal, other celebs",
+     "outlet": "Philippine Daily Inquirer (Entertainment)",
+     "date": "2024-12-31",
+     "url": "https://entertainment.inquirer.net/591373/how-year-of-the-wood-dragon-was-for-kathryn-bernardo-maris-racal-other-celebs",
+     "type": "article",
+     "status": "live",
+     "onSiteAlready": true,
+     "linkCheck": "403",
+     "note": "link check returned 403 to an automated request (bot-blocked or temporarily down); verify in a browser",
+     "sources": [
+      "goddess-doc",
+      "site-cms"
+     ],
+     "docRefs": [
+      42
+     ]
+    },
+    {
+     "title": "Wood Dragon 2024 forecast item",
+     "outlet": "BusinessWorld",
+     "date": "2023",
+     "url": null,
+     "type": "article",
+     "status": "placeholder",
+     "onSiteAlready": false,
+     "linkCheck": "no URL",
+     "sources": [
+      "goddess-doc"
+     ],
+     "docRefs": [
+      45
+     ],
+     "note": "Doc gives only a generic page (https://www.bworldonline.com/page/1522/?m=team), not the article; The information will be up soon; Generic title as given in doc; Doc date: 2023 (late, approximate)"
+    },
+    {
+     "title": "Lucky & Unlucky Areas | 2024 Year of the Wood Dragon",
+     "outlet": "YouTube",
+     "date": "2024",
+     "url": "https://www.youtube.com/watch?v=xvUKxvn-jag",
+     "type": "video",
+     "status": "live",
+     "onSiteAlready": false,
+     "linkCheck": "200",
+     "sources": [
+      "goddess-doc"
+     ],
+     "docRefs": [
+      122
+     ],
+     "note": "Doc date: 2024 (approximate)"
+    },
+    {
+     "title": "Marites Allen Year of the Dragon Feng Shui Convention 2024 Teaser",
+     "outlet": "YouTube",
+     "date": "2024",
+     "url": "https://www.youtube.com/watch?v=YgoYaCC4SQg",
+     "type": "video",
+     "status": "live",
+     "onSiteAlready": false,
+     "linkCheck": "200",
+     "sources": [
+      "goddess-doc"
+     ],
+     "docRefs": [
+      124
+     ],
+     "note": "Doc date: 2024 (approximate)"
+    },
+    {
+     "title": "Marites Allen Chinese New Year Forecast (Playlist)",
+     "outlet": "YouTube",
+     "date": "2024",
+     "url": "https://www.youtube.com/playlist?list=PL0fuBnMe1L0DqPIBuXg-SmmS62uHWomvE",
+     "type": "video",
+     "status": "live",
+     "onSiteAlready": false,
+     "linkCheck": "200",
+     "sources": [
+      "goddess-doc"
+     ],
+     "docRefs": [
+      125
+     ],
+     "note": "Doc date: 2024 (approximate)"
+    }
+   ]
+  },
+  {
+   "year": 2023,
+   "animal": "Water Rabbit",
+   "title": "2023 Year of the Water Rabbit",
+   "summary": "Allen called the Water Rabbit year a calmer time of love, peace, reconciliation and harmony, good for starting families (Manila Bulletin; Lifestyle.INQ). She warned of the shift from Period 8 to Period 9, with the theme 'hop, skip or jump' (Lifestyle.INQ).",
+   "events": [
+    {
+     "title": "Year of the Water Rabbit 2023 media gathering",
+     "date": "2022-11-28",
+     "venue": "Manila House, Bonifacio Global City, Taguig",
+     "source": "https://lifestyle.inquirer.net/435523/year-of-the-water-rabbit-could-be-time-of-peace-harmony-says-queen-of-feng-shui/",
+     "status": "live"
+    }
+   ],
+   "features": [
+    {
+     "title": "Year of the Water Rabbit could be time of peace, harmony, says 'Queen of Feng Shui'",
+     "outlet": "Lifestyle.INQ",
+     "date": "2022-11",
+     "url": "https://lifestyle.inquirer.net/435523/year-of-the-water-rabbit-could-be-time-of-peace-harmony-says-queen-of-feng-shui/",
+     "type": "article",
+     "status": "live",
+     "onSiteAlready": false,
+     "linkCheck": "403",
+     "note": "link check returned 403 to an automated request (bot-blocked or temporarily down); verify in a browser",
+     "sources": [
+      "web"
+     ]
+    },
+    {
+     "title": "Feng shui expert Maritess Allen says 2023 is year of 'moving on'",
+     "outlet": "ABS-CBN News",
+     "date": "2022-11-29",
+     "url": "https://www.abs-cbn.com/life/11/29/22/feng-shui-expert-says-2023-is-year-of-moving-on",
+     "type": "article",
+     "status": "live",
+     "onSiteAlready": true,
+     "linkCheck": "200",
+     "note": null,
+     "sources": [
+      "goddess-doc",
+      "site-cms"
+     ],
+     "docRefs": [
+      135
+     ]
+    },
+    {
+     "title": "Feng Shui Queen declares 2023 as the Year of Letting Go",
+     "outlet": "Manila Standard",
+     "date": "2022-12",
+     "url": "https://manilastandard.net/lifestyle/lifestyle-columns/random-talk-by-kate-adajar/314283708/feng-shui-queen-declares-2023-as-the-year-of-letting-go.html",
+     "type": "article",
+     "status": "live",
+     "onSiteAlready": true,
+     "linkCheck": "202",
+     "note": "link check returned 202 to an automated request (bot-blocked or temporarily down); verify in a browser",
+     "sources": [
+      "goddess-doc",
+      "site-cms"
+     ],
+     "docRefs": [
+      48
+     ]
+    },
+    {
+     "title": "Marites Allen reveals 2023 feng shui forecast",
+     "outlet": "Manila Bulletin",
+     "date": "2022-12-01",
+     "url": "https://mb.com.ph/2022/12/01/marites-allen-reveals-2023-feng-shui-forecast/",
+     "type": "article",
+     "status": "live",
+     "onSiteAlready": true,
+     "linkCheck": "403",
+     "note": "link check returned 403 to an automated request (bot-blocked or temporarily down); verify in a browser",
+     "sources": [
+      "goddess-doc",
+      "site-cms"
+     ],
+     "docRefs": [
+      49
+     ]
+    },
+    {
+     "title": "Feng Shui 2023: Love, Peace, and Prosperity Forecast",
+     "outlet": "MEGA",
+     "date": "2023",
+     "url": "https://mega-asia.com/lifestyle/culture/2023-feng-shui-forecast-predicts-a-year-of-love-peace-and-harmony/",
+     "type": "article",
+     "status": "live",
+     "onSiteAlready": false,
+     "linkCheck": "403",
+     "note": "link check returned 403 to an automated request (bot-blocked or temporarily down); verify in a browser",
+     "sources": [
+      "web"
+     ]
+    },
+    {
+     "title": "2023 is the year of love, Feng Shui master says",
+     "outlet": "GMA News Online",
+     "date": "2023-01-02",
+     "url": "https://www.gmanetwork.com/news/lifestyle/familyandrelationships/856087/2023-is-the-year-of-love-feng-shui-master-says/story/",
+     "type": "article",
+     "status": "live",
+     "onSiteAlready": false,
+     "linkCheck": "200",
+     "note": null,
+     "sources": [
+      "web"
+     ]
+    },
+    {
+     "title": "7 Feng Shui tips for getting lucky this ...",
+     "outlet": "Business Mirror",
+     "date": "2023-01-21",
+     "url": null,
+     "type": "article",
+     "status": "placeholder",
+     "onSiteAlready": false,
+     "linkCheck": "no URL",
+     "sources": [
+      "goddess-doc"
+     ],
+     "docRefs": [
+      47
+     ],
+     "note": "Doc marks link pending; The information will be up soon; Title truncated/partial in doc"
+    },
+    {
+     "title": "MARITES ALLEN, THE REAL FENG SHUI QUEEN - Year of the Rabbit - USA Global TV",
+     "outlet": "YouTube",
+     "date": "2023",
+     "url": "https://www.youtube.com/watch?v=Hlv64fpUXTw",
+     "type": "video",
+     "status": "live",
+     "onSiteAlready": false,
+     "linkCheck": "200",
+     "sources": [
+      "goddess-doc"
+     ],
+     "docRefs": [
+      130
+     ],
+     "note": "Doc date: 2023 (approximate)"
+    },
+    {
+     "title": "2023 is the year of the Water Rabbit | New Day - CNN Philippines",
+     "outlet": "Dailymotion / CNN Philippines",
+     "date": "2023",
+     "url": "https://www.dailymotion.com/video/x8guw0o",
+     "type": "tv",
+     "status": "live",
+     "onSiteAlready": false,
+     "linkCheck": "200",
+     "sources": [
+      "goddess-doc"
+     ],
+     "docRefs": [
+      132
+     ],
+     "note": "Doc date: 2023 (approximate)"
+    },
+    {
+     "title": "Lunar New Year begins on Sunday, Jan. 22 - CNN Philippines",
+     "outlet": "Dailymotion / CNN Philippines",
+     "date": "2023",
+     "url": "https://www.dailymotion.com/video/x8henzj",
+     "type": "tv",
+     "status": "live",
+     "onSiteAlready": false,
+     "linkCheck": "200",
+     "sources": [
+      "goddess-doc"
+     ],
+     "docRefs": [
+      133
+     ],
+     "note": "Doc date: 2023 (approximate)"
+    }
+   ]
+  },
+  {
+   "year": 2022,
+   "animal": "Water Tiger",
+   "title": "2022 Year of the Water Tiger",
+   "summary": "Allen said the Water Tiger year would be 'a year of separation', with movement, unforeseen changes and heightened tensions (Rappler; PhilSTAR Life).",
+   "events": [],
+   "features": [
+    {
+     "title": "Feng shui master Marites Allen says 2022 will be 'a year of separation'",
+     "outlet": "Rappler",
+     "date": "2022-01-02",
+     "url": "https://www.rappler.com/life-and-style/astrology/feng-shui-master-marites-allen-says-2022-year-of-separation/",
+     "type": "article",
+     "status": "live",
+     "onSiteAlready": true,
+     "linkCheck": "200",
+     "note": null,
+     "sources": [
+      "goddess-doc",
+      "site-cms"
+     ],
+     "docRefs": [
+      53
+     ]
+    },
+    {
+     "title": "Feng Shui Queen Marites Allen decodes the Year of the Water Tiger",
+     "outlet": "The Manila Times (Sunday Times)",
+     "date": "2022-01-09",
+     "url": "https://www.manilatimes.net/2022/01/09/the-sunday-times/cover-story/feng-shui-queen-marites-allen-decodes-the-year-of-the-water-tiger/1828614",
+     "type": "article",
+     "status": "live",
+     "onSiteAlready": false,
+     "linkCheck": "200",
+     "note": null,
+     "sources": [
+      "web"
+     ]
+    },
+    {
+     "title": "Marites Allen 2022 feng shui forecast highlights",
+     "outlet": "The Manila Times",
+     "date": "2022-01-13",
+     "url": "https://www.manilatimes.net/2022/01/13/public-square/marites-allen-2022-feng-shui-forecast-highlights/1829088",
+     "type": "article",
+     "status": "live",
+     "onSiteAlready": true,
+     "linkCheck": "200",
+     "note": null,
+     "sources": [
+      "goddess-doc",
+      "site-cms"
+     ],
+     "docRefs": [
+      168
+     ]
+    },
+    {
+     "title": "The Year of the Water Tiger: 'There will be separation, aggression, unforeseen changes'",
+     "outlet": "PhilSTAR Life",
+     "date": "2022-01-25",
+     "url": "https://philstarlife.com/living/956371-year-water-tiger-2022-forecast",
+     "type": "online",
+     "status": "live",
+     "onSiteAlready": false,
+     "linkCheck": "200",
+     "note": null,
+     "sources": [
+      "web"
+     ]
+    },
+    {
+     "title": "Here’s what the Year of the Water Tiger has in store for you in love, health, career, and money",
+     "outlet": "PhilSTAR Life",
+     "date": "2022-01-27",
+     "url": "https://philstarlife.com/living/962328-year-water-tiger-forecast-love-health-career-money",
+     "type": "online",
+     "status": "live",
+     "onSiteAlready": false,
+     "linkCheck": "200",
+     "note": null,
+     "sources": [
+      "web"
+     ]
+    },
+    {
+     "title": "Roaring with confidence: Marites Allen's Feng Shui forecast for 2022",
+     "outlet": "Sunstar Cebu",
+     "date": "2022-01-28",
+     "url": "https://www.sunstar.com.ph/cebu/lifestyle/roaring-with-confidence-marites-allens-feng-shui-forecast-for-2022",
+     "type": "article",
+     "status": "live",
+     "onSiteAlready": true,
+     "linkCheck": "200",
+     "note": null,
+     "sources": [
+      "goddess-doc",
+      "site-cms"
+     ],
+     "docRefs": [
+      50
+     ]
+    },
+    {
+     "title": "Marites Allen's Forecast in the Year of the Water Tiger",
+     "outlet": "Expat Philippines",
+     "date": "2022-01-28",
+     "url": "https://expatphilippines.ph/articles/marites-allens-forecast-in-the-year-of-the-water-tiger/",
+     "type": "online",
+     "status": "live",
+     "onSiteAlready": false,
+     "linkCheck": "200",
+     "note": null,
+     "sources": [
+      "web"
+     ]
+    },
+    {
+     "title": "What are the lucky colors that would attract wealth, fortune, stability this Year of the Water Tiger?",
+     "outlet": "PhilSTAR Life",
+     "date": "2022-01-31",
+     "url": "https://philstarlife.com/self/694943-the-year-of-the-water-tiger-s-lucky-colors",
+     "type": "online",
+     "status": "live",
+     "onSiteAlready": false,
+     "linkCheck": "200",
+     "note": null,
+     "sources": [
+      "web"
+     ]
+    },
+    {
+     "title": "Interview With Filipina Feng Shui Master Marites Allen: Tips on How to Invite Prosperity Into the Home This Year of the Water Tiger",
+     "outlet": "Tatler Asia",
+     "date": "2022",
+     "url": "https://www.tatlerasia.com/homes/decor/inviting-prosperity-at-home-in-this-year-of-the-water-tiger",
+     "type": "online",
+     "status": "live",
+     "onSiteAlready": false,
+     "linkCheck": "403",
+     "sources": [
+      "goddess-doc"
+     ],
+     "docRefs": [
+      51
+     ],
+     "note": "Doc date: 2022 (early, approximate); link check returned 403 to an automated request (bot-blocked or temporarily down); verify in a browser"
+    },
+    {
+     "title": "2022 Lucky Colours: Advice From Feng Shui Expert Marites Allen",
+     "outlet": "Tatler Asia",
+     "date": "2022",
+     "url": "https://www.tatlerasia.com/homes/decor/lucky-colors-to-infuse-into-your-home-for-2022",
+     "type": "online",
+     "status": "live",
+     "onSiteAlready": false,
+     "linkCheck": "403",
+     "sources": [
+      "goddess-doc"
+     ],
+     "docRefs": [
+      52
+     ],
+     "note": "Doc date: 2022 (early, approximate); Lunar New Year season appearance; topic per doc only; link check returned 403 to an automated request (bot-blocked or temporarily down); verify in a browser"
+    },
+    {
+     "title": "CHiNOY TV Podcast - 2022 Challenger Signs: Tiger, Snake, Monkey, Pig ft. Marites Allen",
+     "outlet": "Spotify / CHiNOY TV",
+     "date": "2022",
+     "url": "https://open.spotify.com/show/5SCHsjXZZc5Gleb0ZJKNzO",
+     "type": "radio",
+     "status": "live",
+     "onSiteAlready": false,
+     "linkCheck": "200",
+     "sources": [
+      "goddess-doc"
+     ],
+     "docRefs": [
+      161
+     ],
+     "note": "Doc date: 2022 (approximate)"
+    },
+    {
+     "title": "CHiNOY TV Podcast - 2022 Superstar Signs: Horse, Sheep, Rooster, Dog ft. Marites Allen",
+     "outlet": "Spotify / CHiNOY TV",
+     "date": "2022",
+     "url": "https://open.spotify.com/episode/66cnTNr36sbpaVFo4m4Dr2",
+     "type": "radio",
+     "status": "live",
+     "onSiteAlready": false,
+     "linkCheck": "200",
+     "sources": [
+      "goddess-doc"
+     ],
+     "docRefs": [
+      162
+     ],
+     "note": "Doc date: 2022 (approximate)"
+    },
+    {
+     "title": "CHiNOY TV Podcast - Overview of the Year of the Water Tiger ft. Marites Allen",
+     "outlet": "Spotify / CHiNOY TV",
+     "date": "2022",
+     "url": "https://open.spotify.com/episode/5VVFqhkFX9dayn7IVnP46e",
+     "type": "radio",
+     "status": "live",
+     "onSiteAlready": false,
+     "linkCheck": "200",
+     "sources": [
+      "goddess-doc"
+     ],
+     "docRefs": [
+      163
+     ],
+     "note": "Doc date: 2022 (approximate)"
+    }
+   ]
+  },
+  {
+   "year": 2021,
+   "animal": "Metal Ox",
+   "title": "2021 Year of the Metal Ox",
+   "summary": "Allen forecast the Metal Ox year as one demanding hard work for everyone, calling it a possible 'year of vaccines' (BusinessMirror; Lifestyle.INQ).",
+   "events": [],
+   "features": [
+    {
+     "title": "2021: A hopeful year for everyone",
+     "outlet": "Inquirer Business",
+     "date": "2020-12-26",
+     "url": "https://business.inquirer.net/314704/2021-a-hopeful-year-for-everyone",
+     "type": "article",
+     "status": "live",
+     "onSiteAlready": true,
+     "linkCheck": "403",
+     "note": "link check returned 403 to an automated request (bot-blocked or temporarily down); verify in a browser",
+     "sources": [
+      "goddess-doc",
+      "site-cms"
+     ],
+     "docRefs": [
+      59
+     ]
+    },
+    {
+     "title": "Marites Allen: Thrive in 2021 Year of the Metal OX",
+     "outlet": "Kumagcow",
+     "date": "2020-12-07",
+     "url": "https://www.kumagcow.com/2020/12/marites-allen-thrive-in-2021-year-of.html",
+     "type": "online",
+     "status": "live",
+     "onSiteAlready": false,
+     "linkCheck": "200",
+     "note": null,
+     "sources": [
+      "web"
+     ]
+    },
+    {
+     "title": "Feng shui master says 2021 could be 'year of vaccines'",
+     "outlet": "Lifestyle.INQ",
+     "date": "2021",
+     "url": "https://lifestyle.inquirer.net/376437/feng-shui-master-says-2021-could-be-year-of-vaccines/",
+     "type": "article",
+     "status": "live",
+     "onSiteAlready": false,
+     "linkCheck": "403",
+     "note": "link check returned 403 to an automated request (bot-blocked or temporarily down); verify in a browser",
+     "sources": [
+      "web"
+     ]
+    },
+    {
+     "title": "Feng shui master Maritess Allen’s general forecast for 2021",
+     "outlet": "The Manila Times",
+     "date": "2021-01-02",
+     "url": "https://www.manilatimes.net/2021/01/02/lifestyle-entertainment/show-times/feng-shui-master-maritess-allens-general-forecast-for-2021/821123",
+     "type": "article",
+     "status": "live",
+     "onSiteAlready": false,
+     "linkCheck": "200",
+     "note": null,
+     "sources": [
+      "web"
+     ]
+    },
+    {
+     "title": "Feng Shui master reveals horoscope, predictions for 2021 Year of Metal Ox",
+     "outlet": "The Summit Express",
+     "date": "2021-01-03",
+     "url": "https://www.thesummitexpress.com/2020/12/feng-shui-predictions-2021-year-ox.html",
+     "type": "online",
+     "status": "live",
+     "onSiteAlready": false,
+     "linkCheck": "200",
+     "note": null,
+     "sources": [
+      "web"
+     ]
+    },
+    {
+     "title": "The Year of the Metal Ox requires hard work for everyone — feng shui expert",
+     "outlet": "Business Mirror",
+     "date": "2021-02-10",
+     "url": "https://businessmirror.com.ph/2021/02/10/the-year-of-the-metal-ox-requires-hard-work-for-everyone-feng-shui-expert/",
+     "type": "article",
+     "status": "live",
+     "onSiteAlready": true,
+     "linkCheck": "403",
+     "note": "link check returned 403 to an automated request (bot-blocked or temporarily down); verify in a browser",
+     "sources": [
+      "goddess-doc",
+      "site-cms"
+     ],
+     "docRefs": [
+      169
+     ]
+    },
+    {
+     "title": "Thrive, not just survive, in the Year of the Metal Ox 2021",
+     "outlet": "PhilSTAR Life",
+     "date": "2021-02-03",
+     "url": "https://philstarlife.com/living/525875-feng-shui-cny-metal-ox-2021",
+     "type": "online",
+     "status": "live",
+     "onSiteAlready": false,
+     "linkCheck": "200",
+     "note": null,
+     "sources": [
+      "web"
+     ]
+    },
+    {
+     "title": "Your relationship guide in the Year of the Ox",
+     "outlet": "PhilSTAR Life",
+     "date": "2021-02-12",
+     "url": "https://philstarlife.com/news-and-views/943949-relationship-chinese-new-year-of-the-ox",
+     "type": "online",
+     "status": "live",
+     "onSiteAlready": false,
+     "linkCheck": "200",
+     "note": null,
+     "sources": [
+      "web"
+     ]
+    },
+    {
+     "title": "Marites Allen 2021 Forecast featured in UK's Daily Express",
+     "outlet": "Daily Express UK",
+     "date": "2021-01",
+     "url": null,
+     "type": "online",
+     "status": "placeholder",
+     "onSiteAlready": false,
+     "linkCheck": "no URL",
+     "sources": [
+      "goddess-doc"
+     ],
+     "docRefs": [
+      58
+     ],
+     "note": "Doc gives only a generic page (https://www.express.co.uk/search?s=marites%20allen), not the article; The information will be up soon"
+    }
+   ]
+  },
+  {
+   "year": 2020,
+   "animal": "Metal Rat",
+   "title": "2020 Year of the Metal Rat",
+   "summary": "Allen presented the Metal Rat year as one of new beginnings and new successes, at the start of a new zodiac cycle (BusinessMirror; For Urban Women).",
+   "events": [
+    {
+     "title": "15th Marites Allen Philippine Feng Shui Convention",
+     "date": "2019-11-24",
+     "venue": null,
+     "source": "https://www.forurbanwomen.com/2019/11/year-of-the-rat-2020.html",
+     "status": "live",
+     "note": "Preview press conference held at Novotel Manila Araneta City; convention venue not stated"
+    }
+   ],
+   "features": [
+    {
+     "title": "New beginnings, new successes in the Year of the Metal Rat 2020",
+     "outlet": "Business Mirror",
+     "date": "2019-10-22",
+     "url": "https://businessmirror.com.ph/2019/10/22/new-beginnings-new-successes-in-the-year-of-the-metal-rat-2020/",
+     "type": "article",
+     "status": "live",
+     "onSiteAlready": true,
+     "linkCheck": "403",
+     "note": "link check returned 403 to an automated request (bot-blocked or temporarily down); verify in a browser",
+     "sources": [
+      "goddess-doc",
+      "site-cms"
+     ],
+     "docRefs": [
+      171
+     ]
+    },
+    {
+     "title": "15th Marites Allen Philippine Feng Shui Convention Preview",
+     "outlet": "For Urban Women",
+     "date": "2019-11",
+     "url": "https://www.forurbanwomen.com/2019/11/year-of-the-rat-2020.html",
+     "type": "article",
+     "status": "live",
+     "onSiteAlready": true,
+     "linkCheck": "200",
+     "note": null,
+     "sources": [
+      "goddess-doc",
+      "site-cms"
+     ],
+     "docRefs": [
+      170
+     ]
+    },
+    {
+     "title": "Tonight With Boy Abunda: Maritess Allen Full Interview",
+     "outlet": "Dailymotion",
+     "date": "2019-11-08",
+     "url": "https://www.dailymotion.com/video/x7nqxvs",
+     "type": "video",
+     "status": "live",
+     "onSiteAlready": true,
+     "linkCheck": "200",
+     "note": null,
+     "sources": [
+      "goddess-doc",
+      "site-cms"
+     ],
+     "docRefs": [
+      147
+     ]
+    },
+    {
+     "title": "Lucky Colors to Wear in 2020, According to Feng Shui",
+     "outlet": "Preview.ph",
+     "date": "2020-01-08",
+     "url": "https://www.preview.ph/fashion/lucky-colors-2020-based-on-feng-shui-a00232-20200108",
+     "type": "article",
+     "status": "live",
+     "onSiteAlready": true,
+     "linkCheck": "403",
+     "note": "link check returned 403 to an automated request (bot-blocked or temporarily down); verify in a browser",
+     "sources": [
+      "goddess-doc",
+      "site-cms"
+     ],
+     "docRefs": [
+      62
+     ]
+    },
+    {
+     "title": "SEIZE EVERY GOOD OPPORTUNITY: Feng Shui expert Marites Allen shares her thoughts on the Year of the Metal Rat",
+     "outlet": "Business Mirror",
+     "date": "2020-01-25",
+     "url": "https://businessmirror.com.ph/2020/01/25/seize-every-good-opportunity-feng-shui-expert-marites-allen-shares-her-thoughts-on-the-year-of-the-metal-rat/",
+     "type": "article",
+     "status": "live",
+     "onSiteAlready": true,
+     "linkCheck": "403",
+     "note": "link check returned 403 to an automated request (bot-blocked or temporarily down); verify in a browser",
+     "sources": [
+      "goddess-doc",
+      "site-cms"
+     ],
+     "docRefs": [
+      61
+     ]
+    },
+    {
+     "title": "Predictions for each Chinese zodiac sign.",
+     "outlet": "ABS-CBN · The Bottomline",
+     "date": "2020-01",
+     "url": "https://www.youtube.com/watch?v=xfLMTQCr3og",
+     "type": "video",
+     "status": "live",
+     "onSiteAlready": true,
+     "linkCheck": "200",
+     "note": null,
+     "sources": [
+      "goddess-doc",
+      "site-cms"
+     ],
+     "docRefs": [
+      144
+     ]
+    },
+    {
+     "title": "Feng Shui master reveals what's in store for you in the year of the Metal Rat 2020",
+     "outlet": "The Summit Express",
+     "date": "2020-01-08",
+     "url": "https://www.thesummitexpress.com/2019/12/feng-shui-master-forecast-year-2020-metal-rat.html",
+     "type": "online",
+     "status": "live",
+     "onSiteAlready": false,
+     "linkCheck": "200",
+     "note": null,
+     "sources": [
+      "web"
+     ]
+    },
+    {
+     "title": "Know your fortune as Marites Allen, Feng Shui Master shares her 2020 Astrological Forecast",
+     "outlet": "SMN Events",
+     "date": "2023",
+     "url": "https://www.facebook.com/smnedsa/posts/hope-everyone-got-a-peek-into-their-fortune-as-marites-allen-the-one-and-only-fe/550609233774268/",
+     "type": "online",
+     "status": "live",
+     "onSiteAlready": false,
+     "linkCheck": "400",
+     "sources": [
+      "goddess-doc"
+     ],
+     "docRefs": [
+      46
+     ],
+     "note": "Doc dates this 2023 (approx) but title is about 2020; date unverified; Doc date: 2023 (approximate); link check returned 400 to an automated request (bot-blocked or temporarily down); verify in a browser"
+    }
+   ]
+  },
+  {
+   "year": 2019,
+   "animal": "Earth Pig",
+   "title": "2019 Year of the Earth Pig",
+   "summary": "Allen's Earth Pig forecast pointed to abundance but warned against overspending and unnecessary investments (Philstar, 8 Jan 2019).",
+   "events": [
+    {
+     "title": "14th Annual Feng Shui Updates",
+     "date": "2018-11-18",
+     "venue": "Forbes Ballroom, Conrad Manila, Mall of Asia Complex, Pasay City",
+     "source": "https://www.whereiseduy.com/fengshui-master-marites-allen-reveals-her-2019-forecast-at-14th-annual-feng-shui-updates/",
+     "status": "live"
+    },
+    {
+     "title": "Chinese New Year meet and greet",
+     "date": "2019-01",
+     "venue": "Montebello Villa Hotel, Cebu",
+     "source": "https://www.sunstar.com.ph/cebu/lifestyle/feng-shui-master-marites-allen-shares-her-prediction-at-montebello",
+     "status": "live"
+    }
+   ],
+   "features": [
+    {
+     "title": "FengShui Master Marites Allen reveals her 2019 Forecast at 14th Annual Feng Shui Updates",
+     "outlet": "Where is Ed Uy?",
+     "date": "2018-11-16",
+     "url": "https://www.whereiseduy.com/fengshui-master-marites-allen-reveals-her-2019-forecast-at-14th-annual-feng-shui-updates/",
+     "type": "online",
+     "status": "live",
+     "onSiteAlready": false,
+     "linkCheck": "200",
+     "note": null,
+     "sources": [
+      "web"
+     ]
+    },
+    {
+     "title": "Feng shui advice in the Year of the Earth Pig",
+     "outlet": "The Philippine Star",
+     "date": "2019-01-08",
+     "url": "https://www.philstar.com/other-sections/newsmakers/2019/01/08/1883058/feng-shui-advice-year-earth-pig",
+     "type": "article",
+     "status": "live",
+     "onSiteAlready": false,
+     "linkCheck": "200",
+     "note": null,
+     "sources": [
+      "web"
+     ]
+    },
+    {
+     "title": "Feng Shui master Marites Allen shares her prediction at Montebello Villa Hotel",
+     "outlet": "SunStar Cebu",
+     "date": "2019-02-06",
+     "url": "https://www.sunstar.com.ph/cebu/lifestyle/feng-shui-master-marites-allen-shares-her-prediction-at-montebello",
+     "type": "article",
+     "status": "live",
+     "onSiteAlready": true,
+     "linkCheck": "200",
+     "note": null,
+     "sources": [
+      "goddess-doc",
+      "site-cms"
+     ],
+     "docRefs": [
+      64
+     ]
+    },
+    {
+     "title": "Feng Shui must-read from Allen",
+     "outlet": "Manila Standard",
+     "date": "2019",
+     "url": "https://manilastandard.net/?p=256568",
+     "type": "article",
+     "status": "live",
+     "onSiteAlready": false,
+     "linkCheck": "202",
+     "sources": [
+      "goddess-doc"
+     ],
+     "docRefs": [
+      63
+     ],
+     "note": "Doc date: 2019 (approximate); Lunar New Year season appearance; topic per doc only; link check returned 202 to an automated request (bot-blocked or temporarily down); verify in a browser"
+    },
+    {
+     "title": "Is Your Animal Sign Lucky This Year Of The Earth Boar? Feng Shui Master Marites Allen Has The Answers",
+     "outlet": "Metro.Style",
+     "date": "2018",
+     "url": "https://metro.style/culture/spotlight/year-of-the-earth-boar-feng-shui-marites-allen/12001",
+     "type": "online",
+     "status": "live",
+     "onSiteAlready": false,
+     "linkCheck": "200",
+     "sources": [
+      "goddess-doc"
+     ],
+     "docRefs": [
+      65
+     ],
+     "note": "Doc date: 2018 (late, approximate)"
+    }
+   ]
+  },
+  {
+   "year": 2018,
+   "animal": "Earth Dog",
+   "title": "2018 Year of the Earth Dog",
+   "summary": "Allen called the Earth Dog year a prosperous year of stability and new beginnings (YouTube media conference; The Summit Express).",
+   "events": [
+    {
+     "title": "2018 Year of the Earth Dog book launch",
+     "date": "2017-11/2017-12",
+     "venue": null,
+     "source": "https://www.whereiseduy.com/marites-allen-book-launch-2018/",
+     "status": "placeholder",
+     "note": "Date and venue not stated precisely in source. The information will be up soon."
+    },
+    {
+     "title": "13th Feng Shui Convention ('Getting Things Right')",
+     "date": "2018-01-06",
+     "venue": "Grand Ballroom, Marco Polo Ortigas",
+     "source": "https://kaimagsanoc.wordpress.com/2018/01/06/culture-marites-allens-2018-feng-shui/",
+     "status": "live"
+    }
+   ],
+   "features": [
+    {
+     "title": "Why 2018 is a prosperous year.",
+     "outlet": "Media Conference · Marco Polo",
+     "date": "2017-11",
+     "url": "https://www.youtube.com/watch?v=4RPYGf1oY_4",
+     "type": "video",
+     "status": "live",
+     "onSiteAlready": true,
+     "linkCheck": "200",
+     "note": null,
+     "sources": [
+      "site-cms"
+     ]
+    },
+    {
+     "title": "FengShui Queen Marites Allen launches her new books for 2018 the Year of the Earth Dog",
+     "outlet": "Where is Ed Uy?",
+     "date": "2017-12-04",
+     "url": "https://www.whereiseduy.com/marites-allen-book-launch-2018/",
+     "type": "online",
+     "status": "live",
+     "onSiteAlready": false,
+     "linkCheck": "200",
+     "note": null,
+     "sources": [
+      "web"
+     ]
+    },
+    {
+     "title": "Marites Allen's 2018 Feng Shui",
+     "outlet": "Coffee With Kai",
+     "date": "2018-01-06",
+     "url": "https://kaimagsanoc.wordpress.com/2018/01/06/culture-marites-allens-2018-feng-shui/",
+     "type": "article",
+     "status": "live",
+     "onSiteAlready": true,
+     "linkCheck": "200",
+     "note": null,
+     "sources": [
+      "goddess-doc",
+      "site-cms"
+     ],
+     "docRefs": [
+      67
+     ]
+    },
+    {
+     "title": "Feng Shui expert shares what’s in store for you this Year of the Dog 2018",
+     "outlet": "The Summit Express",
+     "date": "2018-01-13",
+     "url": "https://www.thesummitexpress.com/2018/01/2018-feng-shui-forecasts-predictions.html",
+     "type": "online",
+     "status": "live",
+     "onSiteAlready": false,
+     "linkCheck": "200",
+     "note": null,
+     "sources": [
+      "web"
+     ]
+    }
+   ]
+  },
+  {
+   "year": 2017,
+   "animal": "Fire Rooster",
+   "title": "2017 Year of the Fire Rooster",
+   "summary": "For the Fire Rooster year Allen recommended earth tones to balance the missing Earth element and expected fire-based businesses such as beauty, fashion and entertainment to do well (Philstar, 5 Jan 2017).",
+   "events": [],
+   "features": [
+    {
+     "title": "The year of the yin fire rooster",
+     "outlet": "BusinessWorld Online",
+     "date": "2016-11-29",
+     "url": "https://bworldonline.com/arts-and-leisure/2016/11/29/119579/the-year-of-the-yin-fire-rooster/",
+     "type": "article",
+     "status": "live",
+     "onSiteAlready": true,
+     "linkCheck": "200",
+     "note": null,
+     "sources": [
+      "goddess-doc",
+      "site-cms"
+     ],
+     "docRefs": [
+      69
+     ]
+    },
+    {
+     "title": "Feng Shui expert Marites Allen on new beginnings for the Year of Fire Rooster",
+     "outlet": "The Manila Times (Sunday Times)",
+     "date": "2016-12-31",
+     "url": "https://www.manilatimes.net/2016/12/31/weekly/the-sunday-times/feng-shui-expert-marites-allen-new-beginnings-year-fire-rooster/304523",
+     "type": "article",
+     "status": "live",
+     "onSiteAlready": false,
+     "linkCheck": "200",
+     "note": null,
+     "sources": [
+      "web"
+     ]
+    },
+    {
+     "title": "The Horse and the Sheep could be led into extramarital affairs",
+     "outlet": "Inquirer Lifestyle",
+     "date": "2017-01-28",
+     "url": "https://lifestyle.inquirer.net/252258/horse-sheep-led-extramarital-affairs/",
+     "type": "article",
+     "status": "live",
+     "onSiteAlready": true,
+     "linkCheck": "403",
+     "note": "link check returned 403 to an automated request (bot-blocked or temporarily down); verify in a browser",
+     "sources": [
+      "goddess-doc",
+      "site-cms"
+     ],
+     "docRefs": [
+      68
+     ]
+    },
+    {
+     "title": "Feng shui predictions for 2017",
+     "outlet": "The Philippine Star",
+     "date": "2017-01-05",
+     "url": "https://www.philstar.com/entertainment/2017/01/05/1659592/feng-shui-predictions-2017",
+     "type": "article",
+     "status": "live",
+     "onSiteAlready": false,
+     "linkCheck": "200",
+     "note": null,
+     "sources": [
+      "web"
+     ]
+    },
+    {
+     "title": "Feng Shui Master Marites Allen on how to be lucky in 2017",
+     "outlet": "Where is Ed Uy?",
+     "date": "2017-01-16",
+     "url": "https://www.whereiseduy.com/how-to-be-lucky-this-year-of-the-fire-rooster/",
+     "type": "online",
+     "status": "live",
+     "onSiteAlready": false,
+     "linkCheck": "200",
+     "note": null,
+     "sources": [
+      "web"
+     ]
+    },
+    {
+     "title": "Your luck in 2017",
+     "outlet": "SunStar",
+     "date": "2017-02-08",
+     "url": "https://www.sunstar.com.ph/more-articles/your-luck-in-2017-",
+     "type": "article",
+     "status": "live",
+     "onSiteAlready": false,
+     "linkCheck": "200",
+     "note": null,
+     "sources": [
+      "web"
+     ]
+    },
+    {
+     "title": "Feng Shui Master Marites Allen shares Tips for New Year at Montebello Villa Hotel",
+     "outlet": "YouTube",
+     "date": "2017",
+     "url": "https://www.youtube.com/watch?v=x9uSezQnQJk",
+     "type": "video",
+     "status": "live",
+     "onSiteAlready": false,
+     "linkCheck": "200",
+     "sources": [
+      "goddess-doc"
+     ],
+     "docRefs": [
+      148
+     ],
+     "note": "Doc date: 2017 (approximate); Lunar New Year season appearance; topic per doc only"
+    },
+    {
+     "title": "Preparing your homes for the Year of the Fire Rooster",
+     "outlet": "CNN Philippines",
+     "date": "2017",
+     "url": "https://www.facebook.com/NewsWatchPlusPH/videos/preparing-your-homes-for-the-year-of-the-fire-rooster/1858935741012983/",
+     "type": "tv",
+     "status": "live",
+     "onSiteAlready": false,
+     "linkCheck": "200",
+     "sources": [
+      "goddess-doc"
+     ],
+     "docRefs": [
+      149
+     ],
+     "note": "Doc date: 2017 (approximate)"
+    }
+   ]
+  },
+  {
+   "year": 2016,
+   "animal": "Fire Monkey",
+   "title": "2016 Year of the Fire Monkey",
+   "summary": "Allen's Fire Monkey forecast flagged challenges, competition and health concerns, with blue, black and grey as auspicious colours (Rappler; Manila Standard).",
+   "events": [
+    {
+     "title": "11th Philippine Feng Shui Convention",
+     "date": "2016-01-03",
+     "venue": "Marco Polo Manila, Ortigas",
+     "source": "https://www.whereiseduy.com/marites-allen-feng-shui-convention-2016/",
+     "status": "live"
+    }
+   ],
+   "features": [
+    {
+     "title": "What's in store for you this 2016, the Year of the Monkey?",
+     "outlet": "Rappler",
+     "date": "2015-12-30",
+     "url": "https://www.rappler.com/culture-desk/noteworthy/117509-2016-year-monkey-forecast-marites-allen/",
+     "type": "online",
+     "status": "live",
+     "onSiteAlready": false,
+     "linkCheck": "200",
+     "note": null,
+     "sources": [
+      "web"
+     ]
+    },
+    {
+     "title": "Feng Shui for Life: 2016, Year of the Fire Monkey",
+     "outlet": "Manila Standard",
+     "date": "2016-01",
+     "url": "http://manilastandard.net/lifestyle/pop-culture/196332/feng-shui-for-life-2016-year-of-the-fire-monkey.html",
+     "type": "article",
+     "status": "live",
+     "onSiteAlready": true,
+     "linkCheck": "500",
+     "note": "link check returned 500 to an automated request (bot-blocked or temporarily down); verify in a browser",
+     "sources": [
+      "goddess-doc",
+      "site-cms"
+     ],
+     "docRefs": [
+      72
+     ]
+    },
+    {
+     "title": "11th Philippine Feng Shui Convention (2016 Year of the Fire Monkey)",
+     "outlet": "Your Majesty's Ire",
+     "date": "2016-01-06",
+     "url": "https://urmajestysire.wordpress.com/2016/01/06/marites-allen-11th-philippine-feng-shui-convention-2016-year-of-the-fire-monkey/",
+     "type": "article",
+     "status": "live",
+     "onSiteAlready": true,
+     "linkCheck": "200",
+     "note": null,
+     "sources": [
+      "goddess-doc",
+      "site-cms"
+     ],
+     "docRefs": [
+      172
+     ]
+    },
+    {
+     "title": "Finding love in 2016",
+     "outlet": "BusinessMirror",
+     "date": "2016-01-07",
+     "url": "https://businessmirror.com.ph/2016/01/07/finding-love-in-2016/",
+     "type": "article",
+     "status": "live",
+     "onSiteAlready": false,
+     "linkCheck": "403",
+     "note": "link check returned 403 to an automated request (bot-blocked or temporarily down); verify in a browser",
+     "sources": [
+      "web"
+     ]
+    },
+    {
+     "title": "HOW TO MAKE 2016 YOUR BEST YEAR YET",
+     "outlet": "Where is Ed Uy?",
+     "date": "2016-01-12",
+     "url": "https://www.whereiseduy.com/marites-allen-feng-shui-convention-2016/",
+     "type": "online",
+     "status": "live",
+     "onSiteAlready": false,
+     "linkCheck": "200",
+     "note": null,
+     "sources": [
+      "web"
+     ]
+    },
+    {
+     "title": "Forecast for the Year of the Fire Monkey",
+     "outlet": "BusinessWorld Online",
+     "date": "2016-02-03",
+     "url": "https://bworldonline.com/arts-and-leisure/2016/02/03/1046/forecast-for-the-year-of-the-fire-monkey/",
+     "type": "article",
+     "status": "live",
+     "onSiteAlready": true,
+     "linkCheck": "200",
+     "note": null,
+     "sources": [
+      "goddess-doc",
+      "site-cms"
+     ],
+     "docRefs": [
+      71
+     ]
+    },
+    {
+     "title": "Amp up your business game plan in the Year of the Monkey",
+     "outlet": "BusinessWorld",
+     "date": "2016-02-04",
+     "url": "https://www.bworldonline.com/weekender/focus/2016/02/05/11490/amp-up-your-business-game-plan-in-the-year-of-the-monkey/",
+     "type": "article",
+     "status": "live",
+     "onSiteAlready": true,
+     "linkCheck": "200",
+     "note": null,
+     "sources": [
+      "goddess-doc",
+      "site-cms"
+     ],
+     "docRefs": [
+      70
+     ]
+    },
+    {
+     "title": "Feng shui forecast, tips for 2016, Year of the Fire Monkey",
+     "outlet": "Rappler",
+     "date": "2016-02-06",
+     "url": "https://www.rappler.com/culture-desk/noteworthy/121228-feng-shui-forecast-2016-fire-monkey/",
+     "type": "online",
+     "status": "live",
+     "onSiteAlready": false,
+     "linkCheck": "200",
+     "note": null,
+     "sources": [
+      "web"
+     ]
+    }
+   ]
+  },
+  {
+   "year": 2015,
+   "animal": "Wood Sheep",
+   "title": "2015 Year of the Wood Sheep",
+   "summary": "Allen called the Wood Sheep year an auspicious, more balanced year (Philstar, 17 Feb 2015; PEP.ph).",
+   "events": [],
+   "features": [
+    {
+     "title": "2015 Feng Shui Updates for the Year of the Wood Sheep from Marites Allen",
+     "outlet": "Rockstar Momma",
+     "date": "2014-10",
+     "url": "http://www.r0ckstarm0mma.com/2014/10/2015-feng-shui-updates-for-year-of-wood.html",
+     "type": "article",
+     "status": "live",
+     "onSiteAlready": true,
+     "linkCheck": "500",
+     "note": "link check returned 500 to an automated request (bot-blocked or temporarily down); verify in a browser",
+     "sources": [
+      "goddess-doc",
+      "site-cms"
+     ],
+     "docRefs": [
+      76
+     ]
+    },
+    {
+     "title": "Feng Shui Master Marites Allen says 2015 is an auspicious year",
+     "outlet": "PEP.ph",
+     "date": "2015",
+     "url": "https://www.pep.ph/lifestyle/29837/feng-shui-master-marites-allen-says-2015-is-an-auspicious-year",
+     "type": "online",
+     "status": "live",
+     "onSiteAlready": false,
+     "linkCheck": "403",
+     "note": "link check returned 403 to an automated request (bot-blocked or temporarily down); verify in a browser",
+     "sources": [
+      "web"
+     ]
+    },
+    {
+     "title": "Will you be lucky in the Year of the Sheep?",
+     "outlet": "Lifestyle.INQ",
+     "date": "2015",
+     "url": "https://lifestyle.inquirer.net/174363/will-you-be-lucky-in-the-year-of-the-sheep/",
+     "type": "article",
+     "status": "live",
+     "onSiteAlready": false,
+     "linkCheck": "403",
+     "note": "link check returned 403 to an automated request (bot-blocked or temporarily down); verify in a browser",
+     "sources": [
+      "web"
+     ]
+    },
+    {
+     "title": "Feng Shui Master Marites Allen says 2015 an auspicious year",
+     "outlet": "The Philippine Star",
+     "date": "2015-02-17",
+     "url": "https://www.philstar.com/news-commentary/2015/02/17/1424405/feng-shui-master-marites-allen-says-2015-auspicious-year",
+     "type": "article",
+     "status": "live",
+     "onSiteAlready": false,
+     "linkCheck": "200",
+     "note": null,
+     "sources": [
+      "web"
+     ]
+    }
+   ]
+  },
+  {
+   "year": 2014,
+   "animal": "Wood Horse",
+   "title": "2014 Year of the Wood Horse",
+   "summary": "Allen described the Wood Horse year as aggressive and volatile: good for business and love, with caution advised for Rat, Dog and Boar (LionhearTV).",
+   "events": [],
+   "features": [
+    {
+     "title": "Pinoy Celebrities Predictions for 2014 on The Bottomline (Video) | PhilNews",
+     "outlet": "PhilNews",
+     "date": "2014-01-04",
+     "url": "https://philnews.ph/2014/01/04/pinoy-celebrities-predictions-for-2014-on-the-bottomline-video/",
+     "type": "online",
+     "status": "live",
+     "onSiteAlready": false,
+     "linkCheck": "200",
+     "note": null,
+     "sources": [
+      "web"
+     ]
+    },
+    {
+     "title": "Trivia and feng shui readings for the year of the wooden horse - LionhearTV",
+     "outlet": "LionhearTV",
+     "date": "2014-01-11",
+     "url": "https://www.lionheartv.net/2014/01/trivia-and-feng-shui-readings-for-the-year-of-the-wooden-horse/",
+     "type": "online",
+     "status": "live",
+     "onSiteAlready": false,
+     "linkCheck": "200",
+     "note": null,
+     "sources": [
+      "web"
+     ]
+    },
+    {
+     "title": "Getting lucky with feng shui expert Marites Allen",
+     "outlet": "The Philippine Star",
+     "date": "2014-01-31",
+     "url": "https://www.philstar.com/lifestyle/young-star/2014/01/31/1284797/getting-lucky-feng-shui-expert-marites-allen",
+     "type": "article",
+     "status": "live",
+     "onSiteAlready": true,
+     "linkCheck": "200",
+     "note": null,
+     "sources": [
+      "goddess-doc",
+      "site-cms"
+     ],
+     "docRefs": [
+      173
+     ]
+    }
+   ]
+  },
+  {
+   "year": 2013,
+   "animal": "Water Snake",
+   "title": "2013 Year of the Water Snake",
+   "summary": "Philstar carried Allen's outlook for the Water Snake year and her tips on harnessing good luck in 2013 (Philstar, Feb 2013).",
+   "events": [],
+   "features": [
+    {
+     "title": "Marites Allen teaches the ways to harness good luck in 2013",
+     "outlet": "The Philippine Star",
+     "date": "2013-02-03",
+     "url": "https://www.philstar.com/lifestyle/sunday-life/2013/02/03/904071/marites-allen-teaches-ways-harness-good-luck-2013",
+     "type": "article",
+     "status": "live",
+     "onSiteAlready": false,
+     "linkCheck": "200",
+     "note": null,
+     "sources": [
+      "web"
+     ]
+    },
+    {
+     "title": "Marites Allen’s outlook for the Snake Year",
+     "outlet": "The Philippine Star",
+     "date": "2013-02-08",
+     "url": "https://www.philstar.com/lifestyle/ystyle/2013/02/08/906071/marites-allens-outlook-snake-year",
+     "type": "article",
+     "status": "live",
+     "onSiteAlready": false,
+     "linkCheck": "200",
+     "note": null,
+     "sources": [
+      "web"
+     ]
+    },
+    {
+     "title": "Wasak (TV Episode 2013) - Marites Allen",
+     "outlet": "IMDB",
+     "date": "2013-02-05",
+     "url": "https://m.imdb.com/title/tt3285786/",
+     "type": "tv",
+     "status": "live",
+     "onSiteAlready": false,
+     "linkCheck": "202",
+     "sources": [
+      "goddess-doc"
+     ],
+     "docRefs": [
+      152
+     ],
+     "note": "Lunar New Year season appearance; topic per doc only; link check returned 202 to an automated request (bot-blocked or temporarily down); verify in a browser"
+    }
+   ]
+  },
+  {
+   "year": 2012,
+   "animal": "Water Dragon",
+   "title": "2012 Year of the Water Dragon",
+   "summary": "Allen said the Water Dragon year would initiate economic transformation (The Freeman / Philstar, 27 Jan 2012).",
+   "events": [],
+   "features": [
+    {
+     "title": "Water Dragon to initiate economic transformation",
+     "outlet": "The Freeman / Philstar (Cebu Business)",
+     "date": "2012-01-27",
+     "url": "https://www.philstar.com/cebu-business/2012/01/27/771327/water-dragon-initiate-economic-transformation",
+     "type": "article",
+     "status": "live",
+     "onSiteAlready": false,
+     "linkCheck": "200",
+     "note": null,
+     "sources": [
+      "web"
+     ]
+    }
+   ]
+  },
+  {
+   "year": 2011,
+   "animal": "Metal Rabbit",
+   "title": "2011 Year of the Metal Rabbit",
+   "summary": "Allen gave positive projections for Cebu businesses in the Metal Rabbit year (The Freeman / Philstar, 11 Feb 2011).",
+   "events": [],
+   "features": [
+    {
+     "title": "Feng shui expert bares positive projections for Cebu businesses",
+     "outlet": "The Freeman / Philstar (Cebu Business)",
+     "date": "2011-02-11",
+     "url": "https://www.philstar.com/cebu-business/2011/02/11/655956/feng-shui-expert-bares-positive-projections-cebu-businesses",
+     "type": "article",
+     "status": "live",
+     "onSiteAlready": false,
+     "linkCheck": "200",
+     "note": null,
+     "sources": [
+      "web"
+     ]
+    }
+   ]
+  },
+  {
+   "year": 2010,
+   "animal": "Metal Tiger",
+   "title": "2010 Year of the Metal Tiger",
+   "summary": "The Freeman (Philstar Cebu) ran Allen's 'Your Luck in 2010' reading for the Metal Tiger year (14 Feb 2010).",
+   "events": [],
+   "features": [
+    {
+     "title": "Radio Clash: World of Feng Shui",
+     "outlet": "Edwin Sallan blog",
+     "date": "2009-12",
+     "url": "http://edwinsallan.blogspot.com/2009/12/world-of-feng-shui.html",
+     "type": "online",
+     "status": "live",
+     "onSiteAlready": false,
+     "linkCheck": "500",
+     "note": "link check returned 500 to an automated request (bot-blocked or temporarily down); verify in a browser",
+     "sources": [
+      "web"
+     ]
+    },
+    {
+     "title": "YOUR LUCK IN 2010",
+     "outlet": "The Freeman / Philstar (Cebu Lifestyle)",
+     "date": "2010-02-14",
+     "url": "https://www.philstar.com/cebu-lifestyle/2010/02/14/549236/your-luck-2010",
+     "type": "article",
+     "status": "live",
+     "onSiteAlready": false,
+     "linkCheck": "200",
+     "note": null,
+     "sources": [
+      "web"
+     ]
+    },
+    {
+     "title": "Marites Allen's World of Feng Sh...",
+     "outlet": "Manila Standard Today",
+     "date": "2009-12-29",
+     "url": null,
+     "type": "article",
+     "status": "placeholder",
+     "onSiteAlready": false,
+     "linkCheck": "no URL",
+     "sources": [
+      "goddess-doc"
+     ],
+     "docRefs": [
+      84
+     ],
+     "note": "Doc marks link pending; The information will be up soon; Title truncated/partial in doc; Lunar New Year season appearance; topic per doc only"
+    },
+    {
+     "title": "election feng shui readings",
+     "outlet": "Philippine Daily Inquirer",
+     "date": "2009-12-13",
+     "url": null,
+     "type": "article",
+     "status": "placeholder",
+     "onSiteAlready": false,
+     "linkCheck": "no URL",
+     "sources": [
+      "goddess-doc"
+     ],
+     "docRefs": [
+      85
+     ],
+     "note": "Doc marks link pending; The information will be up soon; Title truncated/partial in doc"
+    }
+   ]
+  },
+  {
+   "year": 2009,
+   "animal": "Earth Ox",
+   "title": "2009 Year of the Earth Ox",
+   "summary": "A Jan 2009 report carried Allen's optimistic outlook for the Earth Ox year, including sector-by-sector business prospects (NTUC Phl repost).",
+   "events": [],
+   "features": [
+    {
+     "title": "Feng Shui experts optimism in 2009 - National Trade Union Center of the Philippines",
+     "outlet": "NTUC Phl (repost)",
+     "date": "2009-01-26",
+     "url": "https://ntucphl.org/2009/01/feng-shui-experts-optimism-in-2009/",
+     "type": "online",
+     "status": "live",
+     "onSiteAlready": false,
+     "linkCheck": "200",
+     "note": null,
+     "sources": [
+      "web"
+     ]
+    }
+   ]
+  },
+  {
+   "year": 2008,
+   "animal": "Earth Rat",
+   "title": "2008 Year of the Earth Rat",
+   "summary": "Allen shared her Earth Rat 2008 readings at Shangri-La Mactan, Cebu (The Freeman / Philstar, 8 Feb 2008).",
+   "events": [
+    {
+     "title": "2008 feng shui readings",
+     "date": "2008-02",
+     "venue": "Shangri-La Mactan, Cebu",
+     "source": "https://www.philstar.com/cebu-lifestyle/2008/02/08/43359/feng-shui-expert-marites-allen-shares-2008-readings-shangri-la-mactan",
+     "status": "live"
+    }
+   ],
+   "features": [
+    {
+     "title": "The Year of the Rat - Good and Bad",
+     "outlet": "maritesallen.com (old press page)",
+     "date": "2008",
+     "url": "https://maritesallen.com/presss/the-year-of-the-rat-good-and-bad-2/",
+     "type": "online",
+     "status": "live",
+     "onSiteAlready": false,
+     "linkCheck": "403",
+     "note": "link check returned 403 to an automated request (bot-blocked or temporarily down); verify in a browser",
+     "sources": [
+      "web"
+     ]
+    },
+    {
+     "title": "Feng Shui expert Marites Allen shares 2008 readings at Shangri-La Mactan",
+     "outlet": "The Freeman / Philstar (Cebu Lifestyle)",
+     "date": "2008-02-08",
+     "url": "https://www.philstar.com/cebu-lifestyle/2008/02/08/43359/feng-shui-expert-marites-allen-shares-2008-readings-shangri-la-mactan",
+     "type": "article",
+     "status": "live",
+     "onSiteAlready": false,
+     "linkCheck": "200",
+     "note": null,
+     "sources": [
+      "web"
+     ]
+    }
+   ]
+  },
+  {
+   "year": 2007,
+   "animal": "Fire Pig",
+   "title": "2007 Year of the Fire Pig",
+   "summary": "The information will be up soon.",
+   "events": [],
+   "features": [
+    {
+     "title": "2007 Year of the Fire Pig forecast coverage",
+     "outlet": null,
+     "date": "2007",
+     "url": null,
+     "type": "article",
+     "status": "placeholder",
+     "onSiteAlready": false,
+     "linkCheck": "n/a",
+     "note": "No coverage found online yet. The information will be up soon",
+     "sources": [
+      "web"
+     ]
+    }
+   ]
+  },
+  {
+   "year": 2006,
+   "animal": "Fire Dog",
+   "title": "2006 Year of the Fire Dog",
+   "summary": "The information will be up soon.",
+   "events": [],
+   "features": [
+    {
+     "title": "Getting Lucky\" (column debut)",
+     "outlet": "Manila Standard Today",
+     "date": "2006",
+     "url": null,
+     "type": "article",
+     "status": "placeholder",
+     "onSiteAlready": false,
+     "linkCheck": "no URL",
+     "sources": [
+      "goddess-doc"
+     ],
+     "docRefs": [
+      87
+     ],
+     "note": "Doc marks link pending; The information will be up soon; Doc date: c. March 30, 2006; Title truncated/partial in doc"
+    }
+   ]
+  },
+  {
+   "year": 2005,
+   "animal": "Wood Rooster",
+   "title": "2005 Year of the Wood Rooster",
+   "summary": "The information will be up soon.",
+   "events": [
+    {
+     "title": "First annual Feng Shui convention",
+     "date": "2005",
+     "venue": null,
+     "source": "https://www.whereiseduy.com/marites-allen-feng-shui-convention-2016/",
+     "status": "placeholder",
+     "note": "Source says the convention was first held in 2005; no 2005 coverage found. The information will be up soon."
+    }
+   ],
+   "features": [
+    {
+     "title": "2005 Year of the Wood Rooster forecast coverage",
+     "outlet": null,
+     "date": "2005",
+     "url": null,
+     "type": "article",
+     "status": "placeholder",
+     "onSiteAlready": false,
+     "linkCheck": "n/a",
+     "note": "No coverage found online yet. The information will be up soon",
+     "sources": [
+      "web"
+     ]
+    }
+   ]
+  }
+ ],
+ "pressCons": [
+  {
+   "date": "2026-10-12",
+   "title": "Year of the Fire Sheep 2027 Annual Press Conference",
+   "venue": "SPACES, Penthouse, World Plaza Tower, Bonifacio Global City, Taguig",
+   "status": "live",
+   "coverage": [
+    {
+     "title": "What the Year of the Fire Sheep 2027 Could Bring: Marites Allen Reveals Feng Shui Forecasts, Lucky Directions and DESTARA",
+     "outlet": "Erica Yub",
+     "date": "2026-10",
+     "url": "https://www.ericayub.com/2026/10/what-year-of-fire-sheep-2027-could.html",
+     "type": "article",
+     "status": "live",
+     "onSiteAlready": true,
+     "linkCheck": "200",
+     "note": null
+    },
+    {
+     "title": "2027 Feng Shui Outlook: What the Year of the Fire Sheep Means for Your Career, Love and Finances",
+     "outlet": "Raincheckblog",
+     "date": "2026-10",
+     "url": "https://www.raindeocampo.com/2026/10/15/2027-feng-shui-outlook-what-the-year-of-the-fire-sheep-means-for-your-career-love-and-finances/",
+     "type": "article",
+     "status": "live",
+     "onSiteAlready": true,
+     "linkCheck": "200",
+     "note": null
+    },
+    {
+     "title": "Marites Allen shares Feng Shui forecast for 2027: What the 12 animal signs can expect",
+     "outlet": "GMA Network",
+     "date": "2026-10",
+     "url": "https://www.gmanetwork.com/lifestyle/news/28224/marites-allen-shares-feng-shui-forecast-for-2027-what-the-12-animal-signs-can-expect/photo",
+     "type": "article",
+     "status": "live",
+     "onSiteAlready": true,
+     "linkCheck": "200",
+     "note": "page metadata date reads 30 Nov 2026 (future/odd); kept site month Oct 2026"
+    },
+    {
+     "title": "Marites Allen shows essentials for the Year of the Fire Sheep 2027",
+     "outlet": "Kumagcow",
+     "date": "2026-10",
+     "url": "https://www.kumagcow.com/2026/10/marites-allen-shows-essentials-for-year.html",
+     "type": "article",
+     "status": "live",
+     "onSiteAlready": true,
+     "linkCheck": "200",
+     "note": null
+    },
+    {
+     "title": "2027 Year Of The Fire Sheep: Which Chinese Zodiac Signs Could Attract Wealth, Love And Success",
+     "outlet": "Earthlingorgeous",
+     "date": "2026-10",
+     "url": "https://www.earthlingorgeous.com/2026/10/2027-year-of-the-fire-sheep.html",
+     "type": "online",
+     "status": "live",
+     "onSiteAlready": false,
+     "linkCheck": "200",
+     "note": null
+    },
+    {
+     "title": "2027 Year of the Fire Sheep Forecast by Feng Shui Queen Marites Allen",
+     "outlet": "YouTube (Earthlingorgeous)",
+     "date": "2026-10",
+     "url": null,
+     "type": "video",
+     "status": "placeholder",
+     "onSiteAlready": true,
+     "linkCheck": "no URL",
+     "note": "Listed on live maritesallen.com/media but link not found in repo fallback or web search; The information will be up soon"
+    },
+    {
+     "title": "YEAR OF THE FIRE SHEEP by MARITES ALLEN Press Conference",
+     "outlet": "Kumagcow (YouTube)",
+     "date": "2026-10",
+     "url": null,
+     "type": "video",
+     "status": "placeholder",
+     "onSiteAlready": true,
+     "linkCheck": "no URL",
+     "note": "Listed on live maritesallen.com/media but link not found in repo fallback or web search; The information will be up soon"
+    },
+    {
+     "title": "A glimpse into the Year of the Fire Sheep 2027 from Feng Shui expert Marites Allen",
+     "outlet": "ReZirb",
+     "date": "2026-10-13",
+     "url": "https://www.rezirb.com/2026/10/a-glimpse-into-the-year-of-the-fire-sheep-2027-from-feng-shui-expert-marites-allen/",
+     "type": "article",
+     "status": "live",
+     "onSiteAlready": true,
+     "linkCheck": "200",
+     "note": null
+    },
+    {
+     "title": "Marites Allen reveals fearless 2027 Fire Sheep forecast, pioneering Destiny Is in Your Stars platform",
+     "outlet": "Manila Times",
+     "date": "2026-10-14",
+     "url": "https://www.manilatimes.net/2026/10/14/entertainment-lifestyle/marites-allen-reveals-fearless-2027-fire-sheep-forecast-pioneering-destiny-is-in-your-stars-platform/2445260",
+     "type": "article",
+     "status": "live",
+     "onSiteAlready": true,
+     "linkCheck": "200",
+     "note": null
+    },
+    {
+     "title": "Marites Allen reveals fearless 2027 Fire Sheep forecast (Newswav)",
+     "outlet": "Newswav",
+     "date": "2026-10-14",
+     "url": "https://newswav.com/article/marites-allen-reveals-fearless-2027-fire-sheep-forecast-pioneering-destiny-A2610_4x6zZf",
+     "type": "article",
+     "status": "live",
+     "onSiteAlready": true,
+     "linkCheck": "200",
+     "note": null
+    },
+    {
+     "title": "Is 2027 Your Lucky Year? Marites Allen Reveals What the Year of the Fire Sheep Has in Store",
+     "outlet": "Where is Ed Uy?",
+     "date": "2026-10-16",
+     "url": "https://www.whereiseduy.com/is-2027-your-lucky-year-marites-allen-reveals-what-the-year-of-the-fire-sheep-has-in-store/",
+     "type": "online",
+     "status": "live",
+     "onSiteAlready": false,
+     "linkCheck": "200",
+     "note": null
+    },
+    {
+     "title": "Love, luck or money? What celebs ask feng shui master Marites Allen",
+     "outlet": "The Philippine Star",
+     "date": "2026-10-18",
+     "url": "https://www.philstar.com/entertainment/2026/10/18/2563917/love-luck-or-money-what-celebs-ask-feng-shui-master-marites-allen",
+     "type": "article",
+     "status": "live",
+     "onSiteAlready": false,
+     "linkCheck": "200",
+     "note": null
+    },
+    {
+     "title": "BEYOND THE ZODIAC: MARITES ALLEN SHARES HER 2027 FIRE SHEEP OUTLOOK AND A NEW ERA OF FENG SHUI GUIDANCE - Lipsticks x Lenses",
+     "outlet": "Lipsticks x Lenses",
+     "date": "2026-10-21",
+     "url": "https://www.lipsticksxlenses.com/lifestyle/beyond-the-zodiac-marites-allen-shares-her-2027-fire-sheep-outlook-and-a-new-era-of-feng-shui-guidance/",
+     "type": "online",
+     "status": "live",
+     "onSiteAlready": false,
+     "linkCheck": "200",
+     "note": null
+    },
+    {
+     "title": "Fire Sheep to shake things up?",
+     "outlet": "Manila Standard",
+     "date": "2026-11",
+     "url": "https://manilastandard.net/lifestyle/314816206/fire-sheep-to-shake-things-up.html",
+     "type": "article",
+     "status": "live",
+     "onSiteAlready": false,
+     "linkCheck": "202",
+     "note": "link check returned 202 to an automated request (bot-blocked or temporarily down); verify in a browser"
+    },
+    {
+     "title": "Fire Sheep year favors steady growth, says Marites Allen",
+     "outlet": "Daily Tribune",
+     "date": "2026-11-06",
+     "url": "https://tribune.net.ph/2026/11/06/fire-sheep-year-favors-steady-growth-says-marites-allen",
+     "type": "article",
+     "status": "live",
+     "onSiteAlready": false,
+     "linkCheck": "200",
+     "note": null
+    },
+    {
+     "title": "Clear direction, strong relationships mark Year of the Fire Sheep",
+     "outlet": "The Philippine Star",
+     "date": "2026-11-08",
+     "url": "https://www.philstar.com/lifestyle/arts-and-culture/2026/11/08/2568736/clear-direction-strong-relationships-mark-year-fire-sheep",
+     "type": "article",
+     "status": "live",
+     "onSiteAlready": false,
+     "linkCheck": "200",
+     "note": null
+    },
+    {
+     "title": "What's in store for the 12 signs in the Year of the Fire Sheep",
+     "outlet": "The Philippine Star",
+     "date": "2026-11-08",
+     "url": "https://www.philstar.com/lifestyle/on-the-radar/2026/11/08/2568776/whats-store-12-signs-year-fire-sheep",
+     "type": "article",
+     "status": "live",
+     "onSiteAlready": false,
+     "linkCheck": "200",
+     "note": null
+    }
+   ]
+  },
+  {
+   "date": "2026-11-27",
+   "title": "Press conference, 27 November 2026",
+   "venue": null,
+   "status": "placeholder",
+   "note": "The information will be up soon. Neither the web nor the Goddess docs (docC/docD) mention a 27 Nov 2026 press con.",
+   "coverage": []
+  }
+ ],
+ "otherMedia": [
+  {
+   "title": "Up close and personal with Marites Allen",
+   "outlet": "Salt & Pepper (Chit Tribiana Blog)",
+   "date": "2012-02-02",
+   "url": "https://chitsblog.wordpress.com/2012/02/02/up-close-and-personal-with-marites-allen/",
+   "type": "article",
+   "status": "live",
+   "onSiteAlready": true,
+   "linkCheck": "200",
+   "note": null,
+   "sources": [
+    "goddess-doc",
+    "site-cms"
+   ],
+   "docRefs": [
+    83
+   ]
+  },
+  {
+   "title": "How Marites Allen discovered her own world of feng shui",
+   "outlet": "The Philippine Star",
+   "date": "2013-02-08",
+   "url": "https://www.philstar.com/lifestyle/ystyle/2013/02/08/906075/how-marites-allen-discovered-her-own-world-feng-shui",
+   "type": "article",
+   "status": "live",
+   "onSiteAlready": true,
+   "linkCheck": "200",
+   "note": null,
+   "sources": [
+    "goddess-doc",
+    "site-cms"
+   ],
+   "docRefs": [
+    13,
+    14
+   ],
+   "altUrls": [
+    "https://chitsblog.wordpress.com/2013/02/08/how-marites-allen-discovered-her-own-world-of-feng-shui/"
+   ]
+  },
+  {
+   "title": "Marites Allen ventures to fashion",
+   "outlet": "The Philippine Star",
+   "date": "2013-10-10",
+   "url": "https://www.philstar.com/lifestyle/lifestyle-features/2013/10/10/1243667/marites-allen-ventures-fashion",
+   "type": "article",
+   "status": "live",
+   "onSiteAlready": true,
+   "linkCheck": "200",
+   "note": null,
+   "sources": [
+    "site-cms"
+   ]
+  },
+  {
+   "title": "Yes, feng shui is also for the rich and famous",
+   "outlet": "The Philippine Star (Young Star)",
+   "date": "2014-01-31",
+   "url": "https://www.philstar.com/lifestyle/young-star/2014/01/31/1284816/yes-feng-shui-also-rich-and-famous",
+   "type": "article",
+   "status": "live",
+   "onSiteAlready": true,
+   "linkCheck": "200",
+   "note": null,
+   "sources": [
+    "goddess-doc",
+    "site-cms"
+   ],
+   "docRefs": [
+    12
+   ]
+  },
+  {
+   "title": "Feng shui expert reveals her advice to celebs",
+   "outlet": "Philippine Daily Inquirer (Entertainment)",
+   "date": "2014-06-09",
+   "url": "https://entertainment.inquirer.net/144268/feng-shui-expert-reveals-her-advice-to-celebs",
+   "type": "article",
+   "status": "live",
+   "onSiteAlready": true,
+   "linkCheck": "403",
+   "note": "link check returned 403 to an automated request (bot-blocked or temporarily down); verify in a browser",
+   "sources": [
+    "goddess-doc",
+    "site-cms"
+   ],
+   "docRefs": [
+    78
+   ]
+  },
+  {
+   "title": "About Marites Allen",
+   "outlet": "The Philippine Star",
+   "date": "2015-02-19",
+   "url": "https://www.philstar.com/lifestyle/food-and-leisure/2015/02/19/1425149/about-marites-allen",
+   "type": "article",
+   "status": "live",
+   "onSiteAlready": true,
+   "linkCheck": "200",
+   "note": null,
+   "sources": [
+    "goddess-doc",
+    "site-cms"
+   ],
+   "docRefs": [
+    8,
+    9
+   ],
+   "altUrls": [
+    "https://www.pressreader.com/philippines/the-philippine-star/20150216/283008283207245"
+   ]
+  },
+  {
+   "title": "Yuppie Central: Feng Shui - As told by Marites",
+   "outlet": "SunStar",
+   "date": "2015-02-25",
+   "url": "https://www.sunstar.com.ph/more-articles/-yuppie-central-feng-shui-as-told-by-marites",
+   "type": "article",
+   "status": "live",
+   "onSiteAlready": true,
+   "linkCheck": "200",
+   "note": null,
+   "sources": [
+    "goddess-doc",
+    "site-cms"
+   ],
+   "docRefs": [
+    74
+   ]
+  },
+  {
+   "title": "Marites Allen launches Feng Shui mobile app",
+   "outlet": "Philippine Daily Inquirer",
+   "date": "2018-05",
+   "url": "https://entertainment.inquirer.net/273835/marites-allen-launches-feng-shui-mobile-app",
+   "type": "article",
+   "status": "live",
+   "onSiteAlready": true,
+   "linkCheck": "403",
+   "note": "link check returned 403 to an automated request (bot-blocked or temporarily down); verify in a browser",
+   "sources": [
+    "goddess-doc",
+    "site-cms"
+   ],
+   "docRefs": [
+    208
+   ]
+  },
+  {
+   "title": "Marites Allen: Feng Shui Master as Queenmaker",
+   "outlet": "Yes Philippines News Magazine (UK edition)",
+   "date": "2019-06-06",
+   "url": "https://www.yesphilnewsmag.com/2019/06/06/marites-allen-feng-shui-master-as-queenmaker/",
+   "type": "article",
+   "status": "live",
+   "onSiteAlready": true,
+   "linkCheck": "000",
+   "note": "link check returned 000 to an automated request (bot-blocked or temporarily down); verify in a browser",
+   "sources": [
+    "goddess-doc",
+    "site-cms"
+   ],
+   "docRefs": [
+    7
+   ]
+  },
+  {
+   "title": "CHiNOY TV - Rise Up with Janeena Chan, Episode 10 ft. Marites Allen",
+   "outlet": "CHiNOY TV / Spotify",
+   "date": "2020-12",
+   "url": "https://www.chinoy.tv/janeena-chans-5-tips-to-rise-up/",
+   "type": "tv",
+   "status": "live",
+   "onSiteAlready": true,
+   "linkCheck": "200",
+   "note": null,
+   "sources": [
+    "goddess-doc",
+    "site-cms"
+   ],
+   "docRefs": [
+    165
+   ]
+  },
+  {
+   "title": "Feng Shui expert Marites Allen on COVID-19 pandemic: \"We are not fortune tellers\"",
+   "outlet": "GMA News Online",
+   "date": "2020-12",
+   "url": "https://www.gmanetwork.com/entertainment/showbiznews/feng-shui-expert-marites-allen-on-covid-19-pandemic-we-are-not-fortune-tellers/72566/",
+   "type": "article",
+   "status": "live",
+   "onSiteAlready": true,
+   "linkCheck": "200",
+   "note": null,
+   "sources": [
+    "goddess-doc",
+    "site-cms"
+   ],
+   "docRefs": [
+    60
+   ]
+  },
+  {
+   "title": "Celebrity Feng Shui Queen: Marites Allen LIVE Interview! #OAGOT Episode 154",
+   "outlet": "YouTube Music / Podcast",
+   "date": "2021-01-03",
+   "url": "https://music.youtube.com/podcast/ww7BAPQBdjs",
+   "type": "video",
+   "status": "live",
+   "onSiteAlready": true,
+   "linkCheck": "200",
+   "note": null,
+   "sources": [
+    "goddess-doc",
+    "site-cms"
+   ],
+   "docRefs": [
+    164
+   ]
+  },
+  {
+   "title": "Marites in the metaverse",
+   "outlet": "Business Mirror",
+   "date": "2022-12-10",
+   "url": "https://businessmirror.com.ph/2022/12/10/marites-in-the-metaverse/",
+   "type": "article",
+   "status": "live",
+   "onSiteAlready": true,
+   "linkCheck": "403",
+   "note": "link check returned 403 to an automated request (bot-blocked or temporarily down); verify in a browser",
+   "sources": [
+    "goddess-doc",
+    "site-cms"
+   ],
+   "docRefs": [
+    207
+   ]
+  },
+  {
+   "title": "Marites Allen reveals a life aligned with feng shui",
+   "outlet": "The Manila Times (Supplements)",
+   "date": "2024-02-10",
+   "url": "https://www.manilatimes.net/2024/02/10/supplements/marites-allen-reveals-a-life-aligned-with-feng-shui/1931906",
+   "type": "article",
+   "status": "live",
+   "onSiteAlready": true,
+   "linkCheck": "200",
+   "note": null,
+   "sources": [
+    "goddess-doc",
+    "site-cms"
+   ],
+   "docRefs": [
+    2
+   ]
+  },
+  {
+   "title": "Trade Talks: Unlocking Luck and Fortune - Feng Shui Tips",
+   "outlet": "YouTube",
+   "date": "2025-08",
+   "url": "https://www.youtube.com/watch?v=b4EXDTk4yBg",
+   "type": "video",
+   "status": "live",
+   "onSiteAlready": true,
+   "linkCheck": "200",
+   "note": null,
+   "sources": [
+    "goddess-doc",
+    "site-cms"
+   ],
+   "docRefs": [
+    104
+   ]
+  },
+  {
+   "title": "TV5's Inay Ko Po - Marites Allen guesting",
+   "outlet": "TV5",
+   "date": "2025-01-15",
+   "url": "https://www.instagram.com/reel/DE2uVBIz3er/",
+   "type": "tv",
+   "status": "live",
+   "onSiteAlready": true,
+   "linkCheck": "200",
+   "note": null,
+   "sources": [
+    "goddess-doc",
+    "site-cms"
+   ],
+   "docRefs": [
+    120
+   ]
+  },
+  {
+   "title": "Marites Allen launches DESTARA - world's first Feng Shui AI App",
+   "outlet": "YouTube",
+   "date": "2026-02",
+   "url": "https://www.youtube.com/watch?v=hzxk7jJzc4g",
+   "type": "video",
+   "status": "live",
+   "onSiteAlready": true,
+   "linkCheck": "200",
+   "note": null,
+   "sources": [
+    "goddess-doc",
+    "site-cms"
+   ],
+   "docRefs": [
+    98
+   ]
+  },
+  {
+   "title": "FENG SHUI Queen MARITES ALLEN launches world's first FENG SHUI app",
+   "outlet": "YouTube",
+   "date": "2026-02",
+   "url": "https://www.youtube.com/watch?v=bjEDgWHDL3g",
+   "type": "video",
+   "status": "live",
+   "onSiteAlready": true,
+   "linkCheck": "200",
+   "note": null,
+   "sources": [
+    "goddess-doc",
+    "site-cms"
+   ],
+   "docRefs": [
+    97
+   ]
+  },
+  {
+   "title": "Notice of disallowance, dagdag na batayan sa election eligibility; Ghost Month tips, alamin! (MEMO with Korina Sanchez-Roxas, 11 Aug)",
+   "outlet": "Bilyonaryo News Channel (BNC)",
+   "date": "2026-08-11",
+   "url": "https://bnc.bilyonaryo.com/notice-of-disallowance-dagdag-na-batayan-sa-election-eligibility-ghost-month-tips-alamin-memo-with-korina-sanchez-roxas/videos/",
+   "type": "tv",
+   "status": "live",
+   "onSiteAlready": true,
+   "linkCheck": "200",
+   "note": null,
+   "sources": [
+    "site-cms"
+   ]
+  },
+  {
+   "title": "Marites Allen shares what to do, what to avoid and how to prepare",
+   "outlet": "Newswav",
+   "date": "2026-08-13",
+   "url": "https://newswav.com/article/marites-allen-shares-what-to-do-what-to-avoid-and-how-to-prepare-A2608_PYP4ov",
+   "type": "article",
+   "status": "live",
+   "onSiteAlready": true,
+   "linkCheck": "200",
+   "note": null,
+   "sources": [
+    "site-cms"
+   ]
+  },
+  {
+   "title": "Marites Allen shares what to do, what to avoid and how to prepare",
+   "outlet": "The Manila Times",
+   "date": "2026-08-13",
+   "url": "https://www.manilatimes.net/2026/08/13/entertainment-lifestyle/life-times/marites-allen-shares-what-to-do-what-to-avoid-and-how-to-prepare/2404645",
+   "type": "article",
+   "status": "live",
+   "onSiteAlready": true,
+   "linkCheck": "200",
+   "note": null,
+   "sources": [
+    "site-cms"
+   ]
+  },
+  {
+   "title": "Destara AI: a long-planned Destiny App bridging ancient wisdom and modern technology.",
+   "outlet": "Manila Times",
+   "date": "2026-02-17",
+   "url": "https://www.manilatimes.net/2026/02/17/supplements/destara-ai-a-long-planned-destiny-app-bridging-ancient-wisdom-and-modern-technology/2278757/amp",
+   "type": "article",
+   "status": "live",
+   "onSiteAlready": true,
+   "linkCheck": "200",
+   "note": "URL is a site homepage, not the article; needs the real article link; The information will be up soon",
+   "sources": [
+    "goddess-doc",
+    "site-cms"
+   ],
+   "docRefs": [
+    95
+   ]
+  },
+  {
+   "title": "How the feng shui expert lives life to the full.",
+   "outlet": "The Daily Tribune",
+   "date": "2023-12-18",
+   "url": "https://tribune.net.ph/2023/12/17/marites-allenhow-the-feng-shui-expertlives-life-to-the-full",
+   "type": "article",
+   "status": "live",
+   "onSiteAlready": true,
+   "linkCheck": "403",
+   "note": "link check returned 403 to an automated request (bot-blocked or temporarily down); verify in a browser",
+   "sources": [
+    "goddess-doc",
+    "site-cms"
+   ],
+   "docRefs": [
+    4
+   ]
+  },
+  {
+   "title": "Marites Allen, Philippine Feng Shui Queen.",
+   "outlet": "Boy Abunda · The Interviewer",
+   "date": "2023-01",
+   "url": "https://www.youtube.com/watch?v=mswSQ7Utz1s",
+   "type": "video",
+   "status": "live",
+   "onSiteAlready": true,
+   "linkCheck": "200",
+   "note": null,
+   "sources": [
+    "site-cms"
+   ]
+  },
+  {
+   "title": "Metro chats with Marites Allen.",
+   "outlet": "Metro.Style",
+   "date": "2022-02",
+   "url": null,
+   "type": "article",
+   "status": "placeholder",
+   "onSiteAlready": true,
+   "linkCheck": "200",
+   "note": "URL is a site homepage, not the article; needs the real article link; The information will be up soon",
+   "sources": [
+    "site-cms"
+   ]
+  },
+  {
+   "title": "Filipina Feng Shui Master Marites Allen's guide to a harmonious home.",
+   "outlet": "Tatler Asia",
+   "date": "2022-01",
+   "url": null,
+   "type": "article",
+   "status": "placeholder",
+   "onSiteAlready": true,
+   "linkCheck": "403",
+   "note": "URL is a site homepage, not the article; needs the real article link; link check returned 403 to an automated request (bot-blocked or temporarily down); verify in a browser; The information will be up soon",
+   "sources": [
+    "site-cms"
+   ]
+  },
+  {
+   "title": "Journey to Feng Shui.",
+   "outlet": "Marites Allen",
+   "date": "2021-06",
+   "url": "https://www.youtube.com/watch?v=kfPKazF19jw",
+   "type": "video",
+   "status": "live",
+   "onSiteAlready": true,
+   "linkCheck": "200",
+   "note": null,
+   "sources": [
+    "site-cms"
+   ]
+  },
+  {
+   "title": "Everything you need to know about Feng Shui, from the expert.",
+   "outlet": "Absolutely Magazines",
+   "date": "2021-03",
+   "url": null,
+   "type": "article",
+   "status": "placeholder",
+   "onSiteAlready": true,
+   "linkCheck": "200",
+   "note": "URL is a site homepage, not the article; needs the real article link; The information will be up soon",
+   "sources": [
+    "site-cms"
+   ]
+  },
+  {
+   "title": "Everything You Need to Know About Feng Shui",
+   "outlet": "Absolutely Magazine UK",
+   "date": "2021-03-03",
+   "url": "https://absolutelymagazines.com/feng-shui-interview-with-marites-allen/",
+   "type": "online",
+   "status": "live",
+   "onSiteAlready": false,
+   "linkCheck": "200",
+   "sources": [
+    "goddess-doc"
+   ],
+   "docRefs": [
+    6
+   ],
+   "note": null
+  },
+  {
+   "title": "Frigga.com.ph - Official Online Shop",
+   "outlet": "Frigga.com.ph",
+   "date": "2025",
+   "url": "https://frigga.com.ph/",
+   "type": "online",
+   "status": "live",
+   "onSiteAlready": false,
+   "linkCheck": "200",
+   "sources": [
+    "goddess-doc"
+   ],
+   "docRefs": [
+    32
+   ],
+   "note": null
+  },
+  {
+   "title": "Frigga.co.uk - UK Online Shop",
+   "outlet": "Frigga.co.uk",
+   "date": "2025",
+   "url": "https://frigga.co.uk/",
+   "type": "online",
+   "status": "live",
+   "onSiteAlready": false,
+   "linkCheck": "200",
+   "sources": [
+    "goddess-doc"
+   ],
+   "docRefs": [
+    33
+   ],
+   "note": null
+  },
+  {
+   "title": "Frigga-usa.com - US Online Shop",
+   "outlet": "Frigga-usa.com",
+   "date": "2025",
+   "url": "https://www.frigga-usa.com/",
+   "type": "online",
+   "status": "live",
+   "onSiteAlready": false,
+   "linkCheck": "200",
+   "sources": [
+    "goddess-doc"
+   ],
+   "docRefs": [
+    34
+   ],
+   "note": null
+  },
+  {
+   "title": "Do's and don'ts to s...",
+   "outlet": "Phil star Life (The Philippine Star)",
+   "date": "2021-08-12",
+   "url": "https://philstarlife.com/living/805486-dos-and-donts-ghost-month-of-august",
+   "type": "article",
+   "status": "live",
+   "onSiteAlready": false,
+   "linkCheck": "200",
+   "sources": [
+    "goddess-doc"
+   ],
+   "docRefs": [
+    54
+   ],
+   "note": "Title truncated/partial in doc"
+  },
+  {
+   "title": "Marites Allen UK PR - Word of Mouth Communications",
+   "outlet": "Word of Mouth Communications UK",
+   "date": "2021",
+   "url": "https://www.wordofmouthcommunications.com/latest-updates/",
+   "type": "online",
+   "status": "live",
+   "onSiteAlready": false,
+   "linkCheck": "200",
+   "sources": [
+    "goddess-doc"
+   ],
+   "docRefs": [
+    55
+   ],
+   "note": "Doc date: 2021 (approximate)"
+  },
+  {
+   "title": "Feng shui expert: Heigh...",
+   "outlet": "Phil star Life (The Philippine Star)",
+   "date": "2021-05-27",
+   "url": "https://philstarlife.com/news-and-views/880604-feng-shui-super-flower-moon",
+   "type": "article",
+   "status": "live",
+   "onSiteAlready": false,
+   "linkCheck": "200",
+   "sources": [
+    "goddess-doc"
+   ],
+   "docRefs": [
+    57
+   ],
+   "note": "Title truncated/partial in doc"
+  },
+  {
+   "title": "How To Feng Shui The Heck Out Of Your Office",
+   "outlet": "Metro.Style",
+   "date": "2018",
+   "url": "https://metro.style/career/girlboss/how-to-feng-shui-the-heck-out-of-your-office/8412",
+   "type": "online",
+   "status": "live",
+   "onSiteAlready": false,
+   "linkCheck": "200",
+   "sources": [
+    "goddess-doc"
+   ],
+   "docRefs": [
+    66
+   ],
+   "note": "Doc date: 2018 (approximate)"
+  },
+  {
+   "title": "Second Frigga Charmed Life...",
+   "outlet": "INQPOP! (Philippine Daily Inquirer)",
+   "date": "2015-06",
+   "url": "https://pop.inquirer.net/17968/second-frigga-charmed-life-shop-now-open",
+   "type": "article",
+   "status": "live",
+   "onSiteAlready": false,
+   "linkCheck": "403",
+   "sources": [
+    "goddess-doc"
+   ],
+   "docRefs": [
+    73
+   ],
+   "note": "Title truncated/partial in doc; link check returned 403 to an automated request (bot-blocked or temporarily down); verify in a browser"
+  },
+  {
+   "title": "Pinterest - @thessallen (26 pins)",
+   "outlet": "Pinterest",
+   "date": "2014",
+   "url": "https://ru.pinterest.com/thessallen/",
+   "type": "online",
+   "status": "live",
+   "onSiteAlready": false,
+   "linkCheck": "200",
+   "sources": [
+    "goddess-doc"
+   ],
+   "docRefs": [
+    75
+   ],
+   "note": null
+  },
+  {
+   "title": "Applying feng shui principles when buying a house",
+   "outlet": "Philippine Daily Inquirer (Business)",
+   "date": "2014",
+   "url": "https://business.inquirer.net/158729/applying-feng-shui-principles-when-buying-a-house",
+   "type": "article",
+   "status": "live",
+   "onSiteAlready": false,
+   "linkCheck": "403",
+   "sources": [
+    "goddess-doc"
+   ],
+   "docRefs": [
+    77
+   ],
+   "note": "Doc date: 2014 (approximate); link check returned 403 to an automated request (bot-blocked or temporarily down); verify in a browser"
+  },
+  {
+   "title": "Twitter/X - @MaritesAllen",
+   "outlet": "Twitter/X",
+   "date": "2013",
+   "url": "https://x.com/MaritesAllen",
+   "type": "online",
+   "status": "live",
+   "onSiteAlready": false,
+   "linkCheck": "200",
+   "sources": [
+    "goddess-doc"
+   ],
+   "docRefs": [
+    80
+   ],
+   "note": null
+  },
+  {
+   "title": "Marites ALLEN personal appointments - Companies House UK",
+   "outlet": "UK Companies House",
+   "date": "2013",
+   "url": "https://find-and-update.company-information.service.gov.uk/officers/9dhuJW6Eg-4Tiz42GdOhsGM92ok/appointments",
+   "type": "online",
+   "status": "live",
+   "onSiteAlready": false,
+   "linkCheck": "200",
+   "sources": [
+    "goddess-doc"
+   ],
+   "docRefs": [
+    81
+   ],
+   "note": null
+  },
+  {
+   "title": "Marites Allen Author Archive - The Manila Times (14 articles)",
+   "outlet": "The Manila Times",
+   "date": "2012",
+   "url": "https://www.manilatimes.net/author/marites-allen",
+   "type": "article",
+   "status": "live",
+   "onSiteAlready": false,
+   "linkCheck": "200",
+   "sources": [
+    "goddess-doc"
+   ],
+   "docRefs": [
+    82
+   ],
+   "note": null
+  },
+  {
+   "title": "feature by Edwin P. Sallan",
+   "outlet": "Manila Bulletin",
+   "date": "2007",
+   "url": null,
+   "type": "article",
+   "status": "placeholder",
+   "onSiteAlready": false,
+   "linkCheck": "no URL",
+   "sources": [
+    "goddess-doc"
+   ],
+   "docRefs": [
+    86
+   ],
+   "note": "Doc marks link pending; The information will be up soon; Doc date: 2007 (approximate); Title truncated/partial in doc"
+  },
+  {
+   "title": "Feng Shui expert Marites Allen said renewable energy, tourism, cybersecurity and blockchain are key sectors",
+   "outlet": "One News PH",
+   "date": "2026",
+   "url": "https://www.facebook.com/ONENewsPH/posts/1437954155026598/",
+   "type": "tv",
+   "status": "live",
+   "onSiteAlready": false,
+   "linkCheck": "400",
+   "sources": [
+    "goddess-doc"
+   ],
+   "docRefs": [
+    91
+   ],
+   "note": "Doc date: 2026 (approximate); link check returned 400 to an automated request (bot-blocked or temporarily down); verify in a browser"
+  },
+  {
+   "title": "An interview with Bilyonaryo and Ms Pinky Webb",
+   "outlet": "YouTube",
+   "date": "2025",
+   "url": "https://www.youtube.com/watch?v=Jzjzk36ULdE",
+   "type": "video",
+   "status": "live",
+   "onSiteAlready": false,
+   "linkCheck": "200",
+   "sources": [
+    "goddess-doc"
+   ],
+   "docRefs": [
+    106
+   ],
+   "note": "Doc date: 2025 (approximate)"
+  },
+  {
+   "title": "Feng Shui Expert Marites Allen | NewsWatch Interviews",
+   "outlet": "CNN Philippines / NewsWatch Plus",
+   "date": "2025",
+   "url": "https://videos.ph.crossmap.com/video/feng-shui-expert-marites-allen-newswatch-interviews/",
+   "type": "tv",
+   "status": "live",
+   "onSiteAlready": false,
+   "linkCheck": "200",
+   "sources": [
+    "goddess-doc"
+   ],
+   "docRefs": [
+    107
+   ],
+   "note": "Doc date: 2025 (approximate)"
+  },
+  {
+   "title": "GMA Gala 2024: Glitz and Glamour Shine at the Biggest Showbiz Event",
+   "outlet": "GMA Network",
+   "date": "2024-07-26",
+   "url": "https://www.gmanetwork.com/entertainment/showbiznews/gma-gala-2024-glitz-and-glamour-shine-at-the-biggest-showbiz-event-of-the-year/114523/",
+   "type": "tv",
+   "status": "live",
+   "onSiteAlready": false,
+   "linkCheck": "200",
+   "sources": [
+    "goddess-doc"
+   ],
+   "docRefs": [
+    121
+   ],
+   "note": null
+  },
+  {
+   "title": "Marites Allen: The Feng Shui Queen Transforming Lives for 21 Years",
+   "outlet": "YouTube",
+   "date": "2024",
+   "url": "https://www.youtube.com/watch?v=9NHZCwt-dEI",
+   "type": "video",
+   "status": "live",
+   "onSiteAlready": false,
+   "linkCheck": "200",
+   "sources": [
+    "goddess-doc"
+   ],
+   "docRefs": [
+    126
+   ],
+   "note": "Doc date: 2024 (approximate)"
+  },
+  {
+   "title": "The Interviewer presents: Marites Allen, Philippine Feng Shui Queen",
+   "outlet": "YouTube",
+   "date": "2023",
+   "url": "https://www.youtube.com/watch?v=60M_0OOtfHU",
+   "type": "video",
+   "status": "live",
+   "onSiteAlready": false,
+   "linkCheck": "200",
+   "sources": [
+    "goddess-doc"
+   ],
+   "docRefs": [
+    129
+   ],
+   "note": "Doc date: 2023 (approximate)"
+  },
+  {
+   "title": "Marites Allen Show - Various Episodes",
+   "outlet": "YouTube",
+   "date": "2023",
+   "url": "https://www.youtube.com/watch?v=2PDW-HWv3MQ",
+   "type": "video",
+   "status": "live",
+   "onSiteAlready": false,
+   "linkCheck": "200",
+   "sources": [
+    "goddess-doc"
+   ],
+   "docRefs": [
+    131
+   ],
+   "note": "Doc date: 2023 (approximate)"
+  },
+  {
+   "title": "This year's ghost month is from August 16 to September 14 - CNN Philippines",
+   "outlet": "Dailymotion / CNN Philippines",
+   "date": "2023",
+   "url": "https://www.dailymotion.com/video/x8n7j2d",
+   "type": "tv",
+   "status": "live",
+   "onSiteAlready": false,
+   "linkCheck": "200",
+   "sources": [
+    "goddess-doc"
+   ],
+   "docRefs": [
+    134
+   ],
+   "note": "Doc date: 2023 (approximate)"
+  },
+  {
+   "title": "AN AUDIENCE WITH MARITES ALLEN, THE REAL FENG SHUI QUEEN - USA Global TV",
+   "outlet": "YouTube",
+   "date": "2022",
+   "url": "https://www.youtube.com/watch?v=54xS7hyCOuc",
+   "type": "video",
+   "status": "live",
+   "onSiteAlready": false,
+   "linkCheck": "200",
+   "sources": [
+    "goddess-doc"
+   ],
+   "docRefs": [
+    137
+   ],
+   "note": "Doc date: 2022 (approximate)"
+  },
+  {
+   "title": "Marites Allen Show - Live from Greece",
+   "outlet": "YouTube",
+   "date": "2022",
+   "url": "https://www.youtube.com/watch?v=6tZpx3zo1mE",
+   "type": "video",
+   "status": "live",
+   "onSiteAlready": false,
+   "linkCheck": "200",
+   "sources": [
+    "goddess-doc"
+   ],
+   "docRefs": [
+    138
+   ],
+   "note": "Doc date: 2022 (approximate)"
+  },
+  {
+   "title": "Metro Chats with Marites Allen Part 1",
+   "outlet": "YouTube",
+   "date": "2022",
+   "url": "https://www.youtube.com/watch?v=kOs9VGNfk8M",
+   "type": "video",
+   "status": "live",
+   "onSiteAlready": false,
+   "linkCheck": "200",
+   "sources": [
+    "goddess-doc"
+   ],
+   "docRefs": [
+    139
+   ],
+   "note": "Doc date: 2022 (approximate)"
+  },
+  {
+   "title": "It's More Fun in the Philippines on Marites Allen Show",
+   "outlet": "YouTube",
+   "date": "2021",
+   "url": "https://www.youtube.com/watch?v=85qZouUegx8",
+   "type": "video",
+   "status": "live",
+   "onSiteAlready": false,
+   "linkCheck": "200",
+   "sources": [
+    "goddess-doc"
+   ],
+   "docRefs": [
+    141
+   ],
+   "note": "Doc date: 2021 (approximate)"
+  },
+  {
+   "title": "SOLAR DAYBREAK: MARITES ALLEN INTERVIEW",
+   "outlet": "YouTube",
+   "date": "2021",
+   "url": "https://www.youtube.com/watch?v=hCX3uVahZcI",
+   "type": "video",
+   "status": "live",
+   "onSiteAlready": false,
+   "linkCheck": "200",
+   "sources": [
+    "goddess-doc"
+   ],
+   "docRefs": [
+    142
+   ],
+   "note": "Doc date: 2021 (approximate)"
+  },
+  {
+   "title": "Marites Allen introduces the miracle morning routine",
+   "outlet": "YouTube",
+   "date": "2020",
+   "url": "https://www.youtube.com/watch?v=n8sYI9qjcmU",
+   "type": "video",
+   "status": "live",
+   "onSiteAlready": false,
+   "linkCheck": "200",
+   "sources": [
+    "goddess-doc"
+   ],
+   "docRefs": [
+    145
+   ],
+   "note": "Doc date: 2020 (approximate)"
+  },
+  {
+   "title": "3-2-1! with Marites Allen - Tim Yap Show",
+   "outlet": "YouTube",
+   "date": "2015",
+   "url": "https://www.youtube.com/watch?v=JMspwrikb84",
+   "type": "video",
+   "status": "live",
+   "onSiteAlready": false,
+   "linkCheck": "200",
+   "sources": [
+    "goddess-doc"
+   ],
+   "docRefs": [
+    151
+   ],
+   "note": "Doc date: 2015 (approximate)"
+  },
+  {
+   "title": "Infos Insights Audiobook Chinese Astrology 2026",
+   "outlet": "Spotify",
+   "date": "2026-07-26",
+   "url": "https://open.spotify.com/episode/0LnIZKRLJD2v2ovkETLjJh",
+   "type": "radio",
+   "status": "live",
+   "onSiteAlready": false,
+   "linkCheck": "200",
+   "sources": [
+    "goddess-doc"
+   ],
+   "docRefs": [
+    153
+   ],
+   "note": null
+  },
+  {
+   "title": "Resumen Review Libro Audiolibro Chinese Astrology Full",
+   "outlet": "Spotify",
+   "date": "2026-07-11",
+   "url": "https://open.spotify.com/episode/6LSaO3MIumodHrbW9YGmBw",
+   "type": "radio",
+   "status": "live",
+   "onSiteAlready": false,
+   "linkCheck": "200",
+   "sources": [
+    "goddess-doc"
+   ],
+   "docRefs": [
+    154
+   ],
+   "note": null
+  },
+  {
+   "title": "Apple Books - Chinese Astrology by Marites Allen",
+   "outlet": "Apple Books",
+   "date": "2025",
+   "url": "https://books.apple.com/us/book/chinese-astrology/id6456038688",
+   "type": "radio",
+   "status": "live",
+   "onSiteAlready": false,
+   "linkCheck": "200",
+   "sources": [
+    "goddess-doc"
+   ],
+   "docRefs": [
+    156
+   ],
+   "note": "Doc date: 2025 (approximate)"
+  },
+  {
+   "title": "Everand - Chinese Astrology by Marites Allen (Ebook)",
+   "outlet": "Everand (Scribd)",
+   "date": "2023",
+   "url": "https://www.everand.com/book/665682536/Chinese-Astrology-Decode-the-Zodiac-to-Live-Your-Best-Life",
+   "type": "radio",
+   "status": "live",
+   "onSiteAlready": false,
+   "linkCheck": "200",
+   "sources": [
+    "goddess-doc"
+   ],
+   "docRefs": [
+    160
+   ],
+   "note": "Doc date: 2023 (approximate)"
+  },
+  {
+   "title": "FRIGGA Lucky Charms - Facebook Page",
+   "outlet": "Facebook / Frigga",
+   "date": "2025",
+   "url": "https://www.facebook.com/Frigga888/",
+   "type": "book",
+   "status": "live",
+   "onSiteAlready": false,
+   "linkCheck": "400",
+   "sources": [
+    "goddess-doc"
+   ],
+   "docRefs": [
+    175
+   ],
+   "note": "link check returned 400 to an automated request (bot-blocked or temporarily down); verify in a browser"
+  },
+  {
+   "title": "12 Animal Sign Horoscope Guides for 2026",
+   "outlet": "Frigga.com.ph",
+   "date": "2025",
+   "url": "https://frigga.com.ph/collections/books",
+   "type": "book",
+   "status": "live",
+   "onSiteAlready": false,
+   "linkCheck": "200",
+   "sources": [
+    "goddess-doc"
+   ],
+   "docRefs": [
+    178
+   ],
+   "note": "Doc date: 2025 (approximate)"
+  },
+  {
+   "title": "Marites Allen Year of the Snake 2025 Forecast Collection - Rabbit Horoscope 2025",
+   "outlet": "Amazon Kindle",
+   "date": "2024",
+   "url": "https://www.amazon.com/Marites-Allen/e/B0BQCLY77H",
+   "type": "book",
+   "status": "live",
+   "onSiteAlready": false,
+   "linkCheck": "200",
+   "sources": [
+    "goddess-doc"
+   ],
+   "docRefs": [
+    179
+   ],
+   "note": "Doc date: 2024 (approximate)"
+  },
+  {
+   "title": "Chinese Astrology: Decode the Zodiac to Live Your Best Life",
+   "outlet": "Simon & Schuster / Mandala Publishing",
+   "date": "2023-09-05",
+   "url": "https://www.simonandschuster.com/books/Chinese-Astrology/Marites-Allen/9798886740301",
+   "type": "book",
+   "status": "live",
+   "onSiteAlready": false,
+   "linkCheck": "403",
+   "sources": [
+    "goddess-doc"
+   ],
+   "docRefs": [
+    192
+   ],
+   "note": "link check returned 403 to an automated request (bot-blocked or temporarily down); verify in a browser"
+  },
+  {
+   "title": "Chinese Astrology: Decode the Zodiac to Live Your Best Life",
+   "outlet": "Hachette Australia",
+   "date": "2023-09-05",
+   "url": "https://www.amazon.com/Chinese-Astrology-Marites-Allen/dp/B0BTXBJKVN",
+   "type": "book",
+   "status": "live",
+   "onSiteAlready": false,
+   "linkCheck": "200",
+   "sources": [
+    "goddess-doc"
+   ],
+   "docRefs": [
+    193
+   ],
+   "note": null
+  },
+  {
+   "title": "Chinese Astrology: Decode the Zodiac to Live Your Best Life",
+   "outlet": "Google Books",
+   "date": "2023-09-05",
+   "url": "https://books.google.com/books/about/Chinese_Astrology.html?id=b1qlzwEACAAJ",
+   "type": "book",
+   "status": "live",
+   "onSiteAlready": false,
+   "linkCheck": "200",
+   "sources": [
+    "goddess-doc"
+   ],
+   "docRefs": [
+    194
+   ],
+   "note": null
+  },
+  {
+   "title": "Chinese Astrology: Decode the Zodiac to Live Your Best Life",
+   "outlet": "Goodreads",
+   "date": "2023-09-05",
+   "url": "https://www.goodreads.com/book/show/146420452-chinese-astrology",
+   "type": "book",
+   "status": "live",
+   "onSiteAlready": false,
+   "linkCheck": "200",
+   "sources": [
+    "goddess-doc"
+   ],
+   "docRefs": [
+    195
+   ],
+   "note": null
+  },
+  {
+   "title": "Chinese Astrology",
+   "outlet": "Simon & Schuster Canada",
+   "date": "2023-09-05",
+   "url": "https://www.simonandschuster.ca/authors/Marites-Allen/200162294",
+   "type": "book",
+   "status": "live",
+   "onSiteAlready": false,
+   "linkCheck": "403",
+   "sources": [
+    "goddess-doc"
+   ],
+   "docRefs": [
+    196
+   ],
+   "note": "link check returned 403 to an automated request (bot-blocked or temporarily down); verify in a browser"
+  },
+  {
+   "title": "Chinese Astrology - Marites Allen (Insight Editions)",
+   "outlet": "Insight Editions",
+   "date": "2023-09-05",
+   "url": "https://insighteditions.com/products/chinese-astrology",
+   "type": "book",
+   "status": "live",
+   "onSiteAlready": false,
+   "linkCheck": "200",
+   "sources": [
+    "goddess-doc"
+   ],
+   "docRefs": [
+    197
+   ],
+   "note": null
+  },
+  {
+   "title": "Astrología China (Spanish Edition)",
+   "outlet": "Google Books",
+   "date": "2023",
+   "url": "https://books.google.com/books/about/Astrolog%C3%ADa_China.html?id=yu460AEACAAJ",
+   "type": "book",
+   "status": "live",
+   "onSiteAlready": false,
+   "linkCheck": "200",
+   "sources": [
+    "goddess-doc"
+   ],
+   "docRefs": [
+    198
+   ],
+   "note": "Doc date: 2023 (approximate)"
+  },
+  {
+   "title": "Chinese Astrology Hardcover Book by Marites Allen",
+   "outlet": "eBay",
+   "date": "2023",
+   "url": "https://www.ebay.com/itm/186926956264",
+   "type": "book",
+   "status": "live",
+   "onSiteAlready": false,
+   "linkCheck": "403",
+   "sources": [
+    "goddess-doc"
+   ],
+   "docRefs": [
+    199
+   ],
+   "note": "Doc date: 2023 (approximate); link check returned 403 to an automated request (bot-blocked or temporarily down); verify in a browser"
+  },
+  {
+   "title": "Chinese Astrology by Marites Allen Hardcover Book (Ebay listing 2)",
+   "outlet": "eBay",
+   "date": "2023",
+   "url": "https://www.ebay.com/itm/366394435165",
+   "type": "book",
+   "status": "live",
+   "onSiteAlready": false,
+   "linkCheck": "403",
+   "sources": [
+    "goddess-doc"
+   ],
+   "docRefs": [
+    200
+   ],
+   "note": "Doc date: 2023 (approximate); link check returned 403 to an automated request (bot-blocked or temporarily down); verify in a browser"
+  },
+  {
+   "title": "Facebook Page - byMARITESALLEN",
+   "outlet": "Facebook",
+   "date": "2017",
+   "url": "https://www.facebook.com/byMARITESALLEN/",
+   "type": "book",
+   "status": "live",
+   "onSiteAlready": false,
+   "linkCheck": "400",
+   "sources": [
+    "goddess-doc"
+   ],
+   "docRefs": [
+    201
+   ],
+   "note": "link check returned 400 to an automated request (bot-blocked or temporarily down); verify in a browser"
+  },
+  {
+   "title": "Facebook Personal Profile",
+   "outlet": "Facebook",
+   "date": "2012",
+   "url": "https://www.facebook.com/marites.allen.1/",
+   "type": "book",
+   "status": "live",
+   "onSiteAlready": false,
+   "linkCheck": "400",
+   "sources": [
+    "goddess-doc"
+   ],
+   "docRefs": [
+    202
+   ],
+   "note": "link check returned 400 to an automated request (bot-blocked or temporarily down); verify in a browser"
+  },
+  {
+   "title": "Facebook Page - Marites Allen, the real Feng Shui Queen",
+   "outlet": "Facebook",
+   "date": "2004",
+   "url": "https://www.facebook.com/MaritesAllen168/",
+   "type": "book",
+   "status": "live",
+   "onSiteAlready": false,
+   "linkCheck": "400",
+   "sources": [
+    "goddess-doc"
+   ],
+   "docRefs": [
+    203
+   ],
+   "note": "link check returned 400 to an automated request (bot-blocked or temporarily down); verify in a browser"
+  },
+  {
+   "title": "Destara.App - Annual Feng Shui AI Subscription",
+   "outlet": "Frigga.com.ph",
+   "date": "2025",
+   "url": "https://frigga.com.ph/products/destara-app",
+   "type": "online",
+   "status": "live",
+   "onSiteAlready": false,
+   "linkCheck": "200",
+   "sources": [
+    "goddess-doc"
+   ],
+   "docRefs": [
+    206
+   ],
+   "note": null
+  },
+  {
+   "title": "LinkedIn - Creator of DESTARA AI, Certified Feng Shui Master",
+   "outlet": "LinkedIn",
+   "date": "2013",
+   "url": "https://ph.linkedin.com/in/marites-allen-1b8a731b",
+   "type": "online",
+   "status": "live",
+   "onSiteAlready": false,
+   "linkCheck": "999",
+   "sources": [
+    "goddess-doc"
+   ],
+   "docRefs": [
+    211
+   ],
+   "note": "link check returned 999 to an automated request (bot-blocked or temporarily down); verify in a browser"
+  },
+  {
+   "title": "Marites Allen YouTube Channel (@maritesallen5966, 10.1K subs, 292 videos)",
+   "outlet": "YouTube",
+   "date": "2015",
+   "url": "https://www.youtube.com/channel/UC4PZanBtXDcgqRpTv2NSDnw/videos",
+   "type": "video",
+   "status": "live",
+   "onSiteAlready": false,
+   "linkCheck": "200",
+   "sources": [
+    "goddess-doc"
+   ],
+   "docRefs": [
+    150
+   ],
+   "note": null
+  }
+ ],
+ "droppedLinks": [
+  {
+   "status": "404",
+   "url": "https://maritesallen.com/presss/mark-your-calendars-the-supermoon-season-of-2025/",
+   "title": "Mark your calendars: the Supermoon season of 2025."
+  },
+  {
+   "status": "404",
+   "url": "https://maritesallen.com/presss/how-to-make-the-most-of-new-lunar-year/",
+   "title": "How to make the most of the new lunar year."
+  },
+  {
+   "status": "404",
+   "url": "https://maritesallen.com/presss/chinese-new-year-feng-shui-expert-advises-beauty-queens-to-be-like-a-snake/",
+   "title": "Feng shui expert advises beauty queens to be 'like a snake' this Chinese New Year."
+  },
+  {
+   "status": "404",
+   "url": "https://maritesallen.com/presss/meet-feng-shui-master-ms-marites-allen-bandila/",
+   "title": "Bandila | Meet Feng Shui master Ms. Marites Allen",
+   "source": "goddess-doc",
+   "where": "otherMedia"
+  },
+  {
+   "status": "404",
+   "url": "https://www.lazada.com.ph/products/marites-allen-feng-shui-almanac-2026-i5304765113.html",
+   "title": "Marites Allen Feng Shui Almanac 2026 on Lazada",
+   "source": "goddess-doc",
+   "where": "otherMedia"
+  },
+  {
+   "status": "404",
+   "url": "https://frigga.com.ph/products/marites-allen-feng-shui-almanac-2026",
+   "title": "2026 Marites Allen Feng Shui Almanac",
+   "source": "goddess-doc",
+   "where": "otherMedia"
+  },
+  {
+   "status": "404",
+   "url": "https://frigga.co.uk/collections/shop-your-sign-rooster/products/marites-allen-feng-shui-planner-2026",
+   "title": "2026 Marites Allen Feng Shui Planner",
+   "source": "goddess-doc",
+   "where": "otherMedia"
+  }
+ ],
+ "docConflicts": [
+  {
+   "item": "On Point: Feng Shui Predictions for 2026 Fire Horse Year (16 Feb 2026)",
+   "doc": "Doc #96 and reference 7 say ANC, host Pinky Webb, YouTube u9M-RXjrOk8; doc #136 lists the same video as 2022 (approx).",
+   "web": "Site CMS lists it as Bilyonaryo News Channel (BNC) with a bnc.bilyonaryo.com link. Both kept (BNC entry and doc's YouTube entry); outlet needs confirming."
+  },
+  {
+   "item": "WATCH: Feng Shui readings from expert Marites Allen this Year of the Fire Horse (ANC, YouTube LyZZ2fuWdlQ)",
+   "doc": "Reference 1: 18 February 2026; register #90: 2026 (approx).",
+   "web": "Site CMS: March 2026."
+  },
+  {
+   "item": "How to make the most of new lunar year (Daily Tribune)",
+   "doc": "1 February 2025",
+   "web": "URL and page date: 31 January 2025."
+  },
+  {
+   "item": "About Marites Allen (Philippine Star)",
+   "doc": "16 February 2015 (PressReader print edition)",
+   "web": "Online article dated 19 February 2015. Likely print vs online; both URLs kept (PressReader as altUrl)."
+  },
+  {
+   "item": "Discover your luck: Feng Shui Queen Marites Allen's 2026 animal sign forecast (Manila Bulletin)",
+   "doc": "Doc #166 gives the same mb.com.ph URL whose slug reads 'romance-and-opportunity-in-2026-feng-shui-insights-from-marites-allen'.",
+   "web": "Same mismatch as the site CMS; the title and link may belong to different MB articles."
+  },
+  {
+   "item": "Positibong Balita (DZRJ, Carl E. Balita)",
+   "doc": "Doc says 29 Dec 2025 'possibly 2024-12-29'.",
+   "web": "Not found online."
+  },
+  {
+   "item": "Know your fortune... 2020 Astrological Forecast (SMN Events, Facebook)",
+   "doc": "Dated 2023 (approx) but about the 2020 forecast.",
+   "web": "Facebook blocks automated checks (400)."
+  },
+  {
+   "item": "Bio details differ between docC and docD",
+   "doc": "docC says 'British/Filipino'; docD says 'Filipino'. docC: MBA–MM completed 1998; docD: 1997–2000. Bio text only, not used in archive.",
+   "web": "n/a"
+  },
+  {
+   "item": "Possible duplicates between doc placeholders and existing entries (2025)",
+   "doc": "'NewsWatch interview — What lies ahead in Year of the Wooden Snake' (27 Jan 2025, no link); 'Bilyonaryo News Channel — On Point' (27 Jan 2025, no link).",
+   "web": "Existing: 'Feng Shui expert Marites Allen on the Year of the Wooden Snake' (NewsWatch Interviews, YouTube r27QpjNfhfk, Jan 2025); doc's own otherMedia item 'An interview with Bilyonaryo and Ms Pinky Webb' (YouTube Jzjzk36ULdE, 2025). Likely the same appearances; kept separate until confirmed."
+  }
+ ],
+ "docUnverifiedReferences": {
+  "note": "Reference-list entries in the Goddess docs that cite only an outlet homepage, mostly without a date. Not added to year pages: no article could be identified. Need real links before use.",
+  "items": [
+   {
+    "ref": 48,
+    "text": "Soul Clinic – Expert Contribution by Marites Allen. Soul &amp; Spirit Magazine (United Kingdom), May 2021."
+   },
+   {
+    "ref": 49,
+    "text": "Feng Shui Your Life. Soul &amp; Spirit Magazine (United Kingdom), May 2021."
+   },
+   {
+    "ref": 50,
+    "text": "Lucky Colours for the Year According to Feng Shui Master Marites Allen. Tatler Asia, 2024."
+   },
+   {
+    "ref": 51,
+    "text": "Home Prosperity Tips by Feng Shui Master Marites Allen. Tatler Asia, 2023."
+   },
+   {
+    "ref": 52,
+    "text": "Annual Feng Shui Forecast Interview with Marites Allen. Tatler Asia, 2022."
+   },
+   {
+    "ref": 53,
+    "text": "How Feng Shui Can Improve Your Home. Tatler Asia, 2021."
+   },
+   {
+    "ref": 54,
+    "text": "Annual Chinese New Year Feng Shui Forecast. Tatler Asia, 2020."
+   },
+   {
+    "ref": 55,
+    "text": "How to Use Feng Shui to Attract Prosperity. Tatler Asia."
+   },
+   {
+    "ref": 56,
+    "text": "Feng Shui Hairstyles. Angliya (United Kingdom / Russian-language publication)."
+   },
+   {
+    "ref": 57,
+    "text": "Annual Chinese Astrology Forecast. Angliya (United Kingdom / Russian-language publication)."
+   },
+   {
+    "ref": 58,
+    "text": "Chinese New Year Forecast with Marites Allen. BusinessMirror."
+   },
+   {
+    "ref": 59,
+    "text": "Year of the Rabbit Forecast. BusinessMirror."
+   },
+   {
+    "ref": 60,
+    "text": "Year of the Dragon Forecast. BusinessMirror."
+   },
+   {
+    "ref": 61,
+    "text": "Chinese New Year Special Interview. ABS-CBN News."
+   },
+   {
+    "ref": 62,
+    "text": "Annual Feng Shui Forecast. GMA News Online."
+   },
+   {
+    "ref": 63,
+    "text": "Chinese New Year 2024 Forecast. CNN Philippines."
+   },
+   {
+    "ref": 64,
+    "text": "Marites Allen Shares 2024 Feng Shui Predictions. Daily Tribune."
+   },
+   {
+    "ref": 65,
+    "text": "Business Forecast Through Feng Shui. BusinessWorld."
+   },
+   {
+    "ref": 66,
+    "text": "The Year Ahead According to Feng Shui Master Marites Allen. The Manila Times."
+   },
+   {
+    "ref": 67,
+    "text": "Chinese New Year Special. Manila Bulletin."
+   },
+   {
+    "ref": 68,
+    "text": "Feng Shui Tips for Every Home. Philippine Daily Inquirer."
+   },
+   {
+    "ref": 69,
+    "text": "Chinese Astrology Forecast. The Philippine Star."
+   },
+   {
+    "ref": 70,
+    "text": "Annual Chinese Horoscope Guide. The Philippine Star."
+   },
+   {
+    "ref": 71,
+    "text": "Home and Lifestyle Through Feng Shui. The Philippine Star."
+   }
+  ]
+ }
+}

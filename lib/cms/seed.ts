@@ -394,6 +394,18 @@ async function ensureLiveDefaults() {
       store.settings.contact.phoneSecondary = "";
       changed = true;
     }
+    const staleEventsIntro =
+      "Live sessions and private gatherings for Ghost Month preparation, cleansing, and guidance.";
+    const nextEventsIntro =
+      "Welcome the Year of the Fire Sheep 2027: forecasts, press events and the Chinese New Year Countdown at Manila House, 5 February 2027.";
+    if (store.pageCopy?.eventsPage?.intro === staleEventsIntro) {
+      store.pageCopy.eventsPage.intro = nextEventsIntro;
+      changed = true;
+    }
+    if (store.pageCopyDraft?.eventsPage?.intro === staleEventsIntro) {
+      store.pageCopyDraft.eventsPage.intro = nextEventsIntro;
+      changed = true;
+    }
     for (const item of store.navigation || []) {
       if (item.href === "/book" && COMING_SOON_LABELS.has(item.label)) {
         item.label = "Book Consultation";

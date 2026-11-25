@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { getCachedArticles, getCachedEvents, getCachedPublishedPages } from "@/lib/cms/content";
+import { forecastYears } from "@/lib/forecast-archive";
 import { PUBLIC_ROUTES, SITE_URL } from "@/lib/seo";
 
 const FORECAST_YEARS = ["2024", "2025", "2026", "2027"];
@@ -24,6 +25,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       lastModified,
       changeFrequency: "yearly" as const,
       priority: year === "2027" ? 0.8 : 0.5
+    })),
+    {
+      url: `${SITE_URL}/annual-forecast`,
+      lastModified,
+      changeFrequency: "yearly" as const,
+      priority: 0.7
+    },
+    ...forecastYears().map((row) => ({
+      url: `${SITE_URL}/annual-forecast/${row.year}`,
+      lastModified,
+      changeFrequency: "yearly" as const,
+      priority: row.year === 2027 ? 0.8 : 0.5
     })),
     ...articles.map((article) => ({
       url: `${SITE_URL}/articles/${article.slug}`,

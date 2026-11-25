@@ -62,7 +62,8 @@ export default async function MediaPage({
       url: a.externalUrl || `/articles/${a.slug}`,
       category: folder?.name || "",
       categorySlug: folder?.slug || "",
-      slug: a.slug
+      slug: a.slug,
+      placeholder: a.tags.includes("placeholder")
     };
   });
   const latest =

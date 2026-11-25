@@ -571,7 +571,8 @@ export const DEFAULT_PAGE_COPY: PageCopy = {
       "Upcoming Marites Allen events — live sessions, exclusive gatherings, and corporate speaking engagements.",
     kicker: "Upcoming & featured",
     title: "Events with Marites Allen",
-    intro: "Live sessions and private gatherings for Ghost Month preparation, cleansing, and guidance.",
+    intro:
+      "Welcome the Year of the Fire Sheep 2027: forecasts, press events and the Chinese New Year Countdown at Manila House, 5 February 2027.",
     speakingHeading: "Speaking engagements & corporate talks",
     speakingLines: [
       "Manila House Private Club|Annual CNY Countdown & Welcoming Ritual",

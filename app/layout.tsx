@@ -4,8 +4,9 @@ import { CmsProvider } from "@/components/cms-provider";
 import { JsonLd } from "@/components/json-ld";
 import { CookieNotice } from "@/components/cookie-notice";
 import { FireSheepVipPopup } from "@/components/fire-sheep-vip-popup";
+import { forecastNavYears } from "@/lib/forecast-archive";
 import { VisitBeacon } from "@/components/visit-beacon";
-import { getCachedNav, getCachedPageCopy, getCachedSettings } from "@/lib/cms/content";
+import { getCachedNav, getCachedSettings } from "@/lib/cms/content";
 import {
   DEFAULT_OG_IMAGE,
   personJsonLd,
@@ -117,14 +118,14 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const [settings, nav, pageCopy] = await Promise.all([getCachedSettings(), getCachedNav(), getCachedPageCopy()]);
+  const [settings, nav] = await Promise.all([getCachedSettings(), getCachedNav()]);
   return (
     <html lang="en" data-scroll-behavior="smooth" className={`${playfair.variable} ${lato.variable}`}>
       <body className={lato.className}>
         <JsonLd data={personJsonLd()} />
         <JsonLd data={websiteJsonLd()} />
         <JsonLd data={professionalServiceJsonLd()} />
-        <CmsProvider settings={settings} nav={nav} forecastYears={pageCopy.forecast.navYears}>
+        <CmsProvider settings={settings} nav={nav} forecastYears={forecastNavYears()}>
           <a href="#main" className="skip-link">
             Skip to content
           </a>

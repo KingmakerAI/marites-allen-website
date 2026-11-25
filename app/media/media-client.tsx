@@ -21,6 +21,7 @@ export type PressItem = {
   category: string;
   categorySlug: string;
   slug: string;
+  placeholder?: boolean;
 };
 
 function chipStyle(active: boolean): CSSProperties {
@@ -36,6 +37,18 @@ function chipStyle(active: boolean): CSSProperties {
 }
 
 function PressCard({ item }: { item: PressItem }) {
+  if (item.placeholder || !item.url) {
+    return (
+      <article className="paper-card">
+        <p className="eyebrow" style={{ fontSize: 11, margin: 0 }}>
+          {item.month} {item.year}
+        </p>
+        <h3 className="font-display">{item.quote}</h3>
+        <p style={{ margin: "0 0 10px", fontSize: 14 }}>{item.outlet}</p>
+        <p style={{ margin: 0, fontSize: 14, fontWeight: 700 }}>The information will be up soon.</p>
+      </article>
+    );
+  }
   const external = /^https?:/i.test(item.url);
   const style = {
     display: "flex",

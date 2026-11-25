@@ -93,6 +93,44 @@ select:focus {
   text-transform: uppercase;
 }
 
+.paper-card {
+  background-color: var(--cream-soft);
+  background-image:
+    radial-gradient(rgba(125, 92, 28, 0.07) 0.7px, transparent 0.7px),
+    linear-gradient(180deg, rgba(255, 253, 248, 0.4), rgba(239, 232, 216, 0.55));
+  background-size: 8px 8px, 100% 100%;
+  color: var(--gold-ink);
+  border: 1px solid rgba(125, 92, 28, 0.28);
+  border-radius: 16px;
+  box-shadow: 0 18px 40px -28px rgba(90, 60, 20, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.75);
+  padding: 22px 24px;
+}
+
+.paper-card h2,
+.paper-card h3 {
+  margin: 6px 0 8px;
+  color: var(--gold-ink);
+  font-size: clamp(20px, 2.4vw, 26px);
+  line-height: 1.25;
+}
+
+.archive-item {
+  background: var(--cream-soft);
+  border: 1px solid rgba(20, 61, 49, 0.1);
+  border-radius: 14px;
+  padding: 16px 18px;
+  box-shadow: 0 10px 24px -20px rgba(20, 60, 45, 0.35);
+}
+
+.archive-item a {
+  color: var(--forest);
+  font-weight: 700;
+}
+
+.archive-item a:hover {
+  color: var(--gold-ink);
+}
+
 .page-shell {
   font-family: var(--font-lato), system-ui, sans-serif;
   color: var(--ink);

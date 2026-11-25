@@ -4,7 +4,7 @@ import { createContext, useContext } from "react";
 import type { NavigationItem, SiteSettings } from "@/lib/cms/types";
 import { FORECAST_YEARS } from "@/lib/site-data";
 
-type ForecastYearNav = { year: string; label: string };
+type ForecastYearNav = { year: string; label: string; href?: string };
 
 type CmsContextValue = {
   settings: SiteSettings | null;

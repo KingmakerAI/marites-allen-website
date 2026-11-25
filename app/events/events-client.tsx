@@ -11,6 +11,15 @@ import { cms } from "@/lib/cms/cms-attr";
 import type { CopyTalk, CopyVideo } from "@/lib/cms/copy-lines";
 import { emailOk } from "@/lib/site-data";
 
+export type ArchiveEventCard = {
+  id: string;
+  title: string;
+  whenLabel: string;
+  whereLabel?: string;
+  href?: string;
+  placeholder?: boolean;
+};
+
 export type FeaturedEvent = {
   id: string;
   slug: string;
@@ -54,6 +63,7 @@ const FALLBACK_VIDEOS: CopyVideo[] = [
 
 export default function EventsPage({
   featuredEvents,
+  archiveEvents = [],
   kicker,
   title,
   intro,
@@ -63,6 +73,7 @@ export default function EventsPage({
   videos
 }: {
   featuredEvents: FeaturedEvent[];
+  archiveEvents?: ArchiveEventCard[];
   kicker?: string;
   title?: string;
   intro?: string;
@@ -191,11 +202,47 @@ export default function EventsPage({
               {title || "Events with Marites Allen"}
             </h1>
             <p style={{ fontSize: 16, lineHeight: 1.65, color: "#c7ddd2", margin: 0 }} {...cms("eventsPage.intro")}>
-              {intro || "Live sessions and private gatherings for Ghost Month preparation, cleansing, and guidance."}
+              {intro || "Welcome the Year of the Fire Sheep 2027: forecasts, press events and the Chinese New Year Countdown at Manila House, 5 February 2027."}
             </p>
           </div>
 
           <div style={{ display: "grid", gap: 22 }}>
+            {archiveEvents.map((event) =>
+              event.placeholder ? (
+                <article key={event.id} className="paper-card">
+                  <p className="eyebrow" style={{ fontSize: 11, margin: 0 }}>
+                    {event.whenLabel}
+                  </p>
+                  <h2 className="font-display">{event.title}</h2>
+                  <p style={{ margin: 0, fontSize: 15, fontWeight: 700 }}>The information will be up soon.</p>
+                </article>
+              ) : (
+                <article
+                  key={event.id}
+                  style={{
+                    background: "rgba(255,255,255,0.04)",
+                    border: "1px solid rgba(230,198,128,0.22)",
+                    borderRadius: 20,
+                    padding: "clamp(20px,3vw,32px)"
+                  }}
+                >
+                  <p className="eyebrow" style={{ fontSize: 11, margin: "0 0 8px", color: "#e6c680" }}>
+                    {event.whenLabel}
+                  </p>
+                  <h2 className="font-display" style={{ color: "#fff", fontSize: "clamp(22px,2.6vw,30px)", margin: "0 0 8px" }}>
+                    {event.title}
+                  </h2>
+                  {event.whereLabel ? (
+                    <p style={{ margin: "0 0 14px", color: "#c7ddd2", fontSize: 15 }}>{event.whereLabel}</p>
+                  ) : null}
+                  {event.href ? (
+                    <a href={event.href} target="_blank" rel="noopener noreferrer" style={{ color: "#e6c680", fontWeight: 700 }}>
+                      Source
+                    </a>
+                  ) : null}
+                </article>
+              )
+            )}
             {featuredEvents.map((event) => {
               const isExternal = event.ctaHref.startsWith("http");
               return (
