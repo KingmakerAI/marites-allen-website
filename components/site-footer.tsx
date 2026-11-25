@@ -57,6 +57,7 @@ export function SiteFooter({ variant = "full" }: Props) {
   if (variant === "minimal") {
     return (
       <footer
+        className="site-footer-minimal"
         style={{
           borderTop: "1px solid rgba(20,61,49,0.1)",
           padding: "18px clamp(18px,4vw,40px)",
@@ -70,13 +71,13 @@ export function SiteFooter({ variant = "full" }: Props) {
       >
         <BrandLogo height={26} maxWidth={200} />
         <div style={{ display: "flex", flexWrap: "wrap", gap: 14, alignItems: "center" }}>
-          <Link href="/privacy" style={{ fontSize: 12, color: "#5f6b60", fontWeight: 600 }}>
+          <Link href="/privacy" className="site-footer-link" style={{ fontSize: 12, color: "#5f6b60", fontWeight: 600 }}>
             Privacy Policy
           </Link>
-          <Link href="/terms" style={{ fontSize: 12, color: "#5f6b60", fontWeight: 600 }}>
+          <Link href="/terms" className="site-footer-link" style={{ fontSize: 12, color: "#5f6b60", fontWeight: 600 }}>
             Terms
           </Link>
-          <Link href="/book" style={{ fontSize: 12, color: "#143d31", fontWeight: 700 }}>
+          <Link href="/book" className="site-footer-link" style={{ fontSize: 12, color: "#143d31", fontWeight: 700 }}>
             Book a Consultation →
           </Link>
           <div style={{ fontSize: 12, color: "#6b6862" }}>© 2026 to 2027 Marites Allen.</div>
@@ -117,10 +118,10 @@ export function SiteFooter({ variant = "full" }: Props) {
 
         <div>
           <div style={headingStyle}>Explore</div>
-          <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+          <div className="site-footer-links">
             {explore.map((item) =>
               item.external || item.href.startsWith("http") ? (
-                <a key={item.id} href={item.href} target="_blank" rel="noopener noreferrer" style={linkStyle}>
+                <a key={item.id} href={item.href} target="_blank" rel="noopener noreferrer" className="site-footer-link" style={linkStyle}>
                   {item.label}
                 </a>
               ) : (
@@ -134,7 +135,7 @@ export function SiteFooter({ variant = "full" }: Props) {
 
         <div>
           <div style={headingStyle}>Contact</div>
-          <div style={{ display: "flex", flexDirection: "column", gap: 6, fontSize: 13, color: "#c7ddd2" }}>
+          <div className="site-footer-links">
             <a href={`mailto:${email}`} className="site-footer-link" style={linkStyle}>
               {email}
             </a>
@@ -167,7 +168,7 @@ export function SiteFooter({ variant = "full" }: Props) {
 
         <div>
           <div style={headingStyle}>Follow Marites</div>
-          <div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
+          <div className="site-footer-links">
             {social.map((s) => (
               <a
                 key={s.id}
@@ -185,7 +186,7 @@ export function SiteFooter({ variant = "full" }: Props) {
           </div>
 
           <div style={{ ...headingStyle, marginTop: 16, marginBottom: 8, fontSize: 10 }}>Frigga Charmed Life</div>
-          <div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
+          <div className="site-footer-links">
             {friggaSocial.map((s) => (
               <a
                 key={s.id}
@@ -225,7 +226,7 @@ export function SiteFooter({ variant = "full" }: Props) {
             Terms
           </Link>
           <span style={{ color: "#5f7a6e" }}>·</span>
-          <Link href="/book" style={{ color: "#e6c680", fontWeight: 700 }}>
+          <Link href="/book" className="site-footer-link" style={{ color: "#e6c680", fontWeight: 700 }}>
             Book a Consultation →
           </Link>
         </div>
@@ -253,9 +254,6 @@ export function SiteFooter({ variant = "full" }: Props) {
           align-items: center;
           justify-content: center;
           min-height: 46px;
-        }
-        .site-footer-link:hover {
-          color: #e6c680 !important;
         }
         @media (max-width: 900px) {
           .site-footer-main {

@@ -109,16 +109,7 @@ export default function ProjectsPage({ copy }: { copy: ProjectsCopy }) {
             {shownCats.map((cat) => (
               <div key={cat} style={{ marginBottom: "clamp(28px,4vw,40px)" }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 14 }}>
-                  <span
-                    style={{
-                      fontSize: 11,
-                      fontWeight: 700,
-                      letterSpacing: 2,
-                      textTransform: "uppercase",
-                      color: "#a3946f",
-                      whiteSpace: "nowrap"
-                    }}
-                  >
+                  <span className="eyebrow" style={{ fontSize: 11, whiteSpace: "nowrap" }}>
                     {cat}
                   </span>
                   <div style={{ flex: 1, height: 1, background: "rgba(20,61,49,0.13)" }} />
@@ -192,7 +183,7 @@ export default function ProjectsPage({ copy }: { copy: ProjectsCopy }) {
                         >
                           {p.summary}
                         </p>
-                        <span style={{ fontSize: 12.5, fontWeight: 700, color: "#c69a3e" }}>Read article →</span>
+                        <span style={{ fontSize: 12.5, fontWeight: 700, color: "var(--gold-ink)" }}>Read article →</span>
                       </button>
                       );
                     })}
@@ -233,12 +224,9 @@ export default function ProjectsPage({ copy }: { copy: ProjectsCopy }) {
             All projects
           </button>
           <span
+            className="eyebrow"
             style={{
               fontSize: 10,
-              fontWeight: 700,
-              letterSpacing: 1,
-              textTransform: "uppercase",
-              color: "#a3946f",
               background: "#efe8d8",
               borderRadius: 99,
               padding: "3px 10px"

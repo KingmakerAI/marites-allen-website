@@ -50,7 +50,7 @@ function PressCard({ item }: { item: PressItem }) {
   };
   const body = (
     <>
-      <span style={{ fontSize: 12, fontWeight: 700, color: "#a3946f", minWidth: 56 }}>{item.month}</span>
+      <span style={{ fontSize: 12, fontWeight: 700, color: "var(--gold-ink)", minWidth: 56 }}>{item.month}</span>
       <span style={{ flex: "1 1 340px", minWidth: 220 }}>
         {item.category ? (
           <span
@@ -84,7 +84,7 @@ function PressCard({ item }: { item: PressItem }) {
         </span>
         <span style={{ display: "block", fontSize: 13, color: "#6b7268", marginTop: 4 }}>{item.outlet}</span>
       </span>
-      <span style={{ fontSize: 12.5, fontWeight: 700, color: "#c69a3e", whiteSpace: "nowrap" }}>{item.cta} →</span>
+      <span style={{ fontSize: 12.5, fontWeight: 700, color: "var(--gold-ink)", whiteSpace: "nowrap" }}>{item.cta} →</span>
     </>
   );
   if (external) {
@@ -340,7 +340,7 @@ export default function MediaPage({
             >
               ×
             </button>
-            <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: 2, textTransform: "uppercase", color: "#c69a3e" }}>
+            <div className="eyebrow" style={{ fontSize: 11 }}>
               For press &amp; media
             </div>
             <h2 className="font-display" style={{ fontWeight: 700, fontSize: 22, color: "#143d31", margin: "8px 0 6px" }} {...cms("mediaPage.pressKitTitle")}>
@@ -579,12 +579,9 @@ export default function MediaPage({
         {latest && !selectedCategory ? (
           <div style={{ marginBottom: 28 }}>
             <p
+              className="eyebrow"
               style={{
                 fontSize: 11,
-                fontWeight: 700,
-                letterSpacing: 1.2,
-                textTransform: "uppercase",
-                color: "#c69a3e",
                 margin: "0 0 10px"
               }}
             >
@@ -603,14 +600,14 @@ export default function MediaPage({
         {folders.length > 0 && (
           <div style={{ display: "flex", flexWrap: "wrap", gap: 8, margin: "0 0 18px" }}>
             <Link href="/media" style={chipStyle(!selectedCategory)}>
-              All <span style={{ color: selectedCategory ? "#a3946f" : "#143d31", fontWeight: 400 }}>({press.length})</span>
+              All <span style={{ color: selectedCategory ? "var(--gold-ink)" : "#143d31", fontWeight: 400 }}>({press.length})</span>
             </Link>
             {folders.map((folder) => {
               const active = selectedCategory === folder.slug;
               return (
                 <Link key={folder.slug} href={`/media?category=${folder.slug}`} style={chipStyle(active)}>
                   {folder.name}{" "}
-                  <span style={{ color: active ? "#143d31" : "#a3946f", fontWeight: 400 }}>({folder.count})</span>
+                  <span style={{ color: active ? "#143d31" : "var(--gold-ink)", fontWeight: 400 }}>({folder.count})</span>
                 </Link>
               );
             })}
@@ -660,7 +657,7 @@ export default function MediaPage({
                   padding: "7px 15px"
                 }}
               >
-                {y.year} <span style={{ color: "#a3946f", fontWeight: 400 }}>({y.items.length})</span>
+                {y.year} <span style={{ color: "var(--gold-ink)", fontWeight: 400 }}>({y.items.length})</span>
               </a>
             ))}
           </div>
@@ -672,7 +669,7 @@ export default function MediaPage({
             <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 16 }}>
               <h3
                 className="font-display"
-                style={{ fontWeight: 700, fontSize: "clamp(26px,3.2vw,34px)", color: "#c69a3e", margin: 0 }}
+                style={{ fontWeight: 700, fontSize: "clamp(26px,3.2vw,34px)", color: "var(--gold-ink)", margin: 0 }}
               >
                 {g.year}
               </h3>
