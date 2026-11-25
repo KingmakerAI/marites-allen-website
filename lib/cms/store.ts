@@ -16,6 +16,7 @@ import type {
   PasswordReset,
   PricingRow,
   Session,
+  PressKitFile,
   Signup,
   SiteSettings,
   Testimonial
@@ -45,6 +46,7 @@ export type StoreData = {
   homeSections: HomeSection[];
   auditLog: AuditLog[];
   signups: Signup[];
+  pressKitFile: PressKitFile | null;
   pageCopy: PageCopy | null;
   /** Working copy for Live Edit / Copy screens. Publish copies this to pageCopy. */
   pageCopyDraft: PageCopy | null;
@@ -73,6 +75,7 @@ const EMPTY: StoreData = {
   homeSections: [],
   auditLog: [],
   signups: [],
+  pressKitFile: null,
   pageCopy: null,
   pageCopyDraft: null,
   bootstrap: {}
@@ -90,6 +93,7 @@ function normalize(parsed: Partial<StoreData>): StoreData {
     ...emptyStore(),
     ...rest,
     signups: rest.signups || [],
+    pressKitFile: rest.pressKitFile || null,
     pageCopy: rest.pageCopy || null,
     pageCopyDraft: rest.pageCopyDraft || null,
     bootstrap: rest.bootstrap || {}
@@ -292,8 +296,27 @@ export async function mutateStoreIfChanged(fn: (store: StoreData) => boolean) {
   return true;
 }
 
+/** Expected upload/save failures (missing Blob token, paused store, read-only disk). */
+export function isStorageFailure(err: unknown) {
+  const message = err instanceof Error ? err.message : String(err ?? "");
+  const code = err && typeof err === "object" && "code" in err ? String((err as { code?: unknown }).code) : "";
+  return (
+    /BLOB_READ_WRITE_TOKEN|not stored|paused|over quota|read-only file system/i.test(message) ||
+    code === "EROFS" ||
+    code === "EPERM" ||
+    code === "EACCES"
+  );
+}
+
+export const STORAGE_SETUP_HINT =
+  "On the live host, create a Vercel Blob store and set BLOB_READ_WRITE_TOKEN (Vercel adds this when the store is connected to the project). The store must not be paused or over quota. Local development keeps files in public/uploads and does not need the token.";
+
 export async function storeUploadedFile(filename: string, body: Buffer, contentType: string) {
   if (!useBlobStore()) {
+    // Vercel’s app disk is read-only. Writing public/uploads there throws and the admin shows a crash page.
+    if (process.env.VERCEL) {
+      throw new Error("BLOB_READ_WRITE_TOKEN is not set. This file was not stored.");
+    }
     const rel = `/uploads/${filename}`;
     const dest = path.join(process.cwd(), "public", "uploads", filename);
     fs.mkdirSync(path.dirname(dest), { recursive: true });
@@ -301,13 +324,22 @@ export async function storeUploadedFile(filename: string, body: Buffer, contentT
     return rel;
   }
   const { put } = await import("@vercel/blob");
-  const blob = await put(`uploads/${filename}`, body, {
-    access: "public",
-    addRandomSuffix: false,
-    allowOverwrite: true,
-    contentType
-  });
-  return blob.url;
+  try {
+    const blob = await put(`uploads/${filename}`, body, {
+      access: "public",
+      addRandomSuffix: false,
+      allowOverwrite: true,
+      contentType
+    });
+    return blob.url;
+  } catch (err) {
+    if (isBlobForbidden(err)) {
+      throw new Error(
+        "Vercel Blob is paused or over quota. This file was not stored. Check Blob usage in the Vercel dashboard or upgrade the plan."
+      );
+    }
+    throw err;
+  }
 }
 
 export async function removeStoredFile(filePath: string) {

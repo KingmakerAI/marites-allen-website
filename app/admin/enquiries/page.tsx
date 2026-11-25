@@ -58,7 +58,10 @@ export default async function EnquiriesPage({
   return (
     <div>
       <h1 className="admin-h1">Messages</h1>
-      <p className="admin-sub">People who asked to book, and what they want. Press “I replied” after you message them.</p>
+      <p className="admin-sub">
+        People who asked to book, and what they want. Press “I replied” after you message them. Press kit registrations
+        are listed under <Link href="/admin/press-kit">Press kit</Link>.
+      </p>
       <Flash saved={q.saved} />
       <form className="admin-actions" style={{ marginBottom: 16 }}>
         <input name="q" placeholder="Search name, email, or request" defaultValue={q.q} />

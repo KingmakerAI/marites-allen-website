@@ -18,6 +18,7 @@ import type {
   NavigationItem,
   PageBlock,
   PricingRow,
+  PressKitFile,
   Signup,
   SignupKind,
   SignupStatus,
@@ -518,6 +519,17 @@ export async function saveSignup(input: Omit<Signup, "id" | "createdAt" | "statu
   });
 }
 
+export async function getPressKitFile() {
+  return (await readStore()).pressKitFile || null;
+}
+
+export async function savePressKitFile(file: PressKitFile) {
+  await mutateStore((store) => {
+    store.pressKitFile = file;
+  });
+  return file;
+}
+
 export async function updateSignupStatus(id: string, status: SignupStatus) {
   await mutateStore((store) => {
     const row = store.signups.find((s) => s.id === id);
@@ -588,13 +600,20 @@ export async function searchAdmin(query: string, limit = 12): Promise<AdminSearc
     }
   }
   for (const row of store.signups || []) {
-    if (row.kind !== "booking-waitlist") continue;
-    if (match(row.email, row.name, row.notes, row.fields?.service)) {
+    if (row.kind === "booking-waitlist" && match(row.email, row.name, row.notes, row.fields?.service)) {
       hits.push({
         type: "Enquiry",
         label: row.name || row.email,
         sub: row.fields?.service || row.email,
         href: `/admin/enquiries?q=${encodeURIComponent(row.email)}`
+      });
+    }
+    if (row.kind === "press-kit" && match(row.email, row.name, row.organization)) {
+      hits.push({
+        type: "Press kit",
+        label: row.name || row.email,
+        sub: row.organization || row.email,
+        href: `/admin/press-kit?q=${encodeURIComponent(row.email)}`
       });
     }
   }

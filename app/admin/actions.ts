@@ -5,7 +5,7 @@ import { redirect, unstable_rethrow } from "next/navigation";
 import { authenticate, cookieOptions, createSession, destroySession, getSessionUser, isProtectedOwnerEmail, logAudit, rateLimitLogin, rateLimitReset, SESSION_COOKIE, REMEMBER_EMAIL_COOKIE, changePasswordWithCurrent, requestPasswordReset, completePasswordReset, setUserPassword } from "@/lib/cms/auth";
 import { safeAdminNext, SESSION_MAX_AGE, SessionSecretError } from "@/lib/cms/session-cookie";
 import { fingerprint, hashPassword, newId, nowIso, slugify } from "@/lib/cms/crypto";
-import { mutateStore, removeStoredFile, storeUploadedFile } from "@/lib/cms/store";
+import { isStorageFailure, mutateStore, persistenceMode, removeStoredFile, storeUploadedFile } from "@/lib/cms/store";
 import { sanitizeHtml, sanitizeText } from "@/lib/cms/sanitize";
 import {
   deleteArticle,
@@ -20,6 +20,7 @@ import {
   duplicatePage,
   mediaInUse,
   getArticle,
+  getPressKitFile,
   saveArticle,
   saveCategory,
   saveEvent,
@@ -28,6 +29,7 @@ import {
   saveMedia,
   saveNavigation,
   savePage,
+  savePressKitFile,
   savePricing,
   saveService,
   saveSettings,
@@ -52,6 +54,7 @@ import {
 } from "@/lib/cms/validation";
 import type { AdminRole, HomeSection, PageBlock, SiteSettings } from "@/lib/cms/types";
 import type { PageCopy } from "@/lib/cms/page-copy-types";
+import { fileLooksLikePlaceholder, PRESS_KIT_MAX_UPLOAD_BYTES, sniffPressKit } from "@/lib/cms/press-kit";
 import { isReservedPageSlug } from "@/lib/cms/reserved-slugs";
 
 async function actor(minRole?: AdminRole) {
@@ -347,49 +350,105 @@ function sniffImage(buf: Buffer): { mime: string; ext: string } | null {
 
 export async function uploadMediaAction(formData: FormData) {
   const user = await actor();
-  const file = formData.get("file");
-  if (!(file instanceof File) || file.size === 0) throw new Error("No file uploaded");
-  if (file.size > 4 * 1024 * 1024) throw new Error("File too large (4MB max)");
-  const bytes = Buffer.from(await file.arrayBuffer());
-  const sniffed = sniffImage(bytes);
-  if (!sniffed) throw new Error("File type not allowed");
-  const id = newId();
-  const filename = `${id}${sniffed.ext}`;
-  const storedPath = await storeUploadedFile(filename, bytes, sniffed.mime);
-  await saveMedia({
-    id,
-    filename: sanitizeText(file.name, 120) || filename,
-    path: storedPath,
-    mimeType: sniffed.mime,
-    size: file.size,
-    width: null,
-    height: null,
-    altText: sanitizeText(formStr(formData, "altText"), 160),
-    createdAt: nowIso()
-  });
-  await logAudit(user.id, "media", id, "upload");
-  redirect("/admin/media?saved=1");
+  try {
+    const file = formData.get("file");
+    if (!(file instanceof File) || file.size === 0) redirect("/admin/media?error=type");
+    if (file.size > 4 * 1024 * 1024) redirect("/admin/media?error=size");
+    const bytes = Buffer.from(await file.arrayBuffer());
+    const sniffed = sniffImage(bytes);
+    if (!sniffed) redirect("/admin/media?error=type");
+    const id = newId();
+    const filename = `${id}${sniffed.ext}`;
+    const storedPath = await storeUploadedFile(filename, bytes, sniffed.mime);
+    await saveMedia({
+      id,
+      filename: sanitizeText(file.name, 120) || filename,
+      path: storedPath,
+      mimeType: sniffed.mime,
+      size: file.size,
+      width: null,
+      height: null,
+      altText: sanitizeText(formStr(formData, "altText"), 160),
+      createdAt: nowIso()
+    });
+    await logAudit(user.id, "media", id, "upload");
+    redirect("/admin/media?saved=1");
+  } catch (err) {
+    unstable_rethrow(err);
+    if (isStorageFailure(err)) redirect("/admin/media?error=storage");
+    throw err;
+  }
+}
+
+export async function uploadPressKitAction(formData: FormData) {
+  const user = await actor();
+  try {
+    const file = formData.get("file");
+    if (!(file instanceof File) || file.size === 0) redirect("/admin/press-kit?error=type");
+    if (file.size > PRESS_KIT_MAX_UPLOAD_BYTES) redirect("/admin/press-kit?error=size");
+    if (persistenceMode() === "ephemeral") redirect("/admin/press-kit?error=storage");
+    const bytes = Buffer.from(await file.arrayBuffer());
+    const sniffed = sniffPressKit(bytes);
+    if (!sniffed) redirect("/admin/press-kit?error=type");
+    const id = newId();
+    const filename = `press-kit-${id}${sniffed.ext}`;
+    const previous = await getPressKitFile();
+    const storedPath = await storeUploadedFile(filename, bytes, sniffed.mime);
+    await savePressKitFile({
+      filename: `press-kit${sniffed.ext}`,
+      path: storedPath,
+      mimeType: sniffed.mime,
+      size: file.size,
+      updatedAt: nowIso(),
+      placeholder: fileLooksLikePlaceholder(bytes)
+    });
+    if (previous?.path && previous.path !== storedPath) {
+      try {
+        await removeStoredFile(previous.path);
+      } catch (err) {
+        if (!isStorageFailure(err)) throw err;
+      }
+    }
+    await logAudit(user.id, "press-kit", id, "upload");
+    redirect("/admin/press-kit?saved=1");
+  } catch (err) {
+    unstable_rethrow(err);
+    if (isStorageFailure(err)) redirect("/admin/press-kit?error=storage");
+    throw err;
+  }
 }
 
 export async function updateMediaAltAction(formData: FormData) {
   const user = await actor();
   const id = formStr(formData, "id");
-  await mutateStore((store) => {
-    const row = store.media.find((m) => m.id === id);
-    if (row) row.altText = sanitizeText(formStr(formData, "altText"), 160);
-  });
-  await logAudit(user.id, "media", id, "update");
-  redirect("/admin/media?saved=1");
+  try {
+    await mutateStore((store) => {
+      const row = store.media.find((m) => m.id === id);
+      if (row) row.altText = sanitizeText(formStr(formData, "altText"), 160);
+    });
+    await logAudit(user.id, "media", id, "update");
+    redirect("/admin/media?saved=1");
+  } catch (err) {
+    unstable_rethrow(err);
+    if (isStorageFailure(err)) redirect("/admin/media?error=storage");
+    throw err;
+  }
 }
 
 export async function deleteMediaAction(formData: FormData) {
   const user = await actor();
   const id = formStr(formData, "id");
   if (await mediaInUse(id)) redirect("/admin/media?error=inuse");
-  const asset = await deleteMedia(id);
-  if (asset?.path) await removeStoredFile(asset.path);
-  await logAudit(user.id, "media", id, "delete");
-  redirect("/admin/media?saved=1");
+  try {
+    const asset = await deleteMedia(id);
+    if (asset?.path) await removeStoredFile(asset.path);
+    await logAudit(user.id, "media", id, "delete");
+    redirect("/admin/media?saved=1");
+  } catch (err) {
+    unstable_rethrow(err);
+    if (isStorageFailure(err)) redirect("/admin/media?error=storage");
+    throw err;
+  }
 }
 
 export async function saveServiceAction(formData: FormData) {

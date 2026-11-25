@@ -220,3 +220,15 @@ export type Signup = {
   status: SignupStatus;
   createdAt: string;
 };
+
+/** Admin-uploaded press kit. Static files in public/press-kit/ are not stored here. */
+export type PressKitFile = {
+  filename: string;
+  /** /uploads/... on disk, or an https blob URL. */
+  path: string;
+  mimeType: string;
+  size: number;
+  updatedAt: string;
+  /** True when the bytes are the committed placeholder, not a real kit. */
+  placeholder: boolean;
+};

@@ -1,11 +1,20 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   devIndicators: false,
+  // Photo and press-kit uploads are allowed up to 4MB. The platform default (1MB) turned larger photos into a generic server error.
+  experimental: {
+    serverActions: {
+      bodySizeLimit: "4mb"
+    }
+  },
   images: {
     formats: ["image/avif", "image/webp"],
     deviceSizes: [640, 750, 828, 1080, 1200, 1920],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
-    remotePatterns: [{ protocol: "https", hostname: "*.public.blob.vercel-storage.com" }]
+    remotePatterns: [
+      { protocol: "https", hostname: "*.public.blob.vercel-storage.com" },
+      { protocol: "https", hostname: "*.blob.vercel-storage.com" }
+    ]
   },
   async redirects() {
     return [
@@ -13,7 +22,10 @@ const nextConfig = {
         source: "/booking-experience",
         destination: "/book",
         permanent: true
-      }
+      },
+      { source: "/presskit", destination: "/press-kit", permanent: false },
+      { source: "/press-kit.pdf", destination: "/press-kit", permanent: false },
+      { source: "/downloads/press-kit.pdf", destination: "/press-kit", permanent: false }
     ];
   },
   async headers() {
