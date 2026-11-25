@@ -40,10 +40,11 @@ export const revalidate = 3600;
 export default async function MediaPage({
   searchParams
 }: {
-  searchParams: Promise<{ category?: string }>;
+  searchParams: Promise<{ category?: string; year?: string }>;
 }) {
   const query = await searchParams;
   const category = (query.category || "").trim().toLowerCase();
+  const year = (query.year || "").trim();
   const [articles, pageCopy, settings] = await Promise.all([
     getCachedArticles(),
     getCachedPageCopy(),
@@ -90,6 +91,7 @@ export default async function MediaPage({
           videos={parseVideoLines(copy.videos)}
           contact={settings.contact}
           category={category}
+          year={year}
           undated={undatedMedia()}
         />
       </Suspense>
