@@ -2,8 +2,10 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArchiveFeatureList } from "@/components/archive-feature-list";
+import { YearVideos } from "@/components/year-videos";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
+import { videosForYear } from "@/lib/ma-videos";
 import {
   forecastYear,
   forecastYears,
@@ -42,6 +44,7 @@ export default async function AnnualForecastYearPage({
   const october = pressConferences().find((item) => item.date === "2026-10-12");
   const november = pressConferences().find((item) => item.date === "2026-11-27");
   const showPress = row.year === 2027 && october && november;
+  const videos = videosForYear(row.year);
 
   return (
     <div className="page-shell page-enter">
@@ -127,6 +130,7 @@ export default async function AnnualForecastYearPage({
           </h2>
           <ArchiveFeatureList features={row.features} />
         </section>
+        <YearVideos items={videos} />
       </main>
       <SiteFooter />
     </div>

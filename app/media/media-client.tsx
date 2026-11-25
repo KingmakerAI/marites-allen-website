@@ -9,6 +9,8 @@ import { SiteHeader } from "@/components/site-header";
 import { cms } from "@/lib/cms/cms-attr";
 import type { CopyVideo } from "@/lib/cms/copy-lines";
 import { emailOk } from "@/lib/site-data";
+import { UndatedMediaList } from "@/components/year-videos";
+import type { YearVideo } from "@/lib/ma-videos";
 
 export type PressItem = {
   year: number;
@@ -169,9 +171,11 @@ export default function MediaPage({
   videosHeading,
   videos,
   contact,
-  category = ""
+  category = "",
+  undated = []
 }: {
   press: PressItem[];
+  undated?: YearVideo[];
   latest?: PressItem | null;
   title?: string;
   intro?: string;
@@ -696,6 +700,7 @@ export default function MediaPage({
             </div>
           </div>
         ))}
+        {selectedCategory ? null : <UndatedMediaList items={undated} />}
       </section>
 
       <section style={{ background: "#12362a", color: "#fff" }}>

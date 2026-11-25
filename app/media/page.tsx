@@ -4,6 +4,7 @@ import { JsonLd } from "@/components/json-ld";
 import { getCachedArticles, getCachedPageCopy, getCachedSettings } from "@/lib/cms/content";
 import { parseVideoLines } from "@/lib/cms/copy-lines";
 import { listCategories, monthName } from "@/lib/cms/repo";
+import { undatedMedia } from "@/lib/ma-videos";
 import { breadcrumbJsonLd, pageMetadata } from "@/lib/seo";
 import MediaClient from "./media-client";
 
@@ -89,6 +90,7 @@ export default async function MediaPage({
           videos={parseVideoLines(copy.videos)}
           contact={settings.contact}
           category={category}
+          undated={undatedMedia()}
         />
       </Suspense>
     </>
