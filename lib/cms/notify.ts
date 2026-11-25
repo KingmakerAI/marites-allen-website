@@ -121,6 +121,95 @@ function mailConfig() {
   return { from: from || undefined, to, key: key || undefined };
 }
 
+/** Env names the host still needs before press-kit email can go out. Values are never included. */
+export function missingPressKitMailEnv() {
+  const missing: string[] = [];
+  if (!(process.env.RESEND_API_KEY || "").trim()) missing.push("RESEND_API_KEY");
+  if (!(process.env.BOOKING_FROM_EMAIL || "").trim() && !(process.env.RESET_FROM_EMAIL || "").trim()) {
+    missing.push("BOOKING_FROM_EMAIL or RESET_FROM_EMAIL");
+  }
+  return missing;
+}
+
+export type PressKitMailResult =
+  | { status: "sent" }
+  | { status: "not-configured"; missing: string[] }
+  | { status: "failed"; missing: string[] };
+
+export async function notifyPressKitDownload(input: {
+  name: string;
+  email: string;
+  outlet: string;
+  downloadUrl: string;
+}): Promise<PressKitMailResult> {
+  const missing = missingPressKitMailEnv();
+  const { from, to, key } = mailConfig();
+  if (!key || !from) return { status: "not-configured", missing };
+
+  const who = input.name.trim() || "there";
+  const text = [
+    `Hi ${who},`,
+    "",
+    "Thank you for requesting the Marites Allen press kit.",
+    "Download it here:",
+    input.downloadUrl,
+    "",
+    "Warm regards,",
+    "Marites Allen Team"
+  ].join("\n");
+  const html = emailShell(
+    "Your press kit",
+    `
+      <p style="margin:0 0 14px;color:#f4f0e6;font-size:16px;">Hi ${escapeHtml(who)},</p>
+      <p style="margin:0 0 14px;">Thank you for requesting the Marites Allen press kit.</p>
+      <p style="margin:0 0 18px;">
+        <a href="${escapeHtml(input.downloadUrl)}" style="display:inline-block;background:#e6c680;color:#143d31;font-weight:700;text-decoration:none;border-radius:10px;padding:12px 18px;">Download the press kit</a>
+      </p>
+      <p style="margin:0 0 14px;font-size:13px;word-break:break-all;"><a href="${escapeHtml(input.downloadUrl)}" style="color:#e6c680;">${escapeHtml(input.downloadUrl)}</a></p>
+      <p style="margin:0;color:#e6c680;font-weight:700;">Warm regards,<br /><span style="font-weight:500;color:#c7ddd2;">Marites Allen Team</span></p>
+    `
+  );
+
+  const sent = await sendResendEmail({
+    from,
+    to: [input.email],
+    subject: "Your Marites Allen press kit",
+    text,
+    html
+  });
+  if (!sent) return { status: "failed", missing };
+
+  const teamText = [
+    "New press kit registration",
+    "",
+    `Name: ${input.name || "—"}`,
+    `Outlet: ${input.outlet || "—"}`,
+    `Email: ${input.email}`,
+    "",
+    `Download link sent: ${input.downloadUrl}`
+  ].join("\n");
+  await sendResendEmail({
+    from,
+    to: [to],
+    replyTo: input.email,
+    subject: `Press kit request — ${input.name || input.email}`,
+    text: teamText,
+    html: emailShell(
+      "Press kit request",
+      `
+        <p style="margin:0 0 14px;">Someone registered for the press kit.</p>
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+          ${detailRow("Name", input.name || "—")}
+          ${detailRow("Outlet", input.outlet || "—")}
+          ${detailRow("Email", input.email)}
+        </table>
+      `
+    )
+  });
+
+  return { status: "sent" };
+}
+
 export async function notifyTeamConsultationEnquiry(input: ConsultationEnquiryNotifyInput) {
   const { from, to, key } = mailConfig();
   if (!key || !from) {

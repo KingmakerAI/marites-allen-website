@@ -698,8 +698,7 @@ export default function EventsPage({
                 Enquiry received
               </h3>
               <p style={{ fontSize: 14, color: "#6b7268", lineHeight: 1.55 }}>
-                Thank you. Your speaking enquiry is saved. Email was not sent. The team reviews website messages and can
-                contact you at <strong style={{ color: "#143d31" }}>{email}</strong>.
+                Thank you, we&apos;ve received your enquiry. Our team will get back to you soon.
               </p>
             </div>
           )}

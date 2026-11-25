@@ -198,7 +198,7 @@ export function ConsultationEnquiryForm({
         <p style={{ fontSize: 14.5, lineHeight: 1.65, color: "#c7ddd2", margin: "0 0 12px" }}>
           {emailsSent
             ? "Our team has been notified and will review your request. We'll contact you by email or WhatsApp regarding availability and the next steps."
-            : "Your enquiry is saved. Email was not sent, so please contact us on WhatsApp if you would like a reply sooner."}
+            : "Thank you, we've received your enquiry. Our team will get back to you soon. You can also reach us on WhatsApp."}
         </p>
         {emailsSent ? (
           <p style={{ fontSize: 14, lineHeight: 1.6, color: "#e6c680", margin: "0 0 22px" }}>

@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState, type CSSProperties } from "react";
+import { useEffect, useMemo, useState, type CSSProperties } from "react";
+import { createPortal } from "react-dom";
 import { submitSignupAction } from "@/app/signup/actions";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
@@ -171,12 +172,24 @@ export default function MediaPage({
   const [pressName, setPressName] = useState("");
   const [pressOutlet, setPressOutlet] = useState("");
   const [pressEmail, setPressEmail] = useState("");
-  const [pressSent, setPressSent] = useState(false);
+  const [pressResult, setPressResult] = useState<{
+    emailed: boolean;
+    headline: string;
+    detail: string;
+    downloadPath: string | null;
+  } | null>(null);
   const [pressPending, setPressPending] = useState(false);
   const [pressError, setPressError] = useState("");
   const [pressModalOpen, setPressModalOpen] = useState(false);
   const [videoModalOpen, setVideoModalOpen] = useState(false);
   const [activeVideoId, setActiveVideoId] = useState<string | null>(null);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    // Portal target is document.body, which does not exist during server render.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setMounted(true);
+  }, []);
 
   const pressReady = !!(pressName && emailOk(pressEmail));
   const clips = videos?.length ? videos : FALLBACK_VIDEOS;
@@ -218,7 +231,8 @@ export default function MediaPage({
 
   return (
     <div className="page-shell page-enter">
-      {videoModalOpen && activeVideoId && (
+      {mounted && videoModalOpen && activeVideoId
+        ? createPortal(
         <div
           onClick={() => {
             setVideoModalOpen(false);
@@ -277,10 +291,13 @@ export default function MediaPage({
               </button>
             </div>
           </div>
-        </div>
-      )}
+        </div>,
+        document.body
+        )
+        : null}
 
-      {pressModalOpen && (
+      {mounted && pressModalOpen
+        ? createPortal(
         <div
           onClick={() => setPressModalOpen(false)}
           style={{
@@ -331,6 +348,8 @@ export default function MediaPage({
             <h2 className="font-display" style={{ fontWeight: 700, fontSize: 22, color: "#143d31", margin: "8px 0 6px" }} {...cms("mediaPage.pressKitTitle")}>
               {pressKitTitle || "Download the free press kit"}
             </h2>
+            {!pressResult ? (
+              <>
             <p style={{ fontSize: 13.5, lineHeight: 1.55, color: "#6b7268", margin: "0 0 18px" }} {...cms("mediaPage.pressKitBody")}>
               {pressKitBody || "Register your details and we'll email you the full kit."}
             </p>
@@ -378,27 +397,66 @@ export default function MediaPage({
                 }}
               />
             </div>
+              </>
+            ) : null}
             {pressError && <div style={{ color: "#8b2e2e", fontSize: 13, marginBottom: 8 }}>{pressError}</div>}
+            {pressResult ? (
+              <div role="status" style={{ display: "grid", gap: 12 }}>
+                <div style={{ fontSize: 15, fontWeight: 700, color: "#143d31", lineHeight: 1.4 }}>
+                  {pressResult.emailed ? "✓ " : ""}
+                  {pressResult.headline}
+                </div>
+                {pressResult.detail ? (
+                  <p style={{ fontSize: 13.5, lineHeight: 1.5, color: "#5f6b60", margin: 0 }}>{pressResult.detail}</p>
+                ) : null}
+                {pressResult.downloadPath ? (
+                  <a
+                    href={pressResult.downloadPath}
+                    style={{
+                      display: "block",
+                      textAlign: "center",
+                      background: "#e6c680",
+                      color: "#143d31",
+                      borderRadius: 11,
+                      padding: 13,
+                      fontSize: 15,
+                      fontWeight: 700
+                    }}
+                  >
+                    Download the press kit
+                  </a>
+                ) : null}
+              </div>
+            ) : (
             <button
               type="button"
               onClick={async () => {
                 if (!pressReady || pressPending) return;
                 setPressError("");
                 setPressPending(true);
-                const result = await submitSignupAction({
-                  kind: "press-kit",
-                  source: "media",
-                  email: pressEmail,
-                  name: pressName,
-                  organization: pressOutlet
-                });
-                setPressPending(false);
-                if (!result.ok) {
-                  setPressError(result.error);
-                  return;
+                try {
+                  const result = await submitSignupAction({
+                    kind: "press-kit",
+                    source: "media",
+                    email: pressEmail,
+                    name: pressName,
+                    organization: pressOutlet
+                  });
+                  if (!result.ok) {
+                    setPressError(result.error);
+                    return;
+                  }
+                  setPressResult({
+                    emailed: Boolean(result.emailed),
+                    headline: result.headline || "Registered.",
+                    detail: result.detail || "",
+                    downloadPath: result.downloadPath || null
+                  });
+                } catch {
+                  setPressError("Something went wrong. Please try again.");
+                } finally {
+                  setPressPending(false);
                 }
-                setPressSent(true);
-                setPressModalOpen(false);
               }}
               style={{
                 width: "100%",
@@ -415,11 +473,14 @@ export default function MediaPage({
                 border: 0
               }}
             >
-              {pressPending ? "Sending…" : "Get the press kit"}
+              {pressPending ? "Please wait…" : "Get the press kit"}
             </button>
+            )}
           </div>
-        </div>
-      )}
+        </div>,
+        document.body
+        )
+        : null}
 
       <SiteHeader />
 
@@ -447,7 +508,7 @@ export default function MediaPage({
               </div>
             </div>
           </div>
-          {!pressSent ? (
+          {!pressResult ? (
             <button
               type="button"
               onClick={() => setPressModalOpen(true)}
@@ -467,9 +528,32 @@ export default function MediaPage({
               Download press kit →
             </button>
           ) : (
-            <span style={{ fontSize: 13, fontWeight: 700, color: "#e6c680", flexShrink: 0 }}>
-              ✓ Sent to {pressEmail}
-            </span>
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", gap: 8, flex: "1 1 260px", maxWidth: 460 }}>
+              <div role="status" style={{ fontSize: 13, fontWeight: 700, color: pressResult.emailed ? "#e6c680" : "#fff", lineHeight: 1.4 }}>
+                {pressResult.emailed ? "✓ " : ""}
+                {pressResult.headline}
+              </div>
+              {pressResult.detail ? (
+                <div style={{ fontSize: 12.5, color: "#d7e6df", lineHeight: 1.45 }}>{pressResult.detail}</div>
+              ) : null}
+              {pressResult.downloadPath ? (
+                <a
+                  href={pressResult.downloadPath}
+                  style={{
+                    background: "#e6c680",
+                    color: "#143d31",
+                    fontSize: 13.5,
+                    fontWeight: 700,
+                    padding: "10px 18px",
+                    borderRadius: 9,
+                    flexShrink: 0,
+                    whiteSpace: "nowrap"
+                  }}
+                >
+                  Download the press kit
+                </a>
+              ) : null}
+            </div>
           )}
         </div>
       </section>

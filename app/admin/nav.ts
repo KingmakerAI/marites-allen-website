@@ -35,6 +35,7 @@ export const ADMIN_NAV_GROUPS: AdminNavGroup[] = [
     items: [
       { href: "/admin/consultations", label: "Services", icon: "consultations" },
       { href: "/admin/enquiries", label: "Messages", icon: "enquiries" },
+      { href: "/admin/press-kit", label: "Press kit", icon: "presskit" },
       { href: "/admin/events", label: "Events", icon: "events" }
     ]
   },
