@@ -58,8 +58,7 @@ export function CookieNotice() {
       }}
     >
       <p style={{ margin: "0 0 14px" }}>
-        We use a small first-party visit cookie (via <code style={{ fontSize: 12 }}>/api/visit</code>) to understand
-        which pages are viewed. See our{" "}
+        We use a small first-party cookie to understand which pages are viewed. See our{" "}
         <Link href="/privacy" style={{ color: "#e6c680", fontWeight: 700 }}>
           Privacy Policy
         </Link>{" "}

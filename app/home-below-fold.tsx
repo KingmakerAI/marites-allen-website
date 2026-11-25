@@ -258,10 +258,11 @@ export default function HomeBelowFold({
               </a>
               <Link
                 href="/destara"
-                style={{ border: "1.5px solid rgba(255,255,255,0.35)", color: "#fff", fontSize: 15, fontWeight: 700, padding: "15px 24px", borderRadius: 99 }}
+                style={{ position: "relative", border: "1.5px solid rgba(255,255,255,0.35)", color: "#fff", fontSize: 15, fontWeight: 700, padding: "15px 24px", borderRadius: 99 }}
                 {...cms("home.destaraMore")}
               >
                 {destaraMore}
+                {/^learn more$/i.test(destaraMore.trim()) ? <span className="sr-only"> about Destara</span> : null}
               </Link>
             </div>
           </div>
@@ -437,7 +438,6 @@ export default function HomeBelowFold({
                 type="button"
                 aria-haspopup="listbox"
                 aria-expanded={servicesMenuOpen}
-                aria-label="Choose a consultation"
                 onClick={() => setServicesMenuOpen((v) => !v)}
                 style={{
                   width: "100%",

@@ -36,7 +36,13 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export const revalidate = 3600;
 
-export default async function MediaPage() {
+export default async function MediaPage({
+  searchParams
+}: {
+  searchParams: Promise<{ category?: string }>;
+}) {
+  const query = await searchParams;
+  const category = (query.category || "").trim().toLowerCase();
   const [articles, pageCopy, settings] = await Promise.all([
     getCachedArticles(),
     getCachedPageCopy(),
@@ -51,7 +57,7 @@ export default async function MediaPage() {
       m: a.month,
       month: monthName(a.month),
       outlet: a.outlet,
-      quote: a.excerpt || a.title,
+      quote: a.title || a.excerpt,
       cta: a.ctaLabel,
       url: a.externalUrl || `/articles/${a.slug}`,
       category: folder?.name || "",
@@ -81,6 +87,7 @@ export default async function MediaPage() {
           videosHeading={copy.videosHeading}
           videos={parseVideoLines(copy.videos)}
           contact={settings.contact}
+          category={category}
         />
       </Suspense>
     </>
