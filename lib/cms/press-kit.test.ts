@@ -2,7 +2,7 @@ import fs from "fs";
 import os from "os";
 import path from "path";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
-import { fileLooksLikePlaceholder, PRESS_KIT_PLACEHOLDER_MARK, pressKitVisitorNotice, resolvePressKit, sniffPressKit } from "./press-kit";
+import { PRESS_KIT_PLACEHOLDER_MARK, pressKitVisitorNotice, resolvePressKit, sniffPressKit } from "./press-kit";
 import { isStorageFailure } from "./store";
 
 function tinyPdf(text: string) {
@@ -60,33 +60,36 @@ describe("press kit", () => {
 
   it("does not say the kit was sent unless email actually went out", () => {
     const email = "editor@example.com";
-    const sent = pressKitVisitorNotice({ email, hasFile: true, emailStatus: "sent", missing: [] });
+    const name = "Ada Editor";
+    const sent = pressKitVisitorNotice({ name, email, hasFile: true, emailStatus: "sent" });
     expect(sent.emailed).toBe(true);
     expect(sent.headline).toBe(`Sent to ${email}`);
     expect(sent.downloadPath).toBe("/press-kit");
 
-    for (const emailStatus of ["not-configured", "failed", "no-file"] as const) {
-      const notice = pressKitVisitorNotice({
-        email,
-        hasFile: emailStatus !== "no-file",
-        emailStatus,
-        missing: ["RESEND_API_KEY", "BOOKING_FROM_EMAIL or RESET_FROM_EMAIL"]
-      });
+    const waiting = pressKitVisitorNotice({ name, email, hasFile: false, emailStatus: "no-file" });
+    expect(waiting.emailed).toBe(false);
+    expect(waiting.headline).toBe(`Thank you, ${name}. Our media team will email you the press kit shortly.`);
+    expect(waiting.downloadPath).toBeNull();
+    expect(waiting.detail).toBe("");
+
+    for (const emailStatus of ["not-configured", "failed"] as const) {
+      const notice = pressKitVisitorNotice({ name, email, hasFile: true, emailStatus });
       expect(notice.emailed).toBe(false);
-      expect(notice.headline).not.toMatch(/Sent to/);
-      expect(notice.detail).not.toMatch(/Sent to/);
-      expect(`${notice.headline} ${notice.detail}`).not.toMatch(/✓/);
+      expect(notice.headline).toBe("Your press kit is ready to download.");
+      expect(notice.downloadPath).toBe("/press-kit");
+      expect(`${notice.headline} ${notice.detail}`).not.toMatch(/Sent to|RESEND_API_KEY|BOOKING_FROM_EMAIL|RESET_FROM_EMAIL/);
     }
 
     const unconfigured = pressKitVisitorNotice({
+      name,
       email,
       hasFile: true,
-      emailStatus: "not-configured",
-      missing: ["RESEND_API_KEY"]
+      emailStatus: "not-configured"
     });
-    expect(unconfigured.detail).toContain("RESEND_API_KEY");
-    expect(unconfigured.detail).toMatch(/not sent/i);
-    expect(unconfigured.downloadPath).toBe("/press-kit");
+    expect(unconfigured.detail).not.toMatch(/RESEND_API_KEY/);
+    expect(`${waiting.headline} ${waiting.detail} ${unconfigured.headline} ${unconfigured.detail}`).not.toMatch(
+      /RESEND_API_KEY|BOOKING_FROM_EMAIL|RESET_FROM_EMAIL/
+    );
   });
 
   it("names the mail settings that are missing", async () => {
@@ -103,9 +106,8 @@ describe("press kit", () => {
 
     const placeholder = tinyPdf(PRESS_KIT_PLACEHOLDER_MARK);
     fs.writeFileSync(path.join(publicDir, "press-kit", "PLACEHOLDER.pdf"), placeholder);
-    const onlyPlaceholder = await resolvePressKit(publicDir);
-    expect(onlyPlaceholder?.placeholder).toBe(true);
-    expect(onlyPlaceholder?.source).toBe("static");
+    fs.writeFileSync(path.join(publicDir, "press-kit", "press-kit.pdf"), placeholder);
+    expect(await resolvePressKit(publicDir)).toBeNull();
 
     const real = tinyPdf("Real kit file");
     fs.writeFileSync(path.join(publicDir, "press-kit", "press-kit.pdf"), real);
@@ -141,16 +143,15 @@ describe("press kit", () => {
     expect(rejected?.filename).toBe("press-kit.pdf");
   });
 
-  it("ships a labeled placeholder and no invented press kit", () => {
-    const committed = fs.readFileSync(path.join(process.cwd(), "public", "press-kit", "PLACEHOLDER.pdf"));
-    expect(committed.subarray(0, 5).toString("ascii")).toBe("%PDF-");
-    expect(fileLooksLikePlaceholder(committed)).toBe(true);
+  it("does not publish a placeholder kit", () => {
+    expect(fs.existsSync(path.join(process.cwd(), "public", "press-kit", "PLACEHOLDER.pdf"))).toBe(false);
     expect(fs.existsSync(path.join(process.cwd(), "public", "press-kit", "press-kit.pdf"))).toBe(false);
     expect(fs.existsSync(path.join(process.cwd(), "public", "press-kit", "press-kit.zip"))).toBe(false);
     const readme = fs.readFileSync(path.join(process.cwd(), "public", "press-kit", "README.md"), "utf8");
     expect(readme).toContain("press-kit.pdf");
     expect(readme).toContain("BLOB_READ_WRITE_TOKEN");
     expect(readme).toContain("RESEND_API_KEY");
+    expect(readme).toContain("does not name these settings");
   });
 
   it("recognises a missing Blob token and a read-only disk as storage failures", () => {

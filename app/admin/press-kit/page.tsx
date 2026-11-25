@@ -2,7 +2,7 @@ import Link from "next/link";
 import { requireUser } from "@/lib/cms/auth";
 import { missingPressKitMailEnv } from "@/lib/cms/notify";
 import { resolvePressKit } from "@/lib/cms/press-kit";
-import { listSignups } from "@/lib/cms/repo";
+import { getPressKitFile, listSignups } from "@/lib/cms/repo";
 import { STORAGE_SETUP_HINT, persistenceMode } from "@/lib/cms/store";
 import { uploadPressKitAction } from "../actions";
 import { Flash } from "../ui";
@@ -32,8 +32,9 @@ export default async function PressKitAdminPage({
 }) {
   await requireUser();
   const q = await searchParams;
-  const [file, rows] = await Promise.all([
+  const [file, stored, rows] = await Promise.all([
     resolvePressKit(),
+    getPressKitFile(),
     listSignups({ kind: "press-kit", q: q.q, sort: "createdAt", dir: "desc" })
   ]);
   const missingMail = missingPressKitMailEnv();
@@ -53,20 +54,26 @@ export default async function PressKitAdminPage({
           See <code>public/press-kit/README.md</code>.
         </div>
       ) : null}
-      {file?.placeholder ? (
+      {!file ? (
         <div className="flash error" role="alert">
-          Visitors can download a file, but it is the placeholder, not the real press kit. Upload the PDF or zip here, or
-          add <code>public/press-kit/press-kit.pdf</code> (or <code>.zip</code>) and redeploy.
+          No real press kit is public yet. People who register are thanked and told the media team will email the kit.
+          They do not get a download. Upload the PDF or zip here, or add <code>public/press-kit/press-kit.pdf</code> (or{" "}
+          <code>.zip</code>) and redeploy. The download button appears on its own once that file is in place.
+        </div>
+      ) : null}
+      {stored?.placeholder && !file ? (
+        <div className="flash error" role="alert">
+          The file last uploaded here is a placeholder. It is not offered to visitors. Upload the real kit.
         </div>
       ) : null}
       {missingMail.length > 0 ? (
         <div className="flash" role="status">
-          Registration email is off until the host has {missingMail.join(" and ")}. People can still download the file.
-          The site will not say an email was sent.
+          Registration email is off until the host has {missingMail.join(" and ")}. This note stays in the admin. The
+          public page does not mention these settings, and it says an email was sent only after one is actually sent.
         </div>
       ) : (
         <div className="flash" role="status">
-          Outgoing email is configured. A successful registration emails the download link and tells the visitor it was sent.
+          Outgoing email is configured. When a real kit is on the site, a registration emails the download link.
         </div>
       )}
 
@@ -74,7 +81,7 @@ export default async function PressKitAdminPage({
         <h2 className="admin-h2">File</h2>
         {file ? (
           <p>
-            Current file: <strong>{file.placeholder ? "placeholder" : file.filename}</strong>
+            Current file: <strong>{file.filename}</strong>
             {" · "}
             {fileLabel(file.size)}
             {" · "}
@@ -83,7 +90,7 @@ export default async function PressKitAdminPage({
             <Link href="/press-kit">Download</Link>
           </p>
         ) : (
-          <p>No press kit file is available. Upload one, or add it under public/press-kit/.</p>
+          <p>No press kit file is public yet. Upload one, or add public/press-kit/press-kit.pdf or press-kit.zip.</p>
         )}
         <form action={uploadPressKitAction} className="admin-form">
           <label>

@@ -12,7 +12,6 @@ export const PRESS_KIT_DOWNLOAD_PATH = "/press-kit";
 export const PRESS_KIT_MAX_UPLOAD_BYTES = 4 * 1024 * 1024;
 
 const STATIC_NAMES = ["press-kit.pdf", "press-kit.zip"] as const;
-const PLACEHOLDER_NAME = "PLACEHOLDER.pdf";
 
 export type ResolvedPressKit = {
   filename: string;
@@ -65,20 +64,21 @@ export function publicSiteOrigin(headerList: { get(name: string): string | null 
 }
 
 /**
- * Honest copy for the media page. "Sent to …" is only used when an email was accepted.
+ * Public copy. "Sent to …" only when an email was accepted.
+ * Host setup (API keys, from address) is never named here.
  */
 export function pressKitVisitorNotice(input: {
+  name: string;
   email: string;
   hasFile: boolean;
   emailStatus: PressKitEmailStatus;
-  missing: string[];
 }): PressKitVisitorNotice {
   if (!input.hasFile || input.emailStatus === "no-file") {
+    const name = input.name.trim() || "there";
     return {
       emailed: false,
-      headline: "Registered. The press kit file is not on the site yet.",
-      detail:
-        "Nothing was emailed. Add the file under Admin → Press kit, or add public/press-kit/press-kit.pdf (or press-kit.zip) and redeploy.",
+      headline: `Thank you, ${name}. Our media team will email you the press kit shortly.`,
+      detail: "",
       downloadPath: null
     };
   }
@@ -90,21 +90,10 @@ export function pressKitVisitorNotice(input: {
       downloadPath: PRESS_KIT_DOWNLOAD_PATH
     };
   }
-  const missing =
-    input.missing.length > 0 ? input.missing.join("; ") : "RESEND_API_KEY and BOOKING_FROM_EMAIL (or RESET_FROM_EMAIL)";
-  if (input.emailStatus === "not-configured") {
-    return {
-      emailed: false,
-      headline: "Your press kit is ready to download.",
-      detail: `Email was not sent. Missing on the host: ${missing}.`,
-      downloadPath: PRESS_KIT_DOWNLOAD_PATH
-    };
-  }
   return {
     emailed: false,
     headline: "Your press kit is ready to download.",
-    detail:
-      "Email was not sent. The mail service refused the message. Check RESEND_API_KEY and BOOKING_FROM_EMAIL (or RESET_FROM_EMAIL). The from address has to be a verified sender.",
+    detail: "",
     downloadPath: PRESS_KIT_DOWNLOAD_PATH
   };
 }
@@ -172,12 +161,13 @@ function staticFile(publicDir: string, name: string, placeholder: boolean): Reso
   };
 }
 
+/** Real files only. A placeholder PDF in this folder is ignored and never offered publicly. */
 export function resolveStaticPressKit(publicDir = defaultPublicDir()): ResolvedPressKit | null {
   for (const name of STATIC_NAMES) {
     const file = staticFile(publicDir, name, false);
-    if (file) return file;
+    if (file && !file.placeholder) return file;
   }
-  return staticFile(publicDir, PLACEHOLDER_NAME, true);
+  return null;
 }
 
 function resolveUploaded(record: PressKitFile, publicDir: string): ResolvedPressKit | null {
@@ -206,12 +196,12 @@ function resolveUploaded(record: PressKitFile, publicDir: string): ResolvedPress
   };
 }
 
-/** Uploaded file wins. Then press-kit.pdf / press-kit.zip. Then the placeholder. */
+/** Uploaded file wins when it is a real kit. Then press-kit.pdf / press-kit.zip. Never a placeholder. */
 export async function resolvePressKit(publicDir = defaultPublicDir()): Promise<ResolvedPressKit | null> {
   const record = (await readStore()).pressKitFile;
-  if (record) {
+  if (record && !record.placeholder) {
     const uploaded = resolveUploaded(record, publicDir);
-    if (uploaded) return uploaded;
+    if (uploaded && !uploaded.placeholder) return uploaded;
   }
   return resolveStaticPressKit(publicDir);
 }

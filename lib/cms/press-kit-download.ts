@@ -14,10 +14,10 @@ function attachmentHeaders(file: { mimeType: string; filename: string; size: num
 }
 
 function missing() {
-  return new Response("The press kit file is not on the site yet.", {
-    status: 404,
+  return new Response(null, {
+    status: 307,
     headers: {
-      "Content-Type": "text/plain; charset=utf-8",
+      Location: "/media",
       "Cache-Control": "no-store"
     }
   });

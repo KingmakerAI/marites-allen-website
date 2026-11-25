@@ -68,10 +68,10 @@ export async function submitSignupAction(raw: unknown): Promise<SignupResult> {
         })
       : { status: "no-file" as const, missing: [] as string[] };
     const notice = pressKitVisitorNotice({
+      name: saved.name,
       email: saved.email,
       hasFile: Boolean(file),
-      emailStatus: mail.status,
-      missing: "missing" in mail ? mail.missing : []
+      emailStatus: mail.status
     });
     return { ok: true, ...notice };
   }
