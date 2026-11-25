@@ -43,7 +43,10 @@ export const getCachedNav = unstable_cache(
 
 export const getCachedArticles = unstable_cache(
   async () => withSeed(() => publishedArticles()),
-  ["cms-articles"],
+  // The cache key is this callback's source plus these parts, not the body of
+  // publishedArticles(). Vercel keeps that entry across deploys, so a change to
+  // how stories are assembled has to bump the key or /media keeps the old list.
+  ["cms-articles-v2"],
   // Longer TTL: each miss downloads the full private CMS blob (Hobby transfer quota).
   { revalidate: 3600, tags: [CMS_TAGS.articles] }
 );

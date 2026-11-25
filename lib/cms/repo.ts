@@ -5,7 +5,7 @@ import { sanitizeHtml, sanitizeText } from "./sanitize";
 import { mergePageCopy } from "./page-copy-defaults";
 import type { PageCopy } from "./page-copy-types";
 import { mergeCodeEvents } from "@/lib/events/fire-sheep-vip";
-import { extraMediaArticles } from "@/lib/forecast-archive";
+import { assemblePublishedArticles } from "@/lib/media-fixes";
 import { mutateStore, readStore } from "./store";
 import type {
   Article,
@@ -147,7 +147,7 @@ export async function getArticleBySlug(slug: string) {
 
 export async function publishedArticles() {
   const published = await listArticles({ status: "published" });
-  return [...published, ...extraMediaArticles(published)];
+  return assemblePublishedArticles(published);
 }
 
 export async function saveArticle(input: Partial<Article> & { title: string; slug: string; year: number; month: number }) {
