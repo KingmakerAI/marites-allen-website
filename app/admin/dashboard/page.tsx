@@ -131,7 +131,7 @@ export default async function DashboardPage({
     ["New booking messages", stats.unreadSignups, "/admin/enquiries"],
     ["All booking messages", stats.signups, "/admin/enquiries"],
     ["Speaking requests", stats.speaking, "/admin/enquiries"],
-    ["Press kit requests", stats.pressKit, "/admin/enquiries"],
+    ["Press kit requests", stats.pressKit, "/admin/press-kit"],
     ["Destiny chart sign-ups", stats.destinyChart, "/admin/enquiries"]
   ] as const;
 
@@ -214,7 +214,15 @@ export default async function DashboardPage({
             </div>
             {enquiries.length === 0 && <p className="dash-empty">No messages yet.</p>}
             {enquiries.map((row) => (
-              <Link key={row.id} href={`/admin/enquiries?q=${encodeURIComponent(row.email)}`} className="dash-row">
+              <Link
+                key={row.id}
+                href={
+                  row.kind === "press-kit"
+                    ? `/admin/press-kit?q=${encodeURIComponent(row.email)}`
+                    : `/admin/enquiries?q=${encodeURIComponent(row.email)}`
+                }
+                className="dash-row"
+              >
                 <span className="dash-row-main">
                   <strong>{row.name || row.email}</strong>
                   <em>

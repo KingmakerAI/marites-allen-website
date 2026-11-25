@@ -33,6 +33,7 @@ Thumbs.db
 
 # misc local clutter (not part of the Next.js website)
 *.zip
+!public/press-kit/*.zip
 *.sql
 *.pptx
 *.docx
