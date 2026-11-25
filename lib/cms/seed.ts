@@ -88,7 +88,7 @@ const DEFAULT_SETTINGS: SiteSettings = {
     email: "hello@maritesallen.com",
     emailSecondary: "hello@maritesallen.com",
     phone: "+63 920 950 9390",
-    phoneSecondary: "+63 939 351 6424",
+    phoneSecondary: "",
     whatsapp: "639209509390"
   },
   social: SOCIAL_LINKS.map((s) => ({ id: s.id, label: s.label, handle: s.handle, href: s.href })),
@@ -388,6 +388,10 @@ async function ensureLiveDefaults() {
     }
     if (store.settings?.contact?.emailSecondary && /frigga/i.test(store.settings.contact.emailSecondary)) {
       store.settings.contact.emailSecondary = "hello@maritesallen.com";
+      changed = true;
+    }
+    if (store.settings?.contact?.phoneSecondary) {
+      store.settings.contact.phoneSecondary = "";
       changed = true;
     }
     for (const item of store.navigation || []) {

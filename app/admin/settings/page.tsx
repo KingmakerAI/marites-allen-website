@@ -62,10 +62,6 @@ export default async function SettingsPage({
                 Phone
                 <input name="phone" defaultValue={s.contact.phone} />
               </label>
-              <label>
-                Secondary phone
-                <input name="phoneSecondary" defaultValue={s.contact.phoneSecondary} />
-              </label>
             </div>
             <label>
               WhatsApp (digits)
