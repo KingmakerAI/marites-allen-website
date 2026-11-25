@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useMemo, useState, type CSSProperties } from "react";
 import { createPortal } from "react-dom";
@@ -15,6 +16,7 @@ import type { YearVideo } from "@/lib/ma-videos";
 export type PressItem = {
   year: number;
   m: number;
+  day?: number;
   month: string;
   outlet: string;
   quote: string;
@@ -24,6 +26,8 @@ export type PressItem = {
   categorySlug: string;
   slug: string;
   placeholder?: boolean;
+  kind?: "story" | "video";
+  youtubeId?: string | null;
 };
 
 function chipStyle(active: boolean): CSSProperties {
@@ -115,6 +119,154 @@ function PressCard({ item }: { item: PressItem }) {
     </Link>
   );
 }
+
+function VideoThumb({ item }: { item: PressItem }) {
+  const [play, setPlay] = useState(false);
+  if (!item.youtubeId) return <PressCard item={item} />;
+  if (play) {
+    return (
+      <div className="archive-item" style={{ padding: 0, overflow: "hidden" }}>
+        <iframe
+          title={item.quote}
+          src={`https://www.youtube-nocookie.com/embed/${item.youtubeId}?rel=0`}
+          allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowFullScreen
+          loading="lazy"
+          style={{ display: "block", width: "100%", aspectRatio: "16 / 9", border: 0 }}
+        />
+        <p style={{ margin: 0, padding: "12px 16px", fontSize: 14, color: "#3d4a41" }}>
+          <strong style={{ display: "block", color: "#143d31" }}>{item.quote}</strong>
+          <span style={{ color: "#5f6b60" }}>
+            {item.outlet}
+            {item.month ? ` · ${item.month} ${item.year}` : ""}
+          </span>
+        </p>
+      </div>
+    );
+  }
+  return (
+    <button
+      type="button"
+      onClick={() => setPlay(true)}
+      style={{
+        display: "block",
+        width: "100%",
+        textAlign: "left",
+        padding: 0,
+        border: "1px solid rgba(20,61,49,0.1)",
+        borderRadius: 14,
+        background: "#fffdf8",
+        boxShadow: "0 10px 24px -20px rgba(20,60,45,0.35)",
+        cursor: "pointer",
+        overflow: "hidden"
+      }}
+    >
+      <span style={{ display: "block", position: "relative", aspectRatio: "16 / 9", background: "#143d31" }}>
+        <Image
+          src={`https://i.ytimg.com/vi/${item.youtubeId}/hqdefault.jpg`}
+          alt=""
+          width={480}
+          height={270}
+          sizes="(max-width: 800px) 100vw, 800px"
+          unoptimized
+          style={{ width: "100%", height: "100%", objectFit: "cover" }}
+        />
+        <span
+          aria-hidden
+          style={{
+            position: "absolute",
+            left: "50%",
+            top: "50%",
+            transform: "translate(-50%, -50%)",
+            width: 56,
+            height: 56,
+            borderRadius: "50%",
+            background: "rgba(246,241,231,0.94)",
+            color: "#143d31",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            fontSize: 22
+          }}
+        >
+          ▶
+        </span>
+      </span>
+      <span style={{ display: "block", padding: "12px 16px" }}>
+        <strong style={{ display: "block", color: "#143d31", fontSize: 15, lineHeight: 1.35 }}>{item.quote}</strong>
+        <span style={{ display: "block", marginTop: 4, color: "#5f6b60", fontSize: 13 }}>
+          {item.outlet}
+          {item.month ? ` · ${item.month} ${item.year}` : ""}
+        </span>
+      </span>
+    </button>
+  );
+}
+
+function YearDirectory({
+  group
+}: {
+  group: { year: string; id: string; items: PressItem[]; label: string };
+}) {
+  const [open, setOpen] = useState(false);
+  const videos = group.items.filter((item) => item.kind === "video");
+  const shown = new Set((open ? videos : videos.slice(0, 12)).map((item) => item.slug));
+  const visible = group.items.filter((item) => item.kind !== "video" || shown.has(item.slug));
+  return (
+    <div id={group.id} style={{ paddingTop: 24, scrollMarginTop: 150 }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 16 }}>
+        <h3 className="font-display" style={{ fontWeight: 700, fontSize: "clamp(26px,3.2vw,34px)", color: "var(--gold-ink)", margin: 0 }}>
+          {group.year}
+        </h3>
+        <div style={{ flex: 1, height: 1, background: "rgba(20,61,49,0.15)" }} />
+        <span style={{ fontSize: 12, color: "#8a8a80", whiteSpace: "nowrap" }}>{group.label}</span>
+      </div>
+      <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+        {visible.length ? (
+          visible.map((item) =>
+            item.kind === "video" && item.youtubeId ? (
+              <VideoThumb key={item.slug} item={item} />
+            ) : (
+              <PressCard key={item.slug} item={item} />
+            )
+          )
+        ) : (
+          <article className="paper-card">
+            <p className="eyebrow" style={{ fontSize: 11, margin: 0 }}>
+              {group.year}
+            </p>
+            <h3 className="font-display">{group.year}</h3>
+            <p style={{ margin: 0, fontSize: 14, fontWeight: 700 }}>The information will be up soon.</p>
+          </article>
+        )}
+      </div>
+      {!open && videos.length > 12 ? (
+        <button
+          type="button"
+          onClick={() => setOpen(true)}
+          style={{
+            marginTop: 14,
+            background: "transparent",
+            border: "1px solid rgba(125,92,28,0.45)",
+            color: "var(--gold-ink)",
+            fontWeight: 700,
+            borderRadius: 999,
+            padding: "10px 18px",
+            cursor: "pointer"
+          }}
+        >
+          Show all {videos.length} videos
+        </button>
+      ) : null}
+    </div>
+  );
+}
+
+const FILTERS = [
+  { slug: "press", name: "Press" },
+  { slug: "television", name: "Television" },
+  { slug: "video", name: "Video" }
+];
 
 const FALLBACK_VIDEOS: CopyVideo[] = [
   {
@@ -217,13 +369,20 @@ export default function MediaPage({
   const selectedYear = /^\d{4}$/.test(year) ? Number(year) : null;
   const folders = useMemo(() => {
     const map = new Map<string, { slug: string; name: string; count: number }>();
+    for (const folder of FILTERS) map.set(folder.slug, { ...folder, count: 0 });
     press.forEach((item) => {
       if (!item.categorySlug) return;
       const current = map.get(item.categorySlug);
       if (current) current.count += 1;
       else map.set(item.categorySlug, { slug: item.categorySlug, name: item.category, count: 1 });
     });
-    return [...map.values()].sort((a, b) => a.name.localeCompare(b.name));
+    const order = new Map(FILTERS.map((folder, index) => [folder.slug, index]));
+    return [...map.values()].sort((a, b) => {
+      const ai = order.get(a.slug) ?? FILTERS.length;
+      const bi = order.get(b.slug) ?? FILTERS.length;
+      if (ai !== bi) return ai - bi;
+      return a.name.localeCompare(b.name);
+    });
   }, [press]);
   const visiblePress = useMemo(
     () => (selectedCategory ? press.filter((item) => item.categorySlug === selectedCategory) : press),
@@ -241,7 +400,9 @@ export default function MediaPage({
     const unique = [...new Set(years)];
     const shown = selectedYear ? unique.filter((y) => y === selectedYear) : unique;
     return shown.map((y) => {
-      const items = visiblePress.filter((p) => p.year === y).sort((a, b) => b.m - a.m);
+      const items = visiblePress
+        .filter((p) => p.year === y)
+        .sort((a, b) => b.m - a.m || (b.day || 0) - (a.day || 0) || a.outlet.localeCompare(b.outlet));
       return {
         year: String(y),
         id: `y${y}`,
@@ -622,7 +783,7 @@ export default function MediaPage({
           Article directory
         </h2>
         {folders.length > 0 && (
-          <div style={{ display: "flex", flexWrap: "wrap", gap: 8, margin: "0 0 18px" }}>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 8, margin: "0 0 18px" }} aria-label="Story type">
             <Link href="/media" style={chipStyle(!selectedCategory)}>
               All <span style={{ color: selectedCategory ? "var(--gold-ink)" : "#143d31", fontWeight: 400 }}>({press.length})</span>
             </Link>
@@ -692,31 +853,7 @@ export default function MediaPage({
         </div>
 
         {groupedPress.map((g) => (
-          <div key={g.id} id={g.id} style={{ paddingTop: 24, scrollMarginTop: 150 }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 16 }}>
-              <h3
-                className="font-display"
-                style={{ fontWeight: 700, fontSize: "clamp(26px,3.2vw,34px)", color: "var(--gold-ink)", margin: 0 }}
-              >
-                {g.year}
-              </h3>
-              <div style={{ flex: 1, height: 1, background: "rgba(20,61,49,0.15)" }} />
-              <span style={{ fontSize: 12, color: "#8a8a80", whiteSpace: "nowrap" }}>{g.label}</span>
-            </div>
-            <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-              {g.items.length ? (
-                g.items.map((p) => <PressCard key={p.slug} item={p} />)
-              ) : (
-                <article className="paper-card">
-                  <p className="eyebrow" style={{ fontSize: 11, margin: 0 }}>
-                    {g.year}
-                  </p>
-                  <h3 className="font-display">{g.year}</h3>
-                  <p style={{ margin: 0, fontSize: 14, fontWeight: 700 }}>The information will be up soon.</p>
-                </article>
-              )}
-            </div>
-          </div>
+          <YearDirectory key={g.id} group={g} />
         ))}
         {selectedCategory || selectedYear ? null : <UndatedMediaList items={undated} />}
       </section>

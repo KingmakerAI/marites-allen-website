@@ -1,5 +1,6 @@
 import archive from "@/data/forecast-archive.json";
 import videos from "@/data/ma-videos.json";
+import { earlyMediaItems } from "@/lib/early-media";
 
 export type MaVideo = {
   title: string;
@@ -83,6 +84,7 @@ function archiveUrls() {
     for (const item of press.coverage || []) add(item.url);
   }
   for (const item of data.otherMedia) add(item.url);
+  for (const item of earlyMediaItems()) add(item.url);
   return urls;
 }
 
@@ -170,4 +172,34 @@ export function undatedMedia() {
   return fresh
     .filter((item) => !item.date)
     .map(toCard);
+}
+
+export type MediaPageVideo = {
+  title: string;
+  outlet: string;
+  year: number;
+  month: number;
+  day: number;
+  url: string;
+  youtubeId: string | null;
+};
+
+/** Dated videos for the Media directory, grouped by calendar publication date. */
+export function mediaPageVideos(): MediaPageVideo[] {
+  return fresh
+    .filter((item) => item.media_kind === "video" && item.date)
+    .map((item) => {
+      const [year, month, day] = item.date.split("-").map((part) => Number(part) || 0);
+      return {
+        title: item.title,
+        outlet: item.channel_or_outlet,
+        year,
+        month,
+        day,
+        url: item.url,
+        youtubeId: item.platform === "YouTube" ? youtubeId(item.url) : null
+      };
+    })
+    .filter((item) => item.year > 1900)
+    .sort((a, b) => b.year - a.year || b.month - a.month || b.day - a.day || a.title.localeCompare(b.title));
 }

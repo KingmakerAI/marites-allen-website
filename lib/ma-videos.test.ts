@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { assignForecastYear, forecastYearFromDate, videoCountsByYear, type MaVideo } from "./ma-videos";
+import { assignForecastYear, forecastYearFromDate, mediaPageVideos, videoCountsByYear, type MaVideo } from "./ma-videos";
 
 function item(partial: Partial<MaVideo>): MaVideo {
   return {
@@ -59,6 +59,13 @@ describe("forecast year from a date", () => {
         })
       )
     ).toBe(2015);
+  });
+
+  it("keeps an October video in its calendar year on the media page", () => {
+    const video = mediaPageVideos().find((item) => item.title.startsWith("2027 YEAR OF THE FIRE SHEEP FORECAST"));
+    expect(video?.year).toBe(2026);
+    expect(video?.month).toBe(10);
+    expect(mediaPageVideos().some((item) => item.year === 0)).toBe(false);
   });
 
   it("leaves undated items off the year pages", () => {

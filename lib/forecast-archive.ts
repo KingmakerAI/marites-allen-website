@@ -1,4 +1,5 @@
 import archive from "@/data/forecast-archive.json";
+import { earlyItemAlreadyRecorded, earlyMediaItems, publicationParts } from "@/lib/early-media";
 import type { Article } from "@/lib/cms/types";
 
 export type ArchiveFeature = {
@@ -72,7 +73,7 @@ export function eventsIntro(intro: string | undefined) {
 }
 
 export function forecastYears() {
-  return [...data.years].sort((a, b) => b.year - a.year);
+  return data.years.map(presentYear).sort((a, b) => b.year - a.year);
 }
 
 export function forecastYear(year: number) {
@@ -116,17 +117,70 @@ export function otherMediaItems() {
   return data.otherMedia;
 }
 
-function normTitle(value: string) {
+export function normalizeStoryTitle(value: string) {
   return value.trim().toLowerCase().replace(/\s+/g, " ");
 }
 
-function normUrl(value: string) {
+export function normalizeStoryUrl(value: string) {
   return value
     .trim()
     .replace(/\/+$/, "")
     .replace(/^http:\/\//i, "https://")
     .replace(/^https:\/\/www\./i, "https://")
     .toLowerCase();
+}
+
+function normTitle(value: string) {
+  return normalizeStoryTitle(value);
+}
+
+function normUrl(value: string) {
+  return normalizeStoryUrl(value);
+}
+
+function featureType(type: string) {
+  if (type === "online") return "online";
+  if (type === "tv" || type === "radio" || type === "video") return type;
+  return "article";
+}
+
+function presentYear(year: ArchiveYear): ArchiveYear {
+  const features = [...year.features];
+  const events = [...year.events];
+  const titles = new Set<string>([...features.map((item) => normTitle(item.title)), ...events.map((item) => normTitle(item.title))]);
+  for (const item of earlyMediaItems()) {
+    if (item.forecastYear !== year.year || earlyItemAlreadyRecorded(item)) continue;
+    const titleKey = normTitle(item.title);
+    if (!titleKey || titles.has(titleKey)) continue;
+    if (item.type === "event") {
+      events.push({
+        title: item.title,
+        date: item.pubDate,
+        venue: item.outlet,
+        source: item.url || null,
+        status: item.url ? "live" : "placeholder"
+      });
+    } else {
+      features.push({
+        title: item.title,
+        outlet: item.outlet,
+        date: item.pubDate,
+        url: item.url || null,
+        type: featureType(item.type),
+        status: item.url ? "live" : "placeholder"
+      });
+    }
+    titles.add(titleKey);
+  }
+  const hasCoverage =
+    features.some((item) => item.url && item.status !== "placeholder") || events.some((item) => item.status !== "placeholder");
+  return {
+    ...year,
+    events,
+    features: hasCoverage
+      ? features.filter((item) => !(item.status === "placeholder" && /forecast coverage$/i.test(item.title || "")))
+      : features
+  };
 }
 
 function parts(date: string) {
@@ -179,5 +233,42 @@ export function extraMediaArticles(existing: Article[]): Article[] {
       updatedAt: "2026-11-25T00:00:00.000Z"
     });
   }
+  const blockedTitles = new Set(titles);
+  const blockedUrls = new Set(urls);
+  for (const item of earlyMediaItems()) {
+    if (earlyItemAlreadyRecorded(item)) continue;
+    const titleKey = normTitle(item.title);
+    const urlKey = item.url ? normUrl(item.url) : "";
+    if ((titleKey && blockedTitles.has(titleKey)) || (urlKey && blockedUrls.has(urlKey))) continue;
+    if (titleKey) blockedTitles.add(titleKey);
+    const when = publicationParts(item.pubDate);
+    const id = `early-${item.id}`;
+    const watch = item.type === "tv";
+    added.push({
+      id,
+      slug: id,
+      title: item.title,
+      excerpt: item.title,
+      body: `<p>${escapeText(item.title)}</p>`,
+      featuredImageId: null,
+      author: "Marites Allen",
+      categoryId: watch ? "cat-tv" : "cat-press",
+      tags: item.confidence === "partial" ? ["partial"] : [],
+      outlet: item.outlet,
+      externalUrl: item.url || "",
+      ctaLabel: watch ? "Watch" : "Read",
+      year: when.year,
+      month: when.month,
+      status: "published",
+      publishedAt: item.pubDate || null,
+      seoTitle: item.title.slice(0, 70),
+      seoDescription: item.title.slice(0, 180),
+      updatedAt: "2026-11-26T00:00:00.000Z"
+    });
+  }
   return added;
+}
+
+function escapeText(value: string) {
+  return value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }
